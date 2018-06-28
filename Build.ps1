@@ -8,6 +8,7 @@ If ([string]::IsNullOrEmpty($scriptBin)) { $scriptBin = $pwd }
 Set-Location $scriptBin
 
 $version = & git describe --tags;
+mkdir "$scriptBin/artifacts"
 $outputDir = Resolve-Path "$scriptBin/artifacts";
 
 dotnet build -c Release $sln;

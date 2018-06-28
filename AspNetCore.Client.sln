@@ -10,8 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A0F6ACE-08C3-4894-B7D2-537B06B057BC}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		after.AspNetCore.Client.sln.targets = after.AspNetCore.Client.sln.targets
 		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
+		Directory.Build.targets = Directory.Build.targets
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
