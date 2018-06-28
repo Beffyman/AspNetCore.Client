@@ -19,6 +19,9 @@ dotnet_csproj:
   file: '**\*.csproj'
   version: '{version}'
 
+install:
+- ps: dotnet restore
+
 after_build:
 - ps: ./Build.ps1
 
