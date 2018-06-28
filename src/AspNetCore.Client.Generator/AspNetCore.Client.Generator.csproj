@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<LangVersion>latest</LangVersion>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DevelopmentDependency>true</DevelopmentDependency>
+		<Copyright>Copyright 2018</Copyright>
+		<Authors>Beffyman</Authors>
+		<Description>A build task that will generate clients from a asp.net core project</Description>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.8.2" PrivateAssets="all" />
+		<PackageReference Include="Newtonsoft.Json" Version="11.0.1" PrivateAssets="all" />
+	</ItemGroup>
+
+	<!--Nerdbank.MSBuildExtension-->
+	<PropertyGroup>
+		<!-- We're going to include it by virtue of sending the whole bin dir to the build folder. -->
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Package up the build folder's contents. -->
+		<None Include="build\**">
+			<Pack>true</Pack>
+			<PackagePath>build\%(RecursiveDir)%(FileName)%(Extension)</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj" />
+	</ItemGroup>
+
+	<!-- Collect all dependencies and include them in the package itself, next to the Task assembly. -->
+	<Target Name="CollectRuntimeOutputs" BeforeTargets="_GetPackageFiles">
+		<ItemGroup>
+			<Content Include="&#xD;&#xA;            $(OutputPath)**\*.dll;&#xD;&#xA;            $(OutputPath)**\*.exe;&#xD;&#xA;            $(OutputPath)**\*.dll.config;&#xD;&#xA;            $(OutputPath)**\*.json;&#xD;&#xA;            " Exclude="&#xD;&#xA;            $(OutputPath)**\Microsoft.Build.Framework.dll;&#xD;&#xA;            $(OutputPath)**\Microsoft.Build.Tasks.Core.dll;&#xD;&#xA;            $(OutputPath)**\Microsoft.Build.Utilities.Core.dll;&#xD;&#xA;            ">
+				<Pack>true</Pack>
+				<PackagePath>build\</PackagePath>
+			</Content>
+		</ItemGroup>
+	</Target>
+
+</Project>

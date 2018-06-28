@@ -1,0 +1,49 @@
+version: '{APPVEYOR_REPO_TAG_NAME}'
+image: Visual Studio 2017
+
+max_jobs: 1
+skip_non_tags: true
+clone_depth: 1
+
+branches:
+  only:
+    - master
+
+nuget:
+  account_feed: true
+  project_feed: true
+  disable_publish_on_pr: true
+
+before_build:
+  - cmd: dotnet --version
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+
+build:
+  - ps: ./Build.ps1
+
+artifacts:
+ - path: '**\*.nupkg'
+
+#deploy:
+#  - provider: NuGet
+#    server: https://api.nuget.org/v3/index.json
+#    api_key:
+#      secure: qv8neZddxXHFevH4lLUAfjVud3fhjTR3J022rlTsgIPqkASxZ/jHjB38nkUJYFGT
+#    skip_symbols: false
+#    symbol_server: https://SymbolSource.org
+#    artifact: /.*\.nupkg/
+#    on:
+#      APPVEYOR_REPO_TAG: true
+#      branch: master
+#
+#  - provider: GitHub
+#    artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+#    draft: false
+#    prerelease: false
+#    on:
+#      branch: master                # release from master branch only
+#      APPVEYOR_REPO_TAG: true       # deploy on tag push only

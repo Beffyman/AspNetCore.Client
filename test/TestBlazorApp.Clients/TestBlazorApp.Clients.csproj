@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<LangVersion>latest</LangVersion>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj" />
+		<ProjectReference Include="..\TestBlazorApp.Shared\TestBlazorApp.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

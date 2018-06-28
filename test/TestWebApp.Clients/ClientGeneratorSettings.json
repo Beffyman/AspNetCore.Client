@@ -1,0 +1,44 @@
+{
+  "Locked": false,
+  "RelativeRouteToServiceProjectFolder": "../TestWebApp",
+  "ClientInterfaceName": "TestWebAppClient",
+  "ValueTask": true,
+  "Namespace": "TestWebApp.Clients",
+  "BlazorClients": false,
+  "AllowedNamespaces": [
+    "System*",
+    "MyNamespaceToInclude*"
+  ],
+  "ExcludedNamespaces": [
+    "MyNameSpaceToExclude*"
+  ],
+  "KnownStatusesAndResponseTypes": {
+    "BadRequest": "string",
+    "InternalServerError": null
+  },
+  "DefaultHttpHeaders": {
+    "Get": {
+      "Accept": "\"application/json\""
+    },
+    "Post": {
+      "Accept": "\"application/json\""
+    },
+    "Put": {
+      "Accept": "\"application/json\""
+    },
+    "Delete": {
+      "Accept": "\"application/json\""
+    }
+  },
+  "RequiredHttpHeaderParameters": {
+    "Post": {
+      "UserId": "int"
+    },
+    "Put": {
+      "UserId": "int"
+    },
+    "Delete": {
+      "UserId": "int"
+    }
+  }
+}

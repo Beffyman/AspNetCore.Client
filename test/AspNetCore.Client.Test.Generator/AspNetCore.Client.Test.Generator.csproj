@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.1</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<LangVersion>latest</LangVersion>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Moq" Version="4.8.3" />
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.8.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj" />
+	</ItemGroup>
+
+</Project>
