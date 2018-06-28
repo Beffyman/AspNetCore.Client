@@ -19,7 +19,7 @@ dotnet_csproj:
   file: '**\*.csproj'
   version: '{version}'
 
-build:
+after_build:
 - ps: ./Build.ps1
 
 artifacts:
