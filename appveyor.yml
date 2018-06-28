@@ -20,7 +20,7 @@ dotnet_csproj:
   version: '{version}'
 
 install:
-- ps: dotnet restore
+- ps: dotnet restore -s "https://api.nuget.org/v3/index.json"
 
 after_build:
 - ps: ./Build.ps1
