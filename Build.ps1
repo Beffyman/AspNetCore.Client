@@ -11,6 +11,8 @@ $version = & git describe --tags;
 mkdir "$scriptBin/artifacts"
 $outputDir = Resolve-Path "$scriptBin/artifacts";
 
+dotnet --info
+
 dotnet build -c Release $sln;
 
 dotnet test -c Release $sln;

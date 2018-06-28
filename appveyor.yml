@@ -14,16 +14,13 @@ nuget:
   project_feed: true
   disable_publish_on_pr: true
 
-before_build:
-  - cmd: dotnet --version
-
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
   version: '{version}'
 
 build:
-  - ps: ./Build.ps1
+- ps: ./Build.ps1
 
 artifacts:
  - path: '**\*.nupkg'
