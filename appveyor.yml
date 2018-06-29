@@ -31,11 +31,9 @@ artifacts:
 
 deploy:
   - provider: NuGet
-    server: https://api.nuget.org/v3/index.json
     api_key:
       secure: qv8neZddxXHFevH4lLUAfjVud3fhjTR3J022rlTsgIPqkASxZ/jHjB38nkUJYFGT
     skip_symbols: false
-    symbol_server: https://SymbolSource.org
     artifact: /.*\.nupkg/
     on:
       branch: master
