@@ -22,9 +22,14 @@ $artifacts = "$scriptBin/artifacts";
 New-Item -Force -ItemType directory -Path $artifacts
 $outputDir = Resolve-Path $artifacts;
 
+Write-Host ">> dotnet --info";
 dotnet --info
 
+Write-Host "Building Version $version";
+
+Write-Host ">> dotnet build -c Release -v m;"
 dotnet build -c Release -v m;
 
+Write-Host ">> dotnet pack -c Release /p:Version=$version -o $outputDir -v m";
 dotnet pack -c Release /p:Version="$version" -o $outputDir -v m
 
