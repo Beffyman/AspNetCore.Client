@@ -13,9 +13,9 @@ $outputDir = Resolve-Path "$scriptBin/artifacts";
 
 dotnet --info
 
-dotnet build -c Release $sln;
+dotnet build -c Release -v m;
 
-dotnet test -c Release $sln;
+dotnet test -c Release -v m --no-build;
 
-dotnet pack -c Release /p:Version="$version" -o $outputDir
+dotnet pack -c Release /p:Version="$version" -o $outputDir -v m
 
