@@ -1,8 +1,3 @@
-Param(
-  [string]$version
-)
-
-
 # Make so the script will stop when it hits an error.
 $ErrorActionPreference = "Stop"
 
@@ -12,8 +7,9 @@ Try { $scriptBin = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)" } 
 If ([string]::IsNullOrEmpty($scriptBin)) { $scriptBin = $pwd }
 Set-Location $scriptBin
 
+$version = $env:APPVEYOR_BUILD_VERSION;
 #For local builds, appveyor will be provided version
-if($version -eq $null){
+if([System.String]::IsNullOrEmpty($version)){
 	$version = & git describe --tags;
 }
 
@@ -29,6 +25,9 @@ Write-Host "Building Version $version";
 
 Write-Host ">> dotnet build -c Release -v m;"
 dotnet build -c Release -v m;
+
+Write-Host ">> dotnet test -c Release -v m;"
+dotnet test -c Release -v m;
 
 Write-Host ">> dotnet pack -c Release /p:Version=$version -o $outputDir -v m";
 dotnet pack -c Release /p:Version="$version" -o $outputDir -v m
