@@ -8,10 +8,22 @@ namespace AspNetCore.Client.Core
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class IncludesHeaderAttribute : Attribute
 	{
+		/// <summary>
+		/// Name of the attribute the generator looks for
+		/// </summary>
 		public const string AttributeName = "IncludesHeader";
 
+		/// <summary>
+		/// Name of the header
+		/// </summary>
 		public string Name { get; }
+		/// <summary>
+		/// Type to be used for the header
+		/// </summary>
 		public string Type { get; }
+		/// <summary>
+		/// Default value (int i = 0) to be used for the header
+		/// </summary>
 		public string DefaultValue { get; }
 
 		public IncludesHeaderAttribute(string name, string type, string defaultValue)

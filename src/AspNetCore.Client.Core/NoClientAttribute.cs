@@ -10,6 +10,9 @@ namespace AspNetCore.Client.Core
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 	public class NoClientAttribute : Attribute
 	{
+		/// <summary>
+		/// Name of the attribute the generator looks for
+		/// </summary>
 		public const string AttributeName = "NoClient";
 	}
 }

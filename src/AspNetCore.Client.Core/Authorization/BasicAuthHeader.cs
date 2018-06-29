@@ -5,6 +5,9 @@ using System.Text;
 
 namespace AspNetCore.Client.Core.Authorization
 {
+	/// <summary>
+	/// Basic Authentication protocol
+	/// </summary>
 	public class BasicAuthHeader : SecurityHeader
 	{
 		public BasicAuthHeader() { }
@@ -15,6 +18,7 @@ namespace AspNetCore.Client.Core.Authorization
 		}
 
 		public string Username { get; set; }
+
 		public string Password { get; set; }
 
 		public override T AddAuth<T>(T clientOrRequest)
