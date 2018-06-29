@@ -1,3 +1,8 @@
+Param(
+  [string]$version
+)
+
+
 # Make so the script will stop when it hits an error.
 $ErrorActionPreference = "Stop"
 
@@ -7,9 +12,15 @@ Try { $scriptBin = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)" } 
 If ([string]::IsNullOrEmpty($scriptBin)) { $scriptBin = $pwd }
 Set-Location $scriptBin
 
-$version = & git describe --tags;
-mkdir "$scriptBin/artifacts"
-$outputDir = Resolve-Path "$scriptBin/artifacts";
+#For local builds, appveyor will be provided version
+if($version -eq $null){
+	$version = & git describe --tags;
+}
+
+$artifacts = "$scriptBin/artifacts";
+
+New-Item -Force -ItemType directory -Path $artifacts
+$outputDir = Resolve-Path $artifacts;
 
 dotnet --info
 
