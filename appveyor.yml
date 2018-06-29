@@ -38,7 +38,6 @@ deploy:
     symbol_server: https://SymbolSource.org
     artifact: /.*\.nupkg/
     on:
-      APPVEYOR_REPO_TAG: true
       branch: master
 
   - provider: GitHub
