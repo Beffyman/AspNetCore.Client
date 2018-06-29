@@ -1,4 +1,5 @@
 version: '0.1.{build}'
+configuration: Release
 image: Visual Studio 2017
 
 max_jobs: 1
