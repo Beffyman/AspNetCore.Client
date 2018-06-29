@@ -24,7 +24,7 @@ install:
 - ps: dotnet restore -s "https://api.nuget.org/v3/index.json" --verbosity m
 
 after_build:
-- ps: ./Build.ps1 -Version $(version)
+- ps: ./Build.ps1 -Version $env:version
 
 artifacts:
  - path: '**\*.nupkg'
