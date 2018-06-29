@@ -29,22 +29,21 @@ after_build:
 artifacts:
  - path: '**\*.nupkg'
 
-#deploy:
-#  - provider: NuGet
-#    server: https://api.nuget.org/v3/index.json
-#    api_key:
-#      secure: qv8neZddxXHFevH4lLUAfjVud3fhjTR3J022rlTsgIPqkASxZ/jHjB38nkUJYFGT
-#    skip_symbols: false
-#    symbol_server: https://SymbolSource.org
-#    artifact: /.*\.nupkg/
-#    on:
-#      APPVEYOR_REPO_TAG: true
-#      branch: master
-#
-#  - provider: GitHub
-#    artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
-#    draft: false
-#    prerelease: false
-#    on:
-#      branch: master                # release from master branch only
-#      APPVEYOR_REPO_TAG: true       # deploy on tag push only
+deploy:
+  - provider: NuGet
+    server: https://api.nuget.org/v3/index.json
+    api_key:
+      secure: qv8neZddxXHFevH4lLUAfjVud3fhjTR3J022rlTsgIPqkASxZ/jHjB38nkUJYFGT
+    skip_symbols: false
+    symbol_server: https://SymbolSource.org
+    artifact: /.*\.nupkg/
+    on:
+      APPVEYOR_REPO_TAG: true
+      branch: master
+
+  - provider: GitHub
+    artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+    draft: false
+    prerelease: false
+    on:
+      branch: master                # release from master branch only
