@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj" />
+    <ProjectReference Include="..\TestWebApp.Contracts\TestWebApp.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

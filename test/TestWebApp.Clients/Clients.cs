@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
+using TestWebApp.Contracts;
 using System.Net.Http;
 using Flurl.Http;
 using Flurl;
@@ -297,6 +298,34 @@ namespace TestWebApp.Clients
 
 		
 		ValueTask<HttpResponseMessage> HeaderTestIntRawAsync(int SpecialValue1, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		void FancyDtoReturn(int id, 
+			int ControllerHeader = 0, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage FancyDtoReturnRaw(int id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		Task FancyDtoReturnAsync(int id, 
+			int ControllerHeader = 0, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
@@ -1700,6 +1729,200 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public void FancyDtoReturn(int id, 
+			int ControllerHeader = 0, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!int.TryParse(id.ToString(),out int idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			
+			var controller = "Values";
+			var action = "FancyDtoReturn";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(JsonConvert.DeserializeObject<MyFancyDto>(response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult()));
+			}
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public HttpResponseMessage FancyDtoReturnRaw(int id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!int.TryParse(id.ToString(),out int idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			
+			var controller = "Values";
+			var action = "FancyDtoReturn";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async Task FancyDtoReturnAsync(int id, 
+			int ControllerHeader = 0, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!int.TryParse(id.ToString(),out int idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			
+			var controller = "Values";
+			var action = "FancyDtoReturn";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(JsonConvert.DeserializeObject<MyFancyDto>(await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
+			}
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public async ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!int.TryParse(id.ToString(),out int idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			
+			var controller = "Values";
+			var action = "FancyDtoReturn";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);

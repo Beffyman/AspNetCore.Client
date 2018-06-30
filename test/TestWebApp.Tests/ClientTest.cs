@@ -9,38 +9,24 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
+using TestWebApp.Contracts;
 
 namespace TestWebApp.Tests
 {
-	public class ClientTest
+	public class ClientTest : IClassFixture<TestServerFixture>
 	{
-		public IServiceProvider BuildServer()
+		private readonly TestServerFixture TestServer;
+
+		public ClientTest(TestServerFixture testServer)
 		{
-			var server = new Microsoft.AspNetCore.TestHost.TestServer(new WebHostBuilder()
-					.UseStartup<Startup>());
-
-			Client = server.CreateClient();
-
-			var services = new ServiceCollection();
-			services.AddSingleton<HttpClient>(Client);
-			services.InstallClients();
-			services.AddScoped<IHttpOverride, FakeHttpOverride>();
-			return services.BuildServiceProvider();
-		}
-
-		private HttpClient Client;
-		private readonly IServiceProvider Provider;
-
-		public ClientTest()
-		{
-			Provider = BuildServer();
+			TestServer = testServer;
 		}
 
 
 		[Fact]
 		public void GetTest()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
 			var values = valuesClient.Get();
 
 
@@ -52,7 +38,7 @@ namespace TestWebApp.Tests
 		[Fact]
 		public void HeaderTestString()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
@@ -60,14 +46,32 @@ namespace TestWebApp.Tests
 
 
 		}
+
 		[Fact]
 		public void HeaderTestInt()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestInt(15);
 
 
 			Assert.Equal(15, value);
+		}
+
+
+		[Fact]
+		public void DtoReturns()
+		{
+			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			MyFancyDto dto = null;
+
+			valuesClient.FancyDtoReturn(15,
+				OKCallback: (_) =>
+				 {
+					 dto = _;
+				 });
+
+
+			Assert.Equal(15, dto.Id);
 		}
 
 		/// <summary>
@@ -78,7 +82,7 @@ namespace TestWebApp.Tests
 		//[Fact]
 		public async Task CancelTestAsync()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
 
 			CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 			var token = cancellationTokenSource.Token;

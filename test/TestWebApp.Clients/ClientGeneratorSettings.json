@@ -8,7 +8,7 @@
   "IncludeHttpOverride": true,
   "AllowedNamespaces": [
     "System*",
-    "MyNamespaceToInclude*"
+    "TestWebApp.Contracts*"
   ],
   "ExcludedNamespaces": [
     "MyNameSpaceToExclude*"

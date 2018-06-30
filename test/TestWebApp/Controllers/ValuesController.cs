@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AspNetCore.Client.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TestWebApp.Contracts;
 
 namespace TestWebApp.Controllers
 {
@@ -72,6 +74,19 @@ namespace TestWebApp.Controllers
 		public int HeaderTestInt()
 		{
 			return int.Parse(Request.Headers["SpecialValue1"].SingleOrDefault());
+		}
+
+		[HttpGet("[action]/{id:int}")]
+		[ProducesResponseType(typeof(MyFancyDto), (int)HttpStatusCode.OK)]
+		public IActionResult FancyDtoReturn(int id)
+		{
+			return Ok(new MyFancyDto
+			{
+				Id = id,
+				Collision = Guid.NewGuid(),
+				Description = "Hello There",
+				When = DateTime.UtcNow
+			});
 		}
 	}
 }
