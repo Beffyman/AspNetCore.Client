@@ -28,6 +28,8 @@ and think the following
   - ProducesResponseType!
 - What if sometimes I want to intercept requests before they go out? 
   - IncludeHttpOverride!
+- If I am using Blazor and don't want to hard code routes?
+  - BlazorClients!
 - If I own the endpoint's code, why can't I just generate clients from it?
   - Introducing AspNetCore.Client.Generator!
 
