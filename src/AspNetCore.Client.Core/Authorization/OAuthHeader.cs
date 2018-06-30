@@ -12,7 +12,7 @@ namespace AspNetCore.Client.Core.Authorization
 	{
 		public OAuthHeader() { }
 		/// <summary>
-		/// The ASCII string for the token, use OAuthHeader.Encode if you just want to pass a unencoded string in.
+		/// The Encoded string for the token, use OAuthHeader.Encode if you just want to pass a unencoded string in.
 		/// </summary>
 		/// <param name="token"></param>
 		public OAuthHeader(string token)
@@ -35,10 +35,11 @@ namespace AspNetCore.Client.Core.Authorization
 		/// Runs the ASCII.GetBytes & Convert.ToBase64String for you
 		/// </summary>
 		/// <param name="token"></param>
+		/// <param name="encoding">Defaults to ASCIIEncoding.ASCII</param>
 		/// <returns></returns>
-		public static OAuthHeader Encode(string token)
+		public static OAuthHeader Encode(string token, Encoding encoding = default)
 		{
-			return new OAuthHeader(Convert.ToBase64String(System.Text.ASCIIEncoding.ASCII.GetBytes(token)));
+			return new OAuthHeader(Convert.ToBase64String((encoding ?? System.Text.ASCIIEncoding.ASCII).GetBytes(token)));
 		}
 	}
 }
