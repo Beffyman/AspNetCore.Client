@@ -40,5 +40,18 @@ namespace AspNetCore.Client.Core
 			DefaultValue = null;
 		}
 
+		public IncludesHeaderAttribute(string name, Type type)
+		{
+			Name = name;
+			Type = type.Name;
+			DefaultValue = null;
+		}
+
+		public IncludesHeaderAttribute(string name, Type type, string defaultValue)
+		{
+			Name = name;
+			Type = type.Name;
+			DefaultValue = defaultValue;
+		}
 	}
 }

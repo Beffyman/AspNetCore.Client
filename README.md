@@ -2,10 +2,42 @@
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/984mqqfnwytd3oga?svg=true)](https://ci.appveyor.com/project/Beffyman/aspnetcore-client)
 ---
 
+If you are anything like me, you look at
+
+```c#
+using(var client  = new HttpClient())
+{
+	var request = await client.client.GetAsync($"api/mysuperspecialroute/{id}");
+	//Now to make sure what came back is what is expected, in every case...
+}
+```
+and think the following
+- Why not just inject clients?
+  - services.InstallClients(baseAddress = null);!
+- How can I pool the HttpClient usage? 
+  - HttpClient is injected!
+- Yuck, hard coded routes, these can lead to issues if my endpoint is still under development. 
+  - Generated On Build!
+- How do I unit test this without spinning up a full web app? 
+  - Works with Microsoft.AspNetCore.TestHost!
+- How do I tell my teammates that an endpoint has headers it requires? 
+  - RequiredHttpHeaderParameters! 
+  - IncludeHeaderAttribute!
+- How do I tell my teammates that an endpoint has known response types for status codes? 
+  - KnownStatusesAndResponseTypes!
+  - ProducesResponseType!
+- What if sometimes I want to intercept requests before they go out? 
+  - IncludeHttpOverride!
+- If I own the endpoint's code, why can't I just generate clients from it?
+  - Introducing AspNetCore.Client.Generator!
+
+
 ## AspNetCore.Client.Core
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Core.svg)](https://www.nuget.org/packages/AspNetCore.Client.Core/)
 
 Package that contains required classes/attributes used by the generator package.
+
+Can be included inside the web app to configure behavior.
 
 ## AspNetCore.Client.Generator
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/AspNetCore.Client.Generator/)
@@ -35,6 +67,7 @@ On Build generator that will generate a Clients.cs file based on the ClientGener
     - Requires a reference to [Microsoft.AspNetCore.Blazor](https://www.nuget.org/packages/Microsoft.AspNetCore.Blazor/) inside the client project
 - IncludeHttpOverride
   - You will be required to provide the service registration for `IHttpOverride`.
+  - If the `IHttpOverride` implementation returns a HttpResonseMessage, the actual http call will be ignored and the returned value will be used.
   - Allows for overrides to a separate service that will check to see if a HttpResponseMessage can be provided by it instead so it doesn't need to make the http call.
   - Useful if you want to intercept a request before it goes out depending on internal flags, etc.
   - Can be used with mocking

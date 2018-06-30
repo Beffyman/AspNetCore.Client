@@ -233,7 +233,7 @@ namespace AspNetCore.Client.Generator.Data
 			}
 
 			var allHeaders = ParentClass.Headers.Union(this.Headers).Union(additionalHeaders).ToList();
-			return allHeaders;
+			return allHeaders.OrderBy(x=>x.SortOrder).ThenBy(x=>x.Name).ToList();
 		}
 
 		static readonly IEnumerable<string> CANCELLATION_TOKEN_PARAM = new List<string> { $"{nameof(CancellationToken)} {Constants.CancellationTokenParameter} = default({nameof(CancellationToken)})" };

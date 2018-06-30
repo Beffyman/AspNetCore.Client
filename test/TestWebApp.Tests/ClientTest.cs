@@ -38,13 +38,25 @@ namespace TestWebApp.Tests
 
 
 		[Fact]
-		public void SimpleTest()
+		public void GetTest()
 		{
 			var valuesClient = Provider.GetService<IValuesClient>();
 			var values = valuesClient.Get();
 
 
 			Assert.Equal(new List<string> { "value1", "value2" }, values);
+
+
+		}
+
+		[Fact]
+		public void HeaderTest()
+		{
+			var valuesClient = Provider.GetService<IValuesClient>();
+			var value = valuesClient.HeaderTest("Val1", "Val2");
+
+
+			Assert.Equal("Val1", value, StringComparer.CurrentCultureIgnoreCase);
 
 
 		}

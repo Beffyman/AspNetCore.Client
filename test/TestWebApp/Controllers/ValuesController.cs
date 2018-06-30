@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TestWebApp.Controllers
 {
 	[Route("api/[controller]")]
+	[IncludesHeader("ControllerHeader", typeof(int),"0")]
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
@@ -56,6 +57,14 @@ namespace TestWebApp.Controllers
 		public void IgnoreMe()
 		{
 
+		}
+
+		[IncludesHeader("SpecialValue1", typeof(String))]
+		[IncludesHeader("SpecialValue2", "string")]
+		[HttpGet("[action]")]
+		public string HeaderTest()
+		{
+			return Request.Headers["SpecialValue1"].SingleOrDefault();
 		}
 	}
 }
