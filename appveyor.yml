@@ -1,14 +1,6 @@
-version: '0.1.{build}'
+version: '0.2.{build}'
 configuration: Release
 image: Visual Studio 2017
-
-max_jobs: 1
-skip_non_tags: true
-clone_depth: 1
-
-branches:
-  only:
-    - master
 
 nuget:
   account_feed: true

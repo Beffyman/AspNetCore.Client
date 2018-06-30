@@ -20,6 +20,7 @@ using AspNetCore.Client.Core;
 using AspNetCore.Client.Core.Authorization;
 using AspNetCore.Client.Core.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
 using Microsoft.AspNetCore.Blazor;
 
 namespace TestBlazorApp.Clients
@@ -53,6 +54,7 @@ namespace TestBlazorApp.Clients
 
 
 
+
 	public class TestBlazorAppClient
 	{
 		public readonly FlurlClient ClientWrapper;
@@ -72,18 +74,20 @@ namespace TestBlazorApp.Clients
 		
 		IEnumerable<WeatherForecast> WeatherForecasts(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage WeatherForecastsRaw();
+		HttpResponseMessage WeatherForecastsRaw(CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync();
+		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 	}
 
@@ -100,7 +104,8 @@ namespace TestBlazorApp.Clients
 
 		public IEnumerable<WeatherForecast> WeatherForecasts(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
@@ -108,11 +113,17 @@ namespace TestBlazorApp.Clients
 			var action = "WeatherForecasts";
 
 			string url = $@"api/{controller}/{action}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -148,7 +159,7 @@ namespace TestBlazorApp.Clients
 		}
 
 
-		public HttpResponseMessage WeatherForecastsRaw()
+		public HttpResponseMessage WeatherForecastsRaw(CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
@@ -156,11 +167,17 @@ namespace TestBlazorApp.Clients
 			var action = "WeatherForecasts";
 
 			string url = $@"api/{controller}/{action}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+			}
 
 			return response;
 		}
@@ -168,7 +185,8 @@ namespace TestBlazorApp.Clients
 
 		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
@@ -176,11 +194,17 @@ namespace TestBlazorApp.Clients
 			var action = "WeatherForecasts";
 
 			string url = $@"api/{controller}/{action}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false);
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -216,7 +240,7 @@ namespace TestBlazorApp.Clients
 		}
 
 
-		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync()
+		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
@@ -224,11 +248,17 @@ namespace TestBlazorApp.Clients
 			var action = "WeatherForecasts";
 
 			string url = $@"api/{controller}/{action}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false);
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+			}
 
 			return response;
 		}

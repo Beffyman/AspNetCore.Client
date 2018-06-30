@@ -54,7 +54,7 @@ namespace AspNetCore.Client.Generator.Data
 			}
 
 
-			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("Route"));
+			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Route));
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
 				Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
@@ -74,10 +74,10 @@ namespace AspNetCore.Client.Generator.Data
 				.ToList();
 
 			//Authorize Attribute
-			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("Authorize")) != null;
+			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Authorize)) != null;
 
 			//Obsolete Attribute
-			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("Obsolete"));
+			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Obsolete));
 			if (obsoleteAttribute != null)
 			{
 				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
@@ -91,6 +91,42 @@ namespace AspNetCore.Client.Generator.Data
 		public string GetText()
 		{
 
+			var fields = new List<string>();
+
+			fields.Add($@"		public readonly {Settings.Instance.ClientInterfaceName} {Constants.ClientInterfaceName};");
+			if (Settings.Instance.IncludeHttpOverride)
+			{
+				fields.Add($@"		public readonly {Constants.HttpOverride} {Constants.HttpOverrideField};");
+			}
+
+			var classFields = string.Join(Environment.NewLine, fields);
+
+
+			var parameters = new List<string>();
+
+			parameters.Add($@"{Settings.Instance.ClientInterfaceName} client");
+
+			if (Settings.Instance.IncludeHttpOverride)
+			{
+				parameters.Add($@"{Constants.HttpOverride} httpOverride");
+			}
+
+
+			string @params = string.Join(", ", parameters);
+
+
+
+
+			var initializers = new List<string>();
+
+			initializers.Add($"			{Constants.ClientInterfaceName} = client;");
+			if (Settings.Instance.IncludeHttpOverride)
+			{
+				initializers.Add($"			{Constants.HttpOverrideField} = httpOverride;");
+			}
+
+			string init = string.Join(Environment.NewLine, initializers);
+
 			var str =
 $@"
 {GetObsolete()}
@@ -102,11 +138,11 @@ $@"
 {GetObsolete()}
 	public class {ClientName} : I{ClientName}
 	{{
-		public readonly {Settings.Instance.ClientInterfaceName} Client;
+{classFields}
 
-		public {ClientName}({Settings.Instance.ClientInterfaceName} client)
+		public {ClientName}({@params})
 		{{
-			Client = client;
+{init}
 		}}
 
 {string.Join($"{Environment.NewLine}", Methods.Where(x => !x.IsNotEndpoint).Select(x => x.GetImplementationText()))}
@@ -122,7 +158,7 @@ $@"
 		{
 			if (Options.Obsolete != null)
 			{
-				return $@"	[Obsolete(""{Options.Obsolete}"")]";
+				return $@"	[{Constants.Obsolete}(""{Options.Obsolete}"")]";
 			}
 			else
 			{

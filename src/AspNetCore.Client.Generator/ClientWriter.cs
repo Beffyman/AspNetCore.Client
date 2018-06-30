@@ -1,9 +1,14 @@
-﻿using AspNetCore.Client.Generator.Data;
+﻿using AspNetCore.Client.Core;
+using AspNetCore.Client.Generator.Data;
+using Flurl.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AspNetCore.Client.Generator
 {
@@ -49,21 +54,38 @@ namespace AspNetCore.Client.Generator
 ";
 		}
 
+		public static string GetIncludePreHttpCheck()
+		{
+			if (!Settings.Instance.IncludeHttpOverride)
+			{
+				return string.Empty;
+			}
+
+
+			return $@"
+	public interface {Constants.HttpOverride}
+	{{
+		{Helpers.GetTaskType()}<{nameof(HttpResponseMessage)}> {Constants.HttpOverrideGetMethod}({nameof(String)} {Constants.UrlVariable}, {nameof(CancellationToken)} {Constants.CancellationTokenParameter} = default({nameof(CancellationToken)}));
+		{nameof(Task)} {Constants.HttpOverrideOnNonOverridedResponse}({nameof(String)} {Constants.UrlVariable}, {nameof(HttpResponseMessage)} {Constants.ResponseVariable}, {nameof(CancellationToken)} {Constants.CancellationTokenParameter} = default({nameof(CancellationToken)}));
+	}}
+";
+		}
+
 		private static string GetServiceClients()
 		{
 			return $@"
 
 	public class {Settings.Instance.ClientInterfaceName}
 	{{
-		public readonly FlurlClient ClientWrapper;
+		public readonly {nameof(FlurlClient)} {Constants.FlurlClientVariable};
 
-		public {Settings.Instance.ClientInterfaceName}(HttpClient client)
+		public {Settings.Instance.ClientInterfaceName}({nameof(HttpClient)} client)
 		{{
-			ClientWrapper = new FlurlClient(client);
+			{Constants.FlurlClientVariable} = new {nameof(FlurlClient)}(client);
 		}}
 	}}
 
-	public interface I{Settings.Instance.ClientInterfaceName} : IClient {{ }}";
+	public interface I{Settings.Instance.ClientInterfaceName} : {nameof(IClient)} {{ }}";
 		}
 
 		public static void WriteClientsFile(IList<ParsedFile> parsedFiles)
@@ -83,7 +105,8 @@ namespace AspNetCore.Client.Generator
 				"using AspNetCore.Client.Core;",
 				"using AspNetCore.Client.Core.Authorization;",
 				"using AspNetCore.Client.Core.Exceptions;",
-				"using Microsoft.Extensions.DependencyInjection;"
+				"using Microsoft.Extensions.DependencyInjection;",
+				"using System.Threading;"
 			};
 
 			if (Settings.Instance.BlazorClients)
@@ -133,6 +156,7 @@ namespace {Settings.Instance.Namespace}
 {{
 
 {GetInstaller(parsedFiles)}
+{GetIncludePreHttpCheck()}
 {GetServiceClients()}
 {string.Join(Environment.NewLine, blocks)}
 }}

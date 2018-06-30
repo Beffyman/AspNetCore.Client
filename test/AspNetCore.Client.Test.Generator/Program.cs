@@ -3,57 +3,56 @@ using Microsoft.Build.Framework;
 using Moq;
 using System;
 using System.Reflection;
+using System.IO;
+using System.Linq;
 
 namespace AspNetCore.Client.Test.Generator
 {
 	public static class Program
 	{
-		const string TESTWEBAPPCLIENT_PATH = "../../../../TestWebApp.Clients";
-		const string TESTBLAZOR_PATH = "../../../../TestBlazorApp.Clients";
+		const string WEBAPP = "TestWebApp.Clients";
+		const string BLAZOR = "TestBlazorApp.Clients";
+		const string FAILURE_DIR = "AspNetCore.Client";
 
 		static void Main()
 		{
-			if (!(GenerateAspNetCore() && GenerateBlazor()))
+			var webApp = GoUpUntilDirectory(WEBAPP, FAILURE_DIR);
+			var blazor = GoUpUntilDirectory(BLAZOR, FAILURE_DIR);
+
+			if (!(Generate(webApp) && Generate(blazor)))
 			{
 				Console.ReadKey();
 			}
 		}
 
-
-		private static bool GenerateAspNetCore()
+		private static string GoUpUntilDirectory(string targetDirectoryName, string failDirectory)
 		{
-			var previousWorkDir = Environment.CurrentDirectory;
-			var task = new GeneratorTask();
+			string currentPath = System.Environment.CurrentDirectory;
 
-			task.ProjectPath = TESTWEBAPPCLIENT_PATH;
-			var mockedBuildEngine = new Mock<IBuildEngine>();
-			mockedBuildEngine.Setup(x => x.LogErrorEvent(It.IsAny<BuildErrorEventArgs>())).Callback((BuildErrorEventArgs args) =>
+			while (Path.GetFileName(currentPath) != failDirectory)
 			{
-				Console.Error.WriteLine(args.Message);
-				throw new Exception(args.Message);
-			});
-			mockedBuildEngine.Setup(x => x.LogMessageEvent(It.IsAny<BuildMessageEventArgs>())).Callback((BuildMessageEventArgs args) =>
-			{
-				Console.WriteLine(args.Message);
-			});
-			mockedBuildEngine.Setup(x => x.LogWarningEvent(It.IsAny<BuildWarningEventArgs>())).Callback((BuildWarningEventArgs args) =>
-			{
-				Console.WriteLine(args.Message);
-			});
+				var childDirectories = Directory.GetDirectories(currentPath).ToList();
+				var dirs = childDirectories.Select(Path.GetFileName).ToList();
+				if (!dirs.Contains(targetDirectoryName))
+				{
+					currentPath = Path.GetFullPath("..", currentPath);
+				}
+				else
+				{
+					return childDirectories.SingleOrDefault(x => Path.GetFileName(x) == targetDirectoryName);
+				}
+			}
 
-			task.BuildEngine = mockedBuildEngine.Object;
-
-			var success = task.Execute();
-			Environment.CurrentDirectory = previousWorkDir;
-			return success;
+			throw new DirectoryNotFoundException($"Directory {targetDirectoryName} was not found.");
 		}
 
-		private static bool GenerateBlazor()
+
+		private static bool Generate(string path)
 		{
 			var previousWorkDir = Environment.CurrentDirectory;
 			var task = new GeneratorTask();
 
-			task.ProjectPath = TESTBLAZOR_PATH;
+			task.ProjectPath = path;
 			var mockedBuildEngine = new Mock<IBuildEngine>();
 			mockedBuildEngine.Setup(x => x.LogErrorEvent(It.IsAny<BuildErrorEventArgs>())).Callback((BuildErrorEventArgs args) =>
 			{

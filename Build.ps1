@@ -14,7 +14,9 @@ if([System.String]::IsNullOrEmpty($version)){
 }
 
 $artifacts = "$scriptBin/artifacts";
+$testGenerator = Resolve-Path "$scriptBin/test/AspNetCore.Client.Test.Generator";
 
+Remove-Item $artifacts -Recurse -ErrorAction Ignore
 New-Item -Force -ItemType directory -Path $artifacts
 $outputDir = Resolve-Path $artifacts;
 
@@ -23,6 +25,16 @@ dotnet --info
 
 Write-Host "Building Version $version";
 
+Write-Host ">> dotnet build -c Release -v m;"
+dotnet build -c Release -v m;
+
+#Run the test project generators
+Push-Location -Path $testGenerator -StackName "Run";
+Write-Host ">> dotnet run -c Release -v m;"
+dotnet run -c Release -v m;
+Pop-Location -StackName "Run";
+
+#Build again, making sure that our clients that were just regenerated via the previous command build
 Write-Host ">> dotnet build -c Release -v m;"
 dotnet build -c Release -v m;
 

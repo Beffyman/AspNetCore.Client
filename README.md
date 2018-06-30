@@ -12,6 +12,7 @@ Package that contains required classes/attributes used by the generator package.
 
 On Build generator that will generate a Clients.cs file based on the ClientGeneratorSettings.json file the generator creates.
 
+
 #### ClientGeneratorSettings.json Reference
 
 - Locked
@@ -30,8 +31,13 @@ On Build generator that will generate a Clients.cs file based on the ClientGener
   - Whether or not the generate the clients so they are compatible with Blazor views
   - Differences include
     - Newtonsoft.Json.JsonConvert.DeserializeObject => JsonUtil.Deserialize
-    - Namespace include changes.
+    - Default namespaces are different.
     - Requires a reference to [Microsoft.AspNetCore.Blazor](https://www.nuget.org/packages/Microsoft.AspNetCore.Blazor/) inside the client project
+- IncludeHttpOverride
+  - You will be required to provide the service registration for `IHttpOverride`.
+  - Allows for overrides to a separate service that will check to see if a HttpResponseMessage can be provided by it instead so it doesn't need to make the http call.
+  - Useful if you want to intercept a request before it goes out depending on internal flags, etc.
+  - Can be used with mocking
 - AllowedNamespaces
   - Namespaces allowed to be pulled from Controllers that the generator is pulling the data from.
     - ex) You have `using MyApp.Contracts;` inside the Controller, if MyApp.Contracts is inside the allowed namespaces, it would be copied into the Clients.cs

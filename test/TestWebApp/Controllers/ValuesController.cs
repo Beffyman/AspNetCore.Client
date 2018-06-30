@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TestWebApp.Controllers
@@ -38,8 +39,15 @@ namespace TestWebApp.Controllers
 
 		// DELETE api/values/5
 		[HttpDelete("{id}")]
+		[Authorize]
 		public void Delete(int id)
 		{
+		}
+
+		[HttpGet("[action]")]
+		public async Task CancellationTestEndpoint()
+		{
+			await Task.Delay(10000);
 		}
 	}
 }

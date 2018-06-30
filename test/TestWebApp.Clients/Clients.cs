@@ -19,6 +19,7 @@ using AspNetCore.Client.Core;
 using AspNetCore.Client.Core.Authorization;
 using AspNetCore.Client.Core.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading;
 using Newtonsoft.Json;
 
 namespace TestWebApp.Clients
@@ -51,6 +52,13 @@ namespace TestWebApp.Clients
 	}
 
 
+	public interface IHttpOverride
+	{
+		ValueTask<HttpResponseMessage> GetResponseAsync(String url, CancellationToken cancellationToken = default(CancellationToken));
+		Task OnNonOverridedResponseAsync(String url, HttpResponseMessage response, CancellationToken cancellationToken = default(CancellationToken));
+	}
+
+
 
 	public class TestWebAppClient
 	{
@@ -71,58 +79,68 @@ namespace TestWebApp.Clients
 		
 		IEnumerable<string> Get(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage GetRaw();
+		HttpResponseMessage GetRaw(CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<IEnumerable<string>> GetAsync(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		ValueTask<HttpResponseMessage> GetRawAsync();
+		ValueTask<HttpResponseMessage> GetRawAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		string Get(int id, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage GetRaw(int id);
+		HttpResponseMessage GetRaw(int id, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<string> GetAsync(int id, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		ValueTask<HttpResponseMessage> GetRawAsync(int id);
+		ValueTask<HttpResponseMessage> GetRawAsync(int id, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		void Post(string value, 
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PostRaw(string value, 
-			int UserId);
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		Task PostAsync(string value, 
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PostRawAsync(string value, 
-			int UserId);
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		void Put(int id, 
@@ -130,12 +148,14 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PutRaw(int id, 
 			string value, 
-			int UserId);
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		Task PutAsync(int id, 
@@ -143,34 +163,62 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PutRawAsync(int id, 
 			string value, 
-			int UserId);
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		void Delete(int id, 
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage DeleteRaw(int id, 
-			int UserId);
+			int UserId, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		Task DeleteAsync(int id, 
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null);
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
-			int UserId);
+			int UserId, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		void CancellationTestEndpoint(Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage CancellationTestEndpointRaw(CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		Task CancellationTestEndpointAsync(Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 	}
 
@@ -178,28 +226,38 @@ namespace TestWebApp.Clients
 	public class ValuesClient : IValuesClient
 	{
 		public readonly TestWebAppClient Client;
+		public readonly IHttpOverride HttpOverride;
 
-		public ValuesClient(TestWebAppClient client)
+		public ValuesClient(TestWebAppClient client, IHttpOverride httpOverride)
 		{
 			Client = client;
+			HttpOverride = httpOverride;
 		}
 
 
 		public IEnumerable<string> Get(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -235,19 +293,26 @@ namespace TestWebApp.Clients
 		}
 
 
-		public HttpResponseMessage GetRaw()
+		public HttpResponseMessage GetRaw(CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			return response;
 		}
@@ -255,19 +320,27 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<IEnumerable<string>> GetAsync(Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false);
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -303,19 +376,26 @@ namespace TestWebApp.Clients
 		}
 
 
-		public async ValueTask<HttpResponseMessage> GetRawAsync()
+		public async ValueTask<HttpResponseMessage> GetRawAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false);
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			return response;
 		}
@@ -324,19 +404,27 @@ namespace TestWebApp.Clients
 		public string Get(int id, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -372,19 +460,27 @@ namespace TestWebApp.Clients
 		}
 
 
-		public HttpResponseMessage GetRaw(int id)
+		public HttpResponseMessage GetRaw(int id, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			return response;
 		}
@@ -393,19 +489,27 @@ namespace TestWebApp.Clients
 		public async ValueTask<string> GetAsync(int id, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false);
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -441,19 +545,27 @@ namespace TestWebApp.Clients
 		}
 
 
-		public async ValueTask<HttpResponseMessage> GetRawAsync(int id)
+		public async ValueTask<HttpResponseMessage> GetRawAsync(int id, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Get";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
-				.GetAsync().ConfigureAwait(false);
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			return response;
 		}
@@ -463,20 +575,28 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Post";
+
 
 			string url = $@"api/{controller}?value={value}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PostJsonAsync(value).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -504,20 +624,28 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage PostRaw(string value, 
-			int UserId)
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Post";
+
 
 			string url = $@"api/{controller}?value={value}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PostJsonAsync(value).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			return response;
 		}
@@ -527,20 +655,28 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Post";
+
 
 			string url = $@"api/{controller}?value={value}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PostJsonAsync(value).ConfigureAwait(false);
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -568,20 +704,28 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> PostRawAsync(string value, 
-			int UserId)
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Post";
+
 
 			string url = $@"api/{controller}?value={value}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PostJsonAsync(value).ConfigureAwait(false);
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			return response;
 		}
@@ -592,20 +736,28 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Put";
+
 
 			string url = $@"api/{controller}/{id}?value={value}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PutJsonAsync(value).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -634,20 +786,28 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage PutRaw(int id, 
 			string value, 
-			int UserId)
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Put";
+
 
 			string url = $@"api/{controller}/{id}?value={value}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PutJsonAsync(value).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			return response;
 		}
@@ -658,20 +818,28 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Put";
+
 
 			string url = $@"api/{controller}/{id}?value={value}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PutJsonAsync(value).ConfigureAwait(false);
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -700,20 +868,28 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> PutRawAsync(int id, 
 			string value, 
-			int UserId)
+			int UserId, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Put";
+
 
 			string url = $@"api/{controller}/{id}?value={value}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.PutJsonAsync(value).ConfigureAwait(false);
+				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			return response;
 		}
@@ -723,20 +899,30 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Delete";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
+				.WithAuth(auth)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.DeleteAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -764,20 +950,30 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage DeleteRaw(int id, 
-			int UserId)
+			int UserId, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Delete";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
 				.Request(url)
+				.WithAuth(auth)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.DeleteAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
 
 			return response;
 		}
@@ -787,20 +983,30 @@ namespace TestWebApp.Clients
 			int UserId, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null)
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Delete";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
+				.WithAuth(auth)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.DeleteAsync().ConfigureAwait(false);
+				.DeleteAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -828,20 +1034,178 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
-			int UserId)
+			int UserId, 
+			SecurityHeader auth = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
 			var controller = "Values";
-			var action = "Delete";
+
 
 			string url = $@"api/{controller}/{id}";
-			HttpResponseMessage response = await Client.ClientWrapper
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
 				.Request(url)
+				.WithAuth(auth)
 				.WithHeader("Accept", "application/json")
 				.WithHeader("UserId", UserId)
 				.AllowAnyHttpStatus()
-				.DeleteAsync().ConfigureAwait(false);
+				.DeleteAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public void CancellationTestEndpoint(Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "CancellationTestEndpoint";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public HttpResponseMessage CancellationTestEndpointRaw(CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "CancellationTestEndpoint";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async Task CancellationTestEndpointAsync(Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "CancellationTestEndpoint";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public async ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "CancellationTestEndpoint";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("Accept", "application/json")
+				.AllowAnyHttpStatus()
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
 
 			return response;
 		}

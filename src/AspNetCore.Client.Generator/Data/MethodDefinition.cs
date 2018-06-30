@@ -1,4 +1,7 @@
-﻿using AspNetCore.Client.Generator.Data.RouteConstraints;
+﻿using AspNetCore.Client.Core;
+using AspNetCore.Client.Core.Authorization;
+using AspNetCore.Client.Generator.Data.RouteConstraints;
+using Flurl.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
@@ -6,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace AspNetCore.Client.Generator.Data
 {
@@ -57,7 +61,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			//Route Attribute
 
-			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("Route"));
+			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Route));
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
 				Options.Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
@@ -66,7 +70,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			//HTTP Attribute
 
-			var httpAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("Http"));
+			var httpAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Http));
 			if (httpAttribute == null)
 			{
 				IsNotEndpoint = true;
@@ -76,8 +80,8 @@ namespace AspNetCore.Client.Generator.Data
 			Options.HttpType = (HttpAttributeType)Enum.Parse(typeof(HttpAttributeType),
 				httpAttribute.Name
 				.ToFullString()
-				.Replace("Http", "")
-				.Replace("Attribute", ""));
+				.Replace(Constants.Http, "")
+				.Replace(Constants.Attribute, ""));
 
 			if (Options.Route == null && httpAttribute.ArgumentList != null)//If Route was never fetched from RouteAttribute or if they used the Http(template) override
 			{
@@ -89,20 +93,20 @@ namespace AspNetCore.Client.Generator.Data
 			}
 
 			//Obsolete Attribute
-			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("Obsolete"));
+			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Obsolete));
 			if (obsoleteAttribute != null)
 			{
 				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
 			}
 
 			//Authorize Attribute
-			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("Authorize")) != null;
+			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Authorize)) != null;
 			//AllowAnonymous Attribute
-			Options.AllowAnonymous = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith("AllowAnonymous")) != null;
+			Options.AllowAnonymous = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.AllowAnonymous)) != null;
 
 
 			//Response types
-			var responseTypes = attributes.Where(x => x.Name.ToFullString().StartsWith("ProducesResponseType"));
+			var responseTypes = attributes.Where(x => x.Name.ToFullString().StartsWith(Constants.ProducesResponseType));
 			Responses = responseTypes.Select(x => new ResponseTypeDefinition(this, x)).ToList();
 
 			foreach (var responseType in Settings.Instance.KnownStatusesAndResponseTypes)
@@ -121,7 +125,7 @@ namespace AspNetCore.Client.Generator.Data
 				.Select(x => new HeaderDefinition(x))
 				.ToList();
 
-			Options.ActionResultReturn = MethodSyntax.ReturnType.ToFullString().Contains("IActionResult");
+			Options.ActionResultReturn = MethodSyntax.ReturnType.ToFullString().Contains(Constants.IActionResult);
 
 
 		}
@@ -173,10 +177,6 @@ namespace AspNetCore.Client.Generator.Data
 					{
 						routeUnformatted = routeUnformatted.Replace(match.Value, $"{{{Helpers.GetRouteStringTransform(parameter.RouteName, parameter.Type)}}}");
 					}
-					if (parameter.RouteName == "code")
-					{
-
-					}
 				}
 
 				var queryVariables = Parameters.Where(x => Helpers.IsRoutableType(x.Type)
@@ -196,8 +196,8 @@ namespace AspNetCore.Client.Generator.Data
 
 
 
-				routeUnformatted = routeUnformatted.Replace("[controller]", "{controller}");
-				routeUnformatted = routeUnformatted.Replace("[action]", "{action}");
+				routeUnformatted = routeUnformatted.Replace($"[{Constants.ControllerRouteReserved}]", $"{{{Constants.ControllerRouteReserved}}}");
+				routeUnformatted = routeUnformatted.Replace($"[{Constants.ActionRouteReserved}]", $"{{{Constants.ActionRouteReserved}}}");
 				return routeUnformatted;
 			}
 		}
@@ -236,15 +236,17 @@ namespace AspNetCore.Client.Generator.Data
 			return allHeaders;
 		}
 
+		static readonly IEnumerable<string> CANCELLATION_TOKEN_PARAM = new List<string> { $"{nameof(CancellationToken)} {Constants.CancellationTokenParameter} = default({nameof(CancellationToken)})" };
+
 		public string GetInterfaceText()
 		{
 			string correctedName = Name.Replace("Async", "");
 
 			var allHeaders = GetAllHeaders();
 
-			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.SyncMethodOutput), OptionParameters() }.SelectMany(x => x));
-			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters() }.SelectMany(x => x));
-			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.AsyncMethodOutput), OptionParameters() }.SelectMany(x => x));
+			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
+			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
+			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
 
 			var returnType = MethodSyntax.ReturnType?.ToFullString();
 
@@ -259,7 +261,8 @@ namespace AspNetCore.Client.Generator.Data
 
 				returnType = returnType.Trim();
 
-				if(returnType == "void")
+
+				if (returnType == "void" || returnType == "Task")
 				{
 					returnType = null;
 				}
@@ -291,9 +294,9 @@ $@"		{GetObsolete()}
 
 			var allHeaders = GetAllHeaders();
 
-			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.SyncMethodOutput), OptionParameters() }.SelectMany(x => x));
-			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters() }.SelectMany(x => x));
-			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.AsyncMethodOutput), OptionParameters() }.SelectMany(x => x));
+			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
+			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
+			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
 
 			var returnType = MethodSyntax.ReturnType?.ToFullString();
 
@@ -309,7 +312,7 @@ $@"		{GetObsolete()}
 				returnType = returnType.Trim();
 
 
-				if (returnType == "void")
+				if (returnType == "void" || returnType == "Task")
 				{
 					returnType = null;
 				}
@@ -335,7 +338,7 @@ $@"{GetObsolete()}
 		{{
 {string.Join(Environment.NewLine, RouteConstraints.Select(x => x.GetText()).Where(x => !string.IsNullOrEmpty(x)))}
 			{ResponseBuilder(false)}
-			return response;
+			return {Constants.ResponseVariable};
 		}}
 
 {GetObsolete()}
@@ -352,7 +355,7 @@ $@"{GetObsolete()}
 		{{
 {string.Join(Environment.NewLine, RouteConstraints.Select(x => x.GetText()).Where(x => !string.IsNullOrEmpty(x)))}
 			{ResponseBuilder(true)}
-			return response;
+			return {Constants.ResponseVariable};
 		}}
 ";
 		}
@@ -363,15 +366,15 @@ $@"{GetObsolete()}
 			string read = null;
 			if (Helpers.KnownPrimitives.Contains(returnType, StringComparer.CurrentCultureIgnoreCase))
 			{
-				read = $@"{(async ? "await " : string.Empty)}response.Content.ReadAsNonJsonAsync<{returnType}>(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
+				read = $@"{(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsNonJsonAsync<{returnType}>(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
 			}
 			else
 			{
-				read = $@"{Helpers.GetJsonDeserializer()}<{returnType}>({(async ? "await " : string.Empty)}response.Content.ReadAsStringAsync(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")})";
+				read = $@"{Helpers.GetJsonDeserializer()}<{returnType}>({(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsStringAsync(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")})";
 			}
 
 			return $@"
-			if(response.IsSuccessStatusCode)
+			if({Constants.ResponseVariable}.IsSuccessStatusCode)
 			{{
 				return {read};
 			}}
@@ -385,36 +388,66 @@ $@"{GetObsolete()}
 
 		private string ResponseBuilder(bool async)
 		{
-			var additionalVars = $@"
-			var controller = ""{ParentClass.ControllerName}"";
-			var action = ""{Name}"";";
+			var controllerVar = $@"			var {Constants.ControllerRouteReserved} = ""{ParentClass.ControllerName}"";";
+			var actionVar = $@"			var {Constants.ActionRouteReserved} = ""{Name}"";";
+
+
 			var route = FullRoute;
 
-			bool contains = route.Contains("{controller}") || route.Contains("{action}");
+			bool containsController = route.Contains($"{{{Constants.ControllerRouteReserved}}}");
+			bool containsAction = route.Contains($"{{{Constants.ActionRouteReserved}}}");
 
 
 			var str =
-$@"{(contains ? additionalVars : string.Empty)}
+$@"
+{(containsController ? controllerVar : string.Empty)}
+{(containsAction ? actionVar : string.Empty)}
 
-			string url = $@""{FullRoute}"";
-			HttpResponseMessage response = {(async ? "await " : "")}{GetHttpText()}{(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};
+			string {Constants.UrlVariable} = $@""{FullRoute}"";
+			HttpResponseMessage {Constants.ResponseVariable} = null;
+			{GetHttpOverridePre(async)}
+			if({Constants.ResponseVariable} == null)
+			{{
+				{Constants.ResponseVariable} = {(async ? "await " : "")}{GetHttpText()}{(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};
+				{GetHttpOverridePost(async)}
+			}}
 ";
 
 			return str;
 		}
 
+		private string GetHttpOverridePre(bool async)
+		{
+			if (!Settings.Instance.IncludeHttpOverride)
+			{
+				return null;
+			}
+
+			return $@"{Constants.ResponseVariable} = {(async ? "await " : "")}{Constants.HttpOverrideField}.{Constants.HttpOverrideGetMethod}({Constants.UrlVariable}, {Constants.CancellationTokenParameter}){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};";
+		}
+
+		private string GetHttpOverridePost(bool async)
+		{
+			if (!Settings.Instance.IncludeHttpOverride)
+			{
+				return null;
+			}
+
+			return $@"
+				{(async ? "await " : "")}{Constants.HttpOverrideField}.{Constants.HttpOverrideOnNonOverridedResponse}({Constants.UrlVariable}, {Constants.ResponseVariable}, {Constants.CancellationTokenParameter}){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};";
+		}
 
 		private string GetHttpText()
 		{
-			string str = $@"Client.ClientWrapper
-				.Request(url)";
+			string str = $@"{Constants.ClientInterfaceName}.{Constants.FlurlClientVariable}
+				.{nameof(FlurlClient.Request)}({Constants.UrlVariable})";
 
 			const string tabs = "\t\t\t\t";
 
 
 			if (Options.Authorize)
 			{
-				str = $"{str}{Environment.NewLine}{tabs}.WithAuth(auth)";
+				str = $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratorExtensions.WithAuth)}({Constants.AuthParameter})";
 			}
 
 
@@ -439,20 +472,20 @@ $@"{(contains ? additionalVars : string.Empty)}
 
 			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.Body ?? false);
 
-			str = $"{str}{Environment.NewLine}{tabs}.AllowAnyHttpStatus()";
+			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.AllowAnyHttpStatus)}()";
 			//str = $@"{str}{Environment.NewLine}{tabs}.WithTimeout({Settings.Instance.ServiceName}HttpClient.Timeout)";
 			switch (Options.HttpType)
 			{
 				case HttpAttributeType.Delete:
-					return $"{str}{Environment.NewLine}{tabs}.DeleteAsync()";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.DeleteAsync)}({Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Get:
-					return $"{str}{Environment.NewLine}{tabs}.GetAsync()";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.GetAsync)}({Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Put:
-					return $"{str}{Environment.NewLine}{tabs}.PutJsonAsync({bodyParameter?.HttpCallOutput ?? "null"})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutJsonAsync)}({bodyParameter?.HttpCallOutput ?? "null"},{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Patch:
-					return $"{str}{Environment.NewLine}{tabs}.PatchJsonAsync({bodyParameter?.HttpCallOutput ?? "null"})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchJsonAsync)}({bodyParameter?.HttpCallOutput ?? "null"},{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Post:
-					return $"{str}{Environment.NewLine}{tabs}.PostJsonAsync({bodyParameter?.HttpCallOutput ?? "null"})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutJsonAsync)}({bodyParameter?.HttpCallOutput ?? "null"},{Constants.CancellationTokenParameter})";
 				default:
 					throw new Exception("Unexpected HTTPType");
 			}
@@ -463,7 +496,7 @@ $@"{(contains ? additionalVars : string.Empty)}
 		{
 			if (Options.Obsolete != null)
 			{
-				return $@"		[Obsolete(""{Options.Obsolete}"")]";
+				return $@"		[{Constants.Obsolete}(""{Options.Obsolete}"")]";
 			}
 			else
 			{
@@ -478,7 +511,7 @@ $@"{(contains ? additionalVars : string.Empty)}
 
 			if (Options.Authorize || ParentClass.Options.Authorize)
 			{
-				optionParameters.Add($"SecurityHeader auth = null");
+				optionParameters.Add($"{nameof(SecurityHeader)} {Constants.AuthParameter} = null");
 			}
 
 

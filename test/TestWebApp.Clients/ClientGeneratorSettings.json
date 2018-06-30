@@ -5,6 +5,7 @@
   "ValueTask": true,
   "Namespace": "TestWebApp.Clients",
   "BlazorClients": false,
+  "IncludeHttpOverride": true,
   "AllowedNamespaces": [
     "System*",
     "MyNamespaceToInclude*"

@@ -16,6 +16,7 @@ namespace AspNetCore.Client.Generator
 		public bool ValueTask { get; set; } = true;
 		public string Namespace { get; set; } = "MyService.Clients";
 		public bool BlazorClients { get; set; } = false;
+		public bool IncludeHttpOverride { get; set; } = false;
 		public string[] AllowedNamespaces { get; set; } = new string[]
 		{
 			"System*",

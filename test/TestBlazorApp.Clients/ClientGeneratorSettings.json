@@ -5,6 +5,7 @@
   "ValueTask": true,
   "Namespace": "TestBlazorApp.Clients",
   "BlazorClients": true,
+  "IncludeHttpOverride": false,
   "AllowedNamespaces": [
     "System*",
     "TestBlazorApp.Shared*"
