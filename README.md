@@ -20,6 +20,7 @@ and think the following
   - Generated On Build!
 - How do I unit test this without spinning up a full web app? 
   - Works with Microsoft.AspNetCore.TestHost!
+    - CancellationTokens are not respected inside the TestServer without some hacks though.
 - How do I tell my teammates that an endpoint has headers it requires? 
   - RequiredHttpHeaderParameters! 
   - IncludeHeaderAttribute!
