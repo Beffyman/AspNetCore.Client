@@ -29,6 +29,7 @@ deploy:
     artifact: /.*\.nupkg/
     on:
       branch: master
+      appveyor_repo_tag: true
 
   - provider: GitHub
     artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
@@ -38,3 +39,4 @@ deploy:
       secure: ciT780F14J207Y8r947Il6TBZQG8xJfvYqOZaU+EsBhDzzzN/sdtETKju59U6hbs
     on:
       branch: master                # release from master branch only
+      appveyor_repo_tag: true
