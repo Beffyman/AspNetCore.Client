@@ -24,7 +24,7 @@ namespace AspNetCore.Client.Generator
 
 		private static string GetInstaller(IList<ParsedFile> parsedFiles)
 		{
-			var clients = string.Join(Environment.NewLine,parsedFiles.SelectMany(x => x.Classes.Select(y => $@"			services.AddScoped<I{y.ClientName}, {y.ClientName}>();")));
+			var clients = string.Join(Environment.NewLine, parsedFiles.SelectMany(x => x.Classes.Where(y => y.NotEmpty).Select(y => $@"			services.AddScoped<I{y.ClientName}, {y.ClientName}>();")));
 
 			return $@"
 	public static class {Settings.Instance.ClientInterfaceName}Installer

@@ -1,16 +1,17 @@
-﻿using System;
+﻿using AspNetCore.Client.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.Client.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TestWebApp.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ValuesController : ControllerBase
+	[NoClient]//Ignores the controller inside the generator
+	public class IgnoredController : ControllerBase
 	{
 		// GET api/values
 		[HttpGet]
@@ -49,13 +50,6 @@ namespace TestWebApp.Controllers
 		public async Task CancellationTestEndpoint()
 		{
 			await Task.Delay(10000);
-		}
-
-		[NoClient]
-		[HttpGet("[action]")]
-		public void IgnoreMe()
-		{
-
 		}
 	}
 }
