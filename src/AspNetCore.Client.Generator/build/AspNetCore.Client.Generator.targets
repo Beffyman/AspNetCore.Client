@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Target Name="AspNetCoreClientGeneratorTarget" BeforeTargets="CoreBuild">
+	<Target Name="AspNetCoreClientGeneratorTarget" BeforeTargets="CoreCompile">
 		<Message Importance="high" Text="AspNetCore.Client.Generator~ Target Project: $(MSBuildProjectDirectory)"/>
 		<AspNetCore.Client.Generator.GeneratorTask ProjectPath="$(MSBuildProjectDirectory)"/>
 	</Target>
