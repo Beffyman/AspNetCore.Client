@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace TestWebApp.Controllers
 {
 	[Route("api/[controller]")]
-	[IncludesHeader("ControllerHeader", typeof(int),"0")]
+	[IncludesHeader("ControllerHeader", typeof(int), "0")]
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
@@ -62,9 +62,16 @@ namespace TestWebApp.Controllers
 		[IncludesHeader("SpecialValue1", typeof(String))]
 		[IncludesHeader("SpecialValue2", "string")]
 		[HttpGet("[action]")]
-		public string HeaderTest()
+		public string HeaderTestString()
 		{
 			return Request.Headers["SpecialValue1"].SingleOrDefault();
+		}
+
+		[IncludesHeader("SpecialValue1", typeof(int))]
+		[HttpGet("[action]")]
+		public int HeaderTestInt()
+		{
+			return int.Parse(Request.Headers["SpecialValue1"].SingleOrDefault());
 		}
 	}
 }

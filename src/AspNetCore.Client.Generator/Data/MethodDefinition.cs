@@ -380,7 +380,7 @@ $@"{GetObsolete()}
 			}}
 			else
 			{{
-				return null;
+				return default({returnType});
 			}}
 ";
 

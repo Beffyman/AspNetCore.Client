@@ -153,7 +153,7 @@ namespace TestBlazorApp.Clients
 			}
 			else
 			{
-				return null;
+				return default(IEnumerable<WeatherForecast>);
 			}
 
 		}
@@ -234,7 +234,7 @@ namespace TestBlazorApp.Clients
 			}
 			else
 			{
-				return null;
+				return default(IEnumerable<WeatherForecast>);
 			}
 
 		}

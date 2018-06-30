@@ -50,15 +50,24 @@ namespace TestWebApp.Tests
 		}
 
 		[Fact]
-		public void HeaderTest()
+		public void HeaderTestString()
 		{
 			var valuesClient = Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTest("Val1", "Val2");
+			var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
-			Assert.Equal("Val1", value, StringComparer.CurrentCultureIgnoreCase);
+			Assert.Equal("Val1", value);
 
 
+		}
+		[Fact]
+		public void HeaderTestInt()
+		{
+			var valuesClient = Provider.GetService<IValuesClient>();
+			var value = valuesClient.HeaderTestInt(15);
+
+
+			Assert.Equal(15, value);
 		}
 
 		/// <summary>

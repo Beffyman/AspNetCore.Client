@@ -20,6 +20,10 @@ namespace AspNetCore.Client.Core
 		public static async ValueTask<T> ReadAsNonJsonAsync<T>(this HttpContent content)
 		{
 			string data = await content.ReadAsStringAsync().ConfigureAwait(false);
+			if(typeof(T) == typeof(string))
+			{
+				data = data.TrimStart('"').TrimEnd('"');
+			}
 			return (T)Convert.ChangeType(data, typeof(T));
 		}
 
