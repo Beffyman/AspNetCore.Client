@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Test.Gene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Tests", "test\TestWebApp.Tests\TestWebApp.Tests.csproj", "{65D34793-90AA-4641-80DC-A8B092E40DAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebApp.Contracts", "test\TestWebApp.Contracts\TestWebApp.Contracts.csproj", "{D21B21B7-CCF3-4C68-8F90-DC045ABE3DCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Contracts", "test\TestWebApp.Contracts\TestWebApp.Contracts.csproj", "{D21B21B7-CCF3-4C68-8F90-DC045ABE3DCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

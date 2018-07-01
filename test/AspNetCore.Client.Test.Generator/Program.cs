@@ -5,6 +5,10 @@ using System;
 using System.Reflection;
 using System.IO;
 using System.Linq;
+using Microsoft.Build.Evaluation;
+using System.Collections.Generic;
+using System.Xml.Linq;
+using Microsoft.Build.Construction;
 
 namespace AspNetCore.Client.Test.Generator
 {
@@ -23,6 +27,7 @@ namespace AspNetCore.Client.Test.Generator
 			{
 				Console.ReadKey();
 			}
+
 		}
 
 		private static string GoUpUntilDirectory(string targetDirectoryName, string failDirectory)
@@ -49,10 +54,20 @@ namespace AspNetCore.Client.Test.Generator
 
 		private static bool Generate(string path)
 		{
+			var projectName = Path.GetFileName(path);
+			var projFile = $"{path}/{projectName}.csproj";
+			var data = XElement.Load(projFile);
+
+			IDictionary<string, string> properties = data.Elements("PropertyGroup")
+				.Descendants()
+				.ToDictionary(x => x.Name.ToString(), y => y.Value);
+
 			var previousWorkDir = Environment.CurrentDirectory;
 			var task = new GeneratorTask();
+			task.Fill(properties);
+			task.CurrentDirectory = path;
 
-			task.ProjectPath = path;
+
 			var mockedBuildEngine = new Mock<IBuildEngine>();
 			mockedBuildEngine.Setup(x => x.LogErrorEvent(It.IsAny<BuildErrorEventArgs>())).Callback((BuildErrorEventArgs args) =>
 			{

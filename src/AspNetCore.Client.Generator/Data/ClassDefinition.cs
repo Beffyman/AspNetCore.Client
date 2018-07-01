@@ -22,6 +22,7 @@ namespace AspNetCore.Client.Generator.Data
 
 		public IList<AttributeSyntax> Attributes { get; }
 		public IList<MethodDefinition> Methods { get; }
+		public IList<ResponseTypeDefinition> Responses { get; }
 
 		public string Route { get; }
 		public IList<HeaderDefinition> Headers { get; }
@@ -68,6 +69,11 @@ namespace AspNetCore.Client.Generator.Data
 				NamespaceVersion = group.Value.ToUpper();
 			}
 
+			//Response types
+			var responseTypes = attributes.Where(x => x.Name.ToFullString().StartsWith(Constants.ProducesResponseType));
+			Responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
+
+
 
 			Headers = attributes.Where(x => x.Name.ToFullString().StartsWith(AspNetCore.Client.Core.IncludesHeaderAttribute.AttributeName))
 				.Select(x => new HeaderDefinition(x))
@@ -93,23 +99,16 @@ namespace AspNetCore.Client.Generator.Data
 
 			var fields = new List<string>();
 
-			fields.Add($@"		public readonly {Settings.Instance.ClientInterfaceName} {Constants.ClientInterfaceName};");
-			if (Settings.Instance.IncludeHttpOverride)
-			{
-				fields.Add($@"		public readonly {Constants.HttpOverride} {Constants.HttpOverrideField};");
-			}
+			fields.Add($@"		public readonly {Settings.ClientInterfaceName} {Constants.ClientInterfaceName};");
+			fields.Add($@"		public readonly {Constants.HttpOverride} {Constants.HttpOverrideField};");
 
 			var classFields = string.Join(Environment.NewLine, fields);
 
 
 			var parameters = new List<string>();
 
-			parameters.Add($@"{Settings.Instance.ClientInterfaceName} client");
-
-			if (Settings.Instance.IncludeHttpOverride)
-			{
-				parameters.Add($@"{Constants.HttpOverride} httpOverride");
-			}
+			parameters.Add($@"{Settings.ClientInterfaceName} client");
+			parameters.Add($@"{Constants.HttpOverride} httpOverride");
 
 
 			string @params = string.Join(", ", parameters);
@@ -120,17 +119,15 @@ namespace AspNetCore.Client.Generator.Data
 			var initializers = new List<string>();
 
 			initializers.Add($"			{Constants.ClientInterfaceName} = client;");
-			if (Settings.Instance.IncludeHttpOverride)
-			{
-				initializers.Add($"			{Constants.HttpOverrideField} = httpOverride;");
-			}
+			initializers.Add($"			{Constants.HttpOverrideField} = httpOverride;");
+
 
 			string init = string.Join(Environment.NewLine, initializers);
 
 			var str =
 $@"
 {GetObsolete()}
-	public interface I{ClientName} : I{Settings.Instance.ClientInterfaceName}
+	public interface I{ClientName} : I{Settings.ClientInterfaceName}
 	{{
 {string.Join($"{Environment.NewLine}", Methods.Where(x => !x.IsNotEndpoint).Select(x => x.GetInterfaceText()))}
 	}}

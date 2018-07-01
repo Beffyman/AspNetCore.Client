@@ -9,35 +9,27 @@ namespace AspNetCore.Client.Generator.Data
 {
 	public class ResponseTypeDefinition
 	{
-		public MethodDefinition Parent { get; }
 		public string Type { get; }
 		public string Status { get; }
 		public string StatusValue { get; }
 		public bool IsResponseHandler { get; set; }
 
 
-		public ResponseTypeDefinition(MethodDefinition parent, bool responseHandler)
+		public ResponseTypeDefinition(bool responseHandler)
 		{
-			Parent = parent;
 			IsResponseHandler = responseHandler;
 		}
 
-		/// <summary>
-		/// Internal server error
-		/// </summary>
-		/// <param name="parent"></param>
-		public ResponseTypeDefinition(MethodDefinition parent, string expectedStatus, string type)
+
+		public ResponseTypeDefinition(string expectedStatus, string type)
 		{
-			Parent = parent;
 			Type = type;
-			Status = $"(int)HttpStatusCode.{expectedStatus}";
+			Status = $"(int){nameof(HttpStatusCode)}.{expectedStatus}";
 			StatusValue = expectedStatus;
 		}
 
-		public ResponseTypeDefinition(MethodDefinition parent, AttributeSyntax attribute)
+		public ResponseTypeDefinition(AttributeSyntax attribute)
 		{
-			Parent = parent;
-
 			if (attribute.ArgumentList.Arguments.Count == 1)//Only HTTP value was provided, assumed to have no body
 			{
 				Type = null;
@@ -51,7 +43,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			if (Status.Contains("(int)"))
 			{
-				StatusValue = Status.Replace("(int)", "").Replace("HttpStatusCode.", "");
+				StatusValue = Status.Replace("(int)", "").Replace($"{nameof(HttpStatusCode)}.", "");
 			}
 			else
 			{
@@ -68,7 +60,7 @@ namespace AspNetCore.Client.Generator.Data
 			{
 				if (IsResponseHandler)
 				{
-					return $"ResponseCallback";
+					return $"{Constants.ResponseCallback}";
 				}
 				return $"{StatusValue}Callback";
 			}
@@ -81,7 +73,7 @@ namespace AspNetCore.Client.Generator.Data
 			{
 				if (IsResponseHandler)
 				{
-					return $@"Action<HttpResponseMessage> ResponseCallback = null";
+					return $@"Action<HttpResponseMessage> {Constants.ResponseCallback} = null";
 				}
 
 				if (Type == null)
@@ -102,7 +94,7 @@ namespace AspNetCore.Client.Generator.Data
 			{
 				if (IsResponseHandler)
 				{
-					return $@"Action<HttpResponseMessage> ResponseCallback = null";
+					return $@"Action<HttpResponseMessage> {Constants.ResponseCallback} = null";
 				}
 
 				if (Type == null)
@@ -130,7 +122,7 @@ $@"			if({ParameterName} != null && {ParameterName}.Method.IsDefined(typeof(Asyn
 				if (IsResponseHandler)
 				{
 					return str += Environment.NewLine +
-$@"			ResponseCallback?.Invoke(response);";
+$@"			{Constants.ResponseCallback}?.Invoke(response);";
 				}
 
 				if (Type == null)
@@ -167,7 +159,7 @@ $@"			if({ParameterName} != null && {ParameterName}.Method.IsDefined(typeof(Asyn
 				if (IsResponseHandler)
 				{
 					return str += Environment.NewLine +
-$@"			ResponseCallback?.Invoke(response);";
+$@"			{Constants.ResponseCallback}?.Invoke(response);";
 				}
 
 				if (Type == null)
@@ -195,11 +187,11 @@ $@"			if(response.StatusCode == System.Net.HttpStatusCode.{StatusValue})
 		{
 			if (Helpers.KnownPrimitives.Contains(Type, StringComparer.CurrentCultureIgnoreCase))
 			{
-				return $"{(async ? "await " : string.Empty)}response.Content.ReadAsNonJsonAsync<{Type}>(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
+				return $"{(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsNonJsonAsync<{Type}>(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
 			}
 			else
 			{
-				return $"{Helpers.GetJsonDeserializer()}<{Type}>({(async ? "await " : string.Empty)}response.Content.ReadAsStringAsync(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")})";
+				return $"{Helpers.GetJsonDeserializer()}<{Type}>({(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsStringAsync(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")})";
 			}
 		}
 

@@ -2,6 +2,14 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Target Name="AspNetCoreClientGeneratorTarget" BeforeTargets="CoreCompile">
 		<Message Importance="high" Text="AspNetCore.Client.Generator~ Target Project: $(MSBuildProjectDirectory)"/>
-		<AspNetCore.Client.Generator.GeneratorTask ProjectPath="$(MSBuildProjectDirectory)"/>
+		<AspNetCore.Client.Generator.GeneratorTask CurrentDirectory="$(MSBuildProjectDirectory)"
+													RouteToServiceProjectFolder="$(RouteToServiceProjectFolder)"
+													ClientInterfaceName="$(ClientInterfaceName)"
+													UseValueTask="$(UseValueTask)"
+													ClientNamespace="$(ClientNamespace)"
+													BlazorClients="$(BlazorClients)"
+													AllowedNamespaces="$(AllowedNamespaces)"
+													ExcludedNamespaces="$(ExcludedNamespaces)"
+													Condition="'$(GenerateClients)' == 'true'"/>
 	</Target>
 </Project>

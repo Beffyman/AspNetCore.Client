@@ -1,18 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-	  <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-	  <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-	  <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-	  <LangVersion>latest</LangVersion>
-	  <IsPackable>false</IsPackable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<LangVersion>latest</LangVersion>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj" />
-    <ProjectReference Include="..\TestWebApp.Contracts\TestWebApp.Contracts.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<GenerateClients>true</GenerateClients>
+		<RouteToServiceProjectFolder>../TestWebApp</RouteToServiceProjectFolder>
+		<ClientInterfaceName>TestWebAppClient</ClientInterfaceName>
+		<UseValueTask>true</UseValueTask>
+		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
+		<BlazorClients>false</BlazorClients>
+		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts*;</AllowedNamespaces>
+		<ExcludedNamespaces></ExcludedNamespaces>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj" />
+		<ProjectReference Include="..\TestWebApp.Contracts\TestWebApp.Contracts.csproj" />
+	</ItemGroup>
 
 </Project>

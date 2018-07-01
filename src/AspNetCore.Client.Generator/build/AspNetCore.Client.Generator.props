@@ -4,5 +4,16 @@
 		<_AspNetCoreClientGeneratorTaskAssembly>.\AspNetCore.Client.Generator.dll</_AspNetCoreClientGeneratorTaskAssembly>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<GenerateClients>true</GenerateClients>
+		<RouteToServiceProjectFolder></RouteToServiceProjectFolder>
+		<ClientInterfaceName>MyServiceClient</ClientInterfaceName>
+		<UseValueTask>true</UseValueTask>
+		<ClientNamespace>MyService.Clients</ClientNamespace>
+		<BlazorClients>false</BlazorClients>
+		<AllowedNamespaces>System*;</AllowedNamespaces>
+		<ExcludedNamespaces></ExcludedNamespaces>
+	</PropertyGroup>
+
 	<UsingTask AssemblyFile="$(_AspNetCoreClientGeneratorTaskAssembly)" TaskName="AspNetCore.Client.Generator.GeneratorTask"/>
 </Project>
