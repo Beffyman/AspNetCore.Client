@@ -10,6 +10,17 @@
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<GenerateClients>true</GenerateClients>
+		<RouteToServiceProjectFolder>../TestBlazorApp.Server</RouteToServiceProjectFolder>
+		<ClientInterfaceName>TestBlazorAppClient</ClientInterfaceName>
+		<UseValueTask>true</UseValueTask>
+		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
+		<BlazorClients>true</BlazorClients>
+		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>
+		<ExcludedNamespaces></ExcludedNamespaces>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.4.0" />
 	</ItemGroup>

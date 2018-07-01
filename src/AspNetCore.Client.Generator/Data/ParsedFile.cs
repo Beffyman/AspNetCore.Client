@@ -38,18 +38,18 @@ namespace AspNetCore.Client.Generator.Data
 			Regex allowedUsings;
 			Regex unallowedUsings;
 
-			if (Settings.Instance.AllowedNamespaces.Any())
+			if (Settings.AllowedNamespaces.Any())
 			{
-				allowedUsings = new Regex($"({string.Join("|", Settings.Instance.AllowedNamespaces)})");
+				allowedUsings = new Regex($"({string.Join("|", Settings.AllowedNamespaces)})");
 			}
 			else
 			{
 				allowedUsings = new Regex($"(.+)");
 			}
 
-			if (Settings.Instance.ExcludedNamespaces.Any())
+			if (Settings.ExcludedNamespaces.Any())
 			{
-				unallowedUsings = new Regex($"({string.Join("|", Settings.Instance.ExcludedNamespaces)})");
+				unallowedUsings = new Regex($"({string.Join("|", Settings.ExcludedNamespaces)})");
 			}
 			else
 			{

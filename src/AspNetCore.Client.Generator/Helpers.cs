@@ -236,18 +236,18 @@ namespace AspNetCore.Client.Generator
 
 		public static string GetJsonDeserializer()
 		{
-			if (Settings.Instance.BlazorClients)
-			{
-				return $"JsonUtil.Deserialize";
-			}
-			else
-			{
-				return $"JsonConvert.DeserializeObject";
-			}
+			//if (Settings.Instance.BlazorClients)
+			//{
+			//	return $"JsonUtil.Deserialize";
+			//}
+			//else
+			//{
+			return $"JsonConvert.DeserializeObject";
+			//}
 		}
 		public static string GetTaskType()
 		{
-			if (Settings.Instance.ValueTask)
+			if (Settings.UseValueTask)
 			{
 				return $"ValueTask";
 			}

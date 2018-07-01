@@ -6,12 +6,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using TestWebApp.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using TestWebApp.Contracts;
+using System.Threading.Tasks;
 using System.Net.Http;
 using Flurl.Http;
 using Flurl;
@@ -52,6 +52,20 @@ namespace TestWebApp.Clients
 		}
 	}
 
+
+
+	public class DefaultHttpOverride : IHttpOverride
+	{
+		public async ValueTask<HttpResponseMessage> GetResponseAsync(String url, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return await Task.FromResult<HttpResponseMessage>(null);
+		}
+
+		public async Task OnNonOverridedResponseAsync(String url, HttpResponseMessage response, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			await Task.CompletedTask;
+		}
+	}
 
 	public interface IHttpOverride
 	{
@@ -127,7 +141,6 @@ namespace TestWebApp.Clients
 
 		
 		void Post(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -136,13 +149,11 @@ namespace TestWebApp.Clients
 
 		
 		HttpResponseMessage PostRaw(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		Task PostAsync(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -151,14 +162,12 @@ namespace TestWebApp.Clients
 
 		
 		ValueTask<HttpResponseMessage> PostRawAsync(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		void Put(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -168,14 +177,12 @@ namespace TestWebApp.Clients
 		
 		HttpResponseMessage PutRaw(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		Task PutAsync(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -185,13 +192,11 @@ namespace TestWebApp.Clients
 		
 		ValueTask<HttpResponseMessage> PutRawAsync(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		void Delete(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -201,14 +206,12 @@ namespace TestWebApp.Clients
 
 		
 		HttpResponseMessage DeleteRaw(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		Task DeleteAsync(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -218,7 +221,6 @@ namespace TestWebApp.Clients
 
 		
 		ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
@@ -304,9 +306,9 @@ namespace TestWebApp.Clients
 		
 		void FancyDtoReturn(int id, 
 			int ControllerHeader = 0, 
-			Action<MyFancyDto> OKCallback = null, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
@@ -318,9 +320,9 @@ namespace TestWebApp.Clients
 		
 		Task FancyDtoReturnAsync(int id, 
 			int ControllerHeader = 0, 
-			Action<MyFancyDto> OKCallback = null, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
@@ -362,7 +364,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -370,22 +371,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -419,7 +404,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -449,7 +433,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -457,22 +440,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -506,7 +473,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -537,7 +503,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -545,22 +510,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -595,7 +544,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -626,7 +574,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -634,22 +581,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -684,7 +615,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -697,7 +627,6 @@ namespace TestWebApp.Clients
 
 
 		public void Post(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -716,8 +645,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -725,22 +652,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -751,7 +662,6 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage PostRaw(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -767,8 +677,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -781,7 +689,6 @@ namespace TestWebApp.Clients
 
 
 		public async Task PostAsync(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -800,8 +707,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
@@ -809,22 +714,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -835,7 +724,6 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> PostRawAsync(string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -851,8 +739,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
@@ -866,7 +752,6 @@ namespace TestWebApp.Clients
 
 		public void Put(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -885,8 +770,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -894,22 +777,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -921,7 +788,6 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage PutRaw(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -937,8 +803,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -952,7 +816,6 @@ namespace TestWebApp.Clients
 
 		public async Task PutAsync(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -971,8 +834,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
@@ -980,22 +841,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1007,7 +852,6 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> PutRawAsync(int id, 
 			string value, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -1023,8 +867,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.PutJsonAsync(value,cancellationToken).ConfigureAwait(false);
@@ -1037,7 +879,6 @@ namespace TestWebApp.Clients
 
 
 		public void Delete(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -1058,8 +899,6 @@ namespace TestWebApp.Clients
 				response = Client.ClientWrapper
 				.Request(url)
 				.WithAuth(auth)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1067,22 +906,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1093,7 +916,6 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage DeleteRaw(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
@@ -1111,8 +933,6 @@ namespace TestWebApp.Clients
 				response = Client.ClientWrapper
 				.Request(url)
 				.WithAuth(auth)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1125,7 +945,6 @@ namespace TestWebApp.Clients
 
 
 		public async Task DeleteAsync(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
@@ -1146,8 +965,6 @@ namespace TestWebApp.Clients
 				response = await Client.ClientWrapper
 				.Request(url)
 				.WithAuth(auth)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.DeleteAsync(cancellationToken).ConfigureAwait(false);
@@ -1155,22 +972,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1181,7 +982,6 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
-			int UserId, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
@@ -1199,8 +999,6 @@ namespace TestWebApp.Clients
 				response = await Client.ClientWrapper
 				.Request(url)
 				.WithAuth(auth)
-				.WithHeader("Accept", "application/json")
-				.WithHeader("UserId", UserId)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.DeleteAsync(cancellationToken).ConfigureAwait(false);
@@ -1230,7 +1028,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1238,22 +1035,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1278,7 +1059,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1308,7 +1088,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -1316,22 +1095,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1356,7 +1119,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -1388,7 +1150,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
@@ -1398,22 +1159,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1449,7 +1194,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
@@ -1483,7 +1227,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
@@ -1493,22 +1236,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1544,7 +1271,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
@@ -1577,7 +1303,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
@@ -1586,22 +1311,6 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1636,7 +1345,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
@@ -1668,7 +1376,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
@@ -1677,22 +1384,6 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1727,7 +1418,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
@@ -1742,9 +1432,9 @@ namespace TestWebApp.Clients
 
 		public void FancyDtoReturn(int id, 
 			int ControllerHeader = 0, 
-			Action<MyFancyDto> OKCallback = null, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -1764,7 +1454,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1779,22 +1468,6 @@ namespace TestWebApp.Clients
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(JsonConvert.DeserializeObject<MyFancyDto>(response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult()));
-			}
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
 			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -1825,7 +1498,6 @@ namespace TestWebApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1839,9 +1511,9 @@ namespace TestWebApp.Clients
 
 		public async Task FancyDtoReturnAsync(int id, 
 			int ControllerHeader = 0, 
-			Action<MyFancyDto> OKCallback = null, 
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -1861,7 +1533,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -1876,22 +1547,6 @@ namespace TestWebApp.Clients
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(JsonConvert.DeserializeObject<MyFancyDto>(await response.Content.ReadAsStringAsync().ConfigureAwait(false)));
-			}
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
 			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
@@ -1922,7 +1577,6 @@ namespace TestWebApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);

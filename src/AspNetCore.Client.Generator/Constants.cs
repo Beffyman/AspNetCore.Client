@@ -18,6 +18,7 @@ namespace AspNetCore.Client.Generator
 		public const string FlurlClientVariable = "ClientWrapper";
 
 		public const string HttpOverride = "IHttpOverride";
+		public const string HttpOverrideClass = "DefaultHttpOverride";
 		public const string HttpOverrideField = "HttpOverride";
 		public const string HttpOverrideGetMethod = "GetResponseAsync";
 		public const string HttpOverrideOnNonOverridedResponse = "OnNonOverridedResponseAsync";
@@ -32,5 +33,7 @@ namespace AspNetCore.Client.Generator
 		public const string ResponseVariable = "response";
 		public const string UrlVariable = "url";
 		public const string AuthParameter = "auth";
+
+		public const string ResponseCallback = "ResponseCallback";
 	}
 }

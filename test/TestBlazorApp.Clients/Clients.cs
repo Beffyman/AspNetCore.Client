@@ -10,8 +10,8 @@ using TestBlazorApp.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Net.Http;
 using Flurl.Http;
 using Flurl;
@@ -21,7 +21,7 @@ using AspNetCore.Client.Core.Authorization;
 using AspNetCore.Client.Core.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
-using Microsoft.AspNetCore.Blazor;
+using Newtonsoft.Json;
 
 namespace TestBlazorApp.Clients
 {
@@ -54,6 +54,26 @@ namespace TestBlazorApp.Clients
 
 
 
+	public class DefaultHttpOverride : IHttpOverride
+	{
+		public async ValueTask<HttpResponseMessage> GetResponseAsync(String url, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			return await Task.FromResult<HttpResponseMessage>(null);
+		}
+
+		public async Task OnNonOverridedResponseAsync(String url, HttpResponseMessage response, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			await Task.CompletedTask;
+		}
+	}
+
+	public interface IHttpOverride
+	{
+		ValueTask<HttpResponseMessage> GetResponseAsync(String url, CancellationToken cancellationToken = default(CancellationToken));
+		Task OnNonOverridedResponseAsync(String url, HttpResponseMessage response, CancellationToken cancellationToken = default(CancellationToken));
+	}
+
+
 
 	public class TestBlazorAppClient
 	{
@@ -72,18 +92,14 @@ namespace TestBlazorApp.Clients
 	public interface ISampleDataClient : ITestBlazorAppClient
 	{
 		
-		IEnumerable<WeatherForecast> WeatherForecasts(Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
+		IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage WeatherForecastsRaw(CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
+		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -95,16 +111,16 @@ namespace TestBlazorApp.Clients
 	public class SampleDataClient : ISampleDataClient
 	{
 		public readonly TestBlazorAppClient Client;
+		public readonly IHttpOverride HttpOverride;
 
-		public SampleDataClient(TestBlazorAppClient client)
+		public SampleDataClient(TestBlazorAppClient client, IHttpOverride httpOverride)
 		{
 			Client = client;
+			HttpOverride = httpOverride;
 		}
 
 
-		public IEnumerable<WeatherForecast> WeatherForecasts(Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
+		public IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -114,33 +130,17 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false).GetAwaiter().GetResult());
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -149,7 +149,7 @@ namespace TestBlazorApp.Clients
 			
 			if(response.IsSuccessStatusCode)
 			{
-				return JsonUtil.Deserialize<IEnumerable<WeatherForecast>>(response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+				return JsonConvert.DeserializeObject<IEnumerable<WeatherForecast>>(response.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult());
 			}
 			else
 			{
@@ -168,24 +168,22 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
 
-		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
+		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -195,33 +193,17 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
-			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-			{
-				BadRequestCallback?.Invoke(await response.Content.ReadAsNonJsonAsync<string>().ConfigureAwait(false));
-			}
-			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
-			}
-			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-			{
-				InternalServerErrorCallback?.Invoke();
-			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -230,7 +212,7 @@ namespace TestBlazorApp.Clients
 			
 			if(response.IsSuccessStatusCode)
 			{
-				return JsonUtil.Deserialize<IEnumerable<WeatherForecast>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+				return JsonConvert.DeserializeObject<IEnumerable<WeatherForecast>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
 			}
 			else
 			{
@@ -249,15 +231,15 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
-				.WithHeader("Accept", "application/json")
 				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;

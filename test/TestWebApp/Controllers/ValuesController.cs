@@ -12,6 +12,8 @@ namespace TestWebApp.Controllers
 {
 	[Route("api/[controller]")]
 	[IncludesHeader("ControllerHeader", typeof(int), "0")]
+	[ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+	[ProducesResponseType((int)HttpStatusCode.InternalServerError)]
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
