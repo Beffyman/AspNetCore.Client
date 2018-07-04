@@ -14,7 +14,6 @@ namespace AspNetCore.Client.Generator
 		public string ClientInterfaceName { get; set; }
 		public string UseValueTask { get; set; }
 		public string ClientNamespace { get; set; }
-		public string BlazorClients { get; set; }
 		public string AllowedNamespaces { get; set; }
 		public string ExcludedNamespaces { get; set; }
 
@@ -45,7 +44,6 @@ namespace AspNetCore.Client.Generator
 			Settings.ClientInterfaceName = ClientInterfaceName;
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
 			Settings.ClientNamespace = ClientNamespace;
-			Settings.BlazorClients = bool.Parse(BlazorClients ?? "false");
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 			Settings.ExcludedNamespaces = ExcludedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 

@@ -42,6 +42,11 @@ Package that contains required classes/attributes used by the generator package.
 
 Can be included inside the web app to configure behavior.
 
+## AspNetCore.Client.Core.Protobuf
+[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Core.Protobuf.svg)](https://www.nuget.org/packages/AspNetCore.Client.Core.Protobuf/)
+
+Contains a protobuf serializer which can override the default json one via the UseProtobufSerlaizer on the ClientConfiguration.
+
 ## AspNetCore.Client.Generator
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/AspNetCore.Client.Generator/)
 

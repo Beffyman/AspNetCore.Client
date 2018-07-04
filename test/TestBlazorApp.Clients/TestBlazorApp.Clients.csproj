@@ -16,7 +16,6 @@
 		<ClientInterfaceName>TestBlazorAppClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
 		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
-		<BlazorClients>true</BlazorClients>
 		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>
 	</PropertyGroup>

@@ -10,7 +10,6 @@
 		<ClientInterfaceName>MyServiceClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
 		<ClientNamespace>MyService.Clients</ClientNamespace>
-		<BlazorClients>false</BlazorClients>
 		<AllowedNamespaces>System*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>
 	</PropertyGroup>

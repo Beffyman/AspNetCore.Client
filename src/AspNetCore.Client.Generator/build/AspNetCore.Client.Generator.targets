@@ -7,7 +7,6 @@
 													ClientInterfaceName="$(ClientInterfaceName)"
 													UseValueTask="$(UseValueTask)"
 													ClientNamespace="$(ClientNamespace)"
-													BlazorClients="$(BlazorClients)"
 													AllowedNamespaces="$(AllowedNamespaces)"
 													ExcludedNamespaces="$(ExcludedNamespaces)"
 													Condition="'$(GenerateClients)' == 'true'"/>
