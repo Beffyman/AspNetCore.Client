@@ -12,22 +12,6 @@ namespace AspNetCore.Client.Core
 	{
 
 		/// <summary>
-		/// Reads non-json back as a string using Convert.ChangeType
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="content"></param>
-		/// <returns></returns>
-		public static async ValueTask<T> ReadAsNonJsonAsync<T>(this HttpContent content)
-		{
-			string data = await content.ReadAsStringAsync().ConfigureAwait(false);
-			if(typeof(T) == typeof(string))
-			{
-				data = data.TrimStart('"').TrimEnd('"');
-			}
-			return (T)Convert.ChangeType(data, typeof(T));
-		}
-
-		/// <summary>
 		/// Inserts the auth headers into the request
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

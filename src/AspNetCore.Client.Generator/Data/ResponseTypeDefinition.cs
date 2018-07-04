@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Net;
+using AspNetCore.Client.Core.Serializers;
 
 namespace AspNetCore.Client.Generator.Data
 {
@@ -185,14 +186,7 @@ $@"			if(response.StatusCode == System.Net.HttpStatusCode.{StatusValue})
 
 		public string ReadBlock(bool async)
 		{
-			if (Helpers.KnownPrimitives.Contains(Type, StringComparer.CurrentCultureIgnoreCase))
-			{
-				return $"{(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsNonJsonAsync<{Type}>(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
-			}
-			else
-			{
-				return $"{Helpers.GetJsonDeserializer()}<{Type}>({(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsStringAsync(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")})";
-			}
+			return $"{(async ? "await " : string.Empty)}{Constants.SerializerField}.{nameof(IHttpSerializer.Deserialize)}<{Type}>({Constants.ResponseVariable}.Content){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
 		}
 
 

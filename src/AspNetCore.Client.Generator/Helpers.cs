@@ -234,17 +234,6 @@ namespace AspNetCore.Client.Generator
 			return parameters;
 		}
 
-		public static string GetJsonDeserializer()
-		{
-			//if (Settings.Instance.BlazorClients)
-			//{
-			//	return $"JsonUtil.Deserialize";
-			//}
-			//else
-			//{
-			return $"JsonConvert.DeserializeObject";
-			//}
-		}
 		public static string GetTaskType()
 		{
 			if (Settings.UseValueTask)
@@ -255,6 +244,11 @@ namespace AspNetCore.Client.Generator
 			{
 				return $"Task";
 			}
+		}
+
+		public static bool MatchesAttribute(this string str, string attribute)
+		{
+			return str.Equals(attribute) || str.Equals($"{attribute}Attribute");
 		}
 	}
 }

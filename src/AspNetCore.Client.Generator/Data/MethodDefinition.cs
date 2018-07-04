@@ -1,5 +1,7 @@
 ﻿using AspNetCore.Client.Core;
+using AspNetCore.Client.Core.Attributes;
 using AspNetCore.Client.Core.Authorization;
+using AspNetCore.Client.Core.Serializers;
 using AspNetCore.Client.Generator.Data.RouteConstraints;
 using Flurl.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,6 +26,7 @@ namespace AspNetCore.Client.Generator.Data
 
 		public IList<ParameterDefinition> Parameters { get; }
 		public IList<ResponseTypeDefinition> Responses { get; }
+		public IList<ParameterHeaderDefinition> ParameterHeaders { get; }
 		public IList<HeaderDefinition> Headers { get; }
 
 		public MethodOptions Options { get; }
@@ -51,7 +54,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			//Ignore generator attribute
 
-			var ignoreAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(AspNetCore.Client.Core.NoClientAttribute.AttributeName));
+			var ignoreAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NoClientAttribute.AttributeName));
 			if (ignoreAttribute != null)
 			{
 				IsNotEndpoint = true;
@@ -61,7 +64,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			//Route Attribute
 
-			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Route));
+			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Route));
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
 				Options.Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
@@ -70,7 +73,16 @@ namespace AspNetCore.Client.Generator.Data
 
 			//HTTP Attribute
 
-			var httpAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Http));
+			var knownHttpAttributes = new List<string>
+			{
+				$"{Constants.Http}{HttpAttributeType.Delete}",
+				$"{Constants.Http}{HttpAttributeType.Get}",
+				$"{Constants.Http}{HttpAttributeType.Patch}",
+				$"{Constants.Http}{HttpAttributeType.Post}",
+				$"{Constants.Http}{HttpAttributeType.Put}",
+			};
+
+			var httpAttribute = attributes.SingleOrDefault(x => knownHttpAttributes.Any(y=>x.Name.ToFullString().MatchesAttribute(y)));
 			if (httpAttribute == null)
 			{
 				IsNotEndpoint = true;
@@ -93,27 +105,31 @@ namespace AspNetCore.Client.Generator.Data
 			}
 
 			//Obsolete Attribute
-			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Obsolete));
+			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Obsolete));
 			if (obsoleteAttribute != null)
 			{
 				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
 			}
 
 			//Authorize Attribute
-			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Authorize)) != null;
+			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Authorize)) != null;
 			//AllowAnonymous Attribute
-			Options.AllowAnonymous = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.AllowAnonymous)) != null;
+			Options.AllowAnonymous = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.AllowAnonymous)) != null;
 
 
 			//Response types
-			var responseTypes = attributes.Where(x => x.Name.ToFullString().StartsWith(Constants.ProducesResponseType));
+			var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(Constants.ProducesResponseType));
 			Responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
 			Responses.Add(new ResponseTypeDefinition(true));
 
 			Parameters = MethodSyntax.ParameterList.Parameters.Select(x => new ParameterDefinition(this, x)).ToList();
 
 
-			Headers = attributes.Where(x => x.Name.ToFullString().StartsWith(AspNetCore.Client.Core.IncludesHeaderAttribute.AttributeName))
+			ParameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(HeaderParameterAttribute.AttributeName))
+				.Select(x => new ParameterHeaderDefinition(x))
+				.ToList();
+
+			Headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(IncludeHeaderAttribute.AttributeName))
 				.Select(x => new HeaderDefinition(x))
 				.ToList();
 
@@ -212,6 +228,12 @@ namespace AspNetCore.Client.Generator.Data
 			throw new Exception("Failed to parse boolean tree");
 		}
 
+		public IList<ParameterHeaderDefinition> GetAllParameterHeaders()
+		{
+			var allHeaders = ParentClass.ParameterHeaders.Union(this.ParameterHeaders).ToList();
+			return allHeaders.OrderBy(x => x.SortOrder).ThenBy(x => x.Name).ToList();
+		}
+
 		public IList<HeaderDefinition> GetAllHeaders()
 		{
 			var allHeaders = ParentClass.Headers.Union(this.Headers).ToList();
@@ -224,7 +246,7 @@ namespace AspNetCore.Client.Generator.Data
 		{
 			string correctedName = Name.Replace("Async", "");
 
-			var allHeaders = GetAllHeaders();
+			var allHeaders = GetAllParameterHeaders();
 
 			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.SyncMethodOutput), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
 			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
@@ -274,7 +296,7 @@ $@"		{GetObsolete()}
 		{
 			string correctedName = Name.Replace("Async", "");
 
-			var allHeaders = GetAllHeaders();
+			var allHeaders = GetAllParameterHeaders();
 
 			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.SyncMethodOutput), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
 			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
@@ -345,15 +367,7 @@ $@"{GetObsolete()}
 		private string ResultTypeReturn(bool async, string returnType)
 		{
 
-			string read = null;
-			if (Helpers.KnownPrimitives.Contains(returnType, StringComparer.CurrentCultureIgnoreCase))
-			{
-				read = $@"{(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsNonJsonAsync<{returnType}>(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
-			}
-			else
-			{
-				read = $@"{Helpers.GetJsonDeserializer()}<{returnType}>({(async ? "await " : string.Empty)}{Constants.ResponseVariable}.Content.ReadAsStringAsync(){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")})";
-			}
+			string read = $@"{(async ? "await " : string.Empty)}{Constants.SerializerField}.{nameof(IHttpSerializer.Deserialize)}<{returnType}>({Constants.ResponseVariable}.Content){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")}";
 
 			return $@"
 			if({Constants.ResponseVariable}.IsSuccessStatusCode)
@@ -423,6 +437,11 @@ $@"
 			}
 
 
+			foreach (var header in GetAllParameterHeaders())
+			{
+				str = $"{str}{Environment.NewLine}{tabs}{header.MethodOutput()}";
+			}
+
 			foreach (var header in GetAllHeaders())
 			{
 				str = $"{str}{Environment.NewLine}{tabs}{header.MethodOutput()}";
@@ -432,7 +451,8 @@ $@"
 			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.Body ?? false);
 
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.AllowAnyHttpStatus)}()";
-			//str = $@"{str}{Environment.NewLine}{tabs}.WithTimeout({Settings.Instance.ServiceName}HttpClient.Timeout)";
+			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.WithTimeout)}({Constants.ClientInterfaceName}.Timeout)";
+
 			switch (Options.HttpType)
 			{
 				case HttpAttributeType.Delete:
@@ -440,11 +460,11 @@ $@"
 				case HttpAttributeType.Get:
 					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.GetAsync)}({Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Put:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutJsonAsync)}({bodyParameter?.HttpCallOutput ?? "null"},{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Patch:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchJsonAsync)}({bodyParameter?.HttpCallOutput ?? "null"},{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Post:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutJsonAsync)}({bodyParameter?.HttpCallOutput ?? "null"},{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				default:
 					throw new Exception("Unexpected HTTPType");
 			}

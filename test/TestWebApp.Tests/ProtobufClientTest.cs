@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,11 +13,11 @@ using TestWebApp.Contracts;
 
 namespace TestWebApp.Tests
 {
-	public class ClientTest : IClassFixture<TestServerFixture>
+	public class ProtobufClientTest : IClassFixture<TestProtobufServerFixture>
 	{
-		private readonly TestServerFixture TestServer;
+		private readonly TestProtobufServerFixture TestServer;
 
-		public ClientTest(TestServerFixture testServer)
+		public ProtobufClientTest(TestProtobufServerFixture testServer)
 		{
 			TestServer = testServer;
 		}
@@ -27,7 +27,7 @@ namespace TestWebApp.Tests
 		public void GetTest()
 		{
 			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
-			var values = valuesClient.Get();
+			var values = valuesClient.Get(Accept:"application/x-protobuf");
 
 
 			Assert.Equal(new List<string> { "value1", "value2" }, values);
@@ -39,7 +39,7 @@ namespace TestWebApp.Tests
 		public void HeaderTestString()
 		{
 			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestString("Val1", "Val2");
+			var value = valuesClient.HeaderTestString("Val1", "Val2", Accept: "application/x-protobuf");
 
 
 			Assert.Equal("Val1", value);
@@ -51,7 +51,7 @@ namespace TestWebApp.Tests
 		public void HeaderTestInt()
 		{
 			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestInt(15);
+			var value = valuesClient.HeaderTestInt(15, Accept: "application/x-protobuf");
 
 
 			Assert.Equal(15, value);
@@ -64,11 +64,11 @@ namespace TestWebApp.Tests
 			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
 			MyFancyDto dto = null;
 
-			valuesClient.FancyDtoReturn(15,
+			valuesClient.FancyDtoReturn(15, Accept: "application/x-protobuf",
 				OKCallback: (_) =>
-				 {
-					 dto = _;
-				 });
+				{
+					dto = _;
+				});
 
 
 			Assert.Equal(15, dto.Id);

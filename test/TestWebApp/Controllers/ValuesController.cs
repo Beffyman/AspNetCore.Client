@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AspNetCore.Client.Core;
+using AspNetCore.Client.Core.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestWebApp.Contracts;
@@ -11,7 +12,11 @@ using TestWebApp.Contracts;
 namespace TestWebApp.Controllers
 {
 	[Route("api/[controller]")]
-	[IncludesHeader("ControllerHeader", typeof(int), "0")]
+	[HeaderParameter("ControllerHeader", typeof(int), "0")]
+	[HeaderParameter("Accept", typeof(string), "application/json")]//This is here so the unit tests have the option of which format
+	//[IncludeHeader("Accept", "application/json")]
+	//[IncludeHeader("Accept", "application/x-protobuf")]
+	[IncludeHeader("Test", "EXTRA")]
 	[ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
 	[ProducesResponseType((int)HttpStatusCode.InternalServerError)]
 	[ApiController]
@@ -26,6 +31,7 @@ namespace TestWebApp.Controllers
 
 		// GET api/values/5
 		[HttpGet("{id}")]
+		[IncludeHeader("GEEET", "FULL")]
 		public ActionResult<string> Get(int id)
 		{
 			return "value";
@@ -63,15 +69,15 @@ namespace TestWebApp.Controllers
 
 		}
 
-		[IncludesHeader("SpecialValue1", typeof(String))]
-		[IncludesHeader("SpecialValue2", "string")]
+		[HeaderParameterAttribute("SpecialValue1", typeof(String))]
+		[HeaderParameterAttribute("SpecialValue2", "string")]
 		[HttpGet("[action]")]
 		public string HeaderTestString()
 		{
 			return Request.Headers["SpecialValue1"].SingleOrDefault();
 		}
 
-		[IncludesHeader("SpecialValue1", typeof(int))]
+		[HeaderParameterAttribute("SpecialValue1", typeof(int))]
 		[HttpGet("[action]")]
 		public int HeaderTestInt()
 		{
