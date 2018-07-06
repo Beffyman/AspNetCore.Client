@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using AspNetCore.Client.Core.Attributes;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -25,6 +26,7 @@ namespace AspNetCore.Client.Generator.Data
 		public IList<ResponseTypeDefinition> Responses { get; }
 
 		public string Route { get; }
+		public IList<ParameterHeaderDefinition> ParameterHeaders { get; }
 		public IList<HeaderDefinition> Headers { get; }
 
 		private static Regex RouteVersionRegex = new Regex(@"\/([v|V]\d+)\/");
@@ -48,14 +50,14 @@ namespace AspNetCore.Client.Generator.Data
 
 			Options = new ClassOptions();
 
-			var ignoreAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(AspNetCore.Client.Core.NoClientAttribute.AttributeName));
+			var ignoreAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NoClientAttribute.AttributeName));
 			if (ignoreAttribute != null)
 			{
 				Options.NoClient = true;
 			}
 
 
-			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Route));
+			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Route));
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
 				Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
@@ -70,20 +72,24 @@ namespace AspNetCore.Client.Generator.Data
 			}
 
 			//Response types
-			var responseTypes = attributes.Where(x => x.Name.ToFullString().StartsWith(Constants.ProducesResponseType));
+			var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(Constants.ProducesResponseType));
 			Responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
 
 
 
-			Headers = attributes.Where(x => x.Name.ToFullString().StartsWith(AspNetCore.Client.Core.IncludesHeaderAttribute.AttributeName))
+			ParameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(HeaderParameterAttribute.AttributeName))
+				.Select(x => new ParameterHeaderDefinition(x))
+				.ToList();
+
+			Headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(IncludeHeaderAttribute.AttributeName))
 				.Select(x => new HeaderDefinition(x))
 				.ToList();
 
 			//Authorize Attribute
-			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Authorize)) != null;
+			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Authorize)) != null;
 
 			//Obsolete Attribute
-			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().StartsWith(Constants.Obsolete));
+			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Obsolete));
 			if (obsoleteAttribute != null)
 			{
 				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
@@ -101,6 +107,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			fields.Add($@"		public readonly {Settings.ClientInterfaceName} {Constants.ClientInterfaceName};");
 			fields.Add($@"		public readonly {Constants.HttpOverride} {Constants.HttpOverrideField};");
+			fields.Add($@"		public readonly {Constants.Serializer} {Constants.SerializerField};");
 
 			var classFields = string.Join(Environment.NewLine, fields);
 
@@ -109,6 +116,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			parameters.Add($@"{Settings.ClientInterfaceName} client");
 			parameters.Add($@"{Constants.HttpOverride} httpOverride");
+			parameters.Add($@"{Constants.Serializer} serializer");
 
 
 			string @params = string.Join(", ", parameters);
@@ -120,6 +128,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			initializers.Add($"			{Constants.ClientInterfaceName} = client;");
 			initializers.Add($"			{Constants.HttpOverrideField} = httpOverride;");
+			initializers.Add($"			{Constants.SerializerField} = serializer;");
 
 
 			string init = string.Join(Environment.NewLine, initializers);

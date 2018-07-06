@@ -13,7 +13,7 @@ using(var client = new HttpClient())
 ```
 and think the following
 - Why not just inject clients?
-  - services.InstallClients(baseAddress = null);!
+  - services.InstallClients();!
 - How can I pool the HttpClient usage? 
   - HttpClient is injected!
 - Yuck, hard coded routes, these can lead to issues if my endpoint is still under development. 
@@ -22,15 +22,13 @@ and think the following
   - Works with Microsoft.AspNetCore.TestHost!
     - CancellationTokens are not respected inside the TestServer without some hacks though.
 - How do I tell my teammates that an endpoint has headers it requires? 
-  - RequiredHttpHeaderParameters! 
+  - HeaderParameterAttribute! 
   - IncludeHeaderAttribute!
 - How do I tell my teammates that an endpoint has known response types for status codes? 
   - KnownStatusesAndResponseTypes!
   - ProducesResponseType!
 - What if sometimes I want to intercept requests before they go out? 
-  - IncludeHttpOverride!
-- If I am using Blazor and don't want to hard code routes?
-  - BlazorClients!
+  - IHttpOverride!
 - If I own the endpoint's code, why can't I just generate clients from it?
   - Introducing AspNetCore.Client.Generator!
 
@@ -41,6 +39,11 @@ and think the following
 Package that contains required classes/attributes used by the generator package.
 
 Can be included inside the web app to configure behavior.
+
+## AspNetCore.Client.Core.Protobuf
+[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Core.Protobuf.svg)](https://www.nuget.org/packages/AspNetCore.Client.Core.Protobuf/)
+
+Contains a protobuf serializer which can override the default json one via the UseProtobufSerlaizer on the ClientConfiguration.
 
 ## AspNetCore.Client.Generator
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/AspNetCore.Client.Generator/)
@@ -62,13 +65,6 @@ On Build generator that will generate a Clients.cs file based on the ClientGener
   - Use ValueTask`<T>` instead of Task`<T>`
 - ClientNamespace
   - Namespace to be used for the Clients.cs
-- BlazorClients
-  - Reevaluating use, may be removed in favor of service configure
-  - Whether or not the generate the clients so they are compatible with Blazor views
-  - Differences include
-    - Newtonsoft.Json.JsonConvert.DeserializeObject => JsonUtil.Deserialize
-    - Default namespaces are different.
-    - Requires a reference to [Microsoft.AspNetCore.Blazor](https://www.nuget.org/packages/Microsoft.AspNetCore.Blazor/) inside the client project
 - AllowedNamespaces
   - Separated by Colons
   - Namespaces allowed to be pulled from Controllers that the generator is pulling the data from.

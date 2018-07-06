@@ -12,9 +12,9 @@ using Microsoft.Extensions.Options;
 
 namespace TestWebApp
 {
-	public class Startup
+	public class JsonStartup
 	{
-		public Startup(IConfiguration configuration)
+		public JsonStartup(IConfiguration configuration)
 		{
 			Configuration = configuration;
 		}

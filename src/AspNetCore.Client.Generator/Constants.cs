@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspNetCore.Client.Core.Serializers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -22,6 +23,11 @@ namespace AspNetCore.Client.Generator
 		public const string HttpOverrideField = "HttpOverride";
 		public const string HttpOverrideGetMethod = "GetResponseAsync";
 		public const string HttpOverrideOnNonOverridedResponse = "OnNonOverridedResponseAsync";
+
+
+		public const string Serializer = nameof(IHttpSerializer);
+		public const string SerializerField = "Serializer";
+
 
 		public const string IActionResult = "IActionResult";
 

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Xunit;
 using TestWebApp.Clients;
 using System.Net.Http;
 using System.Collections.Generic;
@@ -10,58 +9,61 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
 using TestWebApp.Contracts;
+using AspNetCore.Client.Core;
+using NUnit.Framework;
 
 namespace TestWebApp.Tests
 {
-	public class ClientTest : IClassFixture<TestServerFixture>
+	[TestFixture]
+	public class JsonClientTest
 	{
-		private readonly TestServerFixture TestServer;
-
-		public ClientTest(TestServerFixture testServer)
-		{
-			TestServer = testServer;
-		}
-
-
-		[Fact]
+		[Test]
 		public void GetTest()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			var values = valuesClient.Get();
 
 
-			Assert.Equal(new List<string> { "value1", "value2" }, values);
+			Assert.AreEqual(new List<string> { "value1", "value2" }, values);
 
 
 		}
 
-		[Fact]
+		[Test]
 		public void HeaderTestString()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
-			Assert.Equal("Val1", value);
+			Assert.AreEqual("Val1", value);
 
 
 		}
 
-		[Fact]
+		[Test]
 		public void HeaderTestInt()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestInt(15);
 
 
-			Assert.Equal(15, value);
+			Assert.AreEqual(15, value);
 		}
 
 
-		[Fact]
+		[Test]
 		public void DtoReturns()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			MyFancyDto dto = null;
 
 			valuesClient.FancyDtoReturn(15,
@@ -71,7 +73,7 @@ namespace TestWebApp.Tests
 				 });
 
 
-			Assert.Equal(15, dto.Id);
+			Assert.AreEqual(15, dto.Id);
 		}
 
 		/// <summary>
@@ -82,19 +84,21 @@ namespace TestWebApp.Tests
 		//[Fact]
 		public async Task CancelTestAsync()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
 			CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 			var token = cancellationTokenSource.Token;
 
-			var ex = await Assert.ThrowsAsync<FlurlHttpException>(async () =>
+			Assert.ThrowsAsync<FlurlHttpException>(async () =>
 			{
 				var task = valuesClient.CancellationTestEndpointAsync(cancellationToken: token);
 				cancellationTokenSource.CancelAfter(1500);
 				await task.ConfigureAwait(false);
 			});
 
-			Assert.True(ex.InnerException is TaskCanceledException);
+			//Assert.True(ex.InnerException is TaskCanceledException);
 		}
 	}
 }

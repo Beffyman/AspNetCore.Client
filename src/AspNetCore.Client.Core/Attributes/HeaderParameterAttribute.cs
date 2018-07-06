@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace AspNetCore.Client.Core
+namespace AspNetCore.Client.Core.Attributes
 {
 	/// <summary>
-	/// Used to place a header inside the generated method's parameters
+	/// Adds a parameter to the client methods that will be placed inside the request header
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class IncludesHeaderAttribute : Attribute
+	public class HeaderParameterAttribute : Attribute
 	{
 		/// <summary>
 		/// Name of the attribute the generator looks for
 		/// </summary>
-		public const string AttributeName = "IncludesHeader";
+		public const string AttributeName = "HeaderParameter";
 
 		/// <summary>
 		/// Name of the header
@@ -26,28 +26,28 @@ namespace AspNetCore.Client.Core
 		/// </summary>
 		public string DefaultValue { get; }
 
-		public IncludesHeaderAttribute(string name, string type, string defaultValue)
+		public HeaderParameterAttribute(string name, string type, string defaultValue)
 		{
 			Name = name;
 			Type = type;
 			DefaultValue = defaultValue;
 		}
 
-		public IncludesHeaderAttribute(string name, string type)
+		public HeaderParameterAttribute(string name, string type)
 		{
 			Name = name;
 			Type = type;
 			DefaultValue = null;
 		}
 
-		public IncludesHeaderAttribute(string name, Type type)
+		public HeaderParameterAttribute(string name, Type type)
 		{
 			Name = name;
 			Type = type.Name;
 			DefaultValue = null;
 		}
 
-		public IncludesHeaderAttribute(string name, Type type, string defaultValue)
+		public HeaderParameterAttribute(string name, Type type, string defaultValue)
 		{
 			Name = name;
 			Type = type.Name;

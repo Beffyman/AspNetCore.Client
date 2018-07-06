@@ -15,12 +15,12 @@
 		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
 		<PackageReference Include="Moq" Version="4.8.3" />
-		<PackageReference Include="xunit" Version="2.3.1" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-		<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+		<PackageReference Include="NUnit" Version="3.10.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\AspNetCore.Client.Core.Protobuf\AspNetCore.Client.Core.Protobuf.csproj" />
 		<ProjectReference Include="..\TestWebApp.Clients\TestWebApp.Clients.csproj" />
 		<ProjectReference Include="..\TestWebApp\TestWebApp.csproj" />
 	</ItemGroup>
