@@ -10,23 +10,42 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
 using TestWebApp.Contracts;
+using AspNetCore.Client.Core;
 
 namespace TestWebApp.Tests
 {
-	public class JsonClientTest : IClassFixture<TestJsonServerFixture>
+	public class JsonClientTest
 	{
-		private readonly TestJsonServerFixture TestServer;
 
-		public JsonClientTest(TestJsonServerFixture testServer)
+		public JsonClientTest()
 		{
-			TestServer = testServer;
+			Provider = CreateServer<JsonStartup>(config =>
+			{
+				config.UseJsonClientSerializer();
+			});
+		}
+
+		public IServiceProvider Provider { get; }
+
+		public IServiceProvider CreateServer<T>(Action<ClientConfiguration> configure) where T : class
+		{
+			var server = new Microsoft.AspNetCore.TestHost.TestServer(new WebHostBuilder()
+					.UseStartup<T>());
+
+			var client = server.CreateClient();
+
+			var services = new ServiceCollection();
+			services.AddSingleton<HttpClient>(client);
+			services.InstallClients(configure);
+
+			return services.BuildServiceProvider();
 		}
 
 
 		[Fact]
 		public void GetTest()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var valuesClient = Provider.GetService<IValuesClient>();
 			var values = valuesClient.Get();
 
 
@@ -38,7 +57,7 @@ namespace TestWebApp.Tests
 		[Fact]
 		public void HeaderTestString()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var valuesClient = Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
@@ -50,7 +69,7 @@ namespace TestWebApp.Tests
 		[Fact]
 		public void HeaderTestInt()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var valuesClient = Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestInt(15);
 
 
@@ -61,7 +80,7 @@ namespace TestWebApp.Tests
 		[Fact]
 		public void DtoReturns()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var valuesClient = Provider.GetService<IValuesClient>();
 			MyFancyDto dto = null;
 
 			valuesClient.FancyDtoReturn(15,
@@ -82,7 +101,7 @@ namespace TestWebApp.Tests
 		//[Fact]
 		public async Task CancelTestAsync()
 		{
-			var valuesClient = TestServer.Provider.GetService<IValuesClient>();
+			var valuesClient = Provider.GetService<IValuesClient>();
 
 			CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 			var token = cancellationTokenSource.Token;
