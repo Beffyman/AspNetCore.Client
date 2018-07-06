@@ -17,35 +17,12 @@ namespace TestWebApp.Tests
 	public class JsonClientTest
 	{
 
-		public JsonClientTest()
-		{
-			Provider = CreateServer<JsonStartup>(config =>
-			{
-				config.UseJsonClientSerializer();
-			});
-		}
-
-		public IServiceProvider Provider { get; }
-
-		public IServiceProvider CreateServer<T>(Action<ClientConfiguration> configure) where T : class
-		{
-			var server = new Microsoft.AspNetCore.TestHost.TestServer(new WebHostBuilder()
-					.UseStartup<T>());
-
-			var client = server.CreateClient();
-
-			var services = new ServiceCollection();
-			services.AddSingleton<HttpClient>(client);
-			services.InstallClients(configure);
-
-			return services.BuildServiceProvider();
-		}
-
-
 		[Fact]
 		public void GetTest()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			var values = valuesClient.Get();
 
 
@@ -57,7 +34,9 @@ namespace TestWebApp.Tests
 		[Fact]
 		public void HeaderTestString()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
@@ -69,7 +48,9 @@ namespace TestWebApp.Tests
 		[Fact]
 		public void HeaderTestInt()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			var value = valuesClient.HeaderTestInt(15);
 
 
@@ -80,7 +61,9 @@ namespace TestWebApp.Tests
 		[Fact]
 		public void DtoReturns()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			MyFancyDto dto = null;
 
 			valuesClient.FancyDtoReturn(15,
@@ -101,7 +84,9 @@ namespace TestWebApp.Tests
 		//[Fact]
 		public async Task CancelTestAsync()
 		{
-			var valuesClient = Provider.GetService<IValuesClient>();
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
 			CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 			var token = cancellationTokenSource.Token;
