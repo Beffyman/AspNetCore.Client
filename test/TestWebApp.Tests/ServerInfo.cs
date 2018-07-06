@@ -18,13 +18,13 @@ namespace TestWebApp.Tests
 
 		public ServerInfo()
 		{
-			Server = new Microsoft.AspNetCore.TestHost.TestServer(new WebHostBuilder()
+			Server = new TestServer(new WebHostBuilder()
 					.UseStartup<T>());
 
 			Client = Server.CreateClient();
 
 			var services = new ServiceCollection();
-			services.AddSingleton<HttpClient>(Client);
+			services.AddSingleton(Client);
 			services.InstallClients(ConfigureClient);
 
 			Provider = services.BuildServiceProvider();

@@ -39,7 +39,7 @@ Write-Host ">> dotnet build -c Release -v m;"
 dotnet build -c Release -v m;
 
 #Write-Host ">> dotnet test -c Release -v m;"
-#dotnet test -c Release -v m;
+dotnet test -c Release -v m -p:ParallelizeTestCollections=false;
 
 Write-Host ">> dotnet pack -c Release /p:Version=$version -o $outputDir -v m";
 dotnet pack -c Release /p:Version="$version" -o $outputDir -v m
