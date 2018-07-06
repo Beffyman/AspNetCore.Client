@@ -23,7 +23,7 @@ after_build:
 artifacts:
  - path: '**\*.nupkg'
 
-test:off
+test: off
 
 deploy:
   - provider: NuGet
