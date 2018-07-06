@@ -24,8 +24,7 @@ and think the following
 - How do I tell my teammates that an endpoint has headers it requires? 
   - HeaderParameterAttribute! 
   - IncludeHeaderAttribute!
-- How do I tell my teammates that an endpoint has known response types for status codes? 
-  - KnownStatusesAndResponseTypes!
+- How do I tell my teammates that an endpoint has known response types for status codes?
   - ProducesResponseType!
 - What if sometimes I want to intercept requests before they go out? 
   - IHttpOverride!
