@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Core.Authorization;
+﻿using AspNetCore.Client.Authorization;
 using Flurl.Http;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Client.Core
+namespace AspNetCore.Client
 {
 	public static class GeneratorExtensions
 	{

@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Core.Attributes;
+﻿using AspNetCore.Client.Attributes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;

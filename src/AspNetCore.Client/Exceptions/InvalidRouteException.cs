@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Core.Exceptions
+namespace AspNetCore.Client.Exceptions
 {
 	public class InvalidRouteException : Exception
 	{

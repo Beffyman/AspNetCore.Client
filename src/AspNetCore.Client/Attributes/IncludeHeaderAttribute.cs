@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Core.Attributes
+namespace AspNetCore.Client.Attributes
 {
 	/// <summary>
 	/// Adds a pre-defined header to the clients hitting this endpoint

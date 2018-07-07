@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AspNetCore.Client.Core.Attributes
+namespace AspNetCore.Client.Attributes
 {
 	/// <summary>
 	/// Adds a parameter to the client methods that will be placed inside the request header

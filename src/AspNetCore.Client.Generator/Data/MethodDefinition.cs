@@ -1,7 +1,7 @@
-﻿using AspNetCore.Client.Core;
-using AspNetCore.Client.Core.Attributes;
-using AspNetCore.Client.Core.Authorization;
-using AspNetCore.Client.Core.Serializers;
+﻿using AspNetCore.Client;
+using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Authorization;
+using AspNetCore.Client.Serializers;
 using AspNetCore.Client.Generator.Data.RouteConstraints;
 using Flurl.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

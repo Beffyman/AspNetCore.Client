@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Flurl.Http;
 using TestWebApp.Contracts;
 using Microsoft.AspNetCore.TestHost;
-using AspNetCore.Client.Core;
+using AspNetCore.Client;
 
 namespace TestWebApp.Tests
 {

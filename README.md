@@ -32,17 +32,22 @@ and think the following
   - Introducing AspNetCore.Client.Generator!
 
 
-## AspNetCore.Client.Core
-[![NuGet](https://img.shields.io/nuget/dt/AspNetCore.Client.Core.svg)](https://www.nuget.org/packages/AspNetCore.Client.Core?semVer=2.0.0)
+## AspNetCore.Client
+[![NuGet](https://img.shields.io/nuget/dt/AspNetCore.Client.svg)](https://www.nuget.org/packages/AspNetCore.Client?semVer=2.0.0)
 
 Package that contains required classes/attributes used by the generator package.
 
 Can be included inside the web app to configure behavior.
 
-## AspNetCore.Client.Core.Protobuf
-[![NuGet](https://img.shields.io/nuget/dt/AspNetCore.Client.Core.Protobuf.svg)](https://www.nuget.org/packages/AspNetCore.Client.Core.Protobuf?semVer=2.0.0)
+## AspNetCore.Client.Protobuf
+[![NuGet](https://img.shields.io/nuget/dt/AspNetCore.Client.Protobuf.svg)](https://www.nuget.org/packages/AspNetCore.Client.Protobuf?semVer=2.0.0)
 
 Contains a protobuf serializer which can override the default json one via the UseProtobufSerlaizer on the ClientConfiguration.
+
+## AspNetCore.Client.BlazorJson
+[![NuGet](https://img.shields.io/nuget/dt/AspNetCore.Client.BlazorJson.svg)](https://www.nuget.org/packages/AspNetCore.Client.BlazorJson?semVer=2.0.0)
+
+Contains a blazor simpleJson serializer which can override the default json one via the UseBlazorSimpleJsonSerlaizer on the ClientConfiguration.
 
 ## AspNetCore.Client.Generator
 [![NuGet](https://img.shields.io/nuget/dt/AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/AspNetCore.Client.Generator?semVer=2.0.0)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Core.Attributes
+namespace AspNetCore.Client.Attributes
 {
 	/// <summary>
 	/// Used when you don't want a client generated for the endpoint

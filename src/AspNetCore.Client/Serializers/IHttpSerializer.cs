@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Client.Core.Serializers
+namespace AspNetCore.Client.Serializers
 {
 	/// <summary>
 	/// Used for implementing custom serializers for the http content

@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Client.Core.Serializers
+namespace AspNetCore.Client.Serializers
 {
 	/// <summary>
 	/// Uses Newtonsoft.Json for serializing and deserializing the http content

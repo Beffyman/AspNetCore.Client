@@ -16,13 +16,13 @@ using System.Net.Http;
 using Flurl.Http;
 using Flurl;
 using System.Runtime.CompilerServices;
-using AspNetCore.Client.Core;
-using AspNetCore.Client.Core.Authorization;
-using AspNetCore.Client.Core.Exceptions;
+using AspNetCore.Client;
+using AspNetCore.Client.Authorization;
+using AspNetCore.Client.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
-using AspNetCore.Client.Core.Serializers;
-using AspNetCore.Client.Core.Http;
+using AspNetCore.Client.Serializers;
+using AspNetCore.Client.Http;
 
 namespace TestBlazorApp.Clients
 {

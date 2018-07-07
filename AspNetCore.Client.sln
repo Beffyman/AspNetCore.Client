@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Generator", "src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj", "{1DA6050D-345E-41E3-BC84-849FF81F3ACD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Core", "src\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj", "{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client", "src\AspNetCore.Client\AspNetCore.Client.csproj", "{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A0F6ACE-08C3-4894-B7D2-537B06B057BC}"
 	ProjectSection(SolutionItems) = preProject
@@ -45,9 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Tests", "test\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Contracts", "test\TestWebApp.Contracts\TestWebApp.Contracts.csproj", "{D21B21B7-CCF3-4C68-8F90-DC045ABE3DCA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Core.Protobuf", "src\AspNetCore.Client.Core.Protobuf\AspNetCore.Client.Core.Protobuf.csproj", "{4F89E001-24D2-4464-9577-6768E31C510D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Protobuf", "src\AspNetCore.Client.Protobuf\AspNetCore.Client.Protobuf.csproj", "{4F89E001-24D2-4464-9577-6768E31C510D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Client.Core.BlazorJson", "src\AspNetCore.Client.Core.BlazorJson\AspNetCore.Client.Core.BlazorJson.csproj", "{F911F6A0-CBE9-4B4C-91AA-41C3EF3B62A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Client.BlazorJson", "src\AspNetCore.Client.BlazorJson\AspNetCore.Client.BlazorJson.csproj", "{F911F6A0-CBE9-4B4C-91AA-41C3EF3B62A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBlazorApp.Tests", "test\TestBlazorApp.Tests\TestBlazorApp.Tests.csproj", "{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}"
 EndProject

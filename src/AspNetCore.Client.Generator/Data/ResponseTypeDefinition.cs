@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Net;
-using AspNetCore.Client.Core.Serializers;
+using AspNetCore.Client.Serializers;
 
 namespace AspNetCore.Client.Generator.Data
 {
