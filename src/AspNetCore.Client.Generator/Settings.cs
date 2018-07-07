@@ -14,10 +14,6 @@ namespace AspNetCore.Client.Generator
 		public static string ClientInterfaceName { get; set; }
 		public static bool UseValueTask { get; set; }
 		public static string ClientNamespace { get; set; }
-		/// <summary>
-		/// Unsure if this will be needed eventually, if I implement a services config for the serializer
-		/// </summary>
-		public static bool BlazorClients { get; set; }
 
 		public static string[] AllowedNamespaces { get; set; }
 

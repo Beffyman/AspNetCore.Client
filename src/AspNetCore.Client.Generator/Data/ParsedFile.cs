@@ -38,7 +38,7 @@ namespace AspNetCore.Client.Generator.Data
 			Regex allowedUsings;
 			Regex unallowedUsings;
 
-			if (Settings.AllowedNamespaces.Any())
+			if (Settings.AllowedNamespaces?.Any() ?? false)
 			{
 				allowedUsings = new Regex($"({string.Join("|", Settings.AllowedNamespaces)})");
 			}
@@ -47,7 +47,7 @@ namespace AspNetCore.Client.Generator.Data
 				allowedUsings = new Regex($"(.+)");
 			}
 
-			if (Settings.ExcludedNamespaces.Any())
+			if (Settings.ExcludedNamespaces?.Any() ?? false)
 			{
 				unallowedUsings = new Regex($"({string.Join("|", Settings.ExcludedNamespaces)})");
 			}

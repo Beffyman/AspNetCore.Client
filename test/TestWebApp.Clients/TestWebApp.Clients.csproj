@@ -16,7 +16,6 @@
 		<ClientInterfaceName>TestWebAppClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
-		<BlazorClients>false</BlazorClients>
 		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>
 	</PropertyGroup>
