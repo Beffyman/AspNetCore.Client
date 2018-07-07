@@ -19,7 +19,7 @@ if($version -Match "-"){
 }
 
 #Filter out +Build# from CI builds
-if($version -Match "+"){
+if($version -Match "\+"){
 	$version = $version.Split("+")[0];
 }
 
