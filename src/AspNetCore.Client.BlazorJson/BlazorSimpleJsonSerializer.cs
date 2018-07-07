@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Core.Serializers;
+﻿using AspNetCore.Client.Serializers;
 using System;
 using Microsoft.AspNetCore.Blazor;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Client.Core.Serializers
+namespace AspNetCore.Client.Serializers
 {
 	/// <summary>
 	/// Uses Blazor's SimpleJson for serializing and deserializing the http content

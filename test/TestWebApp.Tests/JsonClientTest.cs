@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl.Http;
 using TestWebApp.Contracts;
-using AspNetCore.Client.Core;
+using AspNetCore.Client;
 using NUnit.Framework;
 
 namespace TestWebApp.Tests

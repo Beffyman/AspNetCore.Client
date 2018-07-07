@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Core.Authorization
+namespace AspNetCore.Client.Authorization
 {
 	/// <summary>
 	/// Abstraction around security modifier to http request

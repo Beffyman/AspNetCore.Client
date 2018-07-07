@@ -43,7 +43,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj" />
+	  <ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
 	</ItemGroup>
 
 	<!-- Collect all dependencies and include them in the package itself, next to the Task assembly. -->

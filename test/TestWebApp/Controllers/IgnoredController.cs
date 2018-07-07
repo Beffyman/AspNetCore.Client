@@ -1,5 +1,5 @@
-﻿using AspNetCore.Client.Core;
-using AspNetCore.Client.Core.Attributes;
+﻿using AspNetCore.Client;
+using AspNetCore.Client.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

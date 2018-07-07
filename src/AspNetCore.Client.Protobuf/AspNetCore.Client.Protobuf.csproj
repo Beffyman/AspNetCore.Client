@@ -7,13 +7,13 @@
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 		<LangVersion>latest</LangVersion>
-		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\AspNetCore.Client.Core.BlazorJson.xml</DocumentationFile>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\AspNetCore.Client.Core.Protobuf.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<Copyright>Copyright 2018</Copyright>
 		<Authors>Beffyman</Authors>
-		<Description>Contains Blazor SimpleJson serializer for AspNetCore.Client.Generator clients</Description>
+		<Description>Contains protobuf serializer for AspNetCore.Client.Generator clients</Description>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -23,11 +23,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.4.0" />
+	  <PackageReference Include="protobuf-net" Version="2.3.13" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AspNetCore.Client.Core\AspNetCore.Client.Core.csproj" />
+	  <ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
 	</ItemGroup>
 
 </Project>

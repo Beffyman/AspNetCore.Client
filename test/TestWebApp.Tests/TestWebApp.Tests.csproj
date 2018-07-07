@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\AspNetCore.Client.Core.Protobuf\AspNetCore.Client.Core.Protobuf.csproj" />
+		<ProjectReference Include="..\..\src\AspNetCore.Client.Protobuf\AspNetCore.Client.Protobuf.csproj" />
 		<ProjectReference Include="..\TestWebApp.Clients\TestWebApp.Clients.csproj" />
 		<ProjectReference Include="..\TestWebApp\TestWebApp.csproj" />
 	</ItemGroup>

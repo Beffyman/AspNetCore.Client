@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Client.Core.Http
+namespace AspNetCore.Client.Http
 {
 	public class DefaultHttpOverride : IHttpOverride
 	{

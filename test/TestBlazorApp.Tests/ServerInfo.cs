@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Core;
+﻿using AspNetCore.Client;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,10 +1,10 @@
-﻿using AspNetCore.Client.Core.Serializers;
+﻿using AspNetCore.Client.Serializers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Core
+namespace AspNetCore.Client
 {
 	public static class CoreInstaller
 	{
