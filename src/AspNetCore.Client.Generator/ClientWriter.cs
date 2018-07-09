@@ -40,16 +40,7 @@ namespace AspNetCore.Client.Generator
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);
 
-			services.AddScoped<{Settings.ClientInterfaceName}>((provider) =>
-			{{
-				var client = provider.GetService<HttpClient>();
-
-				var wrappedClient = new {Settings.ClientInterfaceName}(client);
-				wrappedClient.BaseAddress = configuration.HttpBaseAddress;
-				wrappedClient.Timeout = configuration.Timeout;
-				return wrappedClient;
-
-			}});
+			services.AddScoped<{Settings.ClientInterfaceName}>((provider) => new {Settings.ClientInterfaceName}(provider.GetService<HttpClient>(), configuration.HttpBaseAddress, configuration.Timeout));
 
 {clients}
 
@@ -65,17 +56,17 @@ namespace AspNetCore.Client.Generator
 
 	public class {Settings.ClientInterfaceName}
 	{{
-		public string BaseAddress {{ get; internal set; }}
 		public TimeSpan Timeout {{ get; internal set; }}
 		public readonly {nameof(FlurlClient)} {Constants.FlurlClientVariable};
 
-		public {Settings.ClientInterfaceName}({nameof(HttpClient)} client)
+		public {Settings.ClientInterfaceName}({nameof(HttpClient)} client, string baseAddress, TimeSpan timeout)
 		{{
-			if (!string.IsNullOrEmpty(BaseAddress))
+			if (!string.IsNullOrEmpty(baseAddress))
 			{{
-				client.BaseAddress = new Uri(BaseAddress);
+				client.BaseAddress = new Uri(baseAddress);
 			}}
 			{Constants.FlurlClientVariable} = new {nameof(FlurlClient)}(client);
+			Timeout = timeout;
 		}}
 
 	}}

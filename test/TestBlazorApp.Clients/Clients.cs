@@ -41,16 +41,7 @@ namespace TestBlazorApp.Clients
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);
 
-			services.AddScoped<TestBlazorAppClient>((provider) =>
-			{
-				var client = provider.GetService<HttpClient>();
-
-				var wrappedClient = new TestBlazorAppClient(client);
-				wrappedClient.BaseAddress = configuration.HttpBaseAddress;
-				wrappedClient.Timeout = configuration.Timeout;
-				return wrappedClient;
-
-			});
+			services.AddScoped<TestBlazorAppClient>((provider) => new TestBlazorAppClient(provider.GetService<HttpClient>(), configuration.HttpBaseAddress, configuration.Timeout));
 
 			services.AddScoped<ISampleDataClient, SampleDataClient>();
 
@@ -62,17 +53,17 @@ namespace TestBlazorApp.Clients
 
 	public class TestBlazorAppClient
 	{
-		public string BaseAddress { get; internal set; }
 		public TimeSpan Timeout { get; internal set; }
 		public readonly FlurlClient ClientWrapper;
 
-		public TestBlazorAppClient(HttpClient client)
+		public TestBlazorAppClient(HttpClient client, string baseAddress, TimeSpan timeout)
 		{
-			if (!string.IsNullOrEmpty(BaseAddress))
+			if (!string.IsNullOrEmpty(baseAddress))
 			{
-				client.BaseAddress = new Uri(BaseAddress);
+				client.BaseAddress = new Uri(baseAddress);
 			}
 			ClientWrapper = new FlurlClient(client);
+			Timeout = timeout;
 		}
 
 	}

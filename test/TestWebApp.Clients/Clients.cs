@@ -41,16 +41,7 @@ namespace TestWebApp.Clients
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);
 
-			services.AddScoped<TestWebAppClient>((provider) =>
-			{
-				var client = provider.GetService<HttpClient>();
-
-				var wrappedClient = new TestWebAppClient(client);
-				wrappedClient.BaseAddress = configuration.HttpBaseAddress;
-				wrappedClient.Timeout = configuration.Timeout;
-				return wrappedClient;
-
-			});
+			services.AddScoped<TestWebAppClient>((provider) => new TestWebAppClient(provider.GetService<HttpClient>(), configuration.HttpBaseAddress, configuration.Timeout));
 
 			services.AddScoped<IValuesClient, ValuesClient>();
 
@@ -62,17 +53,17 @@ namespace TestWebApp.Clients
 
 	public class TestWebAppClient
 	{
-		public string BaseAddress { get; internal set; }
 		public TimeSpan Timeout { get; internal set; }
 		public readonly FlurlClient ClientWrapper;
 
-		public TestWebAppClient(HttpClient client)
+		public TestWebAppClient(HttpClient client, string baseAddress, TimeSpan timeout)
 		{
-			if (!string.IsNullOrEmpty(BaseAddress))
+			if (!string.IsNullOrEmpty(baseAddress))
 			{
-				client.BaseAddress = new Uri(BaseAddress);
+				client.BaseAddress = new Uri(baseAddress);
 			}
 			ClientWrapper = new FlurlClient(client);
+			Timeout = timeout;
 		}
 
 	}
