@@ -68,11 +68,11 @@ namespace TestWebApp.Clients
 
 		public TestWebAppClient(HttpClient client)
 		{
-			ClientWrapper = new FlurlClient(client);
-			if(!string.IsNullOrEmpty(BaseAddress))
+			if (!string.IsNullOrEmpty(BaseAddress))
 			{
-				ClientWrapper.BaseUrl = BaseAddress;
+				client.BaseAddress = new Uri(BaseAddress);
 			}
+			ClientWrapper = new FlurlClient(client);
 		}
 
 	}

@@ -71,11 +71,11 @@ namespace AspNetCore.Client.Generator
 
 		public {Settings.ClientInterfaceName}({nameof(HttpClient)} client)
 		{{
-			{Constants.FlurlClientVariable} = new {nameof(FlurlClient)}(client);
-			if(!string.IsNullOrEmpty(BaseAddress))
+			if (!string.IsNullOrEmpty(BaseAddress))
 			{{
-				{Constants.FlurlClientVariable}.BaseUrl = BaseAddress;
+				client.BaseAddress = new Uri(BaseAddress);
 			}}
+			{Constants.FlurlClientVariable} = new {nameof(FlurlClient)}(client);
 		}}
 
 	}}
