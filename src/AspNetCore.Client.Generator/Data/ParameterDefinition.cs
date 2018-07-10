@@ -37,7 +37,7 @@ namespace AspNetCore.Client.Generator.Data
 			Options = new ParameterAttributeOptions
 			{
 				Bind = attributes.Any(x => x.Name.ToFullString().StartsWith("Bind")),
-				Body = attributes.Any(x => x.Name.ToFullString().StartsWith("FromBody"))
+				Body = attributes.Any(x => x.Name.ToFullString().StartsWith("FromBody")) || !Helpers.KnownPrimitives.Contains(Type)
 			};
 
 		}

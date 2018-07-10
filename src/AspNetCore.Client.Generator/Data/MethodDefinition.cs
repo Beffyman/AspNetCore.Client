@@ -464,7 +464,7 @@ $@"
 				case HttpAttributeType.Patch:
 					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Post:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PostStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				default:
 					throw new Exception("Unexpected HTTPType");
 			}

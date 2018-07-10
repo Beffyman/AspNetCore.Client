@@ -96,5 +96,12 @@ namespace TestWebApp.Controllers
 				When = DateTime.UtcNow
 			});
 		}
+
+		[HttpPost("[action]")]
+		public async ValueTask<IActionResult> TaskReturn(MyFancyDto dto)
+		{
+			await Task.CompletedTask;
+			return Ok();
+		}
 	}
 }
