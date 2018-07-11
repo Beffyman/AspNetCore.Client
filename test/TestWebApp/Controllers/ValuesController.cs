@@ -103,5 +103,11 @@ namespace TestWebApp.Controllers
 			await Task.CompletedTask;
 			return Ok();
 		}
+
+		[HttpPost("[action]")]
+		public MyFancyDto DtoForDto(MyFancyDto dto)
+		{
+			return dto;
+		}
 	}
 }

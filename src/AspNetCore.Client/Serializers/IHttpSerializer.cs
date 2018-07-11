@@ -24,6 +24,6 @@ namespace AspNetCore.Client.Serializers
 		/// <typeparam name="T"></typeparam>
 		/// <param name="request"></param>
 		/// <returns></returns>
-		string Serialize<T>(T request);
+		HttpContent Serialize<T>(T request);
 	}
 }

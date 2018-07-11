@@ -19,9 +19,10 @@ namespace AspNetCore.Client.Serializers
 			return JsonUtil.Deserialize<T>(await content.ReadAsStringAsync().ConfigureAwait(false));
 		}
 
-		public string Serialize<T>(T request)
+		public HttpContent Serialize<T>(T request)
 		{
-			return JsonUtil.Serialize(request);
+			var json = JsonUtil.Serialize(request);
+			return new StringContent(json, Encoding.UTF8, "application/json");
 		}
 	}
 }

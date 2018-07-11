@@ -46,7 +46,6 @@ services.AddTransient<HttpClient>((provider) =>
 services.InstallClients(config =>
 {
 	config.HttpBaseAddress = Configuration.GetConnectionString("MyBackendApp");
-	config.WithJsonBody();
 });
 
 ```

@@ -19,13 +19,13 @@ namespace AspNetCore.Client.Serializers
 			return Serializer.Deserialize<T>(await content.ReadAsStreamAsync().ConfigureAwait(false));
 		}
 
-		public string Serialize<T>(T request)
+		public HttpContent Serialize<T>(T request)
 		{
 			using (var stream = new MemoryStream())
 			using (var reader = new StreamReader(stream))
 			{
 				Serializer.Serialize(stream, request);
-				return reader.ReadToEnd();
+				return new StringContent(reader.ReadToEnd(), Encoding.UTF8, "application/x-protobuf");
 			}
 
 		}

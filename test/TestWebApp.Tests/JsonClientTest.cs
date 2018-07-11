@@ -68,12 +68,33 @@ namespace TestWebApp.Tests
 
 			valuesClient.FancyDtoReturn(15,
 				OKCallback: (_) =>
-				 {
-					 dto = _;
-				 });
+				{
+					dto = _;
+				});
 
 
 			Assert.AreEqual(15, dto.Id);
+		}
+
+
+		[Test]
+		public void RequestAndResponseChecks()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+
+			var response = valuesClient.DtoForDtoRaw(new MyFancyDto
+			{
+				Id = 1,
+				Collision = Guid.NewGuid(),
+				Description = "Helo",
+				When = DateTime.Now
+			});
+
+
+			Assert.True(response.RequestMessage.Content.Headers.ContentType.MediaType == "application/json");
+			Assert.True(response.Content.Headers.ContentType.MediaType == "application/json");
 		}
 
 		/// <summary>

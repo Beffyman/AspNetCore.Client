@@ -462,11 +462,11 @@ $@"
 				case HttpAttributeType.Get:
 					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.GetAsync)}({Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Put:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Patch:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Post:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PostStringAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PostAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
 				default:
 					throw new Exception("Unexpected HTTPType");
 			}

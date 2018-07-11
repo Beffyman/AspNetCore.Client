@@ -60,9 +60,10 @@ namespace AspNetCore.Client.Serializers
 			}
 		}
 
-		public string Serialize<T>(T request)
+		public HttpContent Serialize<T>(T request)
 		{
-			return JsonConvert.SerializeObject(request);
+			var json = JsonConvert.SerializeObject(request);
+			return new StringContent(json, Encoding.UTF8, "application/json");
 		}
 	}
 }

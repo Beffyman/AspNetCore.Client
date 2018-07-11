@@ -340,6 +340,32 @@ namespace TestWebApp.Clients
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
+		
+		MyFancyDto DtoForDto(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<MyFancyDto> DtoForDtoAsync(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
 	}
 
 
@@ -691,7 +717,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -726,7 +752,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -759,7 +785,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -794,7 +820,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -828,7 +854,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PutStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -864,7 +890,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PutStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -898,7 +924,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PutStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -934,7 +960,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PutStringAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1737,7 +1763,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1772,7 +1798,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				
 				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1805,7 +1831,7 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1840,7 +1866,161 @@ namespace TestWebApp.Clients
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
-				.PostStringAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public MyFancyDto DtoForDto(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "DtoForDto";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			
+			if(response.IsSuccessStatusCode)
+			{
+				return Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+			else
+			{
+				return default(MyFancyDto);
+			}
+
+		}
+
+
+		public HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "DtoForDto";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async ValueTask<MyFancyDto> DtoForDtoAsync(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "DtoForDto";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			
+			if(response.IsSuccessStatusCode)
+			{
+				return await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false);
+			}
+			else
+			{
+				return default(MyFancyDto);
+			}
+
+		}
+
+
+		public async ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "DtoForDto";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}
