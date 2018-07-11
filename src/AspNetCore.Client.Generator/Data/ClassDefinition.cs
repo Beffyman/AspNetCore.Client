@@ -108,6 +108,7 @@ namespace AspNetCore.Client.Generator.Data
 			fields.Add($@"		public readonly {Settings.ClientInterfaceName} {Constants.ClientInterfaceName};");
 			fields.Add($@"		public readonly {Constants.HttpOverride} {Constants.HttpOverrideField};");
 			fields.Add($@"		public readonly {Constants.Serializer} {Constants.SerializerField};");
+			fields.Add($@"		public readonly {Constants.RequestModifier} {Constants.RequestModifierField};");
 
 			var classFields = string.Join(Environment.NewLine, fields);
 
@@ -117,6 +118,7 @@ namespace AspNetCore.Client.Generator.Data
 			parameters.Add($@"{Settings.ClientInterfaceName} client");
 			parameters.Add($@"{Constants.HttpOverride} httpOverride");
 			parameters.Add($@"{Constants.Serializer} serializer");
+			parameters.Add($@"{Constants.RequestModifier} modifier");
 
 
 			string @params = string.Join(", ", parameters);
@@ -129,6 +131,7 @@ namespace AspNetCore.Client.Generator.Data
 			initializers.Add($"			{Constants.ClientInterfaceName} = client;");
 			initializers.Add($"			{Constants.HttpOverrideField} = httpOverride;");
 			initializers.Add($"			{Constants.SerializerField} = serializer;");
+			initializers.Add($"			{Constants.RequestModifierField} = modifier;");
 
 
 			string init = string.Join(Environment.NewLine, initializers);

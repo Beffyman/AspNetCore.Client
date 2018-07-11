@@ -32,6 +32,25 @@ and think the following
   - Introducing AspNetCore.Client.Generator!
 
 
+
+```c#
+
+services.AddHttpClient("MyApp");
+
+services.AddTransient<HttpClient>((provider) =>
+{
+	var factory = provider.GetService<IHttpClientFactory>();
+	return factory.CreateClient();
+});
+
+services.InstallClients(config =>
+{
+	config.HttpBaseAddress = Configuration.GetConnectionString("MyBackendApp");
+	config.WithJsonBody();
+});
+
+```
+
 ## AspNetCore.Client
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.svg)](https://www.nuget.org/packages/AspNetCore.Client)
 

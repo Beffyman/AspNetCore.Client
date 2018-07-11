@@ -94,7 +94,8 @@ namespace AspNetCore.Client.Generator
 				"using Microsoft.Extensions.DependencyInjection;",
 				"using System.Threading;",
 				"using AspNetCore.Client.Serializers;",
-				"using AspNetCore.Client.Http;"
+				"using AspNetCore.Client.Http;",
+				"using AspNetCore.Client.RequestModifiers;"
 			};
 
 			var distinctUsingStatements = parsedFiles

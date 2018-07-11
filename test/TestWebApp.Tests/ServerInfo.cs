@@ -38,6 +38,7 @@ namespace TestWebApp.Tests
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
+			configure.WithProtobufBody();
 			configure.UseProtobufSerlaizer();
 		}
 	}
@@ -46,6 +47,7 @@ namespace TestWebApp.Tests
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
+			configure.WithJsonBody();
 			configure.UseJsonClientSerializer();
 		}
 	}

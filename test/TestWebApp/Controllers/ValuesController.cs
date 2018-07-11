@@ -13,7 +13,7 @@ namespace TestWebApp.Controllers
 {
 	[Route("api/[controller]")]
 	[HeaderParameter("ControllerHeader", typeof(int), "0")]
-	[HeaderParameter("Accept", typeof(string), "application/json")]//This is here so the unit tests have the option of which format
+	//[HeaderParameter("Accept", typeof(string), "application/json")]//This is here so the unit tests have the option of which format
 	//[IncludeHeader("Accept", "application/json")]
 	//[IncludeHeader("Accept", "application/x-protobuf")]
 	[IncludeHeader("Test", "EXTRA")]

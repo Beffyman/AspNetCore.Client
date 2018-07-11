@@ -25,7 +25,7 @@ namespace TestWebApp.Tests
 			var endpoint = new ProtobufServerInfo();
 
 			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var values = valuesClient.Get(Accept: "application/x-protobuf");
+			var values = valuesClient.Get();
 
 
 			Assert.AreEqual(new List<string> { "value1", "value2" }, values);
@@ -39,7 +39,7 @@ namespace TestWebApp.Tests
 			var endpoint = new ProtobufServerInfo();
 
 			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestString("Val1", "Val2", Accept: "application/x-protobuf");
+			var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
 			Assert.AreEqual("Val1", value);
@@ -53,7 +53,7 @@ namespace TestWebApp.Tests
 			var endpoint = new ProtobufServerInfo();
 
 			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestInt(15, Accept: "application/x-protobuf");
+			var value = valuesClient.HeaderTestInt(15);
 
 
 			Assert.AreEqual(15, value);
@@ -68,7 +68,7 @@ namespace TestWebApp.Tests
 			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 			MyFancyDto dto = null;
 
-			valuesClient.FancyDtoReturn(15, Accept: "application/x-protobuf",
+			valuesClient.FancyDtoReturn(15,
 				OKCallback: (_) =>
 				{
 					dto = _;

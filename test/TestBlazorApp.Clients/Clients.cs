@@ -23,6 +23,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
 using AspNetCore.Client.Serializers;
 using AspNetCore.Client.Http;
+using AspNetCore.Client.RequestModifiers;
 
 namespace TestBlazorApp.Clients
 {
@@ -95,12 +96,14 @@ namespace TestBlazorApp.Clients
 		public readonly TestBlazorAppClient Client;
 		public readonly IHttpOverride HttpOverride;
 		public readonly IHttpSerializer Serializer;
+		public readonly IRequestModifier Modifier;
 
-		public SampleDataClient(TestBlazorAppClient client, IHttpOverride httpOverride, IHttpSerializer serializer)
+		public SampleDataClient(TestBlazorAppClient client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;
 			Serializer = serializer;
+			Modifier = modifier;
 		}
 
 
@@ -119,6 +122,7 @@ namespace TestBlazorApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
+				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -158,6 +162,7 @@ namespace TestBlazorApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
+				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -184,6 +189,7 @@ namespace TestBlazorApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
+				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -223,6 +229,7 @@ namespace TestBlazorApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
+				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);

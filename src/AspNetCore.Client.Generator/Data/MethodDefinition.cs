@@ -448,6 +448,8 @@ $@"
 			}
 
 
+			str = $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratorExtensions.WithRequestModifiers)}({Constants.RequestModifierField})";
+
 			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.Body ?? false);
 
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.AllowAnyHttpStatus)}()";

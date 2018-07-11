@@ -13,5 +13,13 @@ namespace AspNetCore.Client
 		{
 			config.SerializeType = typeof(ProtobufSerializer);
 		}
+
+
+		public static ClientConfiguration WithProtobufBody(this ClientConfiguration config)
+		{
+			config.PredefinedHeaders.Add("Accept", "application/x-protobuf");
+
+			return config;
+		}
 	}
 }

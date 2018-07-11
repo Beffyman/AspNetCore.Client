@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.Serializers;
+﻿using AspNetCore.Client.RequestModifiers;
+using AspNetCore.Client.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,9 @@ namespace AspNetCore.Client.Generator
 
 		public const string Serializer = nameof(IHttpSerializer);
 		public const string SerializerField = "Serializer";
+
+		public const string RequestModifier = nameof(IRequestModifier);
+		public const string RequestModifierField = "Modifier";
 
 
 		public const string IActionResult = "IActionResult";
