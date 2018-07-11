@@ -9,7 +9,6 @@ namespace AspNetCore.Client.Generator
 	public class GeneratorTask : Microsoft.Build.Utilities.Task
 	{
 		public string CurrentDirectory { get; set; }
-
 		public string RouteToServiceProjectFolder { get; set; }
 		public string ClientInterfaceName { get; set; }
 		public string UseValueTask { get; set; }

@@ -76,6 +76,61 @@ namespace TestWebApp.Tests
 			Assert.AreEqual(15, dto.Id);
 		}
 
+		[Test]
+		public void GuidReturns()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+			Guid g = Guid.Empty;
+
+			valuesClient.GuidReturn(
+				OKCallback: (_) =>
+				{
+					g = _;
+				});
+
+
+			Assert.AreNotEqual(Guid.Empty, g);
+		}
+
+		[Test]
+		public void DateTimeReturns()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+			DateTime g = DateTime.MinValue;
+
+			valuesClient.DateTimeReturns(
+				OKCallback: (_) =>
+				{
+					g = _;
+				});
+
+
+			Assert.AreNotEqual(DateTime.MinValue, g);
+		}
+
+
+		[Test]
+		public void BoolReturns()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+			bool g = false;
+
+			valuesClient.BoolReturns(
+				OKCallback: (_) =>
+				{
+					g = _;
+				});
+
+
+			Assert.AreNotEqual(false, g);
+		}
+
 
 		[Test]
 		public void RequestAndResponseChecks()

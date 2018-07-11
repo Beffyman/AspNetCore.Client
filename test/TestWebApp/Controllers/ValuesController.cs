@@ -109,5 +109,26 @@ namespace TestWebApp.Controllers
 		{
 			return dto;
 		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(Guid), (int)HttpStatusCode.OK)]
+		public IActionResult GuidReturn()
+		{
+			return Ok(Guid.NewGuid());
+		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(DateTime), (int)HttpStatusCode.OK)]
+		public IActionResult DateTimeReturns()
+		{
+			return Ok(DateTime.Now);
+		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+		public IActionResult BoolReturns()
+		{
+			return Ok(true);
+		}
 	}
 }
