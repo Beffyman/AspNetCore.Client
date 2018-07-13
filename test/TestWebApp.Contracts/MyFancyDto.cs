@@ -11,12 +11,14 @@ namespace TestWebApp.Contracts
 	{
 		[ProtoMember(1)]
 		public int Id { get; set; }
+
 		[ProtoMember(2)]
 		public string Description { get; set; }
+
 		[ProtoMember(3)]
 		public DateTime When { get; set; }
+
 		[ProtoMember(4)]
 		public Guid Collision { get; set; }
-
 	}
 }

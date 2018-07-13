@@ -5,22 +5,41 @@ using System.Text;
 
 namespace AspNetCore.Client.RequestModifiers
 {
+	/// <summary>
+	/// Applies header modifications predefined inside the configuration
+	/// </summary>
 	public interface IRequestModifier
 	{
+		/// <summary>
+		/// Header modifications that are defined inside the configuration
+		/// </summary>
 		IDictionary<string, string> PredefinedHeaders { get; set; }
 
+		/// <summary>
+		/// Applies header modifications to the request
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="clientOrRequest"></param>
+		/// <returns></returns>
 		T ApplyModifiers<T>(T clientOrRequest) where T : IHttpSettingsContainer;
 	}
 
+	/// <summary>
+	/// Implementation of <see cref="IRequestModifier"/> that will apply header modifications defined inside the configuration
+	/// </summary>
 	public class RequestModifier : IRequestModifier
 	{
+		/// <summary>
+		/// Header modifications that are defined inside the configuration
+		/// </summary>
 		public IDictionary<string, string> PredefinedHeaders { get; set; }
 
-		public RequestModifier()
-		{
-
-		}
-
+		/// <summary>
+		/// Applies header modifications to the request
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="clientOrRequest"></param>
+		/// <returns></returns>
 		public T ApplyModifiers<T>(T clientOrRequest) where T : IHttpSettingsContainer
 		{
 			foreach (var header in PredefinedHeaders)
@@ -30,6 +49,5 @@ namespace AspNetCore.Client.RequestModifiers
 
 			return clientOrRequest;
 		}
-
 	}
 }

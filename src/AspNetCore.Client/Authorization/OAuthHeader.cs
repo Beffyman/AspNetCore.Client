@@ -10,9 +10,8 @@ namespace AspNetCore.Client.Authorization
 	/// </summary>
 	public class OAuthHeader : SecurityHeader
 	{
-		public OAuthHeader() { }
 		/// <summary>
-		/// The Encoded string for the token, use OAuthHeader.Encode if you just want to pass a unencoded string in.
+		/// The Encoded string for the token, use <see cref="OAuthHeader.Encode(string, Encoding)"/> if you just want to pass a unencoded string in.
 		/// </summary>
 		/// <param name="token"></param>
 		public OAuthHeader(string token)
@@ -23,8 +22,14 @@ namespace AspNetCore.Client.Authorization
 		/// <summary>
 		/// Token to be used in the header
 		/// </summary>
-		public string Token { get; set; }
+		private string Token { get; }
 
+		/// <summary>
+		///Implementation of <see cref="SecurityHeader.AddAuth{T}(T)"/> which uses <see cref="HeaderExtensions.WithOAuthBearerToken{T}(T, string)"/>
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="clientOrRequest"></param>
+		/// <returns></returns>
 		public override T AddAuth<T>(T clientOrRequest)
 		{
 			return clientOrRequest.WithOAuthBearerToken(Token);
@@ -32,7 +37,7 @@ namespace AspNetCore.Client.Authorization
 
 
 		/// <summary>
-		/// Runs the ASCII.GetBytes & Convert.ToBase64String for you
+		/// Runs the <see cref="Encoding.GetBytes(string)"/> and <see cref="Convert.ToBase64String(byte[])"/> for you
 		/// </summary>
 		/// <param name="token"></param>
 		/// <param name="encoding">Defaults to ASCIIEncoding.ASCII</param>

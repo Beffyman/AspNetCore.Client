@@ -37,7 +37,7 @@ namespace TestBlazorApp.Clients
 		/// <param name="services"></param>
 		/// <param name="configure">Overrides for client configuration</param>
 		/// <returns></returns>
-		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure = null)
+		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
 		{
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);
@@ -117,7 +117,7 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -126,8 +126,7 @@ namespace TestBlazorApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -157,7 +156,7 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -166,8 +165,7 @@ namespace TestBlazorApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -184,7 +182,7 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -193,8 +191,7 @@ namespace TestBlazorApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -224,7 +221,7 @@ namespace TestBlazorApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -233,8 +230,7 @@ namespace TestBlazorApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;

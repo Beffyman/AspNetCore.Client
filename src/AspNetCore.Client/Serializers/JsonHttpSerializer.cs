@@ -30,6 +30,12 @@ namespace AspNetCore.Client.Serializers
 			{ typeof(Guid), (_)=> Guid.Parse(_.TrimStart('"').TrimEnd('"')) },
 		};
 
+		/// <summary>
+		/// Deserializes the request content which is assumed to be json into a object of <typeparamref name="T"/>
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="content"></param>
+		/// <returns></returns>
 		public async ValueTask<T> Deserialize<T>(HttpContent content)
 		{
 			if (_knownJsonPrimitives.ContainsKey(typeof(T)))
@@ -43,6 +49,12 @@ namespace AspNetCore.Client.Serializers
 			}
 		}
 
+		/// <summary>
+		/// Serializes the request into a StringContent with a json media type
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="request"></param>
+		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
 			var json = JsonConvert.SerializeObject(request);

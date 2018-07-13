@@ -37,7 +37,7 @@ namespace TestWebApp.Clients
 		/// <param name="services"></param>
 		/// <param name="configure">Overrides for client configuration</param>
 		/// <returns></returns>
-		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure = null)
+		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
 		{
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);
@@ -558,7 +558,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -569,8 +569,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -601,7 +600,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -612,8 +611,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -633,7 +631,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -644,8 +642,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -676,7 +673,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -687,8 +684,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -709,7 +705,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -721,8 +717,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -754,7 +749,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -766,8 +761,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -788,7 +782,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -800,8 +794,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -833,7 +826,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -845,8 +838,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -867,7 +859,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -878,8 +870,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -902,7 +893,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -913,8 +904,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -935,7 +925,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -946,8 +936,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -970,7 +959,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -981,8 +970,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -1004,7 +992,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1015,8 +1003,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1040,7 +1027,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1051,8 +1038,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -1074,7 +1060,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1085,8 +1071,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1110,7 +1095,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1121,8 +1106,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -1144,7 +1128,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1156,8 +1140,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1181,7 +1164,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1193,8 +1176,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -1216,7 +1198,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1228,8 +1210,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1253,7 +1234,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1265,8 +1246,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -1286,7 +1266,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1297,8 +1277,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1320,7 +1299,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1331,8 +1310,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -1352,7 +1330,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1363,8 +1341,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1386,7 +1363,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1397,8 +1374,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -1420,7 +1396,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1433,8 +1409,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1467,7 +1442,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1480,8 +1455,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -1503,7 +1477,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1516,8 +1490,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1550,7 +1523,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1563,8 +1536,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -1585,7 +1557,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1597,8 +1569,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1630,7 +1601,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1642,8 +1613,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -1664,7 +1634,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1676,8 +1646,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1709,7 +1678,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1721,8 +1690,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -1748,7 +1716,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1759,8 +1727,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1795,7 +1762,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1806,8 +1773,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -1833,7 +1799,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1844,8 +1810,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1880,7 +1845,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1891,8 +1856,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -1913,7 +1877,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1924,8 +1888,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1948,7 +1911,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -1959,8 +1922,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -1981,7 +1943,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -1992,8 +1954,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2016,7 +1977,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2027,8 +1988,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -2049,7 +2009,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2060,8 +2020,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2093,7 +2052,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2104,8 +2063,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -2126,7 +2084,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2137,8 +2095,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2170,7 +2127,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2181,8 +2138,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -2203,7 +2159,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2214,8 +2170,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2245,7 +2200,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2256,8 +2211,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -2278,7 +2232,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2289,8 +2243,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2320,7 +2273,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2331,8 +2284,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -2353,7 +2305,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2364,8 +2316,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2395,7 +2346,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2406,8 +2357,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -2428,7 +2378,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2439,8 +2389,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2470,7 +2419,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2481,8 +2430,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -2503,7 +2451,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2514,8 +2462,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2545,7 +2492,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2556,8 +2503,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -2578,7 +2524,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2589,8 +2535,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2620,7 +2565,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2631,8 +2576,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -2658,7 +2602,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2669,8 +2613,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2705,7 +2648,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2716,8 +2659,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -2743,7 +2685,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2754,8 +2696,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2790,7 +2731,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2801,8 +2742,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -2829,7 +2769,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2840,8 +2780,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2877,7 +2816,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -2888,8 +2827,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -2916,7 +2854,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2927,8 +2865,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2964,7 +2901,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -2975,8 +2912,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -2998,7 +2934,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}?";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -3009,8 +2945,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3041,7 +2976,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}?";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
 			{
 				response = Client.ClientWrapper
@@ -3052,8 +2987,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				
-				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -3075,7 +3009,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}?";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -3086,8 +3020,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3118,7 +3051,7 @@ namespace TestWebApp.Clients
 
 			string url = $@"api/{controller}/{action}?";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false);
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
@@ -3129,8 +3062,7 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
-				
-				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;

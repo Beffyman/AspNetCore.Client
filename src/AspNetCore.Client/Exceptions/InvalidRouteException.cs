@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace AspNetCore.Client.Exceptions
 {
+	/// <summary>
+	/// Thrown when a route constraint is violated during the parameter validation
+	/// </summary>
+	[SuppressMessage("Readability", "RCS1194", Justification = "Used by generator, only 1 constructor is used.")]
 	public class InvalidRouteException : Exception
 	{
-		public InvalidRouteException() : base() { }
+		/// <summary>
+		/// Throws an exception with the message provided
+		/// </summary>
+		/// <param name="str"></param>
 		public InvalidRouteException(string str) : base(str) { }
-		public InvalidRouteException(string message, Exception innerException) : base(message, innerException) { }
-		protected InvalidRouteException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 	}
 }

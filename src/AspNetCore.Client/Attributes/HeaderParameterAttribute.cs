@@ -14,18 +14,26 @@ namespace AspNetCore.Client.Attributes
 		public const string AttributeName = "HeaderParameter";
 
 		/// <summary>
-		/// Name of the header
+		/// Name of the header parameter
 		/// </summary>
 		public string Name { get; }
+
 		/// <summary>
-		/// Type to be used for the header
+		/// Type to be used for the header parameter
 		/// </summary>
 		public string Type { get; }
+
 		/// <summary>
-		/// Default value (int i = 0) to be used for the header
+		/// Default value (int i = *0*) to be used for the header parameter
 		/// </summary>
 		public string DefaultValue { get; }
 
+		/// <summary>
+		/// Will generate a optional parameter that will be: "<paramref name="type"/> <paramref name="name"/> = <paramref name="defaultValue"/>"
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="type"></param>
+		/// <param name="defaultValue"></param>
 		public HeaderParameterAttribute(string name, string type, string defaultValue)
 		{
 			Name = name;
@@ -33,6 +41,11 @@ namespace AspNetCore.Client.Attributes
 			DefaultValue = defaultValue;
 		}
 
+		/// <summary>
+		/// Will generate a required parameter that will be: "<paramref name="type"/> <paramref name="name"/>"
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="type"></param>
 		public HeaderParameterAttribute(string name, string type)
 		{
 			Name = name;
@@ -40,6 +53,11 @@ namespace AspNetCore.Client.Attributes
 			DefaultValue = null;
 		}
 
+		/// <summary>
+		/// Will generate a required parameter that will be: "<paramref name="type"/> <paramref name="name"/>"
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="type"></param>
 		public HeaderParameterAttribute(string name, Type type)
 		{
 			Name = name;
@@ -47,6 +65,12 @@ namespace AspNetCore.Client.Attributes
 			DefaultValue = null;
 		}
 
+		/// <summary>
+		/// Will generate a optional parameter that will be: "<paramref name="type"/> <paramref name="name"/> = <paramref name="defaultValue"/>"
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="type"></param>
+		/// <param name="defaultValue"></param>
 		public HeaderParameterAttribute(string name, Type type, string defaultValue)
 		{
 			Name = name;

@@ -394,6 +394,7 @@ $@"{GetObsolete()}
 			bool containsController = route.Contains($"{{{Constants.ControllerRouteReserved}}}");
 			bool containsAction = route.Contains($"{{{Constants.ActionRouteReserved}}}");
 
+			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.Body ?? false);
 
 			var str =
 $@"
@@ -402,26 +403,45 @@ $@"
 
 			string {Constants.UrlVariable} = $@""{route}"";
 			HttpResponseMessage {Constants.ResponseVariable} = null;
-			{GetHttpOverridePre(async)}
+			{GetHttpOverridePre(async, bodyParameter?.HttpCallOutput ?? "null")}
 			if({Constants.ResponseVariable} == null)
 			{{
 				{Constants.ResponseVariable} = {(async ? "await " : "")}{GetHttpText()}{(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};
-				{GetHttpOverridePost(async)}
+				{GetHttpOverridePost(async, bodyParameter?.HttpCallOutput ?? "null")}
 			}}
 ";
 
 			return str;
 		}
 
-		private string GetHttpOverridePre(bool async)
+
+		private string GetHttpMethod()
 		{
-			return $@"{Constants.ResponseVariable} = {(async ? "await " : "")}{Constants.HttpOverrideField}.{Constants.HttpOverrideGetMethod}({Constants.UrlVariable}, {Constants.CancellationTokenParameter}){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};";
+			switch (Options.HttpType)
+			{
+				case HttpAttributeType.Delete:
+					return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Delete)}";
+				case HttpAttributeType.Get:
+					return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Get)}";
+				case HttpAttributeType.Put:
+					return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Put)}";
+				case HttpAttributeType.Patch:
+					return $@"new {nameof(HttpMethod)}(""PATCH"")";
+				case HttpAttributeType.Post:
+					return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Post)}";
+				default:
+					throw new Exception("Unexpected HTTPType");
+			}
 		}
 
-		private string GetHttpOverridePost(bool async)
+		private string GetHttpOverridePre(bool async, string body)
 		{
-			return $@"
-				{(async ? "await " : "")}{Constants.HttpOverrideField}.{Constants.HttpOverrideOnNonOverridedResponse}({Constants.UrlVariable}, {Constants.ResponseVariable}, {Constants.CancellationTokenParameter}){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};";
+			return $@"{Constants.ResponseVariable} = {(async ? "await " : "")}{Constants.HttpOverrideField}.{Constants.HttpOverrideGetMethod}({GetHttpMethod()}, {Constants.UrlVariable}, {body}, {Constants.CancellationTokenParameter}){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};";
+		}
+
+		private string GetHttpOverridePost(bool async, string body)
+		{
+			return $@"{(async ? "await " : "")}{Constants.HttpOverrideField}.{Constants.HttpOverrideOnNonOverridedResponse}({GetHttpMethod()}, {Constants.UrlVariable}, {body}, {Constants.ResponseVariable}, {Constants.CancellationTokenParameter}){(async ? ".ConfigureAwait(false)" : ".ConfigureAwait(false).GetAwaiter().GetResult()")};";
 		}
 
 		private string GetHttpText()

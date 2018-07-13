@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace AspNetCore.Client
 {
+	/// <summary>
+	/// Extensions to be used inside the generated clients
+	/// </summary>
 	public static class GeneratorExtensions
 	{
-
 		/// <summary>
-		/// Inserts the auth headers into the request
+		/// Inserts the auth headers into the request based on the <see cref="SecurityHeader"/> implementation
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="clientOrRequest"></param>

@@ -18,6 +18,7 @@ namespace AspNetCore.Client.Serializers
 		/// <param name="content"></param>
 		/// <returns></returns>
 		ValueTask<T> Deserialize<T>(HttpContent content);
+
 		/// <summary>
 		///Serializes the request object into a string in the format of it's implementation
 		/// </summary>

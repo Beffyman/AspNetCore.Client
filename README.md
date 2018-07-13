@@ -15,37 +15,46 @@ and think the following
 - Why not just inject clients?
   - services.InstallClients();!
 - How can I pool the HttpClient usage? 
-  - HttpClient is injected!
+  - HttpClient is injected! Which allows you to control it's lifecycle
 - Yuck, hard coded routes, these can lead to issues if my endpoint is still under development. 
-  - Generated On Build!
+  - Generated On Build! AspNetCore.Client.Generator is a before compile build task that will generate clients inside the project that implements it.
 - How do I unit test this without spinning up a full web app? 
   - Works with Microsoft.AspNetCore.TestHost!
-    - CancellationTokens are not respected inside the TestServer without some hacks though.
+    - CancellationTokens are not respected inside the TestServer without some hacks though *(registering a kill of the server)* due to the Token not being checked.
 - How do I tell my teammates that an endpoint has headers it requires? 
-  - HeaderParameterAttribute! 
-  - IncludeHeaderAttribute!
+  - HeaderParameterAttribute! Which makes a header a parameter inside the generated methods, which may or may not be required.
+  - IncludeHeaderAttribute! Which defines a constant header value to be included
 - How do I tell my teammates that an endpoint has known response types for status codes?
-  - ProducesResponseType!
+  - ProducesResponseType! Generates action paramters that allow custom logic depending on the status code returned, without needing to manually check it.
 - What if sometimes I want to intercept requests before they go out? 
-  - IHttpOverride!
-- If I own the endpoint's code, why can't I just generate clients from it?
+  - IHttpOverride! Which allows for potential cache interception of requests.
+- If I own the endpoint's code, why can't I just generate clients from it to make interacting with it as simple as injecting it?
   - Introducing AspNetCore.Client.Generator!
 
 
 
 ```c#
 
+//Microsoft.Extensions.Http, allows for httpclient pooling, which doesn't fall into the trap of staticly creating clients which can be vulnerable to DNS changes.
 services.AddHttpClient("MyApp");
 
+//Injecting an HttpClient from the pooling handler.
+//You don't need to use the Microsoft.Extensions.Http package, the Clients just expect an HttpClient to be able to be resolved via DI.
 services.AddTransient<HttpClient>((provider) =>
 {
 	var factory = provider.GetService<IHttpClientFactory>();
 	return factory.CreateClient();
 });
 
+//Tell the IServiceCollection to register the required services 
 services.InstallClients(config =>
 {
+	//Tells the clients what to use as the base url
 	config.HttpBaseAddress = Configuration.GetConnectionString("MyBackendApp");
+
+	//What if you had a protobuf consuming server?
+	//config.WithProtobufBody();
+	//config.UseProtobufSerlaizer();
 });
 
 ```
@@ -84,7 +93,7 @@ On Build generator that will generate a Clients.cs file based on the ClientGener
   - Name used for the base interface of all clients generated
   - Name used for the wrapper class of the HttpClient
 - [UseValueTask](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/async/async-return-types#generalized-async-return-types-and-valuetaskt)
-  - Use ValueTask`<T>` instead of Task`<T>`
+  - Use ValueTask`<T>` instead of Task`<T>`, only applies to tasks that have a return type.
 - ClientNamespace
   - Namespace to be used for the Clients.cs
 - AllowedNamespaces

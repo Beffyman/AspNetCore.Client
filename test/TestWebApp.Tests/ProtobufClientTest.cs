@@ -105,23 +105,23 @@ namespace TestWebApp.Tests
 		/// </summary>
 		/// <returns></returns>
 		//[Fact]
-		public async Task CancelTestAsync()
-		{
-			var endpoint = new ProtobufServerInfo();
+		//public async Task CancelTestAsync()
+		//{
+		//	var endpoint = new ProtobufServerInfo();
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+		//	var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-			var token = cancellationTokenSource.Token;
+		//	CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+		//	var token = cancellationTokenSource.Token;
 
-			Assert.ThrowsAsync<FlurlHttpException>(async () =>
-			{
-				var task = valuesClient.CancellationTestEndpointAsync(cancellationToken: token);
-				cancellationTokenSource.CancelAfter(1500);
-				await task.ConfigureAwait(false);
-			});
+		//	Assert.ThrowsAsync<FlurlHttpException>(async () =>
+		//	{
+		//		var task = valuesClient.CancellationTestEndpointAsync(cancellationToken: token);
+		//		cancellationTokenSource.CancelAfter(1500);
+		//		await task.ConfigureAwait(false);
+		//	});
 
-			//Assert.True(ex.InnerException is TaskCanceledException);
-		}
+		//	//Assert.True(ex.InnerException is TaskCanceledException);
+		//}
 	}
 }

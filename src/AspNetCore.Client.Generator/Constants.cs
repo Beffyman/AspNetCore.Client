@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.RequestModifiers;
+﻿using AspNetCore.Client.Http;
+using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace AspNetCore.Client.Generator
 		public const string HttpOverride = "IHttpOverride";
 		public const string HttpOverrideClass = "DefaultHttpOverride";
 		public const string HttpOverrideField = "HttpOverride";
-		public const string HttpOverrideGetMethod = "GetResponseAsync";
-		public const string HttpOverrideOnNonOverridedResponse = "OnNonOverridedResponseAsync";
+		public const string HttpOverrideGetMethod = nameof(IHttpOverride.GetResponseAsync);
+		public const string HttpOverrideOnNonOverridedResponse = nameof(IHttpOverride.OnNonOverridedResponseAsync);
 
 
 		public const string Serializer = nameof(IHttpSerializer);

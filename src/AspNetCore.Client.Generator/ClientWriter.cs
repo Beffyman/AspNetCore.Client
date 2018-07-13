@@ -35,7 +35,7 @@ namespace AspNetCore.Client.Generator
 		/// <param name=""services""></param>
 		/// <param name=""configure"">Overrides for client configuration</param>
 		/// <returns></returns>
-		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure = null)
+		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
 		{{
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);

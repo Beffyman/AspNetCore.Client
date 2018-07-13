@@ -10,17 +10,27 @@ namespace AspNetCore.Client.Authorization
 	/// </summary>
 	public class BasicAuthHeader : SecurityHeader
 	{
-		public BasicAuthHeader() { }
+		/// <summary>
+		/// Provides a BasicAuth header with the username and password provided
+		/// </summary>
+		/// <param name="username"></param>
+		/// <param name="password"></param>
 		public BasicAuthHeader(string username, string password)
 		{
 			Username = username;
 			Password = password;
 		}
 
-		public string Username { get; set; }
+		private string Username { get; }
 
-		public string Password { get; set; }
+		private string Password { get; }
 
+		/// <summary>
+		/// Implementation of <see cref="SecurityHeader.AddAuth{T}(T)"/> which uses <see cref="HeaderExtensions.WithBasicAuth{T}(T, string, string)"/>
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="clientOrRequest"></param>
+		/// <returns></returns>
 		public override T AddAuth<T>(T clientOrRequest)
 		{
 			return clientOrRequest.WithBasicAuth(Username, Password);

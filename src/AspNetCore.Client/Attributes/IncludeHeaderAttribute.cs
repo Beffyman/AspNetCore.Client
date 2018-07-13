@@ -19,16 +19,21 @@ namespace AspNetCore.Client.Attributes
 		/// Name of the header
 		/// </summary>
 		public string Name { get; }
+
 		/// <summary>
 		/// Value of the header
 		/// </summary>
 		public string Value { get; }
 
+		/// <summary>
+		/// Will prepopulate a header with the name and value provided
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
 		public IncludeHeaderAttribute(string name, string value)
 		{
 			Name = name;
 			Value = value;
 		}
-
 	}
 }
