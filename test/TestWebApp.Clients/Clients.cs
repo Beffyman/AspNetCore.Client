@@ -438,6 +438,94 @@ namespace TestWebApp.Clients
 		ValueTask<HttpResponseMessage> BoolReturnsRawAsync(int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
+		
+		void PostWithNoBody(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage PostWithNoBodyRaw(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		Task PostWithNoBodyAsync(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		void ComplexPost(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage ComplexPostRaw(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		Task ComplexPostAsync(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		void PostWithSimpleBody(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<Guid> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		Task PostWithSimpleBodyAsync(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<Guid> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
 	}
 
 
@@ -777,7 +865,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}?value={value}";
+			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -812,7 +900,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}?value={value}";
+			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -845,7 +933,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}?value={value}";
+			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -880,7 +968,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}?value={value}";
+			string url = $@"api/{controller}?";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -914,7 +1002,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}/{id}?value={value}";
+			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -950,7 +1038,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}/{id}?value={value}";
+			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -984,7 +1072,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}/{id}?value={value}";
+			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -1020,7 +1108,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 
 
-			string url = $@"api/{controller}/{id}?value={value}";
+			string url = $@"api/{controller}/{id}?";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -2543,6 +2631,504 @@ namespace TestWebApp.Clients
 				.AllowAnyHttpStatus()
 				.WithTimeout(Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public void PostWithNoBody(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "PostWithNoBody";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke();
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public HttpResponseMessage PostWithNoBodyRaw(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "PostWithNoBody";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async Task PostWithNoBodyAsync(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "PostWithNoBody";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke();
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public async ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "PostWithNoBody";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public void ComplexPost(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "ComplexPost";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public HttpResponseMessage ComplexPostRaw(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "ComplexPost";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async Task ComplexPostAsync(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<MyFancyDto> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "ComplexPost";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false));
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public async ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid id, 
+			MyFancyDto dto, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+			}
+
+			
+			var controller = "Values";
+			var action = "ComplexPost";
+
+			string url = $@"api/{controller}/{action}/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public void PostWithSimpleBody(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<Guid> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "PostWithSimpleBody";
+
+			string url = $@"api/{controller}/{action}?";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "PostWithSimpleBody";
+
+			string url = $@"api/{controller}/{action}?";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				
+				HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async Task PostWithSimpleBodyAsync(Guid id, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<Guid> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "PostWithSimpleBody";
+
+			string url = $@"api/{controller}/{action}?";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
+				
+				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(await Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false));
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public async ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "PostWithSimpleBody";
+
+			string url = $@"api/{controller}/{action}?";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(url, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
 				
 				await HttpOverride.OnNonOverridedResponseAsync(url, response, cancellationToken).ConfigureAwait(false);
 			}

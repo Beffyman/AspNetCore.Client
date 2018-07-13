@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Net.Http;
 
 namespace AspNetCore.Client.Generator.Data
 {
@@ -82,7 +83,7 @@ namespace AspNetCore.Client.Generator.Data
 				$"{Constants.Http}{HttpAttributeType.Put}",
 			};
 
-			var httpAttribute = attributes.SingleOrDefault(x => knownHttpAttributes.Any(y=>x.Name.ToFullString().MatchesAttribute(y)));
+			var httpAttribute = attributes.SingleOrDefault(x => knownHttpAttributes.Any(y => x.Name.ToFullString().MatchesAttribute(y)));
 			if (httpAttribute == null)
 			{
 				IsNotEndpoint = true;
@@ -197,7 +198,7 @@ namespace AspNetCore.Client.Generator.Data
 
 				if (queryParams != null && queryParams.Any())
 				{
-					string queryString = $"?{string.Join("&", queryParams.Select(x => x.RouteOutput))}";
+					string queryString = $"?{string.Join("&", queryParams.Where(x => x.IsRouteVariable).Select(x => x.RouteOutput))}";
 
 					routeUnformatted += $"{queryString}";
 				}
@@ -388,7 +389,7 @@ $@"{GetObsolete()}
 			var actionVar = $@"			var {Constants.ActionRouteReserved} = ""{Name}"";";
 
 
-			var route = FullRoute;
+			var route = FullRoute;//Call and store as it is a get that could take a while due to # of params
 
 			bool containsController = route.Contains($"{{{Constants.ControllerRouteReserved}}}");
 			bool containsAction = route.Contains($"{{{Constants.ActionRouteReserved}}}");
@@ -399,7 +400,7 @@ $@"
 {(containsController ? controllerVar : string.Empty)}
 {(containsAction ? actionVar : string.Empty)}
 
-			string {Constants.UrlVariable} = $@""{FullRoute}"";
+			string {Constants.UrlVariable} = $@""{route}"";
 			HttpResponseMessage {Constants.ResponseVariable} = null;
 			{GetHttpOverridePre(async)}
 			if({Constants.ResponseVariable} == null)
@@ -455,6 +456,17 @@ $@"
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.AllowAnyHttpStatus)}()";
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.WithTimeout)}({Constants.ClientInterfaceName}.Timeout)";
 
+			string body = $"";
+
+			if (!string.IsNullOrEmpty(bodyParameter?.HttpCallOutput))
+			{
+				body = $"{Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput})";
+			}
+			else
+			{
+				body = $"new {nameof(StringContent)}({nameof(String)}.{nameof(string.Empty)})";
+			}
+
 			switch (Options.HttpType)
 			{
 				case HttpAttributeType.Delete:
@@ -462,11 +474,11 @@ $@"
 				case HttpAttributeType.Get:
 					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.GetAsync)}({Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Put:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PutAsync)}({body},{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Patch:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PatchAsync)}({body},{Constants.CancellationTokenParameter})";
 				case HttpAttributeType.Post:
-					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PostAsync)}({Constants.SerializerField}.{nameof(IHttpSerializer.Serialize)}({bodyParameter?.HttpCallOutput ?? "null"}),{Constants.CancellationTokenParameter})";
+					return $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratedExtensions.PostAsync)}({body},{Constants.CancellationTokenParameter})";
 				default:
 					throw new Exception("Unexpected HTTPType");
 			}

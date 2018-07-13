@@ -40,6 +40,11 @@ namespace AspNetCore.Client.Generator.Data
 				Body = attributes.Any(x => x.Name.ToFullString().StartsWith("FromBody")) || !Helpers.KnownPrimitives.Contains(Type)
 			};
 
+			if (Options.Body)
+			{
+				IsRouteVariable = false;
+			}
+
 		}
 
 

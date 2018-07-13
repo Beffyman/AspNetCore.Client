@@ -130,5 +130,28 @@ namespace TestWebApp.Controllers
 		{
 			return Ok(true);
 		}
+
+
+		[HttpPost("[action]/{id:guid}")]
+		[ProducesResponseType((int)HttpStatusCode.OK)]
+		public IActionResult PostWithNoBody(Guid id)
+		{
+			return Ok();
+		}
+
+		[HttpPost("[action]/{id:guid}")]
+		[ProducesResponseType(typeof(MyFancyDto), (int)HttpStatusCode.OK)]
+		public IActionResult ComplexPost(Guid id, MyFancyDto dto)
+		{
+			return Ok(dto);
+		}
+
+
+		[HttpPost("[action]")]
+		[ProducesResponseType(typeof(Guid), (int)HttpStatusCode.OK)]
+		public IActionResult PostWithSimpleBody([FromBody]Guid id)
+		{
+			return Ok(id);
+		}
 	}
 }
