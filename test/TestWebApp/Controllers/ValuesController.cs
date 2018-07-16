@@ -154,7 +154,7 @@ namespace TestWebApp.Controllers
 			return Ok(id);
 		}
 
-
+#warning Until 2.2, the FromQuery with no params doesn't work.  https://github.com/aspnet/Mvc/issues/7712
 		[HttpGet("[action]")]
 		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
 		public IActionResult EnumerableGet([FromQuery(Name = "ids")]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
