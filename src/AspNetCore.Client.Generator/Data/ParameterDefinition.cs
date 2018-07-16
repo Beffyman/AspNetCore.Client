@@ -28,17 +28,41 @@ namespace AspNetCore.Client.Generator.Data
 			Name = parameter.Identifier.ValueText.Trim();
 			Type = parameter.Type.ToFullString().Trim();
 			Default = parameter.Default?.Value.ToFullString().Trim();
-			IsRouteVariable = Helpers.IsRouteParameter(Name, ParentMethod.FullRouteTemplate);
+			IsRouteVariable = Helpers.IsRouteParameter(Name, ParentMethod.FullRouteTemplate) || (Helpers.IsEnumerable(Type) && Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)));
 
 
 
 			var attributes = parameter.AttributeLists.SelectMany(x => x.Attributes).ToList();
 
+
+
 			Options = new ParameterAttributeOptions
 			{
 				Bind = attributes.Any(x => x.Name.ToFullString().StartsWith("Bind")),
-				Body = attributes.Any(x => x.Name.ToFullString().StartsWith("FromBody")) || !Helpers.KnownPrimitives.Contains(Type)
+				Body = attributes.Any(x => x.Name.ToFullString().StartsWith("FromBody")) || !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
 			};
+
+			var fromQueryAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.FromQuery));
+			if (fromQueryAttribute != null)//Fetch route from RouteAttribute
+			{
+				Options.Query = true;
+				Options.QueryName = fromQueryAttribute.ArgumentList?.Arguments.ToFullString().Replace("\"", "").Split('=')[1].Trim();
+
+				if (string.IsNullOrEmpty(Options.QueryName))
+				{
+					Options.QueryName = Name;
+				}
+			}
+
+			if ((Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))))
+			{
+				Options.Query = true;
+			}
+
+			if (Options.Query)
+			{
+				IsRouteVariable = true;
+			}
 
 			if (Options.Body)
 			{
@@ -78,7 +102,7 @@ namespace AspNetCore.Client.Generator.Data
 				//Is route arg a enumerable/array?
 				if (Helpers.IsEnumerable(Type))
 				{
-					return $@"{{string.Join(""&"",{RouteName}.Where(x=> x != null).Select(x => $""{RouteName}={{{Helpers.GetRouteStringTransform("x", Type)}}}""))}}";
+					return $@"{{string.Join(""&"",{RouteName}.Select(x => $""{{nameof({RouteName})}}={{{Helpers.GetRouteStringTransform("x", Type)}}}""))}}";
 				}
 				else if (Default != null || !IsRouteVariable)
 				{
@@ -148,5 +172,7 @@ namespace AspNetCore.Client.Generator.Data
 	{
 		public bool Bind { get; set; }
 		public bool Body { get; set; }
+		public bool Query { get; set; }
+		public string QueryName { get; set; }
 	}
 }

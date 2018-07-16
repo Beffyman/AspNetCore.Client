@@ -121,6 +121,11 @@ namespace AspNetCore.Client.Generator
 
 		public static bool IsEnumerable(string type)
 		{
+			if(type == null)
+			{
+				return false;
+			}
+
 			var listMatch = new Regex($"^(?!, )({string.Join("|", KnownEnumerables)})");
 			return listMatch.IsMatch(type);
 		}
@@ -129,9 +134,16 @@ namespace AspNetCore.Client.Generator
 		{
 			var listMatch = new Regex($"{string.Join("|", KnownEnumerables)}");
 			var match = listMatch.Match(type);
-			var groups = (match.Groups as IEnumerable).Cast<Group>();
-			var group = groups.Skip(1).Where(x => !string.IsNullOrEmpty(x.Value)).First();
-			return group.Value;
+			if (match.Success)
+			{
+				var groups = (match.Groups as IEnumerable).Cast<Group>();
+				var group = groups.Skip(1).Where(x => !string.IsNullOrEmpty(x.Value)).First();
+				return group.Value;
+			}
+			else
+			{
+				return type;
+			}
 		}
 
 

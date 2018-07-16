@@ -16,6 +16,7 @@ namespace AspNetCore.Client.Generator
 		public const string Attribute = "Attribute";
 		public const string AllowAnonymous = "AllowAnonymous";
 		public const string ProducesResponseType = "ProducesResponseType";
+		public const string FromQuery = "FromQuery";
 
 		public const string ClientInterfaceName = "Client";
 		public const string FlurlClientVariable = "ClientWrapper";

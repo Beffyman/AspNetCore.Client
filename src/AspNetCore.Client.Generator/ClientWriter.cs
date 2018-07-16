@@ -78,24 +78,21 @@ namespace AspNetCore.Client.Generator
 		{
 			IList<string> requiredUsingStatements = new List<string>
 			{
-				"using System;",
-				"using System.Collections.Generic;",
-				"using System.Linq;",
-				"using System.Net;",
-				"using System.Threading.Tasks;",
-				"using System.Threading.Tasks;",
-				"using System.Net.Http;",
-				"using Flurl.Http;",
-				"using Flurl;",
-				"using System.Runtime.CompilerServices;",
-				"using AspNetCore.Client;",
+				@"using AspNetCore.Client;",
 				"using AspNetCore.Client.Authorization;",
 				"using AspNetCore.Client.Exceptions;",
-				"using Microsoft.Extensions.DependencyInjection;",
-				"using System.Threading;",
-				"using AspNetCore.Client.Serializers;",
 				"using AspNetCore.Client.Http;",
-				"using AspNetCore.Client.RequestModifiers;"
+				"using AspNetCore.Client.RequestModifiers;",
+				"using AspNetCore.Client.Serializers;",
+				"using Flurl.Http;",
+				"using Microsoft.Extensions.DependencyInjection;",
+				"using System;",
+				"using System.Linq;",
+				"using System.Collections.Generic;",
+				"using System.Net.Http;",
+				"using System.Runtime.CompilerServices;",
+				"using System.Threading;",
+				"using System.Threading.Tasks;"
 			};
 
 			var distinctUsingStatements = parsedFiles

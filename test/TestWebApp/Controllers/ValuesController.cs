@@ -153,5 +153,17 @@ namespace TestWebApp.Controllers
 		{
 			return Ok(id);
 		}
+
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
+		public IActionResult EnumerableGet([FromQuery(Name = "ids")]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
+		{
+			if (!truth.Any())
+			{
+				return Ok(ids);
+			}
+			return BadRequest("BAD");
+		}
 	}
 }
