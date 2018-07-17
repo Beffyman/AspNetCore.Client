@@ -584,6 +584,34 @@ namespace TestWebApp.Clients
 		ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
+		
+		void QueryParameter(string name, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<string> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage QueryParameterRaw(string name, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		Task QueryParameterAsync(string name, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<string> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
 	}
 
 
@@ -630,6 +658,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -703,6 +747,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -778,6 +838,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -855,6 +931,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -931,6 +1023,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -997,6 +1105,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1064,6 +1188,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1132,6 +1272,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1201,6 +1357,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1271,6 +1443,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1338,6 +1526,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1402,6 +1606,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1470,6 +1690,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1551,6 +1787,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1630,6 +1882,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1707,6 +1975,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -1788,6 +2072,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -1871,6 +2171,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -1949,6 +2265,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -2015,6 +2347,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -2081,6 +2429,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -2156,6 +2520,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -2231,6 +2611,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2304,6 +2700,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2377,6 +2789,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2450,6 +2878,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2523,6 +2967,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2596,6 +3056,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2674,6 +3150,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2757,6 +3249,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2841,6 +3349,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -2926,6 +3450,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -3006,6 +3546,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -3081,6 +3637,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -3141,7 +3713,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 			var action = "EnumerableGet";
 
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -3157,6 +3729,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -3184,7 +3772,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 			var action = "EnumerableGet";
 
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -3218,7 +3806,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 			var action = "EnumerableGet";
 
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -3234,6 +3822,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -3261,7 +3865,7 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 			var action = "EnumerableGet";
 
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -3311,6 +3915,22 @@ namespace TestWebApp.Clients
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -3402,6 +4022,22 @@ namespace TestWebApp.Clients
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
@@ -3444,6 +4080,188 @@ namespace TestWebApp.Clients
 			var action = "AttributeFormatting";
 
 			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public void QueryParameter(string name, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<string> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "QueryParameter";
+
+			string url = $@"api/{controller}/{action}?name={name}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public HttpResponseMessage QueryParameterRaw(string name, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "QueryParameter";
+
+			string url = $@"api/{controller}/{action}?name={name}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async Task QueryParameterAsync(string name, 
+			int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<string> OKCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "QueryParameter";
+
+			string url = $@"api/{controller}/{action}?name={name}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public async ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
+			int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "QueryParameter";
+
+			string url = $@"api/{controller}/{action}?name={name}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)

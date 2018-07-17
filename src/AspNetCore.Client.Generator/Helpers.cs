@@ -121,7 +121,7 @@ namespace AspNetCore.Client.Generator
 
 		public static bool IsEnumerable(string type)
 		{
-			if(type == null)
+			if (type == null)
 			{
 				return false;
 			}

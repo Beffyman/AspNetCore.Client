@@ -223,6 +223,26 @@ namespace TestWebApp.Tests
 			Assert.AreEqual(expected, returnedEnumerable);
 		}
 
+
+		[Test]
+		public void QueryParameterReturns()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+			string expected = "FUN";
+			string actual = null;
+
+			valuesClient.QueryParameter(expected,
+				OKCallback: _ =>
+				 {
+					 actual = _;
+				 });
+
+
+			Assert.AreEqual(expected, actual);
+		}
+
 		/// <summary>
 		/// Microsoft.AspNetCore.TestHost.ClientHandler does not respect the CancellationToken and will always complete a request. Their unit test around it ClientCancellationAbortsRequest has a "hack" that cancels in TestServer when the token is canceled.
 		/// When the HttpClient has the default HttpMessageHandler, the SendAsync will cancel approriately, until they match this functionality, this test will be disabled

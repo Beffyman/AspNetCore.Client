@@ -334,6 +334,7 @@ $@"{GetObsolete()}
 		{{
 {string.Join(Environment.NewLine, RouteConstraints.Select(x => x.GetText()).Where(x => !string.IsNullOrEmpty(x)))}
 			{ResponseBuilder(false)}
+{string.Join(Environment.NewLine, ParentClass.Responses.Select(x => x.SyncMethodBlock))}
 {string.Join(Environment.NewLine, Responses.Select(x => x.SyncMethodBlock))}
 			{(returnType == null ? "return;" : ResultTypeReturn(false, returnType))}
 		}}
@@ -351,6 +352,7 @@ $@"{GetObsolete()}
 		{{
 {string.Join(Environment.NewLine, RouteConstraints.Select(x => x.GetText()).Where(x => !string.IsNullOrEmpty(x)))}
 			{ResponseBuilder(true)}
+{string.Join(Environment.NewLine, ParentClass.Responses.Select(x => x.AsyncMethodBlock))}
 {string.Join(Environment.NewLine, Responses.Select(x => x.AsyncMethodBlock))}
 			{(returnType == null ? "return;" : ResultTypeReturn(true, returnType))}
 		}}

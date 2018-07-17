@@ -102,9 +102,19 @@ namespace AspNetCore.Client.Generator.Data
 				//Is route arg a enumerable/array?
 				if (Helpers.IsEnumerable(Type))
 				{
-					return $@"{{string.Join(""&"",{RouteName}.Select(x => $""{{nameof({RouteName})}}={{{Helpers.GetRouteStringTransform("x", Type)}}}""))}}";
+					string name = null;
+					if(Options.QueryName != null)
+					{
+						name = Options.QueryName;
+					}
+					else
+					{
+						name = $"{{nameof({RouteName})}}";
+					}
+
+					return $@"{{string.Join(""&"",{RouteName}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", Type)}}}""))}}";
 				}
-				else if (Default != null || !IsRouteVariable)
+				else if (Default != null || !IsRouteVariable || Options.Query)
 				{
 					return $"{RouteName}={{{Helpers.GetRouteStringTransform(RouteName, Type)}}}";
 				}

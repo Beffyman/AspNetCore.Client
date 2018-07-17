@@ -158,7 +158,7 @@ namespace TestWebApp.Controllers
 #warning Until 2.2, the FromQuery with no params doesn't work.  https://github.com/aspnet/Mvc/issues/7712
 		[HttpGet("[action]")]
 		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
-		public IActionResult EnumerableGet([FromQuery(Name = "ids")]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
+		public IActionResult EnumerableGet([FromQuery(Name = "customIds")]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
 		{
 			if (!truth.Any())
 			{
@@ -174,6 +174,14 @@ namespace TestWebApp.Controllers
 		public IActionResult AttributeFormatting()
 		{
 			return Ok();
+		}
+
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+		public IActionResult QueryParameter(string   name)
+		{
+			return Ok(name);
 		}
 	}
 }
