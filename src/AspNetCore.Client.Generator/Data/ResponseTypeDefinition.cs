@@ -38,13 +38,42 @@ namespace AspNetCore.Client.Generator.Data
 			}
 			else//Has 2 arguments(else invalid syntax) type,status
 			{
-				Type = attribute.ArgumentList.Arguments.FirstOrDefault().ToFullString().Replace("typeof", "").TrimStart('(').TrimEnd(')');
+				Type = attribute.ArgumentList.Arguments.FirstOrDefault().ToFullString().Replace("typeof", "").Trim().TrimStart('(').TrimEnd(')');
 				Status = attribute.ArgumentList.Arguments.LastOrDefault().ToFullString();
 			}
 
+			if (Type != null)
+			{
+				if (Type.Contains("StatusCodes.")
+				|| Type.Contains("(int)")
+				|| Type.Contains($"{ nameof(HttpStatusCode)}."))
+				{
+					if (Status?.Contains("=") ?? false)
+					{
+						Status = Status.Split('=')[1].Trim();
+					}
+
+
+					var tmp = Type;
+					Type = Status.Replace("typeof", "").Trim().TrimStart('(').TrimEnd(')');
+					Status = tmp;
+				}
+			}
+
+			if (Type?.Contains("=") ?? false)
+			{
+				Type = Type.Split('=')[1].Trim();
+			}
+
+
 			if (Status.Contains("(int)"))
 			{
-				StatusValue = Status.Replace("(int)", "").Replace($"{nameof(HttpStatusCode)}.", "");
+				StatusValue = Status.Replace("(int)", "").Replace("StatusCodes.Status", "").Replace($"{nameof(HttpStatusCode)}.", "");
+			}
+			else if (Status.Contains("StatusCodes.Status"))
+			{
+				StatusValue = Status.Replace("(int)", "").Replace("StatusCodes.Status", "").Replace($"{nameof(HttpStatusCode)}.", "");
+				Status = StatusValue = new string(StatusValue.Where(x => !char.IsNumber(x)).ToArray());
 			}
 			else
 			{

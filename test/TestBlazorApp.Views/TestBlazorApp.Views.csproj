@@ -17,6 +17,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\AspNetCore.Client.BlazorJson\AspNetCore.Client.BlazorJson.csproj" />
+		<ProjectReference Include="..\TestBlazorApp.Clients\TestBlazorApp.Clients.csproj" />
 		<ProjectReference Include="..\TestBlazorApp.Shared\TestBlazorApp.Shared.csproj" />
 	</ItemGroup>
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AspNetCore.Client;
 using AspNetCore.Client.Attributes;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestWebApp.Contracts;
 
@@ -164,6 +165,15 @@ namespace TestWebApp.Controllers
 				return Ok(ids);
 			}
 			return BadRequest("BAD");
+		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
+		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(int))]
+		[ProducesResponseType(typeof(int), StatusCodes.Status303SeeOther)]
+		public IActionResult AttributeFormatting()
+		{
+			return Ok();
 		}
 	}
 }

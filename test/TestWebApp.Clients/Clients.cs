@@ -556,6 +556,34 @@ namespace TestWebApp.Clients
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
+		
+		void AttributeFormatting(int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<IEnumerable<int>> OKCallback = null, 
+			Action<int> NoContentCallback = null, 
+			Action<int> SeeOtherCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		Task AttributeFormattingAsync(int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<IEnumerable<int>> OKCallback = null, 
+			Action<int> NoContentCallback = null, 
+			Action<int> SeeOtherCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
+		
+		ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken));
+
 	}
 
 
@@ -3234,6 +3262,188 @@ namespace TestWebApp.Clients
 			var action = "EnumerableGet";
 
 			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+		public void AttributeFormatting(int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<IEnumerable<int>> OKCallback = null, 
+			Action<int> NoContentCallback = null, 
+			Action<int> SeeOtherCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "AttributeFormatting";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(NoContentCallback != null && NoContentCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for NoContentCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.NoContent)
+			{
+				NoContentCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for SeeOtherCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.SeeOther)
+			{
+				SeeOtherCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "AttributeFormatting";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+
+		public async Task AttributeFormattingAsync(int ControllerHeader = 0, 
+			Action<string> BadRequestCallback = null, 
+			Action InternalServerErrorCallback = null, 
+			Action<IEnumerable<int>> OKCallback = null, 
+			Action<int> NoContentCallback = null, 
+			Action<int> SeeOtherCallback = null, 
+			Action<HttpResponseMessage> ResponseCallback = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "AttributeFormatting";
+
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+				.Request(url)
+				.WithHeader("ControllerHeader", ControllerHeader)
+				.WithHeader("Test", "EXTRA")
+				.WithRequestModifiers(Modifier)
+				.AllowAnyHttpStatus()
+				.WithTimeout(Client.Timeout)
+				.GetAsync(cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				OKCallback?.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
+			}
+			if(NoContentCallback != null && NoContentCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for NoContentCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.NoContent)
+			{
+				NoContentCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+			}
+			if(SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for SeeOtherCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.SeeOther)
+			{
+				SeeOtherCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+			}
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+			}
+			ResponseCallback?.Invoke(response);
+			return;
+		}
+
+
+		public async ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
+			CancellationToken cancellationToken = default(CancellationToken))
+		{
+
+			
+			var controller = "Values";
+			var action = "AttributeFormatting";
+
+			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if(response == null)

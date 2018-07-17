@@ -31,7 +31,7 @@ and think the following
 - If I own the endpoint's code, why can't I just generate clients from it to make interacting with it as simple as injecting it?
   - Introducing AspNetCore.Client.Generator!
 
-
+### Example Registration, AspNetCore
 
 ```c#
 
@@ -59,6 +59,41 @@ services.InstallClients(config =>
 
 ```
 
+### Example Blazor Registration
+HttpClient is injected by default inside blazor, so you only need to register the clients + a blazor json serializer unless you overrided the default one for something like protobuf
+
+```c#
+
+var serviceProvider = new BrowserServiceProvider(services =>
+{
+	services.InstallClients(config=>
+	{
+		config.UseBlazorSimpleJsonSerlaizer();
+	});
+});
+
+```
+
+
+### Example XYZ.Clients csproj
+These values control the generator output
+
+```xml
+
+<PropertyGroup>
+	<GenerateClients>true</GenerateClients>
+	<RouteToServiceProjectFolder>../TestWebApp</RouteToServiceProjectFolder>
+	<ClientInterfaceName>TestWebAppClient</ClientInterfaceName>
+	<UseValueTask>true</UseValueTask>
+	<ClientNamespace>TestWebApp.Clients</ClientNamespace>
+	<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts*;</AllowedNamespaces>
+	<ExcludedNamespaces></ExcludedNamespaces>
+</PropertyGroup>
+
+
+```
+
+
 ## AspNetCore.Client
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.svg)](https://www.nuget.org/packages/AspNetCore.Client)
 
@@ -71,15 +106,32 @@ Can be included inside the web app to configure behavior.
 
 Contains a protobuf serializer which can override the default json one via the UseProtobufSerlaizer on the ClientConfiguration.
 
+```c#
+services.InstallClients(config=>
+{
+	config.UseProtobufSerlaizer();
+	config.WithProtobufBody();
+});
+
+```
+
 ## AspNetCore.Client.BlazorJson
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.BlazorJson.svg)](https://www.nuget.org/packages/AspNetCore.Client.BlazorJson)
 
 Contains a blazor simpleJson serializer which can override the default json one via the UseBlazorSimpleJsonSerlaizer on the ClientConfiguration.
 
+```c#
+services.InstallClients(config=>
+{
+	config.UseBlazorSimpleJsonSerlaizer();
+});
+
+```
+
 ## AspNetCore.Client.Generator
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/AspNetCore.Client.Generator)
 
-On Build generator that will generate a Clients.cs file based on the ClientGeneratorSettings.json file the generator creates.
+On Build generator that will generate a Clients.cs file based on the Properties in the csproj.
 
 
 #### Generator Properties Reference

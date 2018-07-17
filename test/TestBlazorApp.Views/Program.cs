@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using TestBlazorApp.Clients;
+using AspNetCore.Client;
 
 namespace TestBlazorApp.Views
 {
@@ -11,6 +13,10 @@ namespace TestBlazorApp.Views
 		{
 			var serviceProvider = new BrowserServiceProvider(services =>
 			{
+				services.InstallClients(config=>
+				{
+					config.UseBlazorSimpleJsonSerlaizer();
+				});
 				// Add any custom services here
 			});
 
