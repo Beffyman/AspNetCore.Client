@@ -14,6 +14,25 @@ namespace AspNetCore.Client.Serializers
 	/// </summary>
 	public class BlazorSimpleJsonSerializer : IHttpSerializer
 	{
+		private static readonly IDictionary<Type, Func<string, object>> _knownJsonPrimitives = new Dictionary<Type, Func<string, object>>
+		{
+			{ typeof(char), (_)=> char.Parse(_) },
+			{ typeof(byte), (_)=> byte.Parse(_) },
+			{ typeof(sbyte), (_)=> sbyte.Parse(_) },
+			{ typeof(ushort), (_)=> ushort.Parse(_) },
+			{ typeof(int), (_)=> int.Parse(_) },
+			{ typeof(uint), (_)=> uint.Parse(_) },
+			{ typeof(long), (_)=> long.Parse(_) },
+			{ typeof(ulong), (_)=> ulong.Parse(_) },
+			{ typeof(float), (_)=> float.Parse(_) },
+			{ typeof(double), (_)=> double.Parse(_) },
+			{ typeof(string), (_)=> _.TrimStart('"').TrimEnd('"') },
+			{ typeof(bool), (_)=> bool.Parse(_) },
+			{ typeof(DateTime), (_)=> DateTime.Parse(_.TrimStart('"').TrimEnd('"')) },
+			{ typeof(Guid), (_)=> Guid.Parse(_.TrimStart('"').TrimEnd('"')) },
+		};
+
+
 		/// <summary>
 		/// Deserializes the request content which is assumed to be simpleJson into a object of <typeparamref name="T"/>
 		/// </summary>
@@ -22,7 +41,15 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public async ValueTask<T> Deserialize<T>(HttpContent content)
 		{
-			return JsonUtil.Deserialize<T>(await content.ReadAsStringAsync().ConfigureAwait(false));
+			if (_knownJsonPrimitives.ContainsKey(typeof(T)))
+			{
+				return (T)_knownJsonPrimitives[typeof(T)](await content.ReadAsStringAsync().ConfigureAwait(false));
+			}
+			else
+			{
+				var str = await content.ReadAsStringAsync().ConfigureAwait(false);
+				return JsonUtil.Deserialize<T>(str);
+			}
 		}
 
 		/// <summary>
