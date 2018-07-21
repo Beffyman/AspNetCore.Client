@@ -40,7 +40,7 @@ namespace TestBlazorApp.Clients
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);
 
-			services.AddScoped<TestBlazorAppClient>((provider) => new TestBlazorAppClient(provider.GetService<HttpClient>(), configuration.HttpBaseAddress, configuration.Timeout));
+			services.AddScoped<TestBlazorAppClient>((provider) => new TestBlazorAppClient(provider.GetService<HttpClient>(), configuration.GetSettings()));
 
 			services.AddScoped<ISampleDataClient, SampleDataClient>();
 
@@ -55,14 +55,14 @@ namespace TestBlazorApp.Clients
 		public TimeSpan Timeout { get; internal set; }
 		public readonly FlurlClient ClientWrapper;
 
-		public TestBlazorAppClient(HttpClient client, string baseAddress, TimeSpan timeout)
+		public TestBlazorAppClient(HttpClient client, ClientSettings settings)
 		{
-			if (!string.IsNullOrEmpty(baseAddress))
+			if (!string.IsNullOrEmpty(settings.BaseAddress))
 			{
-				client.BaseAddress = new Uri(baseAddress);
+				client.BaseAddress = new Uri(settings.BaseAddress);
 			}
 			ClientWrapper = new FlurlClient(client);
-			Timeout = timeout;
+			Timeout = settings.Timeout;
 		}
 
 	}
@@ -74,17 +74,21 @@ namespace TestBlazorApp.Clients
 	{
 		
 		IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage WeatherForecastsRaw(CancellationToken cancellationToken = default(CancellationToken));
+		HttpResponseMessage WeatherForecastsRaw(TimeSpan? timeout = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(CancellationToken cancellationToken = default(CancellationToken));
+		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(TimeSpan? timeout = null, 
+			CancellationToken cancellationToken = default(CancellationToken));
 
 	}
 
@@ -106,6 +110,7 @@ namespace TestBlazorApp.Clients
 
 
 		public IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -122,7 +127,7 @@ namespace TestBlazorApp.Clients
 				.Request(url)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -146,7 +151,8 @@ namespace TestBlazorApp.Clients
 		}
 
 
-		public HttpResponseMessage WeatherForecastsRaw(CancellationToken cancellationToken = default(CancellationToken))
+		public HttpResponseMessage WeatherForecastsRaw(TimeSpan? timeout = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
@@ -162,7 +168,7 @@ namespace TestBlazorApp.Clients
 				.Request(url)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -172,6 +178,7 @@ namespace TestBlazorApp.Clients
 
 
 		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -188,7 +195,7 @@ namespace TestBlazorApp.Clients
 				.Request(url)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -212,7 +219,8 @@ namespace TestBlazorApp.Clients
 		}
 
 
-		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(CancellationToken cancellationToken = default(CancellationToken))
+		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(TimeSpan? timeout = null, 
+			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			
@@ -228,7 +236,7 @@ namespace TestBlazorApp.Clients
 				.Request(url)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}

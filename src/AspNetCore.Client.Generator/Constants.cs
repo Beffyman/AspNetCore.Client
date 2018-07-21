@@ -42,6 +42,7 @@ namespace AspNetCore.Client.Generator
 		public const string ControllerRouteReserved = "controller";
 		public const string ActionRouteReserved = "action";
 
+		public const string TimeoutParameter = "timeout";
 		public const string CancellationTokenParameter = "cancellationToken";
 
 		public const string ResponseVariable = "response";

@@ -241,7 +241,11 @@ namespace AspNetCore.Client.Generator.Data
 			return allHeaders.OrderBy(x => x.SortOrder).ThenBy(x => x.Name).ToList();
 		}
 
-		static readonly IEnumerable<string> CANCELLATION_TOKEN_PARAM = new List<string> { $"{nameof(CancellationToken)} {Constants.CancellationTokenParameter} = default({nameof(CancellationToken)})" };
+		private static readonly IEnumerable<string> CONSTANT_PARAMETERS = new List<string>
+		{
+			$"{nameof(TimeSpan)}? {Constants.TimeoutParameter} = null",
+			$"{nameof(CancellationToken)} {Constants.CancellationTokenParameter} = default({nameof(CancellationToken)})"
+		};
 
 		public string GetInterfaceText()
 		{
@@ -249,9 +253,9 @@ namespace AspNetCore.Client.Generator.Data
 
 			var allHeaders = GetAllParameterHeaders();
 
-			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.SyncMethodOutput), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
-			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
-			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.AsyncMethodOutput), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
+			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.SyncMethodOutput), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
+			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
+			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.AsyncMethodOutput), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
 
 			var returnType = MethodSyntax.ReturnType?.ToFullString();
 
@@ -299,9 +303,9 @@ $@"		{GetObsolete()}
 
 			var allHeaders = GetAllParameterHeaders();
 
-			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.SyncMethodOutput), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
-			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
-			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.AsyncMethodOutput), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CANCELLATION_TOKEN_PARAM }.SelectMany(x => x));
+			string syncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.SyncMethodOutput), Responses.Select(x => x.SyncMethodOutput), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
+			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
+			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.AsyncMethodOutput), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
 
 			var returnType = MethodSyntax.ReturnType?.ToFullString();
 
@@ -476,7 +480,7 @@ $@"
 			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.FromBody ?? false);
 
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.AllowAnyHttpStatus)}()";
-			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.WithTimeout)}({Constants.ClientInterfaceName}.Timeout)";
+			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.WithTimeout)}({Constants.TimeoutParameter} ?? {Constants.ClientInterfaceName}.Timeout)";
 
 			string body = $"";
 

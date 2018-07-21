@@ -16,27 +16,27 @@ namespace AspNetCore.Client
 		/// <summary>
 		/// Base address to be used for a HttpClient being injected
 		/// </summary>
-		public string HttpBaseAddress { get; set; }
+		private string HttpBaseAddress { get; set; }
 
 		/// <summary>
 		/// What IHttpSerializer to use, defaults to json, allows for custom serialization of requests
 		/// </summary>
-		public Type SerializeType { get; set; } = typeof(JsonHttpSerializer);
+		private Type SerializeType { get; set; } = typeof(JsonHttpSerializer);
 
 		/// <summary>
 		/// What IHttpOverride to use, allows for pre-post request calls
 		/// </summary>
-		public Type HttpOverrideType { get; set; } = typeof(DefaultHttpOverride);
+		private Type HttpOverrideType { get; set; } = typeof(DefaultHttpOverride);
 
 		/// <summary>
 		/// Headers that will always be included with every request
 		/// </summary>
-		public IDictionary<string, string> PredefinedHeaders { get; } = new Dictionary<string, string>();
+		private IDictionary<string, string> PredefinedHeaders { get; } = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Override the default timeout, which is 60
 		/// </summary>
-		public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(60);
+		private TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(60);
 
 		/// <summary>
 		/// Applies the configurations to the <see cref="IServiceCollection"/>
@@ -70,14 +70,48 @@ namespace AspNetCore.Client
 		}
 
 		/// <summary>
+		/// Sets the base address to be used for the injected HttpClients.
+		/// </summary>
+		/// <param name="baseAddress"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithBaseAddress(string baseAddress)
+		{
+			HttpBaseAddress = baseAddress;
+
+			return this;
+		}
+
+		/// <summary>
+		/// Overrides the default timeout of 60 seconds with the one provided
+		/// </summary>
+		/// <param name="timeout"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithTimeout(TimeSpan timeout)
+		{
+			Timeout = timeout;
+
+			return this;
+		}
+
+		/// <summary>
+		/// Adds a predefined header to the configuration
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithPredefinedHeader(string name, string value)
+		{
+			PredefinedHeaders.Add(name, value);
+			return this;
+		}
+
+		/// <summary>
 		/// Adds an Accept of "application/json" to every request
 		/// </summary>
 		/// <returns></returns>
 		public ClientConfiguration WithJsonBody()
 		{
-			PredefinedHeaders.Add("Accept", "application/json");
-
-			return this;
+			return WithPredefinedHeader("Accept", "application/json");
 		}
 
 		/// <summary>
@@ -88,6 +122,41 @@ namespace AspNetCore.Client
 			SerializeType = typeof(JsonHttpSerializer);
 
 			return this;
+		}
+
+		/// <summary>
+		/// Overrides the default <see cref="IHttpOverride"/> and uses the one provided
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public ClientConfiguration UseHttpOverride<T>() where T : IHttpOverride
+		{
+			HttpOverrideType = typeof(T);
+			return this;
+		}
+
+		/// <summary>
+		/// Overrides the default <see cref="JsonHttpSerializer"/> with the one provided
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public ClientConfiguration UseSerializer<T>() where T : IHttpSerializer
+		{
+			SerializeType = typeof(T);
+			return this;
+		}
+
+		/// <summary>
+		/// Gets the global settings to be passed into each client
+		/// </summary>
+		/// <returns></returns>
+		public ClientSettings GetSettings()
+		{
+			return new ClientSettings
+			{
+				BaseAddress = HttpBaseAddress,
+				Timeout = Timeout
+			};
 		}
 	}
 }

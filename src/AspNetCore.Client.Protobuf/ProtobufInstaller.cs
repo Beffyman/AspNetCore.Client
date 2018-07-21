@@ -16,9 +16,9 @@ namespace AspNetCore.Client
 		/// Uses <see cref="ProtobufSerializer"/> to serialize and deserialize requests
 		/// </summary>
 		/// <param name="config"></param>
-		public static void UseProtobufSerlaizer(this ClientConfiguration config)
+		public static ClientConfiguration UseProtobufSerlaizer(this ClientConfiguration config)
 		{
-			config.SerializeType = typeof(ProtobufSerializer);
+			return config.UseSerializer<ProtobufSerializer>();
 		}
 
 
@@ -28,9 +28,7 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public static ClientConfiguration WithProtobufBody(this ClientConfiguration config)
 		{
-			config.PredefinedHeaders.Add("Accept", "application/x-protobuf");
-
-			return config;
+			return config.WithPredefinedHeader("Accept", "application/x-protobuf");
 		}
 	}
 }

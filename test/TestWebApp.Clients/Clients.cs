@@ -40,7 +40,7 @@ namespace TestWebApp.Clients
 			var configuration = new ClientConfiguration();
 			configure?.Invoke(configuration);
 
-			services.AddScoped<TestWebAppClient>((provider) => new TestWebAppClient(provider.GetService<HttpClient>(), configuration.HttpBaseAddress, configuration.Timeout));
+			services.AddScoped<TestWebAppClient>((provider) => new TestWebAppClient(provider.GetService<HttpClient>(), configuration.GetSettings()));
 
 			services.AddScoped<IValuesClient, ValuesClient>();
 
@@ -55,14 +55,14 @@ namespace TestWebApp.Clients
 		public TimeSpan Timeout { get; internal set; }
 		public readonly FlurlClient ClientWrapper;
 
-		public TestWebAppClient(HttpClient client, string baseAddress, TimeSpan timeout)
+		public TestWebAppClient(HttpClient client, ClientSettings settings)
 		{
-			if (!string.IsNullOrEmpty(baseAddress))
+			if (!string.IsNullOrEmpty(settings.BaseAddress))
 			{
-				client.BaseAddress = new Uri(baseAddress);
+				client.BaseAddress = new Uri(settings.BaseAddress);
 			}
 			ClientWrapper = new FlurlClient(client);
-			Timeout = timeout;
+			Timeout = settings.Timeout;
 		}
 
 	}
@@ -77,10 +77,12 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage GetRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -88,10 +90,12 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> GetRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -100,11 +104,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage GetRaw(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -113,11 +119,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> GetRawAsync(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -126,11 +134,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PostRaw(string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -139,11 +149,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PostRawAsync(string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -153,12 +165,14 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PutRaw(int id, 
 			string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -168,12 +182,14 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PutRawAsync(int id, 
 			string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -183,12 +199,14 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage DeleteRaw(int id, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -198,12 +216,14 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -211,10 +231,12 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage CancellationTestEndpointRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -222,10 +244,12 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -235,12 +259,14 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage HeaderTestStringRaw(String SpecialValue1, 
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -250,12 +276,14 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> HeaderTestStringRawAsync(String SpecialValue1, 
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -264,11 +292,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage HeaderTestIntRaw(int SpecialValue1, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -277,11 +307,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> HeaderTestIntRawAsync(int SpecialValue1, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -291,11 +323,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage FancyDtoReturnRaw(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -305,11 +339,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -318,11 +354,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage TaskReturnRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -331,11 +369,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> TaskReturnRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -344,11 +384,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -357,11 +399,13 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -370,10 +414,12 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage GuidReturnRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -382,10 +428,12 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> GuidReturnRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -394,10 +442,12 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage DateTimeReturnsRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -406,10 +456,12 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -418,10 +470,12 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage BoolReturnsRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -430,10 +484,12 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> BoolReturnsRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -443,11 +499,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PostWithNoBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -457,11 +515,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -472,12 +532,14 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage ComplexPostRaw(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -488,12 +550,14 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -503,11 +567,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -517,11 +583,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -532,12 +600,14 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage EnumerableGetRaw(IEnumerable<int> ids, 
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -548,12 +618,14 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> EnumerableGetRawAsync(IEnumerable<int> ids, 
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -565,10 +637,12 @@ namespace TestWebApp.Clients
 			Action<int> SeeOtherCallback = null, 
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -580,10 +654,12 @@ namespace TestWebApp.Clients
 			Action<int> SeeOtherCallback = null, 
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -593,11 +669,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage QueryParameterRaw(string name, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -607,11 +685,13 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 	}
@@ -637,6 +717,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -655,7 +736,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -695,6 +776,7 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage GetRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -713,7 +795,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -726,6 +808,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -744,7 +827,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -784,6 +867,7 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> GetRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -802,7 +886,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -816,6 +900,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -835,7 +920,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -876,6 +961,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage GetRaw(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -895,7 +981,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -909,6 +995,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -928,7 +1015,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -969,6 +1056,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> GetRawAsync(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -988,7 +1076,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1002,6 +1090,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1020,7 +1109,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1052,6 +1141,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage PostRaw(string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1070,7 +1160,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1084,6 +1174,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1102,7 +1193,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1134,6 +1225,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> PostRawAsync(string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1152,7 +1244,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1167,6 +1259,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1185,7 +1278,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1218,6 +1311,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage PutRaw(int id, 
 			string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1236,7 +1330,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1251,6 +1345,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1269,7 +1364,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1302,6 +1397,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> PutRawAsync(int id, 
 			string value, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1320,7 +1416,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1335,6 +1431,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1354,7 +1451,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1387,6 +1484,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage DeleteRaw(int id, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1406,7 +1504,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1421,6 +1519,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1440,7 +1539,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1473,6 +1572,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1492,7 +1592,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.DeleteAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1505,6 +1605,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1523,7 +1624,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1554,6 +1655,7 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage CancellationTestEndpointRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1572,7 +1674,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1585,6 +1687,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1603,7 +1706,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1634,6 +1737,7 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1652,7 +1756,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1667,6 +1771,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1687,7 +1792,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1729,6 +1834,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage HeaderTestStringRaw(String SpecialValue1, 
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1749,7 +1855,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1764,6 +1870,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1784,7 +1891,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1826,6 +1933,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> HeaderTestStringRawAsync(String SpecialValue1, 
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1846,7 +1954,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -1860,6 +1968,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1879,7 +1988,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1920,6 +2029,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage HeaderTestIntRaw(int SpecialValue1, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1939,7 +2049,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -1953,6 +2063,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1972,7 +2083,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2013,6 +2124,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> HeaderTestIntRawAsync(int SpecialValue1, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2032,7 +2144,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2047,6 +2159,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2069,7 +2182,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2109,6 +2222,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage FancyDtoReturnRaw(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2131,7 +2245,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2146,6 +2260,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2168,7 +2283,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2208,6 +2323,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2230,7 +2346,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2244,6 +2360,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2262,7 +2379,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2294,6 +2411,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage TaskReturnRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2312,7 +2430,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2326,6 +2444,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2344,7 +2463,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2376,6 +2495,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> TaskReturnRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2394,7 +2514,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2408,6 +2528,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2426,7 +2547,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2467,6 +2588,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2485,7 +2607,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2499,6 +2621,7 @@ namespace TestWebApp.Clients
 			Action<string> BadRequestCallback = null, 
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2517,7 +2640,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2558,6 +2681,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2576,7 +2700,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2590,6 +2714,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2608,7 +2733,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2647,6 +2772,7 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage GuidReturnRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2665,7 +2791,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2679,6 +2805,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2697,7 +2824,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2736,6 +2863,7 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> GuidReturnRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2754,7 +2882,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2768,6 +2896,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2786,7 +2915,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2825,6 +2954,7 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage DateTimeReturnsRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2843,7 +2973,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -2857,6 +2987,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2875,7 +3006,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2914,6 +3045,7 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2932,7 +3064,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2946,6 +3078,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2964,7 +3097,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3003,6 +3136,7 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage BoolReturnsRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3021,7 +3155,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3035,6 +3169,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3053,7 +3188,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3092,6 +3227,7 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> BoolReturnsRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3110,7 +3246,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3125,6 +3261,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3147,7 +3284,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3187,6 +3324,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage PostWithNoBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3209,7 +3347,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3224,6 +3362,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3246,7 +3385,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3286,6 +3425,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3308,7 +3448,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3324,6 +3464,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3346,7 +3487,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3387,6 +3528,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage ComplexPostRaw(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3409,7 +3551,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3425,6 +3567,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3447,7 +3590,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3488,6 +3631,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3510,7 +3654,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3525,6 +3669,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3543,7 +3688,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3583,6 +3728,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3601,7 +3747,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3616,6 +3762,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3634,7 +3781,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3674,6 +3821,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3692,7 +3840,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3708,6 +3856,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3726,7 +3875,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3767,6 +3916,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage EnumerableGetRaw(IEnumerable<int> ids, 
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3785,7 +3935,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3801,6 +3951,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3819,7 +3970,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3860,6 +4011,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> EnumerableGetRawAsync(IEnumerable<int> ids, 
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3878,7 +4030,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -3895,6 +4047,7 @@ namespace TestWebApp.Clients
 			Action<int> SeeOtherCallback = null, 
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3913,7 +4066,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -3976,6 +4129,7 @@ namespace TestWebApp.Clients
 
 
 		public HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3994,7 +4148,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -4011,6 +4165,7 @@ namespace TestWebApp.Clients
 			Action<int> SeeOtherCallback = null, 
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4029,7 +4184,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -4092,6 +4247,7 @@ namespace TestWebApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4110,7 +4266,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -4125,6 +4281,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4143,7 +4300,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -4183,6 +4340,7 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage QueryParameterRaw(string name, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4201,7 +4359,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
@@ -4216,6 +4374,7 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4234,7 +4393,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -4274,6 +4433,7 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
 			int ControllerHeader = 0, 
+			TimeSpan? timeout = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4292,7 +4452,7 @@ namespace TestWebApp.Clients
 				.WithHeader("Test", "EXTRA")
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
-				.WithTimeout(Client.Timeout)
+				.WithTimeout(timeout ?? Client.Timeout)
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
