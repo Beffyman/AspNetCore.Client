@@ -51,14 +51,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.BlazorJso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Tests", "test\TestBlazorApp.Tests\TestBlazorApp.Tests.csproj", "{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wiki", "wiki", "{53C485CC-F0FF-4231-8E8C-40B83A7DD353}"
-	ProjectSection(SolutionItems) = preProject
-		wiki\First Time Setup.md = wiki\First Time Setup.md
-		wiki\Generator Attributes.md = wiki\Generator Attributes.md
-		wiki\Generator Output.md = wiki\Generator Output.md
-		wiki\Project Properties.md = wiki\Project Properties.md
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
