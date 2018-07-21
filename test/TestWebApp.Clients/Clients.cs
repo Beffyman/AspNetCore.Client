@@ -465,7 +465,7 @@ namespace TestWebApp.Clients
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		void ComplexPost(Guid id, 
+		void ComplexPost(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
@@ -475,13 +475,13 @@ namespace TestWebApp.Clients
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage ComplexPostRaw(Guid id, 
+		HttpResponseMessage ComplexPostRaw(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		Task ComplexPostAsync(Guid id, 
+		Task ComplexPostAsync(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
@@ -491,7 +491,7 @@ namespace TestWebApp.Clients
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid id, 
+		ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken));
@@ -563,6 +563,7 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<int> NoContentCallback = null, 
 			Action<int> SeeOtherCallback = null, 
+			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
@@ -577,6 +578,7 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<int> NoContentCallback = null, 
 			Action<int> SeeOtherCallback = null, 
+			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
@@ -3315,7 +3317,7 @@ namespace TestWebApp.Clients
 		}
 
 
-		public void ComplexPost(Guid id, 
+		public void ComplexPost(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
@@ -3324,16 +3326,16 @@ namespace TestWebApp.Clients
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
 			{
-				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
 
 			
 			var controller = "Values";
 			var action = "ComplexPost";
 
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -3382,21 +3384,21 @@ namespace TestWebApp.Clients
 		}
 
 
-		public HttpResponseMessage ComplexPostRaw(Guid id, 
+		public HttpResponseMessage ComplexPostRaw(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
 			{
-				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
 
 			
 			var controller = "Values";
 			var action = "ComplexPost";
 
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if(response == null)
@@ -3416,7 +3418,7 @@ namespace TestWebApp.Clients
 		}
 
 
-		public async Task ComplexPostAsync(Guid id, 
+		public async Task ComplexPostAsync(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			Action<string> BadRequestCallback = null, 
@@ -3425,16 +3427,16 @@ namespace TestWebApp.Clients
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
 			{
-				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
 
 			
 			var controller = "Values";
 			var action = "ComplexPost";
 
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -3483,21 +3485,21 @@ namespace TestWebApp.Clients
 		}
 
 
-		public async ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid id, 
+		public async ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid testId, 
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
 			{
-				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
+				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
 
 			
 			var controller = "Values";
 			var action = "ComplexPost";
 
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
 			if(response == null)
@@ -3891,6 +3893,7 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<int> NoContentCallback = null, 
 			Action<int> SeeOtherCallback = null, 
+			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -3955,6 +3958,14 @@ namespace TestWebApp.Clients
 			{
 				SeeOtherCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+			if(NotModifiedCallback != null && NotModifiedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for NotModifiedCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.NotModified)
+			{
+				NotModifiedCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
@@ -3998,6 +4009,7 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<int> NoContentCallback = null, 
 			Action<int> SeeOtherCallback = null, 
+			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
@@ -4061,6 +4073,14 @@ namespace TestWebApp.Clients
 			if(response.StatusCode == System.Net.HttpStatusCode.SeeOther)
 			{
 				SeeOtherCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+			}
+			if(NotModifiedCallback != null && NotModifiedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for NotModifiedCallback are not supported. As they will run out of the scope of this call.");
+			}
+			if(response.StatusCode == System.Net.HttpStatusCode.NotModified)
+			{
+				NotModifiedCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{

@@ -396,7 +396,7 @@ $@"{GetObsolete()}
 			bool containsController = route.Contains($"{{{Constants.ControllerRouteReserved}}}");
 			bool containsAction = route.Contains($"{{{Constants.ActionRouteReserved}}}");
 
-			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.Body ?? false);
+			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.FromBody ?? false);
 
 			var str =
 $@"
@@ -473,7 +473,7 @@ $@"
 
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratorExtensions.WithRequestModifiers)}({Constants.RequestModifierField})";
 
-			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.Body ?? false);
+			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.FromBody ?? false);
 
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.AllowAnyHttpStatus)}()";
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(SettingsExtensions.WithTimeout)}({Constants.ClientInterfaceName}.Timeout)";

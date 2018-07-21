@@ -38,14 +38,14 @@ namespace AspNetCore.Client.Generator.Data
 
 			Options = new ParameterAttributeOptions
 			{
-				Bind = attributes.Any(x => x.Name.ToFullString().StartsWith("Bind")),
-				Body = attributes.Any(x => x.Name.ToFullString().StartsWith("FromBody")) || !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
+				FromRoute = attributes.Any(x => x.Name.ToFullString().StartsWith(Constants.FromRoute)),
+				FromBody = attributes.Any(x => x.Name.ToFullString().StartsWith(Constants.FromBody)) || !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
 			};
 
 			var fromQueryAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.FromQuery));
 			if (fromQueryAttribute != null)//Fetch route from RouteAttribute
 			{
-				Options.Query = true;
+				Options.FromQuery = true;
 				Options.QueryName = fromQueryAttribute.ArgumentList?.Arguments.ToFullString().Replace("\"", "").Split('=')[1].Trim();
 
 				if (string.IsNullOrEmpty(Options.QueryName))
@@ -54,17 +54,31 @@ namespace AspNetCore.Client.Generator.Data
 				}
 			}
 
-			if ((Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))))
+
+			var fromRouteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.FromRoute));
+			if (fromRouteAttribute != null)//Fetch route from RouteAttribute
 			{
-				Options.Query = true;
+				Options.FromRoute = true;
+				Options.RouteName = fromRouteAttribute.ArgumentList?.Arguments.ToFullString().Replace("\"", "").Split('=')[1].Trim();
+
+				if (string.IsNullOrEmpty(Options.RouteName))
+				{
+					Options.RouteName = Name;
+				}
 			}
 
-			if (Options.Query)
+
+			if ((Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))))
+			{
+				Options.FromQuery = true;
+			}
+
+			if (Options.FromQuery)
 			{
 				IsRouteVariable = true;
 			}
 
-			if (Options.Body)
+			if (Options.FromBody)
 			{
 				IsRouteVariable = false;
 			}
@@ -80,15 +94,14 @@ namespace AspNetCore.Client.Generator.Data
 		{
 			get
 			{
-				return Name;
-				//if (Options.Bind)
-				//{
-				//	return attribute.Prefix;
-				//}
-				//else
-				//{
-				//	return ParameterName;
-				//}
+				if (Options.FromRoute)
+				{
+					return Options.RouteName;
+				}
+				else
+				{
+					return Name;
+				}
 			}
 		}
 
@@ -103,7 +116,7 @@ namespace AspNetCore.Client.Generator.Data
 				if (Helpers.IsEnumerable(Type))
 				{
 					string name = null;
-					if(Options.QueryName != null)
+					if (Options.QueryName != null)
 					{
 						name = Options.QueryName;
 					}
@@ -114,7 +127,7 @@ namespace AspNetCore.Client.Generator.Data
 
 					return $@"{{string.Join(""&"",{RouteName}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", Type)}}}""))}}";
 				}
-				else if (Default != null || !IsRouteVariable || Options.Query)
+				else if (Default != null || !IsRouteVariable || Options.FromQuery)
 				{
 					return $"{RouteName}={{{Helpers.GetRouteStringTransform(RouteName, Type)}}}";
 				}
@@ -151,7 +164,7 @@ namespace AspNetCore.Client.Generator.Data
 		{
 			get
 			{
-				if (this.Options.Body)
+				if (this.Options.FromBody)
 				{
 					return RouteName;
 				}
@@ -180,9 +193,12 @@ namespace AspNetCore.Client.Generator.Data
 
 	public class ParameterAttributeOptions
 	{
-		public bool Bind { get; set; }
-		public bool Body { get; set; }
-		public bool Query { get; set; }
+		public bool FromRoute { get; set; }
+		public string RouteName { get; set; }
+
+		public bool FromBody { get; set; }
+
+		public bool FromQuery { get; set; }
 		public string QueryName { get; set; }
 	}
 }

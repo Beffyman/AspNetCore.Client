@@ -140,9 +140,9 @@ namespace TestWebApp.Controllers
 			return Ok();
 		}
 
-		[HttpPost("[action]/{id:guid}")]
+		[HttpPost("[action]/{testId:guid}")]
 		[ProducesResponseType(typeof(MyFancyDto), (int)HttpStatusCode.OK)]
-		public IActionResult ComplexPost(Guid id, MyFancyDto dto)
+		public IActionResult ComplexPost([FromRoute(Name = "testId")]Guid id, MyFancyDto dto)
 		{
 			return Ok(dto);
 		}
@@ -171,6 +171,7 @@ namespace TestWebApp.Controllers
 		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
 		[ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(int))]
 		[ProducesResponseType(typeof(int), StatusCodes.Status303SeeOther)]
+		[ProducesResponseType(typeof(string), 304)]
 		public IActionResult AttributeFormatting()
 		{
 			return Ok();
@@ -179,7 +180,7 @@ namespace TestWebApp.Controllers
 
 		[HttpGet("[action]")]
 		[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-		public IActionResult QueryParameter(string   name)
+		public IActionResult QueryParameter(string name)
 		{
 			return Ok(name);
 		}

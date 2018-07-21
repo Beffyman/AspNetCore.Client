@@ -47,9 +47,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Contracts", "tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Protobuf", "src\AspNetCore.Client.Protobuf\AspNetCore.Client.Protobuf.csproj", "{4F89E001-24D2-4464-9577-6768E31C510D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Client.BlazorJson", "src\AspNetCore.Client.BlazorJson\AspNetCore.Client.BlazorJson.csproj", "{F911F6A0-CBE9-4B4C-91AA-41C3EF3B62A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.BlazorJson", "src\AspNetCore.Client.BlazorJson\AspNetCore.Client.BlazorJson.csproj", "{F911F6A0-CBE9-4B4C-91AA-41C3EF3B62A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBlazorApp.Tests", "test\TestBlazorApp.Tests\TestBlazorApp.Tests.csproj", "{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Tests", "test\TestBlazorApp.Tests\TestBlazorApp.Tests.csproj", "{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wiki", "wiki", "{53C485CC-F0FF-4231-8E8C-40B83A7DD353}"
+	ProjectSection(SolutionItems) = preProject
+		wiki\First Time Setup.md = wiki\First Time Setup.md
+		wiki\Generator Attributes.md = wiki\Generator Attributes.md
+		wiki\Generator Output.md = wiki\Generator Output.md
+		wiki\Project Properties.md = wiki\Project Properties.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
