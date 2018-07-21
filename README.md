@@ -31,6 +31,7 @@ and think the following
 - If I own the endpoint's code, why can't I just generate clients from it to make interacting with it as simple as injecting it?
   - Introducing AspNetCore.Client.Generator!
 
+[First Time Setup](https://github.com/Beffyman/AspNetCore.Client/wiki/First-Time-Setup)
 
 ## AspNetCore.Client
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.svg)](https://www.nuget.org/packages/AspNetCore.Client)
