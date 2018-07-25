@@ -6,6 +6,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
 using TestWebApp.Contracts;
 using AspNetCore.Client;
 using AspNetCore.Client.Authorization;
@@ -15,13 +20,9 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace TestWebApp.Clients
 {

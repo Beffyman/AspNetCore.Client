@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Target Name="AspNetCoreClientGeneratorTarget" BeforeTargets="CoreCompile" Condition="'$(GenerateClients)' == 'true'">
+	<Target Name="AspNetCoreClientGeneratorTarget"
+			BeforeTargets="CoreCompile"
+			Condition="'$(GenerateClients)' == 'true'">
+
 		<Message Importance="high" Text="AspNetCore.Client.Generator~ Target Project: $(MSBuildProjectDirectory)"/>
+
 		<AspNetCore.Client.Generator.GeneratorTask CurrentDirectory="$(MSBuildProjectDirectory)"
 													RouteToServiceProjectFolder="$(RouteToServiceProjectFolder)"
 													ClientInterfaceName="$(ClientInterfaceName)"
@@ -9,5 +13,10 @@
 													ClientNamespace="$(ClientNamespace)"
 													AllowedNamespaces="$(AllowedNamespaces)"
 													ExcludedNamespaces="$(ExcludedNamespaces)"/>
+
+		<ItemGroup>
+			<Compile Include="**/*$(DefaultLanguageSourceExtension)"
+					Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);$(BaseIntermediateOutputPath)**;$(BaseOutputPath)**;@(Compile)" />
+		</ItemGroup>
 	</Target>
 </Project>

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Generator", "src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj", "{1DA6050D-345E-41E3-BC84-849FF81F3ACD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client", "src\AspNetCore.Client\AspNetCore.Client.csproj", "{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A0F6ACE-08C3-4894-B7D2-537B06B057BC}"
@@ -14,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
 		Directory.Build.targets = Directory.Build.targets
+		global.json = global.json
 		LICENSE = LICENSE
 		NuGet.config = NuGet.config
 		README.md = README.md
@@ -39,8 +38,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Shared", "tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Clients", "test\TestBlazorApp.Clients\TestBlazorApp.Clients.csproj", "{BBE6C596-7295-420D-9814-829933A8F6AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Test.Generator", "test\AspNetCore.Client.Test.Generator\AspNetCore.Client.Test.Generator.csproj", "{297106AF-32E1-4219-A604-115AA6F195F2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Tests", "test\TestWebApp.Tests\TestWebApp.Tests.csproj", "{65D34793-90AA-4641-80DC-A8B092E40DAC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Contracts", "test\TestWebApp.Contracts\TestWebApp.Contracts.csproj", "{D21B21B7-CCF3-4C68-8F90-DC045ABE3DCA}"
@@ -51,16 +48,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.BlazorJso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Tests", "test\TestBlazorApp.Tests\TestBlazorApp.Tests.csproj", "{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Test.Generator", "test\AspNetCore.Client.Test.Generator\AspNetCore.Client.Test.Generator.csproj", "{CB1D07D7-FB79-4A73-A91A-3DA64623DD70}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Generator", "src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj", "{B005D8A1-5291-4D6F-9007-0750A106DDC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1DA6050D-345E-41E3-BC84-849FF81F3ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DA6050D-345E-41E3-BC84-849FF81F3ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DA6050D-345E-41E3-BC84-849FF81F3ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DA6050D-345E-41E3-BC84-849FF81F3ACD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -89,10 +86,6 @@ Global
 		{BBE6C596-7295-420D-9814-829933A8F6AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBE6C596-7295-420D-9814-829933A8F6AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBE6C596-7295-420D-9814-829933A8F6AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{297106AF-32E1-4219-A604-115AA6F195F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{297106AF-32E1-4219-A604-115AA6F195F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{297106AF-32E1-4219-A604-115AA6F195F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{297106AF-32E1-4219-A604-115AA6F195F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65D34793-90AA-4641-80DC-A8B092E40DAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{65D34793-90AA-4641-80DC-A8B092E40DAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65D34793-90AA-4641-80DC-A8B092E40DAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -113,12 +106,19 @@ Global
 		{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB1D07D7-FB79-4A73-A91A-3DA64623DD70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB1D07D7-FB79-4A73-A91A-3DA64623DD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB1D07D7-FB79-4A73-A91A-3DA64623DD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB1D07D7-FB79-4A73-A91A-3DA64623DD70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B005D8A1-5291-4D6F-9007-0750A106DDC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B005D8A1-5291-4D6F-9007-0750A106DDC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B005D8A1-5291-4D6F-9007-0750A106DDC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B005D8A1-5291-4D6F-9007-0750A106DDC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1DA6050D-345E-41E3-BC84-849FF81F3ACD} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 		{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 		{303D91A0-1A4E-4F98-A81F-35072F18C19A} = {EBC264EF-636C-42D0-9CF9-F5FD874354D4}
 		{D59C431C-CAB3-4BAD-8AAA-2D2042E492D3} = {EBC264EF-636C-42D0-9CF9-F5FD874354D4}
@@ -128,12 +128,13 @@ Global
 		{AC543DFE-E8AD-4EB6-9C7D-1DED7A93938A} = {DAA1FF40-201F-444E-A3EF-FB83FB5D8F96}
 		{CA3BA183-5937-4484-8FDB-1A1E80C9077D} = {DAA1FF40-201F-444E-A3EF-FB83FB5D8F96}
 		{BBE6C596-7295-420D-9814-829933A8F6AF} = {DAA1FF40-201F-444E-A3EF-FB83FB5D8F96}
-		{297106AF-32E1-4219-A604-115AA6F195F2} = {765F8CBA-ECD0-4E5B-AB1D-AC0F508A05AC}
 		{65D34793-90AA-4641-80DC-A8B092E40DAC} = {EBC264EF-636C-42D0-9CF9-F5FD874354D4}
 		{D21B21B7-CCF3-4C68-8F90-DC045ABE3DCA} = {EBC264EF-636C-42D0-9CF9-F5FD874354D4}
 		{4F89E001-24D2-4464-9577-6768E31C510D} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 		{F911F6A0-CBE9-4B4C-91AA-41C3EF3B62A3} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 		{B28C16E6-4FDB-4245-AB1B-F4928CC9B611} = {DAA1FF40-201F-444E-A3EF-FB83FB5D8F96}
+		{CB1D07D7-FB79-4A73-A91A-3DA64623DD70} = {765F8CBA-ECD0-4E5B-AB1D-AC0F508A05AC}
+		{B005D8A1-5291-4D6F-9007-0750A106DDC7} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCFD7864-E2E5-4CF3-9A6D-D53B4F4E8AE0}

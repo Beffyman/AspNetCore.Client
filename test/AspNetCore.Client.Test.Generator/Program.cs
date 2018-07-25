@@ -41,7 +41,7 @@ namespace AspNetCore.Client.Test.Generator
 				var dirs = childDirectories.Select(Path.GetFileName).ToList();
 				if (!dirs.Contains(targetDirectoryName))
 				{
-					currentPath = Path.GetFullPath("..", currentPath);
+					currentPath = Path.GetFullPath($"{currentPath}/..");
 				}
 				else
 				{
