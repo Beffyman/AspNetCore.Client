@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AspNetCore.Client.Generator" Version="*" Condition="'$(GenerateWithNuget)' == 'true'" />
 		<ProjectReference Include="..\..\src\AspNetCore.Client\AspNetCore.Client.csproj" />
 		<ProjectReference Include="..\TestBlazorApp.Shared\TestBlazorApp.Shared.csproj" />
 	</ItemGroup>

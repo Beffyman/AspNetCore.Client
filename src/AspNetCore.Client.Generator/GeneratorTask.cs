@@ -6,7 +6,14 @@ using System.Linq;
 
 namespace AspNetCore.Client.Generator
 {
-	public class GeneratorTask : Microsoft.Build.Utilities.Task
+	public class GeneratorTask :
+#if NET462
+		Microsoft.Build.Utilities.Task
+#endif
+
+#if NETSTANDARD2_0
+		ContextIsolatedTask
+#endif
 	{
 		public string CurrentDirectory { get; set; }
 		public string RouteToServiceProjectFolder { get; set; }
@@ -16,7 +23,7 @@ namespace AspNetCore.Client.Generator
 		public string AllowedNamespaces { get; set; }
 		public string ExcludedNamespaces { get; set; }
 
-		public void Fill(IDictionary<string,string> properties)
+		public void Fill(IDictionary<string, string> properties)
 		{
 			RouteToServiceProjectFolder = properties[nameof(RouteToServiceProjectFolder)];
 			ClientInterfaceName = properties[nameof(ClientInterfaceName)];
@@ -27,8 +34,26 @@ namespace AspNetCore.Client.Generator
 			ExcludedNamespaces = properties[nameof(ExcludedNamespaces)];
 		}
 
+		public bool ByPassExecute()
+		{
+#if NET462
+			return Execute();
+#endif
 
+#if NETSTANDARD2_0
+			return ExecuteIsolated();
+#endif
+
+		}
+
+#if NET462
 		public override bool Execute()
+#endif
+
+#if NETSTANDARD2_0
+		protected override bool ExecuteIsolated()
+#endif
+
 		{
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] START");
 

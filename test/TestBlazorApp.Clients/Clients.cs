@@ -7,6 +7,10 @@
 //------------------------------------------------------------------------------
 
 using TestBlazorApp.Shared;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AspNetCore.Client;
 using AspNetCore.Client.Authorization;
 using AspNetCore.Client.Exceptions;
@@ -15,13 +19,9 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace TestBlazorApp.Clients
 {
