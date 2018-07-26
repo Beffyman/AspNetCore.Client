@@ -11,22 +11,23 @@ $version = $env:APPVEYOR_BUILD_VERSION;
 $localBuild = $false;
 #For local builds, appveyor will be provided version
 if([System.String]::IsNullOrEmpty($version)){
-	$ver = & git describe --tags;
-	$build = & git rev-list --count HEAD;
-	$version = "$($ver)$build";
+	$version = & git describe --tags;
 	$localBuild = $true;
 }
+#Filter out - branch commit locally
+if($version -Match "-"){
+	$version = $version.Split("-")[0];
+}
 
-if($localBuild -eq $false){
-	#Filter out - branch commit locally
-	if($version -Match "-"){
-		$version = $version.Split("-")[0];
-	}
+#Filter out +Build# from CI builds
+if($version -Match "\+"){
+	$version = $version.Split("+")[0];
+}
 
-	#Filter out +Build# from CI builds
-	if($version -Match "\+"){
-		$version = $version.Split("+")[0];
-	}
+
+if($localBuild -eq $true){
+	$build = & git rev-list --count HEAD;
+	$version = "$($version)$build";
 }
 
 
@@ -35,8 +36,7 @@ Write-Host "---Version $version will be used---" -ForegroundColor Magenta;
 $artifacts = "$scriptBin/artifacts";
 $testGenerator = Resolve-Path "$scriptBin/test/AspNetCore.Client.Test.Generator";
 
-Remove-Item $artifacts -Recurse -ErrorAction Ignore
-New-Item -Force -ItemType directory -Path $artifacts
+Get-ChildItem -Path $artifacts -Filter "*.nupkg" -Recurse | Remove-item -ErrorAction Ignore;
 $outputDir = Resolve-Path $artifacts;
 
 Write-Host ">> dotnet --info" -ForegroundColor Magenta;

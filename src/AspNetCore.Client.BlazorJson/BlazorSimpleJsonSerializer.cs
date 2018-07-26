@@ -1,11 +1,9 @@
-﻿using AspNetCore.Client.Serializers;
-using System;
-using Microsoft.AspNetCore.Blazor;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.JSInterop;
 
 namespace AspNetCore.Client.Serializers
 {
@@ -48,7 +46,7 @@ namespace AspNetCore.Client.Serializers
 			else
 			{
 				var str = await content.ReadAsStringAsync().ConfigureAwait(false);
-				return JsonUtil.Deserialize<T>(str);
+				return Json.Deserialize<T>(str);
 			}
 		}
 
@@ -60,7 +58,7 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			var json = JsonUtil.Serialize(request);
+			var json = Json.Serialize(request);
 			return new StringContent(json, Encoding.UTF8, "application/json");
 		}
 	}
