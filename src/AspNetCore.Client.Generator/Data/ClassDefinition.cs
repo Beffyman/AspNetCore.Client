@@ -145,7 +145,7 @@ $@"
 	}}
 
 {GetObsolete()}
-	public class {ClientName} : I{ClientName}
+	{(Settings.UseInternalClients ? "internal" :"public")} class {ClientName} : I{ClientName}
 	{{
 {classFields}
 

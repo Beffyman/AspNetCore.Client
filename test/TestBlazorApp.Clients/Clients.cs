@@ -7,10 +7,6 @@
 //------------------------------------------------------------------------------
 
 using TestBlazorApp.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AspNetCore.Client;
 using AspNetCore.Client.Authorization;
 using AspNetCore.Client.Exceptions;
@@ -19,9 +15,14 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TestBlazorApp.Clients
 {
@@ -75,25 +76,33 @@ namespace TestBlazorApp.Clients
 		
 		IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage WeatherForecastsRaw(TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 	}
 
 
-	public class SampleDataClient : ISampleDataClient
+	internal class SampleDataClient : ISampleDataClient
 	{
 		public readonly TestBlazorAppClient Client;
 		public readonly IHttpOverride HttpOverride;
@@ -111,6 +120,8 @@ namespace TestBlazorApp.Clients
 
 		public IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -125,6 +136,8 @@ namespace TestBlazorApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -152,6 +165,8 @@ namespace TestBlazorApp.Clients
 
 
 		public HttpResponseMessage WeatherForecastsRaw(TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -166,6 +181,8 @@ namespace TestBlazorApp.Clients
 			{
 				response = Client.ClientWrapper
 				.Request(url)
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -179,6 +196,8 @@ namespace TestBlazorApp.Clients
 
 		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -193,6 +212,8 @@ namespace TestBlazorApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -220,6 +241,8 @@ namespace TestBlazorApp.Clients
 
 
 		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -234,6 +257,8 @@ namespace TestBlazorApp.Clients
 			{
 				response = await Client.ClientWrapper
 				.Request(url)
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)

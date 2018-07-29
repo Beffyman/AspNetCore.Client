@@ -12,7 +12,7 @@ namespace AspNetCore.Client.Serializers
 	/// <summary>
 	/// Uses Google.Protobuf for serializing and deserializing the http content
 	/// </summary>
-	public class ProtobufSerializer : IHttpSerializer
+	internal class ProtobufSerializer : IHttpSerializer
 	{
 		/// <summary>
 		/// Deserializes the request content which is assumed to be protobuf into a object of <typeparamref name="T"/>

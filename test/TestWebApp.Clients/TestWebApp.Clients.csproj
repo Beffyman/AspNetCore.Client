@@ -15,6 +15,7 @@
 		<RouteToServiceProjectFolder>../TestWebApp</RouteToServiceProjectFolder>
 		<ClientInterfaceName>TestWebAppClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
+		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>

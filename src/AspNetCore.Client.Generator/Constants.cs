@@ -48,6 +48,8 @@ namespace AspNetCore.Client.Generator
 		public const string ResponseVariable = "response";
 		public const string UrlVariable = "url";
 		public const string AuthParameter = "auth";
+		public const string CookiesParameter = "cookies";
+		public const string HeadersParameter = "headers";
 
 		public const string ResponseCallback = "ResponseCallback";
 	}

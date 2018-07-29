@@ -6,11 +6,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
 using TestWebApp.Contracts;
 using AspNetCore.Client;
 using AspNetCore.Client.Authorization;
@@ -20,9 +15,14 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TestWebApp.Clients
 {
@@ -79,11 +79,15 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage GetRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -92,11 +96,15 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> GetRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -106,12 +114,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage GetRaw(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -121,12 +133,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> GetRawAsync(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -136,12 +152,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PostRaw(string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -151,12 +171,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PostRawAsync(string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -167,6 +191,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -174,6 +200,8 @@ namespace TestWebApp.Clients
 			string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -184,6 +212,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -191,6 +221,8 @@ namespace TestWebApp.Clients
 			string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -201,6 +233,8 @@ namespace TestWebApp.Clients
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -208,6 +242,8 @@ namespace TestWebApp.Clients
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -218,6 +254,8 @@ namespace TestWebApp.Clients
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -225,6 +263,8 @@ namespace TestWebApp.Clients
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -233,11 +273,15 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage CancellationTestEndpointRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -246,11 +290,15 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -261,6 +309,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -268,6 +318,8 @@ namespace TestWebApp.Clients
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -278,6 +330,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -285,6 +339,8 @@ namespace TestWebApp.Clients
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -294,12 +350,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage HeaderTestIntRaw(int SpecialValue1, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -309,12 +369,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> HeaderTestIntRawAsync(int SpecialValue1, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -325,12 +389,16 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage FancyDtoReturnRaw(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -341,12 +409,16 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -356,12 +428,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage TaskReturnRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -371,12 +447,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> TaskReturnRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -386,12 +466,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -401,12 +485,16 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -416,11 +504,15 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage GuidReturnRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -430,11 +522,15 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> GuidReturnRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -444,11 +540,15 @@ namespace TestWebApp.Clients
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage DateTimeReturnsRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -458,11 +558,15 @@ namespace TestWebApp.Clients
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -472,11 +576,15 @@ namespace TestWebApp.Clients
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage BoolReturnsRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -486,11 +594,15 @@ namespace TestWebApp.Clients
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> BoolReturnsRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -501,12 +613,16 @@ namespace TestWebApp.Clients
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PostWithNoBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -517,12 +633,16 @@ namespace TestWebApp.Clients
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -534,6 +654,8 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -541,6 +663,8 @@ namespace TestWebApp.Clients
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -552,6 +676,8 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -559,6 +685,8 @@ namespace TestWebApp.Clients
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -569,12 +697,16 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -585,12 +717,16 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -602,6 +738,8 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -609,6 +747,8 @@ namespace TestWebApp.Clients
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -620,6 +760,8 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -627,6 +769,8 @@ namespace TestWebApp.Clients
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -639,11 +783,15 @@ namespace TestWebApp.Clients
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -656,11 +804,15 @@ namespace TestWebApp.Clients
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -671,12 +823,16 @@ namespace TestWebApp.Clients
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		HttpResponseMessage QueryParameterRaw(string name, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
@@ -687,18 +843,22 @@ namespace TestWebApp.Clients
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 		
 		ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken));
 
 	}
 
 
-	public class ValuesClient : IValuesClient
+	internal class ValuesClient : IValuesClient
 	{
 		public readonly TestWebAppClient Client;
 		public readonly IHttpOverride HttpOverride;
@@ -719,6 +879,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -735,6 +897,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -778,6 +942,8 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage GetRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -794,6 +960,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -810,6 +978,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -826,6 +996,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -869,6 +1041,8 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> GetRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -885,6 +1059,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -902,6 +1078,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -919,6 +1097,8 @@ namespace TestWebApp.Clients
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("GEEET", "FULL")
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -963,6 +1143,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage GetRaw(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -980,6 +1162,8 @@ namespace TestWebApp.Clients
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("GEEET", "FULL")
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -997,6 +1181,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1014,6 +1200,8 @@ namespace TestWebApp.Clients
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("GEEET", "FULL")
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1058,6 +1246,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> GetRawAsync(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1075,6 +1265,8 @@ namespace TestWebApp.Clients
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("GEEET", "FULL")
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1092,6 +1284,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1108,6 +1302,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1143,6 +1339,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage PostRaw(string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1159,6 +1357,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1176,6 +1376,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1192,6 +1394,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1227,6 +1431,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> PostRawAsync(string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1243,6 +1449,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1261,6 +1469,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1277,6 +1487,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1313,6 +1525,8 @@ namespace TestWebApp.Clients
 			string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1329,6 +1543,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1347,6 +1563,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1363,6 +1581,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1399,6 +1619,8 @@ namespace TestWebApp.Clients
 			string value, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1415,6 +1637,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1433,6 +1657,8 @@ namespace TestWebApp.Clients
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1450,6 +1676,8 @@ namespace TestWebApp.Clients
 				.WithAuth(auth)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1486,6 +1714,8 @@ namespace TestWebApp.Clients
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1503,6 +1733,8 @@ namespace TestWebApp.Clients
 				.WithAuth(auth)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1521,6 +1753,8 @@ namespace TestWebApp.Clients
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1538,6 +1772,8 @@ namespace TestWebApp.Clients
 				.WithAuth(auth)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1574,6 +1810,8 @@ namespace TestWebApp.Clients
 			int ControllerHeader = 0, 
 			SecurityHeader auth = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1591,6 +1829,8 @@ namespace TestWebApp.Clients
 				.WithAuth(auth)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1607,6 +1847,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1623,6 +1865,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1657,6 +1901,8 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage CancellationTestEndpointRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1673,6 +1919,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1689,6 +1937,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1705,6 +1955,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1739,6 +1991,8 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1755,6 +2009,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1773,6 +2029,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1791,6 +2049,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1836,6 +2096,8 @@ namespace TestWebApp.Clients
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1854,6 +2116,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1872,6 +2136,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1890,6 +2156,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1935,6 +2203,8 @@ namespace TestWebApp.Clients
 			string SpecialValue2, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1953,6 +2223,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue2", SpecialValue2)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -1970,6 +2242,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -1987,6 +2261,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2031,6 +2307,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage HeaderTestIntRaw(int SpecialValue1, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2048,6 +2326,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2065,6 +2345,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2082,6 +2364,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2126,6 +2410,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> HeaderTestIntRawAsync(int SpecialValue1, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2143,6 +2429,8 @@ namespace TestWebApp.Clients
 				.WithHeader("SpecialValue1", SpecialValue1)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2161,6 +2449,8 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2181,6 +2471,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2224,6 +2516,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage FancyDtoReturnRaw(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2244,6 +2538,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2262,6 +2558,8 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2282,6 +2580,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2325,6 +2625,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!int.TryParse(id.ToString(),out int idOUT))
@@ -2345,6 +2647,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2362,6 +2666,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2378,6 +2684,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2413,6 +2721,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage TaskReturnRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2429,6 +2739,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2446,6 +2758,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2462,6 +2776,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2497,6 +2813,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> TaskReturnRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2513,6 +2831,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2530,6 +2850,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2546,6 +2868,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2590,6 +2914,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2606,6 +2932,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2623,6 +2951,8 @@ namespace TestWebApp.Clients
 			Action InternalServerErrorCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2639,6 +2969,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2683,6 +3015,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2699,6 +3033,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2716,6 +3052,8 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2732,6 +3070,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2774,6 +3114,8 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage GuidReturnRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2790,6 +3132,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2807,6 +3151,8 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2823,6 +3169,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2865,6 +3213,8 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> GuidReturnRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2881,6 +3231,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2898,6 +3250,8 @@ namespace TestWebApp.Clients
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2914,6 +3268,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2956,6 +3312,8 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage DateTimeReturnsRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -2972,6 +3330,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -2989,6 +3349,8 @@ namespace TestWebApp.Clients
 			Action<DateTime> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3005,6 +3367,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3047,6 +3411,8 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3063,6 +3429,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3080,6 +3448,8 @@ namespace TestWebApp.Clients
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3096,6 +3466,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3138,6 +3510,8 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage BoolReturnsRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3154,6 +3528,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3171,6 +3547,8 @@ namespace TestWebApp.Clients
 			Action<bool> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3187,6 +3565,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3229,6 +3609,8 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> BoolReturnsRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3245,6 +3627,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3263,6 +3647,8 @@ namespace TestWebApp.Clients
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3283,6 +3669,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3326,6 +3714,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage PostWithNoBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3346,6 +3736,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3364,6 +3756,8 @@ namespace TestWebApp.Clients
 			Action OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3384,6 +3778,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3427,6 +3823,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
@@ -3447,6 +3845,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3466,6 +3866,8 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3486,6 +3888,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3530,6 +3934,8 @@ namespace TestWebApp.Clients
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3550,6 +3956,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3569,6 +3977,8 @@ namespace TestWebApp.Clients
 			Action<MyFancyDto> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3589,6 +3999,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3633,6 +4045,8 @@ namespace TestWebApp.Clients
 			MyFancyDto dto, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
@@ -3653,6 +4067,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3671,6 +4087,8 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3687,6 +4105,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3730,6 +4150,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3746,6 +4168,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3764,6 +4188,8 @@ namespace TestWebApp.Clients
 			Action<Guid> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3780,6 +4206,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3823,6 +4251,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3839,6 +4269,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3858,6 +4290,8 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3874,6 +4308,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3918,6 +4354,8 @@ namespace TestWebApp.Clients
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3934,6 +4372,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -3953,6 +4393,8 @@ namespace TestWebApp.Clients
 			Action<IEnumerable<int>> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -3969,6 +4411,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4013,6 +4457,8 @@ namespace TestWebApp.Clients
 			IEnumerable<bool> truth, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4029,6 +4475,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4049,6 +4497,8 @@ namespace TestWebApp.Clients
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4065,6 +4515,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4131,6 +4583,8 @@ namespace TestWebApp.Clients
 
 		public HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4147,6 +4601,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4167,6 +4623,8 @@ namespace TestWebApp.Clients
 			Action<string> NotModifiedCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4183,6 +4641,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4249,6 +4709,8 @@ namespace TestWebApp.Clients
 
 		public async ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4265,6 +4727,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4283,6 +4747,8 @@ namespace TestWebApp.Clients
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4299,6 +4765,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4342,6 +4810,8 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage QueryParameterRaw(string name, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4358,6 +4828,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4376,6 +4848,8 @@ namespace TestWebApp.Clients
 			Action<string> OKCallback = null, 
 			Action<HttpResponseMessage> ResponseCallback = null, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4392,6 +4866,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
@@ -4435,6 +4911,8 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
 			int ControllerHeader = 0, 
 			TimeSpan? timeout = null, 
+			IEnumerable<Cookie> cookies = null, 
+			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
 
@@ -4451,6 +4929,8 @@ namespace TestWebApp.Clients
 				.Request(url)
 				.WithHeader("ControllerHeader", ControllerHeader)
 				.WithHeader("Test", "EXTRA")
+				.WithCookies(cookies)
+				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
 				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)

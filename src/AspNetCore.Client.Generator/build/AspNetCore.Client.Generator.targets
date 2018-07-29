@@ -10,6 +10,7 @@
 													RouteToServiceProjectFolder="$(RouteToServiceProjectFolder)"
 													ClientInterfaceName="$(ClientInterfaceName)"
 													UseValueTask="$(UseValueTask)"
+													UseInternalClients="$(UseInternalClients)"
 													ClientNamespace="$(ClientNamespace)"
 													AllowedNamespaces="$(AllowedNamespaces)"
 													ExcludedNamespaces="$(ExcludedNamespaces)"/>

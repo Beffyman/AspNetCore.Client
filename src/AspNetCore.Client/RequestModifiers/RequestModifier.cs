@@ -1,6 +1,7 @@
 ﻿using Flurl.Http;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace AspNetCore.Client.RequestModifiers
@@ -16,6 +17,11 @@ namespace AspNetCore.Client.RequestModifiers
 		IDictionary<string, string> PredefinedHeaders { get; set; }
 
 		/// <summary>
+		/// Cookie modifications that are defined inside the configuration
+		/// </summary>
+		IEnumerable<Cookie> PredefinedCookies { get; set; }
+
+		/// <summary>
 		/// Applies header modifications to the request
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -27,12 +33,17 @@ namespace AspNetCore.Client.RequestModifiers
 	/// <summary>
 	/// Implementation of <see cref="IRequestModifier"/> that will apply header modifications defined inside the configuration
 	/// </summary>
-	public class RequestModifier : IRequestModifier
+	internal class RequestModifier : IRequestModifier
 	{
 		/// <summary>
 		/// Header modifications that are defined inside the configuration
 		/// </summary>
 		public IDictionary<string, string> PredefinedHeaders { get; set; }
+
+		/// <summary>
+		/// Cookie modifications that are defined inside the configuration
+		/// </summary>
+		public IEnumerable<Cookie> PredefinedCookies { get; set; }
 
 		/// <summary>
 		/// Applies header modifications to the request
@@ -46,6 +57,8 @@ namespace AspNetCore.Client.RequestModifiers
 			{
 				clientOrRequest.WithHeader(header.Key, header.Value);
 			}
+
+			clientOrRequest.WithCookies(PredefinedCookies);
 
 			return clientOrRequest;
 		}

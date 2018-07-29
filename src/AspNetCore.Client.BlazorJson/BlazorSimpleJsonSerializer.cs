@@ -10,7 +10,7 @@ namespace AspNetCore.Client.Serializers
 	/// <summary>
 	/// Uses Blazor's SimpleJson for serializing and deserializing the http content
 	/// </summary>
-	public class BlazorSimpleJsonSerializer : IHttpSerializer
+	internal class BlazorSimpleJsonSerializer : IHttpSerializer
 	{
 		private static readonly IDictionary<Type, Func<string, object>> _knownJsonPrimitives = new Dictionary<Type, Func<string, object>>
 		{

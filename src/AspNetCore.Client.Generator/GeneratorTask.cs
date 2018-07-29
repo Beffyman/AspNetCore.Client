@@ -19,6 +19,7 @@ namespace AspNetCore.Client.Generator
 		public string RouteToServiceProjectFolder { get; set; }
 		public string ClientInterfaceName { get; set; }
 		public string UseValueTask { get; set; }
+		public string UseInternalClients { get; set; }
 		public string ClientNamespace { get; set; }
 		public string AllowedNamespaces { get; set; }
 		public string ExcludedNamespaces { get; set; }
@@ -29,6 +30,7 @@ namespace AspNetCore.Client.Generator
 			ClientInterfaceName = properties[nameof(ClientInterfaceName)];
 			ClientInterfaceName = properties[nameof(ClientInterfaceName)];
 			UseValueTask = properties[nameof(UseValueTask)];
+			UseInternalClients = properties[nameof(UseInternalClients)];
 			ClientNamespace = properties[nameof(ClientNamespace)];
 			AllowedNamespaces = properties[nameof(AllowedNamespaces)];
 			ExcludedNamespaces = properties[nameof(ExcludedNamespaces)];
@@ -67,6 +69,7 @@ namespace AspNetCore.Client.Generator
 			Settings.RouteToServiceProjectFolder = RouteToServiceProjectFolder;
 			Settings.ClientInterfaceName = ClientInterfaceName;
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
+			Settings.UseInternalClients = bool.Parse(UseInternalClients ?? "false");
 			Settings.ClientNamespace = ClientNamespace;
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 			Settings.ExcludedNamespaces = ExcludedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);

@@ -10,7 +10,7 @@ namespace AspNetCore.Client.Serializers
 	/// <summary>
 	/// Uses Newtonsoft.Json for serializing and deserializing the http content
 	/// </summary>
-	public class JsonHttpSerializer : IHttpSerializer
+	internal class JsonHttpSerializer : IHttpSerializer
 	{
 		private static readonly IDictionary<Type, Func<string, object>> _knownJsonPrimitives = new Dictionary<Type, Func<string, object>>
 		{

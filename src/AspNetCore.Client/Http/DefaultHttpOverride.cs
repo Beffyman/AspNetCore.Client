@@ -10,7 +10,7 @@ namespace AspNetCore.Client.Http
 	/// <summary>
 	/// Default implementation for <see cref="IHttpOverride"/> which doesn't do anything
 	/// </summary>
-	public class DefaultHttpOverride : IHttpOverride
+	internal class DefaultHttpOverride : IHttpOverride
 	{
 		/// <summary>
 		/// Empty implementation of <see cref="IHttpOverride.GetResponseAsync(HttpMethod, string, object, CancellationToken)"/>

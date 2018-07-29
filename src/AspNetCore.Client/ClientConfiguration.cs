@@ -4,6 +4,7 @@ using AspNetCore.Client.Serializers;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace AspNetCore.Client
@@ -34,6 +35,11 @@ namespace AspNetCore.Client
 		private IDictionary<string, string> PredefinedHeaders { get; } = new Dictionary<string, string>();
 
 		/// <summary>
+		/// Headers that will always be included with every request
+		/// </summary>
+		private List<Cookie> PredefinedCookies { get; } = new List<Cookie>();
+
+		/// <summary>
 		/// Override the default timeout, which is 60
 		/// </summary>
 		private TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(60);
@@ -62,7 +68,8 @@ namespace AspNetCore.Client
 			{
 				return new RequestModifier
 				{
-					PredefinedHeaders = PredefinedHeaders
+					PredefinedHeaders = PredefinedHeaders,
+					PredefinedCookies = PredefinedCookies
 				};
 			});
 
@@ -102,6 +109,29 @@ namespace AspNetCore.Client
 		public ClientConfiguration WithPredefinedHeader(string name, string value)
 		{
 			PredefinedHeaders.Add(name, value);
+			return this;
+		}
+
+		/// <summary>
+		/// Adds a predefined cookie to the configuration
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithPredefinedCookie(string name, string value)
+		{
+			PredefinedCookies.Add(new Cookie(name, value));
+			return this;
+		}
+
+		/// <summary>
+		/// Adds the predefined cookies to the configuration
+		/// </summary>
+		/// <param name="cookies"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithPredefinedCookies(IEnumerable<Cookie> cookies)
+		{
+			PredefinedCookies.AddRange(cookies);
 			return this;
 		}
 

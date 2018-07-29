@@ -10,6 +10,7 @@
 		<RouteToServiceProjectFolder></RouteToServiceProjectFolder>
 		<ClientInterfaceName>MyServiceClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
+		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>MyService.Clients</ClientNamespace>
 		<AllowedNamespaces>System*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>

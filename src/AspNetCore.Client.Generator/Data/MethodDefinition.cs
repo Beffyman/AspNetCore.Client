@@ -244,6 +244,8 @@ namespace AspNetCore.Client.Generator.Data
 		private static readonly IEnumerable<string> CONSTANT_PARAMETERS = new List<string>
 		{
 			$"{nameof(TimeSpan)}? {Constants.TimeoutParameter} = null",
+			$"IEnumerable<{nameof(Cookie)}> {Constants.CookiesParameter} = null",
+			$"IDictionary<string, object> {Constants.HeadersParameter} = null",
 			$"{nameof(CancellationToken)} {Constants.CancellationTokenParameter} = default({nameof(CancellationToken)})"
 		};
 
@@ -475,6 +477,8 @@ $@"
 			}
 
 
+			str = $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratorExtensions.WithCookies)}({Constants.CookiesParameter})";
+			str = $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratorExtensions.WithHeaders)}({Constants.HeadersParameter})";
 			str = $"{str}{Environment.NewLine}{tabs}.{nameof(GeneratorExtensions.WithRequestModifiers)}({Constants.RequestModifierField})";
 
 			var bodyParameter = Parameters.SingleOrDefault(x => x.Options?.FromBody ?? false);

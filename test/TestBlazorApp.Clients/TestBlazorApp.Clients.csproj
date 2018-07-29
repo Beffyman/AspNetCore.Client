@@ -15,6 +15,7 @@
 		<RouteToServiceProjectFolder>../TestBlazorApp.Server</RouteToServiceProjectFolder>
 		<ClientInterfaceName>TestBlazorAppClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
+		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>
