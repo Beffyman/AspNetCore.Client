@@ -105,7 +105,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			var fields = new List<string>();
 
-			fields.Add($@"		public readonly {Settings.ClientInterfaceName} {Constants.ClientInterfaceName};");
+			fields.Add($@"		public readonly I{Settings.ClientInterfaceName}Wrapper {Constants.ClientInterfaceName};");
 			fields.Add($@"		public readonly {Constants.HttpOverride} {Constants.HttpOverrideField};");
 			fields.Add($@"		public readonly {Constants.Serializer} {Constants.SerializerField};");
 			fields.Add($@"		public readonly {Constants.RequestModifier} {Constants.RequestModifierField};");
@@ -115,7 +115,7 @@ namespace AspNetCore.Client.Generator.Data
 
 			var parameters = new List<string>();
 
-			parameters.Add($@"{Settings.ClientInterfaceName} client");
+			parameters.Add($@"I{Settings.ClientInterfaceName}Wrapper client");
 			parameters.Add($@"{Constants.HttpOverride} httpOverride");
 			parameters.Add($@"{Constants.Serializer} serializer");
 			parameters.Add($@"{Constants.RequestModifier} modifier");

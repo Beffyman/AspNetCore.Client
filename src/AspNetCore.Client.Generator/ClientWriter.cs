@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Client;
 using AspNetCore.Client.Generator.Data;
 using Flurl.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,16 +36,19 @@ namespace AspNetCore.Client.Generator
 		/// <param name=""services""></param>
 		/// <param name=""configure"">Overrides for client configuration</param>
 		/// <returns></returns>
-		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
+		public static {nameof(IServiceCollection)} InstallClients(this {nameof(IServiceCollection)} services, Action<{nameof(ClientConfiguration)}> configure)
 		{{
-			var configuration = new ClientConfiguration();
+			var configuration = new {nameof(ClientConfiguration)}();
+
+			configuration.{nameof(ClientConfiguration.RegisterClientWrapperCreator)}({Settings.ClientInterfaceName}Wrapper.Create);
+			configuration.{nameof(ClientConfiguration.UseClientWrapper)}<I{Settings.ClientInterfaceName}Wrapper, {Settings.ClientInterfaceName}Wrapper>((provider) => new {Settings.ClientInterfaceName}Wrapper(provider.GetService<HttpClient>(), configuration.{nameof(ClientConfiguration.GetSettings)}()));
+
 			configure?.Invoke(configuration);
 
-			services.AddScoped<{Settings.ClientInterfaceName}>((provider) => new {Settings.ClientInterfaceName}(provider.GetService<HttpClient>(), configuration.GetSettings()));
 
 {clients}
 
-			return configuration.ApplyConfiguration(services);;
+			return configuration.{nameof(ClientConfiguration.ApplyConfiguration)}(services);;
 		}}
 	}}
 ";
@@ -54,21 +58,28 @@ namespace AspNetCore.Client.Generator
 		{
 			return $@"
 
-	public class {Settings.ClientInterfaceName}
+
+	public interface I{Settings.ClientInterfaceName}Wrapper : IClientWrapper {{ }}
+
+	public class {Settings.ClientInterfaceName}Wrapper :  I{Settings.ClientInterfaceName}Wrapper
 	{{
 		public TimeSpan Timeout {{ get; internal set; }}
-		public readonly {nameof(FlurlClient)} {Constants.FlurlClientVariable};
+		public {nameof(FlurlClient)} {Constants.FlurlClientVariable} {{ get; internal set; }}
 
-		public {Settings.ClientInterfaceName}({nameof(HttpClient)} client, ClientSettings settings)
+		public {Settings.ClientInterfaceName}Wrapper({nameof(HttpClient)} client, {nameof(ClientSettings)} settings)
 		{{
-			if (!string.IsNullOrEmpty(settings.BaseAddress))
+			if (!string.IsNullOrEmpty(settings.{nameof(ClientSettings.BaseAddress)}))
 			{{
-				client.BaseAddress = new Uri(settings.BaseAddress);
+				client.BaseAddress = new Uri(settings.{nameof(ClientSettings.BaseAddress)});
 			}}
 			{Constants.FlurlClientVariable} = new {nameof(FlurlClient)}(client);
-			Timeout = settings.Timeout;
+			Timeout = settings.{nameof(ClientSettings.Timeout)};
 		}}
 
+		public static I{Settings.ClientInterfaceName}Wrapper Create(HttpClient client, {nameof(ClientSettings)} settings)
+		{{
+			return new {Settings.ClientInterfaceName}Wrapper(client, settings);
+		}}
 	}}
 
 	public interface I{Settings.ClientInterfaceName} : {nameof(IClient)} {{ }}";
