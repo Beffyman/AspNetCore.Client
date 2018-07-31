@@ -37,7 +37,7 @@ namespace TestWebApp.Tests
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
-			configure.UseTestServerClient<ITestWebAppClientWrapper, TestWebAppClientWrapper>(Client);
+			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client);
 			configure.WithProtobufBody();
 			configure.UseProtobufSerlaizer();
 		}
@@ -47,7 +47,7 @@ namespace TestWebApp.Tests
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
-			configure.UseTestServerClient<ITestWebAppClientWrapper, TestWebAppClientWrapper>(Client);
+			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client);
 			configure.WithJsonBody();
 			configure.UseJsonClientSerializer();
 		}
