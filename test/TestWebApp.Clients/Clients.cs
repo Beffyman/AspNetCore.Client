@@ -27,6 +27,8 @@ using System.Threading.Tasks;
 namespace TestWebApp.Clients
 {
 
+#warning  File C:\Git_Github\AspNetCore.Client\test\TestWebApp\Controllers\ErrorController.cs is misconfigured for generation :: Controller must have a route to be valid for generation.
+
 
 	public static class TestWebAppClientInstaller
 	{

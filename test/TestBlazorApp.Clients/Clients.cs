@@ -28,6 +28,7 @@ namespace TestBlazorApp.Clients
 {
 
 
+
 	public static class TestBlazorAppClientInstaller
 	{
 		/// <summary>

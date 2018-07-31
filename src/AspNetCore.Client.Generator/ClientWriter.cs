@@ -85,6 +85,20 @@ namespace AspNetCore.Client.Generator
 	public interface I{Settings.ClientInterfaceName} : {nameof(IClient)} {{ }}";
 		}
 
+
+		private static string GetErrorMessages(IList<ParsedFile> errorFiles)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			foreach(var errorFile in errorFiles)
+			{
+				sb.AppendLine($"#warning {(errorFile.UnexpectedFailure ? "PLEASE MAKE A GITHUB REPO ISSUE" : "")} File {Path.GetFullPath(errorFile.FileName)} {(errorFile.UnexpectedFailure? "has failed generation withunexpected error" : "is misconfigured for generation")} :: {errorFile.Error.Replace('\r', ' ').Replace('\n', ' ')}");
+			}
+
+			return sb.ToString();
+		}
+
+
 		public static void WriteClientsFile(IList<ParsedFile> parsedFiles)
 		{
 			IList<string> requiredUsingStatements = new List<string>
@@ -107,7 +121,11 @@ namespace AspNetCore.Client.Generator
 				"using System.Threading.Tasks;"
 			};
 
-			var distinctUsingStatements = parsedFiles
+
+			var errorFiles = parsedFiles.Where(x => x.Failed).ToList();
+			var correctFiles = parsedFiles.Where(x => !x.Failed).ToList();
+
+			var distinctUsingStatements = correctFiles
 											.SelectMany(x => x.UsingStatements)
 											.Union(requiredUsingStatements)
 											.Distinct()
@@ -129,9 +147,10 @@ $@"//---------------------------------------------------------------------------
 namespace {Settings.ClientNamespace}
 {{
 
-{GetInstaller(parsedFiles)}
+{GetErrorMessages(errorFiles)}
+{GetInstaller(correctFiles)}
 {GetServiceClients()}
-{string.Join(Environment.NewLine, parsedFiles.SelectMany(x => x.Classes).Where(x => x.NotEmpty).Select(x => x.GetText()))}
+{string.Join(Environment.NewLine, correctFiles.SelectMany(x => x.Classes).Where(x => x.NotEmpty).Select(x => x.GetText()))}
 }}
 ";
 

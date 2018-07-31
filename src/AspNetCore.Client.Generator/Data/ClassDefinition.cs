@@ -54,6 +54,7 @@ namespace AspNetCore.Client.Generator.Data
 			if (ignoreAttribute != null)
 			{
 				Options.NoClient = true;
+				return;
 			}
 
 
@@ -63,6 +64,11 @@ namespace AspNetCore.Client.Generator.Data
 				Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
 			}
 
+			if(Route == null)//No Route, invalid controller
+			{
+				Options.NoClient = true;
+				throw new NotSupportedException("Controller must have a route to be valid for generation.");
+			}
 
 			var match = RouteVersionRegex.Match(Route);
 			if (match.Success)
