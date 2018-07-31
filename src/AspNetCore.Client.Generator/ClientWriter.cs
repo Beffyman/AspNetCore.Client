@@ -23,9 +23,17 @@ namespace AspNetCore.Client.Generator
 			}
 		}
 
-		private static string GetInstaller(IList<ParsedFile> parsedFiles)
+		private static string GetInstaller(IList<ParsedFile> correctFiles)
 		{
-			var clients = string.Join(Environment.NewLine, parsedFiles.SelectMany(x => x.Classes.Where(y => y.NotEmpty).Select(y => $@"			services.AddScoped<I{y.ClientName}, {y.ClientName}>();")));
+			var clients = string.Join(Environment.NewLine, correctFiles.SelectMany(x => x.Classes.Where(y => y.NotEmpty).Select(y => $@"			services.AddScoped<{(y.NamespaceVersion != null ? $"{y.NamespaceVersion}." : "")}{(y.Options.NamespaceSuffix != null ? $"{y.Options.NamespaceSuffix}." : string.Empty)}I{y.ClientName}, {(y.NamespaceVersion != null ? $"{y.NamespaceVersion}." : "")}{(y.Options.NamespaceSuffix != null ? $"{y.Options.NamespaceSuffix}." : string.Empty)}{y.ClientName}>();")));
+
+			var repositories = correctFiles.SelectMany(x => x.Classes)
+												.Where(x => x.NotEmpty)
+												.GroupBy(x => x.NamespaceVersion)
+												.Select(x => $"			services.AddScoped<I{Settings.ClientInterfaceName}{x.Key}Repository,{Settings.ClientInterfaceName}{x.Key}Repository>();")
+												.ToList();
+
+			var repoList = string.Join($@"			{Environment.NewLine}", repositories);
 
 			return $@"
 	public static class {Settings.ClientInterfaceName}Installer
@@ -45,7 +53,7 @@ namespace AspNetCore.Client.Generator
 
 			configure?.Invoke(configuration);
 
-
+{string.Join(Environment.NewLine, repositories)}
 {clients}
 
 			return configuration.{nameof(ClientConfiguration.ApplyConfiguration)}(services);;
@@ -90,10 +98,55 @@ namespace AspNetCore.Client.Generator
 		{
 			StringBuilder sb = new StringBuilder();
 
-			foreach(var errorFile in errorFiles)
+			foreach (var errorFile in errorFiles)
 			{
-				sb.AppendLine($"#warning {(errorFile.UnexpectedFailure ? "PLEASE MAKE A GITHUB REPO ISSUE" : "")} File {Path.GetFullPath(errorFile.FileName)} {(errorFile.UnexpectedFailure? "has failed generation withunexpected error" : "is misconfigured for generation")} :: {errorFile.Error.Replace('\r', ' ').Replace('\n', ' ')}");
+				sb.AppendLine($"#warning {(errorFile.UnexpectedFailure ? "PLEASE MAKE A GITHUB REPO ISSUE" : "")} File {Path.GetFullPath(errorFile.FileName)} {(errorFile.UnexpectedFailure ? "has failed generation withunexpected error" : "is misconfigured for generation")} :: {errorFile.Error.Replace('\r', ' ').Replace('\n', ' ')}");
 			}
+
+			return sb.ToString();
+		}
+
+		private static string GetRepositoryModels(IList<ParsedFile> correctFiles)
+		{
+			var versionedClients = correctFiles.SelectMany(x => x.Classes)
+												.Where(x => x.NotEmpty)
+												.GroupBy(x => x.NamespaceVersion)
+												.ToList();
+
+			StringBuilder sb = new StringBuilder();
+
+
+			foreach (var repo in versionedClients)
+			{
+				var interfaceProperties = repo.Select(x => $@"		{repo.Key}{(repo.Key != null ? "." : "")}{(x.Options.NamespaceSuffix != null ? $"{x.Options.NamespaceSuffix}." : string.Empty)}I{x.ClientName} {x.ControllerName} {{ get; }}");
+				var implementationProperties = repo.Select(x => $@"		public {repo.Key}{(repo.Key != null ? "." : "")}{(x.Options.NamespaceSuffix != null ? $"{x.Options.NamespaceSuffix}." : string.Empty)}I{x.ClientName} {x.ControllerName} {{ get; private set; }}");
+				var implementationParameters = repo.Select(x => $@"			{repo.Key}{(repo.Key != null ? "." : "")}{(x.Options.NamespaceSuffix != null ? $"{x.Options.NamespaceSuffix}." : string.Empty)}I{x.ClientName} {x.ControllerName.ToLower()}");
+				var implementationAssignment = repo.Select(x => $@"			this.{x.ControllerName} = {x.ControllerName.ToLower()};");
+
+
+				sb.AppendLine(
+$@"
+	public interface I{Settings.ClientInterfaceName}{repo.Key}Repository
+	{{
+{string.Join(Environment.NewLine, interfaceProperties)}
+	}}
+
+	{(Settings.UseInternalClients ? "internal" : "public")} class {Settings.ClientInterfaceName}{repo.Key}Repository : I{Settings.ClientInterfaceName}{repo.Key}Repository
+	{{
+{string.Join(Environment.NewLine, implementationProperties)}
+
+		public {Settings.ClientInterfaceName}{repo.Key}Repository
+		(
+{string.Join($",{Environment.NewLine}", implementationParameters)}
+		)
+		{{
+{string.Join(Environment.NewLine, implementationAssignment)}
+		}}
+	}}
+");
+
+			}
+
 
 			return sb.ToString();
 		}
@@ -133,6 +186,25 @@ namespace AspNetCore.Client.Generator
 
 			string usingBlock = string.Join(Environment.NewLine, distinctUsingStatements);
 
+
+			var versionedClients = correctFiles.SelectMany(x => x.Classes)
+												.Where(x => x.NotEmpty)
+												.GroupBy(x => x.NamespaceVersion)
+												.ToList();
+
+			StringBuilder versionBlocks = new StringBuilder();
+
+			foreach (var version in versionedClients)
+			{
+				versionBlocks.AppendLine(
+$@"
+namespace {Settings.ClientNamespace}{(version.Key != null ? "." : "")}{version.Key}
+{{
+{string.Join(Environment.NewLine, version.Select(x => x.GetText()))}
+}}
+");
+			}
+
 			string str =
 $@"//------------------------------------------------------------------------------
 // <auto-generated>
@@ -150,8 +222,11 @@ namespace {Settings.ClientNamespace}
 {GetErrorMessages(errorFiles)}
 {GetInstaller(correctFiles)}
 {GetServiceClients()}
-{string.Join(Environment.NewLine, correctFiles.SelectMany(x => x.Classes).Where(x => x.NotEmpty).Select(x => x.GetText()))}
+
+{GetRepositoryModels(correctFiles)}
 }}
+
+{string.Join(Environment.NewLine, versionBlocks)}
 ";
 
 			Helpers.SafelyWriteToFile($"{Environment.CurrentDirectory}/Clients.cs", str);

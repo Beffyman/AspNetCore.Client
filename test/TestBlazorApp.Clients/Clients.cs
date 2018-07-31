@@ -46,7 +46,7 @@ namespace TestBlazorApp.Clients
 
 			configure?.Invoke(configuration);
 
-
+			services.AddScoped<ITestBlazorAppClientRepository,TestBlazorAppClientRepository>();
 			services.AddScoped<ISampleDataClient, SampleDataClient>();
 
 			return configuration.ApplyConfiguration(services);;
@@ -80,6 +80,34 @@ namespace TestBlazorApp.Clients
 	}
 
 	public interface ITestBlazorAppClient : IClient { }
+
+
+	public interface ITestBlazorAppClientRepository
+	{
+		ISampleDataClient SampleData { get; }
+	}
+
+	internal class TestBlazorAppClientRepository : ITestBlazorAppClientRepository
+	{
+		public ISampleDataClient SampleData { get; private set;}
+
+		public TestBlazorAppClientRepository
+		(
+			ISampleDataClient sampledata
+		)
+		{
+			this.SampleData = sampledata;
+		}
+	}
+
+
+}
+
+
+namespace TestBlazorApp.Clients
+{
+
+
 
 
 	public interface ISampleDataClient : ITestBlazorAppClient
@@ -282,4 +310,7 @@ namespace TestBlazorApp.Clients
 
 	}
 
+
 }
+
+

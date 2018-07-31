@@ -38,6 +38,12 @@ namespace TestWebApp.Controllers
 			return "value";
 		}
 
+		[HttpGet("dontGenerateMeImPrivate")]
+		private void NonClientEndpoint()
+		{
+
+		}
+
 		// POST api/values
 		[HttpPost]
 		public void Post([FromBody] string value)

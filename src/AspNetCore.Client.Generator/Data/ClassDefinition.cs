@@ -33,7 +33,7 @@ namespace AspNetCore.Client.Generator.Data
 
 		public ClassOptions Options { get; set; }
 
-		public bool NotEmpty => !Options.NoClient && Methods.Any(x => !x.IsNotEndpoint);
+		public bool NotEmpty => !Options.NoClient && (Methods?.Any(x => !x.IsNotEndpoint) ?? false);
 
 		public ClassDefinition(string @namespace,
 			string className,
@@ -58,13 +58,19 @@ namespace AspNetCore.Client.Generator.Data
 			}
 
 
+			var namespaceAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NamespaceSuffixAttribute.AttributeName));
+			if (namespaceAttribute != null)
+			{
+				Options.NamespaceSuffix = namespaceAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
+			}
+
 			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Route));
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
 				Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
 			}
 
-			if(Route == null)//No Route, invalid controller
+			if (Route == null)//No Route, invalid controller
 			{
 				Options.NoClient = true;
 				throw new NotSupportedException("Controller must have a route to be valid for generation.");
@@ -101,7 +107,10 @@ namespace AspNetCore.Client.Generator.Data
 				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
 			}
 
-			Methods = methods.Select(x => new MethodDefinition(this, x)).ToList();
+			//Only public or internal endpoints can be hit anyways
+			Methods = methods.Where(x => x.Modifiers.Any(y => y.Text == "public"))
+				.Select(x => new MethodDefinition(this, x))
+				.ToList();
 
 		}
 
@@ -144,6 +153,9 @@ namespace AspNetCore.Client.Generator.Data
 
 			var str =
 $@"
+{(Options.NamespaceSuffix != null?$@"namespace {Options.NamespaceSuffix}
+{{":string.Empty)}
+
 {GetObsolete()}
 	public interface I{ClientName} : I{Settings.ClientInterfaceName}
 	{{
@@ -151,7 +163,7 @@ $@"
 	}}
 
 {GetObsolete()}
-	{(Settings.UseInternalClients ? "internal" :"public")} class {ClientName} : I{ClientName}
+	{(Settings.UseInternalClients ? "internal" : "public")} class {ClientName} : I{ClientName}
 	{{
 {classFields}
 
@@ -162,6 +174,7 @@ $@"
 
 {string.Join($"{Environment.NewLine}", Methods.Where(x => !x.IsNotEndpoint).Select(x => x.GetImplementationText()))}
 	}}
+{(Options.NamespaceSuffix != null ? $@"}}" : string.Empty)}
 ";
 
 
@@ -191,6 +204,8 @@ $@"
 	public class ClassOptions
 	{
 		public bool NoClient { get; set; }
+
+		public string NamespaceSuffix { get; set; }
 
 		public string Obsolete { get; set; }
 		public bool Authorize { get; set; }
