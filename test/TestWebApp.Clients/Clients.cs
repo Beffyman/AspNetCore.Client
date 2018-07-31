@@ -39,9 +39,12 @@ namespace TestWebApp.Clients
 		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
 		{
 			var configuration = new ClientConfiguration();
+
+			configuration.RegisterClientWrapperCreator(TestWebAppClientWrapper.Create);
+			configuration.UseClientWrapper<ITestWebAppClientWrapper, TestWebAppClientWrapper>((provider) => new TestWebAppClientWrapper(provider.GetService<HttpClient>(), configuration.GetSettings()));
+
 			configure?.Invoke(configuration);
 
-			services.AddScoped<TestWebAppClient>((provider) => new TestWebAppClient(provider.GetService<HttpClient>(), configuration.GetSettings()));
 
 			services.AddScoped<IValuesClient, ValuesClient>();
 
@@ -51,12 +54,15 @@ namespace TestWebApp.Clients
 
 
 
-	public class TestWebAppClient
+
+	public interface ITestWebAppClientWrapper : IClientWrapper { }
+
+	public class TestWebAppClientWrapper :  ITestWebAppClientWrapper
 	{
 		public TimeSpan Timeout { get; internal set; }
-		public readonly FlurlClient ClientWrapper;
+		public FlurlClient ClientWrapper { get; internal set; }
 
-		public TestWebAppClient(HttpClient client, ClientSettings settings)
+		public TestWebAppClientWrapper(HttpClient client, ClientSettings settings)
 		{
 			if (!string.IsNullOrEmpty(settings.BaseAddress))
 			{
@@ -66,6 +72,10 @@ namespace TestWebApp.Clients
 			Timeout = settings.Timeout;
 		}
 
+		public static ITestWebAppClientWrapper Create(HttpClient client, ClientSettings settings)
+		{
+			return new TestWebAppClientWrapper(client, settings);
+		}
 	}
 
 	public interface ITestWebAppClient : IClient { }
@@ -860,12 +870,12 @@ namespace TestWebApp.Clients
 
 	internal class ValuesClient : IValuesClient
 	{
-		public readonly TestWebAppClient Client;
+		public readonly ITestWebAppClientWrapper Client;
 		public readonly IHttpOverride HttpOverride;
 		public readonly IHttpSerializer Serializer;
 		public readonly IRequestModifier Modifier;
 
-		public ValuesClient(TestWebAppClient client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
+		public ValuesClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;

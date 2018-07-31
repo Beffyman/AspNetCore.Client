@@ -39,9 +39,12 @@ namespace TestBlazorApp.Clients
 		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
 		{
 			var configuration = new ClientConfiguration();
+
+			configuration.RegisterClientWrapperCreator(TestBlazorAppClientWrapper.Create);
+			configuration.UseClientWrapper<ITestBlazorAppClientWrapper, TestBlazorAppClientWrapper>((provider) => new TestBlazorAppClientWrapper(provider.GetService<HttpClient>(), configuration.GetSettings()));
+
 			configure?.Invoke(configuration);
 
-			services.AddScoped<TestBlazorAppClient>((provider) => new TestBlazorAppClient(provider.GetService<HttpClient>(), configuration.GetSettings()));
 
 			services.AddScoped<ISampleDataClient, SampleDataClient>();
 
@@ -51,12 +54,15 @@ namespace TestBlazorApp.Clients
 
 
 
-	public class TestBlazorAppClient
+
+	public interface ITestBlazorAppClientWrapper : IClientWrapper { }
+
+	public class TestBlazorAppClientWrapper :  ITestBlazorAppClientWrapper
 	{
 		public TimeSpan Timeout { get; internal set; }
-		public readonly FlurlClient ClientWrapper;
+		public FlurlClient ClientWrapper { get; internal set; }
 
-		public TestBlazorAppClient(HttpClient client, ClientSettings settings)
+		public TestBlazorAppClientWrapper(HttpClient client, ClientSettings settings)
 		{
 			if (!string.IsNullOrEmpty(settings.BaseAddress))
 			{
@@ -66,6 +72,10 @@ namespace TestBlazorApp.Clients
 			Timeout = settings.Timeout;
 		}
 
+		public static ITestBlazorAppClientWrapper Create(HttpClient client, ClientSettings settings)
+		{
+			return new TestBlazorAppClientWrapper(client, settings);
+		}
 	}
 
 	public interface ITestBlazorAppClient : IClient { }
@@ -104,12 +114,12 @@ namespace TestBlazorApp.Clients
 
 	internal class SampleDataClient : ISampleDataClient
 	{
-		public readonly TestBlazorAppClient Client;
+		public readonly ITestBlazorAppClientWrapper Client;
 		public readonly IHttpOverride HttpOverride;
 		public readonly IHttpSerializer Serializer;
 		public readonly IRequestModifier Modifier;
 
-		public SampleDataClient(TestBlazorAppClient client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
+		public SampleDataClient(ITestBlazorAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;

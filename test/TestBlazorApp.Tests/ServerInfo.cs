@@ -25,7 +25,6 @@ namespace TestBlazorApp.Tests
 			Client = Server.CreateClient();
 
 			var services = new ServiceCollection();
-			services.AddSingleton(Client);
 			services.InstallClients(ConfigureClient);
 
 			Provider = services.BuildServiceProvider();
@@ -39,6 +38,7 @@ namespace TestBlazorApp.Tests
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
+			configure.UseTestServerClient<ITestBlazorAppClientWrapper>(Client);
 			configure.UseBlazorSimpleJsonSerlaizer();
 		}
 	}

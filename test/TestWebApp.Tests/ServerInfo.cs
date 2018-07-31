@@ -24,7 +24,6 @@ namespace TestWebApp.Tests
 			Client = Server.CreateClient();
 
 			var services = new ServiceCollection();
-			services.AddSingleton(Client);
 			services.InstallClients(ConfigureClient);
 
 			Provider = services.BuildServiceProvider();
@@ -38,6 +37,7 @@ namespace TestWebApp.Tests
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
+			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client);
 			configure.WithProtobufBody();
 			configure.UseProtobufSerlaizer();
 		}
@@ -47,6 +47,7 @@ namespace TestWebApp.Tests
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
+			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client);
 			configure.WithJsonBody();
 			configure.UseJsonClientSerializer();
 		}
