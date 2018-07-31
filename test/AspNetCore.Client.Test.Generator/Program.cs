@@ -86,7 +86,7 @@ namespace AspNetCore.Client.Test.Generator
 
 			task.BuildEngine = mockedBuildEngine.Object;
 
-			var success = task.Execute();
+			var success = task.ByPassExecute();
 			Environment.CurrentDirectory = previousWorkDir;
 			return success;
 		}
