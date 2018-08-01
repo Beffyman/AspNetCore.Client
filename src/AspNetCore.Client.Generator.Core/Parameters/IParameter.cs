@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AspNetCore.Client.Generator.Core.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +8,7 @@ namespace AspNetCore.Client.Generator.Core.Parameters
 	/// <summary>
 	/// Indicates that the object should be placed as a parameter
 	/// </summary>
-	public interface IParameter
+	public interface IParameter : INavNode
 	{
 		/// <summary>
 		/// Display name of the parameter

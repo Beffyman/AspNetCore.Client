@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using AspNetCore.Client.Generator.CSharp;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -12,6 +14,29 @@ namespace AspNetCore.Client.Generator
 {
 	internal static class Helpers
 	{
+		public static HttpMethod HttpMethodFromEnum(HttpAttributeType type)
+		{
+			switch (type)
+			{
+				case HttpAttributeType.Delete:
+					return HttpMethod.Delete;
+				case HttpAttributeType.Get:
+					return HttpMethod.Get;
+				case HttpAttributeType.Patch:
+					return new HttpMethod("PATCH");
+				case HttpAttributeType.Post:
+					return HttpMethod.Post;
+				case HttpAttributeType.Put:
+					return HttpMethod.Put;
+				default:
+					throw new NotSupportedException($"HttpAttributeType of value {type} is not supported");
+			}
+		}
+
+		public static T EnumParse<T>(string value) where T: Enum
+		{
+			return (T)Enum.Parse(typeof(T), value);
+		}
 
 		public static FileStream WaitForFile(string fullPath, FileMode mode, FileAccess access, FileShare share)
 		{

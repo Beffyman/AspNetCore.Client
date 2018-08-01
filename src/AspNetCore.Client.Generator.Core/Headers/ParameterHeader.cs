@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Generator.Core.Navigation;
 using AspNetCore.Client.Generator.Core.Parameters;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,11 @@ namespace AspNetCore.Client.Generator.Core.Headers
 		{
 			Type = type;
 			DefaultValue = defaultValue;
+		}
+
+		public override IEnumerable<INavNode> GetChildren()
+		{
+			return null;
 		}
 	}
 }

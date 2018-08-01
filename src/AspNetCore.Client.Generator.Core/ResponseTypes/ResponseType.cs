@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.Generator.Core.Parameters;
+﻿using AspNetCore.Client.Generator.Core.Navigation;
+using AspNetCore.Client.Generator.Core.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -66,6 +67,11 @@ namespace AspNetCore.Client.Generator.Core.ResponseTypes
 		{
 			ActionType = null;
 			Status = status;
+		}
+
+		public IEnumerable<INavNode> GetChildren()
+		{
+			return null;
 		}
 	}
 }

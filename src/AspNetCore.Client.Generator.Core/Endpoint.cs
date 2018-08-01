@@ -1,18 +1,21 @@
 ﻿using AspNetCore.Client.Attributes;
 using AspNetCore.Client.Generator.Core.AttributeInterfaces;
 using AspNetCore.Client.Generator.Core.Headers;
+using AspNetCore.Client.Generator.Core.Navigation;
 using AspNetCore.Client.Generator.Core.ResponseTypes;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Linq;
+using AspNetCore.Client.Generator.Core.Routes;
 
 namespace AspNetCore.Client.Generator.Core
 {
 	/// <summary>
 	/// The information about an endpoint used for generation
 	/// </summary>
-	public class Endpoint : IResponseTypes, IHeaders, IRoute, IIgnored, IObsolete
+	public class Endpoint : IResponseTypes, IHeaders, IIgnored, IObsolete, INavNode
 	{
 		/// <summary>
 		/// Name of the endpoint/controller generated from
@@ -54,7 +57,7 @@ namespace AspNetCore.Client.Generator.Core
 		/// <summary>
 		/// Route required to hit the endpoint
 		/// </summary>
-		public string Route { get; set; }
+		public Route Route { get; set; }
 
 		//IIgnored
 
@@ -75,5 +78,18 @@ namespace AspNetCore.Client.Generator.Core
 		/// Message
 		/// </summary>
 		public string ObsoleteMessage { get; set; }
+
+		public Endpoint(Client parent)
+		{
+			Parent = parent;
+		}
+
+		public IEnumerable<INavNode> GetChildren()
+		{
+			return new List<INavNode>() { Parent }
+				.Union(ResponseTypes)
+				.Union(ConstantHeader)
+				.Union(ParameterHeader);
+		}
 	}
 }

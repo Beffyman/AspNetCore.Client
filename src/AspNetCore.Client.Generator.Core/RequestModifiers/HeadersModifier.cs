@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.Generator.Core.Parameters;
+﻿using AspNetCore.Client.Generator.Core.Navigation;
+using AspNetCore.Client.Generator.Core.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,6 +34,11 @@ namespace AspNetCore.Client.Generator.Core.RequestModifiers
 		public IRequestModifier ExtractModifier()
 		{
 			throw new NotImplementedException();
+		}
+
+		public IEnumerable<INavNode> GetChildren()
+		{
+			return null;
 		}
 	}
 }

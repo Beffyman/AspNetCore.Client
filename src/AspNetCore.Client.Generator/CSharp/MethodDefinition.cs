@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Net.Http;
+using AspNetCore.Client.Generator.Core;
 
 namespace AspNetCore.Client.Generator.CSharp
 {
@@ -136,7 +137,28 @@ namespace AspNetCore.Client.Generator.CSharp
 
 			Options.ActionResultReturn = MethodSyntax.ReturnType.ToFullString().Contains(Constants.IActionResult);
 
+			Options.ReturnType = MethodSyntax.ReturnType?.ToFullString();
+			if (!Options.ActionResultReturn)
+			{
+				var regex = new Regex(@"(ValueTask|Task|ActionResult)<(.+)>");
+				var match = regex.Match(Options.ReturnType);
+				if (match.Success)
+				{
+					Options.ReturnType = match.Groups[2].Value;
+				}
 
+				Options.ReturnType = Options.ReturnType.Trim();
+
+
+				if (Options.ReturnType == "void" || Options.ReturnType == "Task")
+				{
+					Options.ReturnType = null;
+				}
+			}
+			else
+			{
+				Options.ReturnType = null;
+			}
 		}
 
 
@@ -212,6 +234,22 @@ namespace AspNetCore.Client.Generator.CSharp
 		}
 
 
+		public Endpoint GetEndpoint(Core.Client client)
+		{
+			var endpoint = new Endpoint(client);
+			endpoint.Name = Name;
+			endpoint.Ignored = IsNotEndpoint;
+			endpoint.ConstantHeader = Headers.Select(x => new Core.Headers.ConstantHeader(x.Name, x.Value)).ToList();
+			endpoint.ParameterHeader = ParameterHeaders.Select(x => new Core.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
+			endpoint.ResponseTypes = Responses.Select(x => new Core.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
+			endpoint.Route = Options.Route;
+			endpoint.Obsolete = string.IsNullOrEmpty(Options.Obsolete);
+			endpoint.ObsoleteMessage = Options.Obsolete;
+			endpoint.HttpType = Helpers.HttpMethodFromEnum(Options.HttpType);
+			endpoint.ReturnType = Options.ReturnType;
+			return endpoint;
+		}
+
 		public string MethodParametersOutput(bool async, bool actionResponses)
 		{
 			if (!async && actionResponses)
@@ -259,40 +297,16 @@ namespace AspNetCore.Client.Generator.CSharp
 			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
 			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.AsyncMethodOutput), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
 
-			var returnType = MethodSyntax.ReturnType?.ToFullString();
-
-			if (!Options.ActionResultReturn)
-			{
-				var regex = new Regex(@"(ValueTask|Task|ActionResult)<(.+)>");
-				var match = regex.Match(returnType);
-				if (match.Success)
-				{
-					returnType = match.Groups[2].Value;
-				}
-
-				returnType = returnType.Trim();
-
-
-				if (returnType == "void" || returnType == "Task")
-				{
-					returnType = null;
-				}
-			}
-			else
-			{
-				returnType = null;
-			}
-
 
 			return
 $@"		{GetObsolete()}
-		{(returnType == null ? "void" : returnType)} {correctedName}({syncParameters});
+		{(Options.ReturnType == null ? "void" : Options.ReturnType)} {correctedName}({syncParameters});
 
 		{GetObsolete()}
 		HttpResponseMessage {correctedName}Raw({rawParameters});
 
 		{GetObsolete()}
-		{(returnType == null ? "Task" : $"{Helpers.GetTaskType()}<{returnType}>")} {correctedName}Async({asyncParameters});
+		{(Options.ReturnType == null ? "Task" : $"{Helpers.GetTaskType()}<{Options.ReturnType}>")} {correctedName}Async({asyncParameters});
 
 		{GetObsolete()}
 		{Helpers.GetTaskType()}<HttpResponseMessage> {correctedName}RawAsync({rawParameters});
@@ -309,40 +323,15 @@ $@"		{GetObsolete()}
 			string rawParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
 			string asyncParameters = string.Join($", {Environment.NewLine}			", new List<IEnumerable<string>> { Parameters.Select(x => x.MethodParameterOutput), allHeaders.Select(x => x.ParameterOutput()), ParentClass.Responses.Select(x => x.AsyncMethodOutput), Responses.Select(x => x.AsyncMethodOutput), OptionParameters(), CONSTANT_PARAMETERS }.SelectMany(x => x));
 
-			var returnType = MethodSyntax.ReturnType?.ToFullString();
-
-			if (!Options.ActionResultReturn)
-			{
-				var regex = new Regex(@"(ValueTask|Task|ActionResult)<(.+)>");
-				var match = regex.Match(returnType);
-				if (match.Success)
-				{
-					returnType = match.Groups[2].Value;
-				}
-
-				returnType = returnType.Trim();
-
-
-				if (returnType == "void" || returnType == "Task")
-				{
-					returnType = null;
-				}
-			}
-			else
-			{
-				returnType = null;
-			}
-
-
 			return
 $@"{GetObsolete()}
-		public {(returnType == null ? "void" : returnType)} {correctedName}({syncParameters})
+		public {(Options.ReturnType == null ? "void" : Options.ReturnType)} {correctedName}({syncParameters})
 		{{
 {string.Join(Environment.NewLine, RouteConstraints.Select(x => x.GetText()).Where(x => !string.IsNullOrEmpty(x)))}
 			{ResponseBuilder(false)}
 {string.Join(Environment.NewLine, ParentClass.Responses.Select(x => x.SyncMethodBlock))}
 {string.Join(Environment.NewLine, Responses.Select(x => x.SyncMethodBlock))}
-			{(returnType == null ? "return;" : ResultTypeReturn(false, returnType))}
+			{(Options.ReturnType == null ? "return;" : ResultTypeReturn(false, Options.ReturnType))}
 		}}
 
 {GetObsolete()}
@@ -354,13 +343,13 @@ $@"{GetObsolete()}
 		}}
 
 {GetObsolete()}
-		public async {(returnType == null ? "Task" : $"{Helpers.GetTaskType()}<{returnType}>")} {correctedName}Async({asyncParameters})
+		public async {(Options.ReturnType == null ? "Task" : $"{Helpers.GetTaskType()}<{Options.ReturnType}>")} {correctedName}Async({asyncParameters})
 		{{
 {string.Join(Environment.NewLine, RouteConstraints.Select(x => x.GetText()).Where(x => !string.IsNullOrEmpty(x)))}
 			{ResponseBuilder(true)}
 {string.Join(Environment.NewLine, ParentClass.Responses.Select(x => x.AsyncMethodBlock))}
 {string.Join(Environment.NewLine, Responses.Select(x => x.AsyncMethodBlock))}
-			{(returnType == null ? "return;" : ResultTypeReturn(true, returnType))}
+			{(Options.ReturnType == null ? "return;" : ResultTypeReturn(true, Options.ReturnType))}
 		}}
 
 {GetObsolete()}
@@ -553,6 +542,7 @@ $@"
 		public HttpAttributeType HttpType { get; set; }
 		public string Obsolete { get; set; }
 		public bool ActionResultReturn { get; set; }
+		public string ReturnType { get; set; }
 		public bool Authorize { get; set; }
 		public bool AllowAnonymous { get; set; }
 	}

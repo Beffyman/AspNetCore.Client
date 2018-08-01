@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Generator.Core.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,6 +24,11 @@ namespace AspNetCore.Client.Generator.Core.Headers
 		public ConstantHeader(string key, string value) : base(key)
 		{
 			Value = value;
+		}
+
+		public override IEnumerable<INavNode> GetChildren()
+		{
+			return null;
 		}
 	}
 }

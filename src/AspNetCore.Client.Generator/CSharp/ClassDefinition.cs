@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using AspNetCore.Client.Generator.Core;
+using System.Net;
 
 namespace AspNetCore.Client.Generator.CSharp
 {
@@ -116,13 +117,21 @@ namespace AspNetCore.Client.Generator.CSharp
 		}
 
 
-		public void CopyInfo(Core.Client client)
+		public Core.Client GetClient()
 		{
+			var client = new Core.Client();
 			client.Name = ControllerName;
 			client.Ignored = Options.NoClient;
 			client.ConstantHeader = Headers.Select(x => new Core.Headers.ConstantHeader(x.Name, x.Value)).ToList();
 			client.ParameterHeader = ParameterHeaders.Select(x => new Core.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
-			client.ResponseTypes = Responses.Select(x => new Core.ResponseTypes.ResponseType(x.Type,x.Status)).ToList();
+			client.ResponseTypes = Responses.Select(x => new Core.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
+			client.Route = Route;
+			client.NamespaceSuffix = Options.NamespaceSuffix;
+			client.Obsolete = string.IsNullOrEmpty(Options.Obsolete);
+			client.ObsoleteMessage = Options.Obsolete;
+			client.Endpoints = Methods.Select(x => x.GetEndpoint(client)).ToList();
+
+			return client;
 		}
 
 		public string GetText()
