@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.Generator.Data;
+﻿using AspNetCore.Client.Generator.Core;
+using AspNetCore.Client.Generator.CSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -96,6 +97,8 @@ namespace AspNetCore.Client.Generator
 			Log.LogCommandLine(Settings.RouteToServiceProjectFolder);
 
 			//Start out by loading all cs files into memory
+
+			var context = new GenerationContext();
 
 			var parsedFiles = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")

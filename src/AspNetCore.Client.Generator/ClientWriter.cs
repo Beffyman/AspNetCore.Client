@@ -1,5 +1,5 @@
 ﻿using AspNetCore.Client;
-using AspNetCore.Client.Generator.Data;
+using AspNetCore.Client.Generator.CSharp;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;

@@ -7,7 +7,7 @@
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 		<LangVersion>latest</LangVersion>
-		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\AspNetCore.Client.Core.Protobuf.xml</DocumentationFile>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\AspNetCore.Client.Protobuf.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
