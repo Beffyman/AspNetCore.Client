@@ -13,7 +13,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Net.Http;
-using AspNetCore.Client.Generator.Core;
+using AspNetCore.Client.Generator.Framework;
+using AspNetCore.Client.Generator.Framework.Routes;
 
 namespace AspNetCore.Client.Generator.CSharp
 {
@@ -234,15 +235,15 @@ namespace AspNetCore.Client.Generator.CSharp
 		}
 
 
-		public Endpoint GetEndpoint(Core.Client client)
+		public Endpoint GetEndpoint(Framework.Client client)
 		{
 			var endpoint = new Endpoint(client);
 			endpoint.Name = Name;
 			endpoint.Ignored = IsNotEndpoint;
-			endpoint.ConstantHeader = Headers.Select(x => new Core.Headers.ConstantHeader(x.Name, x.Value)).ToList();
-			endpoint.ParameterHeader = ParameterHeaders.Select(x => new Core.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
-			endpoint.ResponseTypes = Responses.Select(x => new Core.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
-			endpoint.Route = Options.Route;
+			endpoint.ConstantHeader = Headers.Select(x => new Framework.Headers.ConstantHeader(x.Name, x.Value)).ToList();
+			endpoint.ParameterHeader = ParameterHeaders.Select(x => new Framework.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
+			endpoint.ResponseTypes = Responses.Select(x => new Framework.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
+			endpoint.Route = new Route(Route);
 			endpoint.Obsolete = string.IsNullOrEmpty(Options.Obsolete);
 			endpoint.ObsoleteMessage = Options.Obsolete;
 			endpoint.HttpType = Helpers.HttpMethodFromEnum(Options.HttpType);

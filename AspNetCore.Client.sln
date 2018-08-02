@@ -52,7 +52,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Test.Gene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Generator", "src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj", "{D25A8FDE-BB00-49FD-8ABF-A494B09268E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Client.Generator.Core", "src\AspNetCore.Client.Generator.Core\AspNetCore.Client.Generator.Core.csproj", "{862DD062-0098-4700-8CDB-7570AF9655F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Client.Generator.Framework", "src\AspNetCore.Client.Generator.Framework\AspNetCore.Client.Generator.Framework.csproj", "{862DD062-0098-4700-8CDB-7570AF9655F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

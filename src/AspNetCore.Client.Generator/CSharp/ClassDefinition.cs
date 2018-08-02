@@ -7,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using AspNetCore.Client.Generator.Core;
+using AspNetCore.Client.Generator.Framework;
 using System.Net;
+using AspNetCore.Client.Generator.Framework.Routes;
 
 namespace AspNetCore.Client.Generator.CSharp
 {
@@ -117,15 +118,15 @@ namespace AspNetCore.Client.Generator.CSharp
 		}
 
 
-		public Core.Client GetClient()
+		public Framework.Client GetClient()
 		{
-			var client = new Core.Client();
+			var client = new Framework.Client();
 			client.Name = ControllerName;
 			client.Ignored = Options.NoClient;
-			client.ConstantHeader = Headers.Select(x => new Core.Headers.ConstantHeader(x.Name, x.Value)).ToList();
-			client.ParameterHeader = ParameterHeaders.Select(x => new Core.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
-			client.ResponseTypes = Responses.Select(x => new Core.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
-			client.Route = Route;
+			client.ConstantHeader = Headers.Select(x => new Framework.Headers.ConstantHeader(x.Name, x.Value)).ToList();
+			client.ParameterHeader = ParameterHeaders.Select(x => new Framework.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
+			client.ResponseTypes = Responses.Select(x => new Framework.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
+			client.Route = new Route(Route);
 			client.NamespaceSuffix = Options.NamespaceSuffix;
 			client.Obsolete = string.IsNullOrEmpty(Options.Obsolete);
 			client.ObsoleteMessage = Options.Obsolete;

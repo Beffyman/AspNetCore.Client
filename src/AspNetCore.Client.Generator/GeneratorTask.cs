@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Generator.Core;
+﻿using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.CSharp;
 using System;
 using System.Collections.Generic;
@@ -103,7 +103,7 @@ namespace AspNetCore.Client.Generator
 			var parsedFiles = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
-									.Select(cs => new ParsedFile(cs))
+									.Select(cs => new ParsedFile(context, cs))
 									.ToList();
 
 			ClientWriter.WriteClientsFile(parsedFiles);

@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Generator.Core;
+﻿using AspNetCore.Client.Generator.Framework;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -82,7 +82,7 @@ namespace AspNetCore.Client.Generator.CSharp
 						var attributes = cd.AttributeLists.SelectMany(x => x.Attributes).ToList();
 						var methods = cd.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
 
-						var client = new Core.Client();
+						var client = new Framework.Client();
 						var def = new ClassDefinition(nsd.Name.ToString(), cd.Identifier.ValueText, this, cd, attributes, methods);
 						Classes.Add(def);
 						context.Clients.Add(client);
