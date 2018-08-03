@@ -18,13 +18,8 @@ namespace AspNetCore.Client.Generator.CSharp
 		public string Name { get; }
 		public string ControllerName => Name.Replace("Controller", "");
 		public string ClientName => Name.Replace("Controller", "Client");
-		public string Namespace { get; }
 		public string NamespaceVersion { get; }
 
-		public ClassDeclarationSyntax ClassDeclaration;
-		public ParsedFile File { get; }
-
-		public IList<AttributeSyntax> Attributes { get; }
 		public IList<MethodDefinition> Methods { get; }
 		public IList<ResponseTypeDefinition> Responses { get; }
 
@@ -46,10 +41,6 @@ namespace AspNetCore.Client.Generator.CSharp
 			IList<MethodDeclarationSyntax> methods)
 		{
 			Name = className;
-			Namespace = @namespace;
-			File = file;
-			ClassDeclaration = classDeclaration;
-			Attributes = attributes;
 
 			Options = new ClassOptions();
 
@@ -118,9 +109,9 @@ namespace AspNetCore.Client.Generator.CSharp
 		}
 
 
-		public Framework.Client GetClient()
+		public Framework.Controller GetClient()
 		{
-			var client = new Framework.Client();
+			var client = new Framework.Controller();
 			client.Name = ControllerName;
 			client.Ignored = Options.NoClient;
 			client.ConstantHeader = Headers.Select(x => new Framework.Headers.ConstantHeader(x.Name, x.Value)).ToList();

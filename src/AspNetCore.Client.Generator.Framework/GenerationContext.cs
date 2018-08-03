@@ -13,11 +13,20 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <summary>
 		/// Clients that will be generated
 		/// </summary>
-		public IList<Client> Clients { get; set; } = new List<Client>();
+		public IList<Controller> Clients { get; set; } = new List<Controller>();
 
 		/// <summary>
 		/// All of the endpoints inside the clients
 		/// </summary>
 		public IEnumerable<Endpoint> Endpoints => Clients.SelectMany(x => x.Endpoints);
+
+
+		public GenerationContext Merge(GenerationContext other)
+		{
+			return new GenerationContext
+			{
+				Clients = this.Clients.Union(other.Clients).ToList()
+			};
+		}
 	}
 }

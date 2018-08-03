@@ -1,5 +1,6 @@
 ﻿using AspNetCore.Client.Attributes;
 using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
+using AspNetCore.Client.Generator.Framework.Dependencies;
 using AspNetCore.Client.Generator.Framework.Headers;
 using AspNetCore.Client.Generator.Framework.Navigation;
 using AspNetCore.Client.Generator.Framework.ResponseTypes;
@@ -7,6 +8,7 @@ using AspNetCore.Client.Generator.Framework.Routes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace AspNetCore.Client.Generator.Framework
@@ -14,14 +16,17 @@ namespace AspNetCore.Client.Generator.Framework
 	/// <summary>
 	/// Information about a group of endpoints used for generation
 	/// </summary>
-	public class Client : IResponseTypes, IHeaders, IIgnored, INamespaceSuffix, IObsolete, INavNode
+	public class Controller : IResponseTypes, IHeaders, IIgnored, INamespaceSuffix, IObsolete, INavNode, IAuthorize
 	{
 		/// <summary>
 		/// Name of the endpoint/controller generated from
 		/// </summary>
 		public string Name { get; set; }
 
-
+		/// <summary>
+		/// Version of the route, will group controllers with similar versions together
+		/// </summary>
+		public string NamespaceVersion { get; set; }
 
 		/// <summary>
 		/// List of response types that can be added to the context
@@ -78,9 +83,27 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public string ObsoleteMessage { get; set; }
 
+		//IAuthoize
+
+		/// <summary>
+		/// Should this endpoint require credentials
+		/// </summary>
+		public bool IsSecured { get; set; }
+
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return ResponseTypes.Cast<INavNode>().Union(ConstantHeader).Union(ParameterHeader);
+		}
+
+
+
+		private static IEnumerable<Type> _allDependencies = typeof(IDependency).GetTypeInfo().Assembly
+											.GetTypes()
+											.Where(x => typeof(IDependency).IsAssignableFrom(x) && !x.GetTypeInfo().IsAbstract)
+											.ToList();
+		public IEnumerable<IDependency> GetInjectionDependencies()
+		{
+			return _allDependencies.Where(x => x != typeof(ClientDependency)).Select(x => Activator.CreateInstance(x) as IDependency);
 		}
 	}
 }

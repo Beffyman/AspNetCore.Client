@@ -1135,10 +1135,10 @@ namespace FancySuffix
 
 	internal class ValuesClient : IValuesClient
 	{
-		public readonly ITestWebAppClientWrapper Client;
-		public readonly IHttpOverride HttpOverride;
-		public readonly IHttpSerializer Serializer;
-		public readonly IRequestModifier Modifier;
+		protected readonly ITestWebAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IRequestModifier Modifier;
 
 		public ValuesClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
 		{

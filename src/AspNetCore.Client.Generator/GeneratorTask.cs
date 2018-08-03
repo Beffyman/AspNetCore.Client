@@ -98,12 +98,10 @@ namespace AspNetCore.Client.Generator
 
 			//Start out by loading all cs files into memory
 
-			var context = new GenerationContext();
-
 			var parsedFiles = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
-									.Select(cs => new ParsedFile(context, cs))
+									.Select(cs => new ParsedFile(cs))
 									.ToList();
 
 			ClientWriter.WriteClientsFile(parsedFiles);

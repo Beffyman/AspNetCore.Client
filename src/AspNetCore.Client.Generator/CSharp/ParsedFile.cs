@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Client.Generator.Framework;
+using AspNetCore.Client.Generator.Temp;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,13 +22,13 @@ namespace AspNetCore.Client.Generator.CSharp
 
 		public List<string> UsingStatements { get; }
 
-		public IList<ClassDefinition> Classes { get; }
+		public GenerationContext Context { get; set; }
 
 		public bool Failed { get; }
 		public bool UnexpectedFailure { get; }
 		public string Error { get; }
 
-		public ParsedFile(GenerationContext context, string file)
+		public ParsedFile(string file)
 		{
 			Name = Path.GetFileNameWithoutExtension(file);
 			FileName = file;
@@ -40,7 +41,7 @@ namespace AspNetCore.Client.Generator.CSharp
 
 				Syntax = CSharpSyntaxTree.ParseText(FileText, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
 
-				Classes = new List<ClassDefinition>();
+				Context = new GenerationContext();
 				Root = Syntax.GetRoot() as CompilationUnitSyntax;
 				var usingStatements = Root.DescendantNodes().OfType<UsingDirectiveSyntax>().ToList();
 
@@ -78,16 +79,10 @@ namespace AspNetCore.Client.Generator.CSharp
 
 					foreach (var cd in classDeclarations)
 					{
-
-						var attributes = cd.AttributeLists.SelectMany(x => x.Attributes).ToList();
-						var methods = cd.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
-
-						var client = new Framework.Client();
-						var def = new ClassDefinition(nsd.Name.ToString(), cd.Identifier.ValueText, this, cd, attributes, methods);
-						Classes.Add(def);
-						context.Clients.Add(client);
+						Context.Clients.Add(ClassParser.ReadAsClient(cd));
 					}
 				}
+
 			}
 			catch (NotSupportedException nse)
 			{

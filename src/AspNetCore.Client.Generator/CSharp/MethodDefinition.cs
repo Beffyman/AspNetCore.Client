@@ -116,8 +116,6 @@ namespace AspNetCore.Client.Generator.CSharp
 
 			//Authorize Attribute
 			Options.Authorize = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Authorize)) != null;
-			//AllowAnonymous Attribute
-			Options.AllowAnonymous = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.AllowAnonymous)) != null;
 
 
 			//Response types
@@ -235,7 +233,7 @@ namespace AspNetCore.Client.Generator.CSharp
 		}
 
 
-		public Endpoint GetEndpoint(Framework.Client client)
+		public Endpoint GetEndpoint(Framework.Controller client)
 		{
 			var endpoint = new Endpoint(client);
 			endpoint.Name = Name;
@@ -545,6 +543,5 @@ $@"
 		public bool ActionResultReturn { get; set; }
 		public string ReturnType { get; set; }
 		public bool Authorize { get; set; }
-		public bool AllowAnonymous { get; set; }
 	}
 }

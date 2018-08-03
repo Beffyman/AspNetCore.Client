@@ -9,13 +9,18 @@ using System.Net.Http;
 using System.Text;
 using System.Linq;
 using AspNetCore.Client.Generator.Framework.Routes;
+using AspNetCore.Client.Generator.Framework.Parameters;
+using AspNetCore.Client.Generator.Framework.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.Routes.Constraints;
+using AspNetCore.Client.Generator.Framework.Dependencies;
+using System.Reflection;
 
 namespace AspNetCore.Client.Generator.Framework
 {
 	/// <summary>
 	/// The information about an endpoint used for generation
 	/// </summary>
-	public class Endpoint : IResponseTypes, IHeaders, IIgnored, IObsolete, INavNode
+	public class Endpoint : IResponseTypes, IHeaders, IIgnored, IObsolete, INavNode, IAuthorize
 	{
 		/// <summary>
 		/// Name of the endpoint/controller generated from
@@ -48,9 +53,14 @@ namespace AspNetCore.Client.Generator.Framework
 		public IList<ParameterHeader> ParameterHeader { get; set; } = new List<ParameterHeader>();
 
 		/// <summary>
+		/// Parameters that the endpoint has, can be placed in many different locations in a request
+		/// </summary>
+		public IList<IParameter> Parameters { get; set; } = new List<IParameter>();
+
+		/// <summary>
 		/// Parent of this endpoint
 		/// </summary>
-		public Client Parent { get; set; }
+		public Controller Parent { get; set; }
 
 		//IRoute
 
@@ -79,7 +89,16 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public string ObsoleteMessage { get; set; }
 
-		public Endpoint(Client parent)
+
+		//IAuthoize
+
+		/// <summary>
+		/// Should this endpoint require credentials
+		/// </summary>
+		public bool IsSecured { get; set; }
+
+
+		public Endpoint(Controller parent)
 		{
 			Parent = parent;
 		}
@@ -89,7 +108,64 @@ namespace AspNetCore.Client.Generator.Framework
 			return new List<INavNode>() { Parent }
 				.Union(ResponseTypes)
 				.Union(ConstantHeader)
+				.Union(Parameters)
 				.Union(ParameterHeader);
+		}
+
+		public IEnumerable<IParameter> GetParameters()
+		{
+			return GetChildren().OfType<IParameter>();
+		}
+
+		public IEnumerable<IParameter> GetParametersWithoutResponseTypes()
+		{
+			return GetChildren().Where(x => !(x is ResponseType)).OfType<IParameter>();
+		}
+
+		public IEnumerable<RouteParameter> GetRouteParameters()
+		{
+			return GetChildren().OfType<RouteParameter>();
+		}
+
+		public IEnumerable<QueryParameter> GetQueryParameters()
+		{
+			return GetChildren().OfType<QueryParameter>();
+		}
+
+		public BodyParameter GetBodyParameter()
+		{
+			return GetChildren().OfType<BodyParameter>().SingleOrDefault();
+		}
+
+		public IEnumerable<Header> GetHeaders()
+		{
+			return GetChildren().OfType<Header>();
+		}
+
+		public IEnumerable<ResponseType> GetResponseTypes()
+		{
+			return GetChildren().OfType<ResponseType>();
+		}
+
+		public IEnumerable<IRequestModifier> GetRequestModifiers()
+		{
+			return GetChildren().OfType<IRequestModifier>();
+		}
+
+		/// <summary>
+		/// Full route template for the endpoint
+		/// </summary>
+		public string FullRoute => Parent.Route.Merge(Route).Value;
+
+		public IEnumerable<RouteConstraint> GetRouteConstraints()
+		{
+			return Parent.Route.Merge(Route).Constraints;
+		}
+
+
+		public bool RequiresAuthorization()
+		{
+			return GetChildren().OfType<IAuthorize>().Any(x => x.IsSecured);
 		}
 	}
 }

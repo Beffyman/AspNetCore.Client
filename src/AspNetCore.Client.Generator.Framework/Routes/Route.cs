@@ -69,7 +69,7 @@ namespace AspNetCore.Client.Generator.Framework.Routes
 		/// <returns></returns>
 		public Route Merge(Route route)
 		{
-			return new Route($"{this.Value}/{route?.Value}");
+			return new Route($"{this?.Value}/{route?.Value}");
 		}
 	}
 }

@@ -8,39 +8,29 @@ namespace AspNetCore.Client.Generator.CSharp
 {
 	public class ParameterDefinition
 	{
-		public MethodDefinition ParentMethod { get; }
 		public string Name { get; }
 		public string Type { get; }
 		public string Default { get; }
-		public bool IsRouteVariable { get; }
 
 		public ParameterAttributeOptions Options { get; }
 
 
-		public ParameterDefinition(
-			MethodDefinition method,
-			ParameterSyntax parameter)
+		public ParameterDefinition(ParameterSyntax parameter, string fullRoute)
 		{
-			ParentMethod = method;
-
-
-
 			Name = parameter.Identifier.ValueText.Trim();
 			Type = parameter.Type.ToFullString().Trim();
 			Default = parameter.Default?.Value.ToFullString().Trim();
-			IsRouteVariable = Helpers.IsRouteParameter(Name, ParentMethod.FullRouteTemplate) || (Helpers.IsEnumerable(Type) && Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)));
-
-
 
 			var attributes = parameter.AttributeLists.SelectMany(x => x.Attributes).ToList();
-
-
 
 			Options = new ParameterAttributeOptions
 			{
 				FromRoute = attributes.Any(x => x.Name.ToFullString().StartsWith(Constants.FromRoute)),
 				FromBody = attributes.Any(x => x.Name.ToFullString().StartsWith(Constants.FromBody)) || !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
 			};
+
+			Options.FromRoute = Options.FromRoute || (Helpers.IsRouteParameter(Name, fullRoute) || (Helpers.IsEnumerable(Type) && Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))));
+
 
 			var fromQueryAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.FromQuery));
 			if (fromQueryAttribute != null)//Fetch route from RouteAttribute
@@ -75,12 +65,12 @@ namespace AspNetCore.Client.Generator.CSharp
 
 			if (Options.FromQuery)
 			{
-				IsRouteVariable = true;
+				Options.FromRoute = true;
 			}
 
 			if (Options.FromBody)
 			{
-				IsRouteVariable = false;
+				Options.FromRoute = false;
 			}
 
 		}
@@ -127,7 +117,7 @@ namespace AspNetCore.Client.Generator.CSharp
 
 					return $@"{{string.Join(""&"",{RouteName}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", Type)}}}""))}}";
 				}
-				else if (Default != null || !IsRouteVariable || Options.FromQuery)
+				else if (Default != null || !Options.FromRoute || Options.FromQuery)
 				{
 					return $"{RouteName}={{{Helpers.GetRouteStringTransform(RouteName, Type)}}}";
 				}
