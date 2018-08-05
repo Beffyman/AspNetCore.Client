@@ -40,7 +40,7 @@ namespace AspNetCore.Client
 		/// <param name="clientOrRequest"></param>
 		/// <param name="requestModifier"></param>
 		/// <returns></returns>
-		public static T WithRequestModifiers<T>(this T clientOrRequest, IRequestModifier requestModifier) where T : IHttpSettingsContainer
+		public static T WithRequestModifiers<T>(this T clientOrRequest, IHttpRequestModifier requestModifier) where T : IHttpSettingsContainer
 		{
 			return requestModifier.ApplyModifiers(clientOrRequest);
 		}

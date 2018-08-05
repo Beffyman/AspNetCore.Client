@@ -42,16 +42,5 @@ namespace AspNetCore.Client.Generator.CSharp
 			Name = name?.Replace("\"", "").Trim();
 			Value = value?.Replace("\"", "").Trim();
 		}
-
-
-		public string MethodOutput()
-		{
-			return GetMethodOutput($@"""{Name}""", $@"""{Value}""");
-		}
-
-		public static string GetMethodOutput(string key, string value)
-		{
-			return $@".WithHeader({key}, {value})";
-		}
 	}
 }

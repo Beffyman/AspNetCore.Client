@@ -195,9 +195,9 @@ namespace FancySuffix
 		public readonly ITestWebAppClientWrapper Client;
 		public readonly IHttpOverride HttpOverride;
 		public readonly IHttpSerializer Serializer;
-		public readonly IRequestModifier Modifier;
+		public readonly IHttpRequestModifier Modifier;
 
-		public NamespacedClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
+		public NamespacedClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;
@@ -1138,9 +1138,9 @@ namespace FancySuffix
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
 		protected readonly IHttpSerializer Serializer;
-		protected readonly IRequestModifier Modifier;
+		protected readonly IHttpRequestModifier Modifier;
 
-		public ValuesClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
+		public ValuesClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;
@@ -1274,8 +1274,8 @@ namespace FancySuffix
 				.WithCookies(cookies)
 				.WithHeaders(headers)
 				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
 				.WithTimeout(timeout ?? Client.Timeout)
+				.AllowAnyHttpStatus()
 				.GetAsync(cancellationToken).ConfigureAwait(false);
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
@@ -2728,7 +2728,7 @@ namespace FancySuffix
 			IDictionary<string, object> headers = null, 
 			CancellationToken cancellationToken = default(CancellationToken))
 		{
-			if(!int.TryParse(id.ToString(),out int idOUT))
+			if(!int.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an int.");
 			}
@@ -5264,9 +5264,9 @@ namespace TestWebApp.Clients.V1
 		public readonly ITestWebAppClientWrapper Client;
 		public readonly IHttpOverride HttpOverride;
 		public readonly IHttpSerializer Serializer;
-		public readonly IRequestModifier Modifier;
+		public readonly IHttpRequestModifier Modifier;
 
-		public TestClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
+		public TestClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;
@@ -5456,9 +5456,9 @@ namespace TestWebApp.Clients.V2
 		public readonly ITestWebAppClientWrapper Client;
 		public readonly IHttpOverride HttpOverride;
 		public readonly IHttpSerializer Serializer;
-		public readonly IRequestModifier Modifier;
+		public readonly IHttpRequestModifier Modifier;
 
-		public TestClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
+		public TestClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;

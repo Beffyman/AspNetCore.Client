@@ -7,6 +7,6 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 {
 	public interface IRequestModifier : INavNode
 	{
-		IRequestModifier ExtractModifier();
+
 	}
 }

@@ -2,6 +2,7 @@
 using AspNetCore.Client.Generator.CSharp;
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.Parameters;
+using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.Routes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -172,7 +173,6 @@ namespace AspNetCore.Client.Generator.Temp
 			endpoint.IsSecured = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Authorize)) != null;
 
 
-
 			//Response types
 			var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(Constants.ProducesResponseType));
 			var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
@@ -186,12 +186,21 @@ namespace AspNetCore.Client.Generator.Temp
 			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.FullRoute)).ToList();
 
 
-			var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.Name, x.Type, x.Default)).ToList();
-			var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Name, x.Type, x.Default)).ToList();
+			var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
+			var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Options.QueryName, x.Type, x.Default)).ToList();
 			var bodyParams = parameters.Where(x => x.Options.FromBody).Select(x => new BodyParameter(x.Name, x.Type, x.Default)).SingleOrDefault();
 
 			endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParams }).ToList();
 
+
+			endpoint.Parameters.Add(new CancellationTokenModifier());
+			endpoint.Parameters.Add(new CookieModifier());
+			endpoint.Parameters.Add(new HeadersModifier());
+			endpoint.Parameters.Add(new TimeoutModifier());
+			if (endpoint.IsSecured)
+			{
+				endpoint.Parameters.Add(new SecurityModifier());
+			}
 
 
 			var parameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(HeaderParameterAttribute.AttributeName))

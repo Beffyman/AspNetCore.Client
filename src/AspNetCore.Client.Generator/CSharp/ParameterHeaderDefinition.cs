@@ -62,35 +62,5 @@ namespace AspNetCore.Client.Generator.CSharp
 				Type = Regex.Replace(Type, @"typeof\((.+)\)", "$1 ");
 			}
 		}
-
-
-		public string ParameterOutput()
-		{
-			if (string.IsNullOrEmpty(DefaultValue))
-			{
-				return $@"{Type} {Name}";
-			}
-			else
-			{
-				if (Type.Equals("string", StringComparison.CurrentCultureIgnoreCase))
-				{
-					return $@"{Type} {Name} = ""{DefaultValue}""";
-				}
-				else
-				{
-					return $@"{Type} {Name} = {DefaultValue}";
-				}
-			}
-		}
-
-		public string MethodOutput()
-		{
-			return GetMethodOutput($@"""{Name}""", Name);
-		}
-
-		public static string GetMethodOutput(string key, string value)
-		{
-			return $@".WithHeader({key}, {value})";
-		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.Framework.Routes.Constraints
 {
@@ -14,14 +15,22 @@ namespace AspNetCore.Client.Generator.Framework.Routes.Constraints
 											.ToList();
 
 
-		public string ParamterName { get; set; }
+		public string ParameterName { get; set; }
 		public string Constraint { get; set; }
 
 
 		public RouteConstraint(string name, string constraint)
 		{
-			ParamterName = name;
+			ParameterName = name;
 			Constraint = constraint;
+		}
+
+
+		protected static Regex GetConstraintValueRegex = new Regex(@".+\((.+)\)");
+
+		public virtual string GetConstraintValue()
+		{
+			return GetConstraintValueRegex.Match(Constraint).Groups[1].Value;
 		}
 
 		public abstract bool IsMatch();

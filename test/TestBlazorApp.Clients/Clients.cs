@@ -146,9 +146,9 @@ namespace TestBlazorApp.Clients
 		public readonly ITestBlazorAppClientWrapper Client;
 		public readonly IHttpOverride HttpOverride;
 		public readonly IHttpSerializer Serializer;
-		public readonly IRequestModifier Modifier;
+		public readonly IHttpRequestModifier Modifier;
 
-		public SampleDataClient(ITestBlazorAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IRequestModifier modifier)
+		public SampleDataClient(ITestBlazorAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
 		{
 			Client = client;
 			HttpOverride = httpOverride;

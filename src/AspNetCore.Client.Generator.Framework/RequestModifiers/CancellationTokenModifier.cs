@@ -25,17 +25,6 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		/// </summary>
 		public string DefaultValue => "default";
 
-		public CancellationTokenModifier()
-		{
-
-		}
-
-
-
-		public IRequestModifier ExtractModifier()
-		{
-			throw new NotImplementedException();
-		}
 
 		public IEnumerable<INavNode> GetChildren()
 		{

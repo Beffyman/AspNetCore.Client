@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AspNetCore.Client.Generator.Temp;
 
 namespace AspNetCore.Client.Generator
 {
@@ -104,7 +105,7 @@ namespace AspNetCore.Client.Generator
 									.Select(cs => new ParsedFile(cs))
 									.ToList();
 
-			ClientWriter.WriteClientsFile(parsedFiles);
+			ClassWriter.WriteClientsFile(parsedFiles);
 
 			Log.LogCommandLine("Client Generation Successful!");
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] END");

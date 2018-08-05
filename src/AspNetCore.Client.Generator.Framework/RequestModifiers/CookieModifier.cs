@@ -26,17 +26,6 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		/// </summary>
 		public string DefaultValue => "null";
 
-		public CookieModifier()
-		{
-
-		}
-
-
-
-		public IRequestModifier ExtractModifier()
-		{
-			throw new NotImplementedException();
-		}
 
 		public IEnumerable<INavNode> GetChildren()
 		{

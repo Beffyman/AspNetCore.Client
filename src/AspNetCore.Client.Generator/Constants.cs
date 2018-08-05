@@ -33,7 +33,7 @@ namespace AspNetCore.Client.Generator
 		public const string Serializer = nameof(IHttpSerializer);
 		public const string SerializerField = "Serializer";
 
-		public const string RequestModifier = nameof(IRequestModifier);
+		public const string RequestModifier = nameof(IHttpRequestModifier);
 		public const string RequestModifierField = "Modifier";
 
 

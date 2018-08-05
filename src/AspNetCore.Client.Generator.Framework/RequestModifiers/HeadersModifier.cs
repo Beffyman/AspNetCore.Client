@@ -24,17 +24,6 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		/// </summary>
 		public string DefaultValue => "null";
 
-		public HeadersModifier()
-		{
-
-		}
-
-
-
-		public IRequestModifier ExtractModifier()
-		{
-			throw new NotImplementedException();
-		}
 
 		public IEnumerable<INavNode> GetChildren()
 		{

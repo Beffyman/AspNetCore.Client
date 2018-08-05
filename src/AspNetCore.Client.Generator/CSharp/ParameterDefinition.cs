@@ -61,11 +61,13 @@ namespace AspNetCore.Client.Generator.CSharp
 			if ((Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))))
 			{
 				Options.FromQuery = true;
+				Options.QueryName = Name;
 			}
 
 			if (Options.FromQuery)
 			{
 				Options.FromRoute = true;
+				Options.RouteName = Name;
 			}
 
 			if (Options.FromBody)
@@ -94,77 +96,6 @@ namespace AspNetCore.Client.Generator.CSharp
 				}
 			}
 		}
-
-		/// <summary>
-		/// What is inside the route = "api/{name}", possibly a query string
-		/// </summary>
-		public string RouteOutput
-		{
-			get
-			{
-				//Is route arg a enumerable/array?
-				if (Helpers.IsEnumerable(Type))
-				{
-					string name = null;
-					if (Options.QueryName != null)
-					{
-						name = Options.QueryName;
-					}
-					else
-					{
-						name = $"{{nameof({RouteName})}}";
-					}
-
-					return $@"{{string.Join(""&"",{RouteName}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", Type)}}}""))}}";
-				}
-				else if (Default != null || !Options.FromRoute || Options.FromQuery)
-				{
-					return $"{RouteName}={{{Helpers.GetRouteStringTransform(RouteName, Type)}}}";
-				}
-				else
-				{
-					return $"{{{Helpers.GetRouteStringTransform(RouteName, Type)}}}";
-				}
-			}
-		}
-
-
-		/// <summary>
-		/// What goes into the void Get(string name)
-		/// </summary>
-		public string MethodParameterOutput
-		{
-			get
-			{
-				if (Default != null)
-				{
-					return $"{Type} {RouteName} = {Default}";
-				}
-				else
-				{
-					return $"{Type} {RouteName}";
-				}
-			}
-		}
-
-		/// <summary>
-		/// What goes into the client.Get(route)/client.Post(route,obj)
-		/// </summary>
-		public string HttpCallOutput
-		{
-			get
-			{
-				if (this.Options.FromBody)
-				{
-					return RouteName;
-				}
-				else
-				{
-					return null;
-				}
-			}
-		}
-
 
 		public override string ToString()
 		{

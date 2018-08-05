@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.Framework.Routes.Constraints
 {
@@ -9,6 +10,14 @@ namespace AspNetCore.Client.Generator.Framework.Routes.Constraints
 		public RegexConstraint(string name, string constraint) : base(name, constraint)
 		{
 
+		}
+
+
+		public override string GetConstraintValue()
+		{
+			Regex regexParser = new Regex(@"regex\((.+)\)");
+
+			return regexParser.Match(Constraint).Groups[1].Value;
 		}
 
 		public override bool IsMatch()

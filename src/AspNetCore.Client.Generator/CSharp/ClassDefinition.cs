@@ -16,8 +16,6 @@ namespace AspNetCore.Client.Generator.CSharp
 	public class ClassDefinition
 	{
 		public string Name { get; }
-		public string ControllerName => Name.Replace("Controller", "");
-		public string ClientName => Name.Replace("Controller", "Client");
 		public string NamespaceVersion { get; }
 
 		public IList<MethodDefinition> Methods { get; }
@@ -30,8 +28,7 @@ namespace AspNetCore.Client.Generator.CSharp
 		private static Regex RouteVersionRegex = new Regex(@"\/([v|V]\d+)\/");
 
 		public ClassOptions Options { get; set; }
-
-		public bool NotEmpty => !Options.NoClient && (Methods?.Any(x => !x.IsNotEndpoint) ?? false);
+		
 
 		public ClassDefinition(string @namespace,
 			string className,
@@ -105,104 +102,6 @@ namespace AspNetCore.Client.Generator.CSharp
 			Methods = methods.Where(x => x.Modifiers.Any(y => y.Text == "public"))
 				.Select(x => new MethodDefinition(this, x))
 				.ToList();
-
-		}
-
-
-		public Framework.Controller GetClient()
-		{
-			var client = new Framework.Controller();
-			client.Name = ControllerName;
-			client.Ignored = Options.NoClient;
-			client.ConstantHeader = Headers.Select(x => new Framework.Headers.ConstantHeader(x.Name, x.Value)).ToList();
-			client.ParameterHeader = ParameterHeaders.Select(x => new Framework.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
-			client.ResponseTypes = Responses.Select(x => new Framework.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
-			client.Route = new Route(Route);
-			client.NamespaceSuffix = Options.NamespaceSuffix;
-			client.Obsolete = string.IsNullOrEmpty(Options.Obsolete);
-			client.ObsoleteMessage = Options.Obsolete;
-			client.Endpoints = Methods.Select(x => x.GetEndpoint(client)).ToList();
-
-			return client;
-		}
-
-		public string GetText()
-		{
-
-			var fields = new List<string>();
-
-			fields.Add($@"		public readonly I{Settings.ClientInterfaceName}Wrapper {Constants.ClientInterfaceName};");
-			fields.Add($@"		public readonly {Constants.HttpOverride} {Constants.HttpOverrideField};");
-			fields.Add($@"		public readonly {Constants.Serializer} {Constants.SerializerField};");
-			fields.Add($@"		public readonly {Constants.RequestModifier} {Constants.RequestModifierField};");
-
-			var classFields = string.Join(Environment.NewLine, fields);
-
-
-			var parameters = new List<string>();
-
-			parameters.Add($@"I{Settings.ClientInterfaceName}Wrapper client");
-			parameters.Add($@"{Constants.HttpOverride} httpOverride");
-			parameters.Add($@"{Constants.Serializer} serializer");
-			parameters.Add($@"{Constants.RequestModifier} modifier");
-
-
-			string @params = string.Join(", ", parameters);
-
-
-
-
-			var initializers = new List<string>();
-
-			initializers.Add($"			{Constants.ClientInterfaceName} = client;");
-			initializers.Add($"			{Constants.HttpOverrideField} = httpOverride;");
-			initializers.Add($"			{Constants.SerializerField} = serializer;");
-			initializers.Add($"			{Constants.RequestModifierField} = modifier;");
-
-
-			string init = string.Join(Environment.NewLine, initializers);
-
-			var str =
-$@"
-{(Options.NamespaceSuffix != null ? $@"namespace {Options.NamespaceSuffix}
-{{" : string.Empty)}
-
-{GetObsolete()}
-	public interface I{ClientName} : I{Settings.ClientInterfaceName}
-	{{
-{string.Join($"{Environment.NewLine}", Methods.Where(x => !x.IsNotEndpoint).Select(x => x.GetInterfaceText()))}
-	}}
-
-{GetObsolete()}
-	{(Settings.UseInternalClients ? "internal" : "public")} class {ClientName} : I{ClientName}
-	{{
-{classFields}
-
-		public {ClientName}({@params})
-		{{
-{init}
-		}}
-
-{string.Join($"{Environment.NewLine}", Methods.Where(x => !x.IsNotEndpoint).Select(x => x.GetImplementationText()))}
-	}}
-{(Options.NamespaceSuffix != null ? $@"}}" : string.Empty)}
-";
-
-
-			return str;
-		}
-
-
-		private string GetObsolete()
-		{
-			if (Options.Obsolete != null)
-			{
-				return $@"	[{Constants.Obsolete}(""{Options.Obsolete}"")]";
-			}
-			else
-			{
-				return string.Empty;
-			}
 
 		}
 

@@ -84,9 +84,9 @@ namespace AspNetCore.Client
 			services.AddScoped(typeof(IHttpSerializer), SerializeType);
 			services.AddScoped(typeof(IHttpOverride), HttpOverrideType);
 
-			services.AddScoped<IRequestModifier, RequestModifier>((_) =>
+			services.AddScoped<IHttpRequestModifier, HttpRequestModifier>((_) =>
 			{
-				return new RequestModifier
+				return new HttpRequestModifier
 				{
 					PredefinedHeaders = PredefinedHeaders,
 					PredefinedCookies = PredefinedCookies
