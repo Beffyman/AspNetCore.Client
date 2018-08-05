@@ -92,23 +92,23 @@ namespace TestWebApp.Clients
 
 	public interface ITestWebAppClientRepository
 	{
-		FancySuffix.INamespacedClient NamespacedClient { get; }
-		IValuesClient ValuesClient { get; }
+		FancySuffix.INamespacedClient Namespaced { get; }
+		IValuesClient Values { get; }
 	}
 
 	internal class TestWebAppClientRepository : ITestWebAppClientRepository
 	{
-		public FancySuffix.INamespacedClient NamespacedClient { get; }
-		public IValuesClient ValuesClient { get; }
+		public FancySuffix.INamespacedClient Namespaced { get; }
+		public IValuesClient Values { get; }
 
 		public TestWebAppClientRepository
 		(
-			FancySuffix.INamespacedClient param_namespacedclient,
-			IValuesClient param_valuesclient
+			FancySuffix.INamespacedClient param_namespaced,
+			IValuesClient param_values
 		)
 		{
-			this.NamespacedClient = param_namespacedclient;
-			this.ValuesClient = param_valuesclient;
+			this.Namespaced = param_namespaced;
+			this.Values = param_values;
 		}
 	}
 
@@ -116,19 +116,19 @@ namespace TestWebApp.Clients
 
 	public interface ITestWebAppClientV1Repository
 	{
-		V1.ITestClient TestClient { get; }
+		V1.ITestClient Test { get; }
 	}
 
 	internal class TestWebAppClientV1Repository : ITestWebAppClientV1Repository
 	{
-		public V1.ITestClient TestClient { get; }
+		public V1.ITestClient Test { get; }
 
 		public TestWebAppClientV1Repository
 		(
-			V1.ITestClient param_testclient
+			V1.ITestClient param_test
 		)
 		{
-			this.TestClient = param_testclient;
+			this.Test = param_test;
 		}
 	}
 
@@ -136,19 +136,19 @@ namespace TestWebApp.Clients
 
 	public interface ITestWebAppClientV2Repository
 	{
-		V2.ITestClient TestClient { get; }
+		V2.ITestClient Test { get; }
 	}
 
 	internal class TestWebAppClientV2Repository : ITestWebAppClientV2Repository
 	{
-		public V2.ITestClient TestClient { get; }
+		public V2.ITestClient Test { get; }
 
 		public TestWebAppClientV2Repository
 		(
-			V2.ITestClient param_testclient
+			V2.ITestClient param_test
 		)
 		{
-			this.TestClient = param_testclient;
+			this.Test = param_test;
 		}
 	}
 

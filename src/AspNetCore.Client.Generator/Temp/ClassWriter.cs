@@ -237,22 +237,22 @@ $@"
 
 		private static string WriteRepositoryInterfaceProperty(string key, Controller controller)
 		{
-			return $@"		{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.ClientName} {{ get; }}";
+			return $@"		{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.Name} {{ get; }}";
 		}
 
 		private static string WriteRepositoryProperty(string key, Controller controller)
 		{
-			return $@"		public {key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.ClientName} {{ get; }}";
+			return $@"		public {key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.Name} {{ get; }}";
 		}
 
 		private static string WriteRepositoryParameter(string key, Controller controller)
 		{
-			return $@"			{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} param_{controller.ClientName.ToLower()}";
+			return $@"			{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} param_{controller.Name.ToLower()}";
 		}
 
 		private static string WriteRepositoryAssignment(string key, Controller controller)
 		{
-			return $@"			this.{controller.ClientName} = param_{controller.ClientName.ToLower()};";
+			return $@"			this.{controller.Name} = param_{controller.Name.ToLower()};";
 		}
 
 

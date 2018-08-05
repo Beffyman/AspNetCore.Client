@@ -87,19 +87,19 @@ namespace TestBlazorApp.Clients
 
 	public interface ITestBlazorAppClientRepository
 	{
-		ISampleDataClient SampleDataClient { get; }
+		ISampleDataClient SampleData { get; }
 	}
 
 	internal class TestBlazorAppClientRepository : ITestBlazorAppClientRepository
 	{
-		public ISampleDataClient SampleDataClient { get; }
+		public ISampleDataClient SampleData { get; }
 
 		public TestBlazorAppClientRepository
 		(
-			ISampleDataClient param_sampledataclient
+			ISampleDataClient param_sampledata
 		)
 		{
-			this.SampleDataClient = param_sampledataclient;
+			this.SampleData = param_sampledata;
 		}
 	}
 
