@@ -1,5 +1,5 @@
 ﻿using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.Temp;
+using AspNetCore.Client.Generator.Output;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

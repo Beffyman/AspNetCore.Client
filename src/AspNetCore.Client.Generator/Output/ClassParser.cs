@@ -12,7 +12,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AspNetCore.Client.Generator.Temp
+namespace AspNetCore.Client.Generator.Output
 {
 	public static class ClassParser
 	{

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AspNetCore.Client.Generator.Temp;
+using AspNetCore.Client.Generator.Output;
 
 namespace AspNetCore.Client.Generator
 {

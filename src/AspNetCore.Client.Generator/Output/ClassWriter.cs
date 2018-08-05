@@ -18,7 +18,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AspNetCore.Client.Generator.Temp
+namespace AspNetCore.Client.Generator.Output
 {
 	public static class ClassWriter
 	{
