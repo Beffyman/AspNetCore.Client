@@ -9,7 +9,7 @@ namespace AspNetCore.Client.RequestModifiers
 	/// <summary>
 	/// Applies header modifications predefined inside the configuration
 	/// </summary>
-	public interface IRequestModifier
+	public interface IHttpRequestModifier
 	{
 		/// <summary>
 		/// Header modifications that are defined inside the configuration
@@ -31,9 +31,9 @@ namespace AspNetCore.Client.RequestModifiers
 	}
 
 	/// <summary>
-	/// Implementation of <see cref="IRequestModifier"/> that will apply header modifications defined inside the configuration
+	/// Implementation of <see cref="IHttpRequestModifier"/> that will apply header modifications defined inside the configuration
 	/// </summary>
-	internal class RequestModifier : IRequestModifier
+	internal class HttpRequestModifier : IHttpRequestModifier
 	{
 		/// <summary>
 		/// Header modifications that are defined inside the configuration

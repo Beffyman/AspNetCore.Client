@@ -188,7 +188,7 @@ namespace TestWebApp.Tests
 				When = DateTime.Now
 			};
 
-			valuesClient.ComplexPost(Guid.NewGuid(), dto,
+			valuesClient.ComplexPost(dto, Guid.NewGuid(),
 			OKCallback: (_) =>
 			{
 				returnedDto = _;

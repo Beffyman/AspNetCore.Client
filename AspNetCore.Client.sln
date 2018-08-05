@@ -52,6 +52,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Test.Gene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.Generator", "src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj", "{D25A8FDE-BB00-49FD-8ABF-A494B09268E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Client.Generator.Framework", "src\AspNetCore.Client.Generator.Framework\AspNetCore.Client.Generator.Framework.csproj", "{862DD062-0098-4700-8CDB-7570AF9655F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +116,10 @@ Global
 		{D25A8FDE-BB00-49FD-8ABF-A494B09268E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D25A8FDE-BB00-49FD-8ABF-A494B09268E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D25A8FDE-BB00-49FD-8ABF-A494B09268E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862DD062-0098-4700-8CDB-7570AF9655F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862DD062-0098-4700-8CDB-7570AF9655F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862DD062-0098-4700-8CDB-7570AF9655F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862DD062-0098-4700-8CDB-7570AF9655F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +141,7 @@ Global
 		{B28C16E6-4FDB-4245-AB1B-F4928CC9B611} = {DAA1FF40-201F-444E-A3EF-FB83FB5D8F96}
 		{68779CC4-5C3F-4989-BC9F-2863CE208A49} = {765F8CBA-ECD0-4E5B-AB1D-AC0F508A05AC}
 		{D25A8FDE-BB00-49FD-8ABF-A494B09268E2} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
+		{862DD062-0098-4700-8CDB-7570AF9655F7} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCFD7864-E2E5-4CF3-9A6D-D53B4F4E8AE0}
