@@ -29,9 +29,6 @@ namespace AspNetCore.Client.Generator.CSharp
 				FromBody = attributes.Any(x => x.Name.ToFullString().StartsWith(Constants.FromBody)) || !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
 			};
 
-			Options.FromRoute = Options.FromRoute || (Helpers.IsRouteParameter(Name, fullRoute) || (Helpers.IsEnumerable(Type) && Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))));
-
-
 			var fromQueryAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.FromQuery));
 			if (fromQueryAttribute != null)//Fetch route from RouteAttribute
 			{
@@ -57,8 +54,12 @@ namespace AspNetCore.Client.Generator.CSharp
 				}
 			}
 
+			Options.FromRoute = Options.FromRoute || (Helpers.IsRouteParameter(Name, fullRoute) || (Helpers.IsEnumerable(Type) && Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))));
 
-			if ((Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))))
+
+			if ((Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
+				&& !Options.FromRoute
+				&& !Options.FromBody)
 			{
 				Options.FromQuery = true;
 				Options.QueryName = Name;
@@ -66,13 +67,25 @@ namespace AspNetCore.Client.Generator.CSharp
 
 			if (Options.FromQuery)
 			{
-				Options.FromRoute = true;
-				Options.RouteName = Name;
+				Options.FromRoute = false;
+				Options.RouteName = null;
 			}
 
 			if (Options.FromBody)
 			{
 				Options.FromRoute = false;
+			}
+
+			var types = new List<bool>
+			{
+				Options.FromBody,
+				Options.FromRoute,
+				Options.FromQuery
+			};
+
+			if (types.Count(x => x == true) > 1)
+			{
+				throw new Exception();
 			}
 
 		}
@@ -88,7 +101,7 @@ namespace AspNetCore.Client.Generator.CSharp
 			{
 				if (Options.FromRoute)
 				{
-					return Options.RouteName;
+					return Options.RouteName ?? Name;
 				}
 				else
 				{

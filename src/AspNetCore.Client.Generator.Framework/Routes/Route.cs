@@ -17,7 +17,10 @@ namespace AspNetCore.Client.Generator.Framework.Routes
 		{
 			Value = value;
 
-			Constraints = GetRouteParameters(Value).Select(x => RouteConstraint.GetConstraint(x.Key, x.Value)).ToList();
+			Constraints = GetRouteParameters(Value)
+				.Select(x => RouteConstraint.GetConstraint(x.Key, x.Value))
+				.Where(x => x != null)
+				.ToList();
 		}
 
 

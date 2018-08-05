@@ -106,30 +106,32 @@ namespace AspNetCore.Client.Generator.Framework
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return new List<INavNode>() { Parent }
+				.Union(Parent.GetChildren())
 				.Union(ResponseTypes)
 				.Union(ConstantHeader)
 				.Union(Parameters)
-				.Union(ParameterHeader);
+				.Union(ParameterHeader)
+				.Where(x => x != null);
 		}
 
 		public IEnumerable<IParameter> GetParameters()
 		{
-			return GetChildren().OfType<IParameter>();
+			return GetChildren().OfType<IParameter>().OrderBy(x => x.SortOrder).ThenBy(x => x.DefaultValue == null ? 0 : 1);
 		}
 
 		public IEnumerable<IParameter> GetParametersWithoutResponseTypes()
 		{
-			return GetChildren().Where(x => !(x is ResponseType)).OfType<IParameter>();
+			return GetChildren().Where(x => !(x is ResponseType)).OfType<IParameter>().OrderBy(x => x.SortOrder).ThenBy(x => x.DefaultValue == null ? 0 : 1);
 		}
 
 		public IEnumerable<RouteParameter> GetRouteParameters()
 		{
-			return GetChildren().OfType<RouteParameter>();
+			return GetChildren().OfType<RouteParameter>().OrderBy(x => x.SortOrder);
 		}
 
 		public IEnumerable<QueryParameter> GetQueryParameters()
 		{
-			return GetChildren().OfType<QueryParameter>();
+			return GetChildren().OfType<QueryParameter>().OrderBy(x => x.SortOrder);
 		}
 
 		public BodyParameter GetBodyParameter()
@@ -144,7 +146,7 @@ namespace AspNetCore.Client.Generator.Framework
 
 		public IEnumerable<ResponseType> GetResponseTypes()
 		{
-			return GetChildren().OfType<ResponseType>();
+			return GetChildren().OfType<ResponseType>().OrderBy(x => x.SortOrder);
 		}
 
 		public IEnumerable<IRequestModifier> GetRequestModifiers()
@@ -166,6 +168,13 @@ namespace AspNetCore.Client.Generator.Framework
 		public bool RequiresAuthorization()
 		{
 			return GetChildren().OfType<IAuthorize>().Any(x => x.IsSecured);
+		}
+
+		public override string ToString()
+		{
+			string namespaceVersion = $@"{(Parent.NamespaceVersion != null ? $"{Parent.NamespaceVersion}." : "")}{(Parent.NamespaceSuffix != null ? $"{Parent.NamespaceSuffix}." : string.Empty)}";
+
+			return $"{namespaceVersion}{Parent.Name}.{Name}";
 		}
 	}
 }

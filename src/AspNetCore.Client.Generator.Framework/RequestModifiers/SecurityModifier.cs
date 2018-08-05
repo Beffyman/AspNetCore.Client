@@ -18,13 +18,14 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		/// <summary>
 		/// Type of the parameter
 		/// </summary>
-		public string Type => $"{nameof(SecurityHeader)}?";
+		public string Type => $"{nameof(SecurityHeader)}";
 
 		/// <summary>
 		/// What the default value of the parameter is, if it has one. the string "null" should be used for an optional parameter
 		/// </summary>
 		public string DefaultValue => "null";
 
+		public int SortOrder => 5;
 
 		public IEnumerable<INavNode> GetChildren()
 		{

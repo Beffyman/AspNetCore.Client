@@ -24,5 +24,26 @@ namespace AspNetCore.Client.Generator.Framework.Parameters
 		/// What the default value of the parameter is, if it has one. the string "null" should be used for an optional parameter
 		/// </summary>
 		string DefaultValue { get; }
+
+		/*
+		 * Parameter Order
+		 * 1) Body Parameters
+		 * 2) Route Parameters
+		 * 3) Query Parameters
+		 * 4) Parameter Headers
+		 * 5) Auth
+		 * 6) Response Types
+		 * 7) Headers
+		 * 8) Cookies
+		 * 9) Timeout
+		 * 10) CancellationToken
+		 */
+
+
+
+		/// <summary>
+		/// Order in which the parameter is inside the generated file
+		/// </summary>
+		int SortOrder { get; }
 	}
 }

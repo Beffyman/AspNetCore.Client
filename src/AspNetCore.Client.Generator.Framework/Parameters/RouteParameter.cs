@@ -12,6 +12,7 @@ namespace AspNetCore.Client.Generator.Framework.Parameters
 		public string Type { get; }
 
 		public string DefaultValue { get; }
+		public int SortOrder => 2;
 
 		public RouteParameter(string name, string type, string defaultValue = null)
 		{

@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Client.Attributes;
 using AspNetCore.Client.Generator.Framework.Navigation;
 using AspNetCore.Client.Generator.Framework.Parameters;
+using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,8 @@ namespace AspNetCore.Client.Generator.Framework.Headers
 		/// What the default value be as a parameter
 		/// </summary>
 		public string DefaultValue { get; set; }
+
+		public int SortOrder => 4;
 
 		/// <summary>
 		/// Default parameter

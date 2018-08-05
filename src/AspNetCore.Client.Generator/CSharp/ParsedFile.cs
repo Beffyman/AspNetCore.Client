@@ -32,10 +32,8 @@ namespace AspNetCore.Client.Generator.CSharp
 		{
 			Name = Path.GetFileNameWithoutExtension(file);
 			FileName = file;
-
 			try
 			{
-
 				FileText = Helpers.SafelyReadFromFile(file);
 
 
@@ -82,19 +80,20 @@ namespace AspNetCore.Client.Generator.CSharp
 						Context.Clients.Add(ClassParser.ReadAsClient(cd));
 					}
 				}
-
 			}
 			catch (NotSupportedException nse)
 			{
 				Failed = true;
 				Error = nse.Message;
 			}
+#if !DEBUG
 			catch (Exception ex)
 			{
 				Failed = true;
 				UnexpectedFailure = true;
 				Error = ex.Message;
 			}
+#endif
 
 		}
 	}

@@ -24,6 +24,7 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		/// </summary>
 		public string DefaultValue => "null";
 
+		public int SortOrder => 7;
 
 		public IEnumerable<INavNode> GetChildren()
 		{

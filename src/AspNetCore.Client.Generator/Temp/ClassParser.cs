@@ -25,7 +25,7 @@ namespace AspNetCore.Client.Generator.Temp
 
 
 			var controller = new Controller();
-			controller.Name = syntax.Identifier.ValueText.Trim();
+			controller.Name = $@"{syntax.Identifier.ValueText.Trim().Replace("Controller", "")}";
 
 
 
@@ -190,8 +190,13 @@ namespace AspNetCore.Client.Generator.Temp
 			var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Options.QueryName, x.Type, x.Default)).ToList();
 			var bodyParams = parameters.Where(x => x.Options.FromBody).Select(x => new BodyParameter(x.Name, x.Type, x.Default)).SingleOrDefault();
 
-			endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParams }).ToList();
 
+			endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParams }).NotNull().ToList();
+
+			if (endpoint.Parameters.Select(x => x.Name).Distinct().Count() != endpoint.Parameters.Select(x => x.Name).Count())
+			{
+				throw new Exception();
+			}
 
 			endpoint.Parameters.Add(new CancellationTokenModifier());
 			endpoint.Parameters.Add(new CookieModifier());

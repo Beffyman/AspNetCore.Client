@@ -13,6 +13,8 @@ namespace AspNetCore.Client.Generator.Framework.Parameters
 
 		public string DefaultValue { get; }
 
+		public int SortOrder => 1;
+
 		public BodyParameter(string name, string type, string defaultValue = null)
 		{
 			Name = name;

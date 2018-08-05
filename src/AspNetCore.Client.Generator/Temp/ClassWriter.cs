@@ -2,6 +2,7 @@
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
 using AspNetCore.Client.Generator.Framework.Dependencies;
+using AspNetCore.Client.Generator.Framework.Headers;
 using AspNetCore.Client.Generator.Framework.Parameters;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.ResponseTypes;
@@ -130,7 +131,7 @@ $@"
 			configure?.Invoke(configuration);
 
 {string.Join(Environment.NewLine, versions.Select(WriteRepositoryRegistration))}
-{string.Join(Environment.NewLine, context.Clients.Select(WriteClientRegistration))}
+{string.Join(Environment.NewLine, context.Clients.Where(x => !x.Ignored).Select(WriteClientRegistration))}
 
 			return configuration.{nameof(ClientConfiguration.ApplyConfiguration)}(services);;
 		}}
@@ -140,15 +141,15 @@ $@"
 
 		private static string WriteRepositoryRegistration(string version)
 		{
-			return $@"services.AddScoped<I{Settings.ClientInterfaceName}{version}Repository,{Settings.ClientInterfaceName}{version}Repository>();";
+			return $@"			services.AddScoped<I{Settings.ClientInterfaceName}{version}Repository,{Settings.ClientInterfaceName}{version}Repository>();";
 		}
 
 		private static string WriteClientRegistration(Controller controller)
 		{
 			string namespaceVersion = $@"{(controller.NamespaceVersion != null ? $"{controller.NamespaceVersion}." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}";
-			string interfaceName = $@"{namespaceVersion}I{controller.Name}";
-			string implementationName = $@"{namespaceVersion}{controller.Name}";
-			return $@"services.AddScoped<{interfaceName}, {implementationName}>();";
+			string interfaceName = $@"{namespaceVersion}I{controller.ClientName}";
+			string implementationName = $@"{namespaceVersion}{controller.ClientName}";
+			return $@"			services.AddScoped<{interfaceName}, {implementationName}>();";
 		}
 
 
@@ -234,22 +235,22 @@ $@"
 
 		private static string WriteRepositoryInterfaceProperty(string key, Controller controller)
 		{
-			return $@"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.Name} {controller.Name} {{ get; }}";
+			return $@"		{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.ClientName} {{ get; }}";
 		}
 
 		private static string WriteRepositoryProperty(string key, Controller controller)
 		{
-			return $@"public {key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.Name} {controller.Name} {{ get; }}";
+			return $@"		public {key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.ClientName} {{ get; }}";
 		}
 
 		private static string WriteRepositoryParameter(string key, Controller controller)
 		{
-			return $@"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.Name} param_{controller.Name.ToLower()}";
+			return $@"			{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} param_{controller.ClientName.ToLower()}";
 		}
 
 		private static string WriteRepositoryAssignment(string key, Controller controller)
 		{
-			return $@"this.{controller.Name} = param_{controller.Name.ToLower()};";
+			return $@"			this.{controller.ClientName} = param_{controller.ClientName.ToLower()};";
 		}
 
 
@@ -309,7 +310,7 @@ $@"
 			return
 $@"
 {GetObsolete(controller)}
-	public interface I{controller.Name} : I{Settings.ClientInterfaceName}
+	public interface I{controller.ClientName} : I{Settings.ClientInterfaceName}
 	{{
 {string.Join($"{Environment.NewLine}", controller.Endpoints.Select(WriteEndpointInterface))}
 	}}
@@ -324,11 +325,12 @@ $@"
 			return
 $@"
 {GetObsolete(controller)}
-	{(Settings.UseInternalClients ? "internal" : "public")} class {controller.Name} : I{controller.Name}
+	{(Settings.UseInternalClients ? "internal" : "public")} class {controller.ClientName} : I{controller.ClientName}
 	{{
 {string.Join($"{Environment.NewLine}", dependencies.Select(WriteDependenciesField))}
 
-		public {controller.Name}({string.Join($",{Environment.NewLine}", dependencies.Select(WriteDependenciesParameter))})
+		public {controller.ClientName}(
+{string.Join($",{Environment.NewLine}", dependencies.Select(WriteDependenciesParameter))})
 		{{
 {string.Join($"{Environment.NewLine}", dependencies.Select(WriteDependenciesAssignment))}
 		}}
@@ -349,12 +351,12 @@ $@"
 
 		private static string WriteDependenciesParameter(IDependency dependency)
 		{
-			return $@"{dependency.Type} param_{dependency.Name.ToLower()}";
+			return $@"			{dependency.Type} param_{dependency.Name.ToLower()}";
 		}
 
 		private static string WriteDependenciesAssignment(IDependency dependency)
 		{
-			return $@"{dependency.Name} = param_{dependency.Name.ToLower()};";
+			return $@"			{dependency.Name} = param_{dependency.Name.ToLower()};";
 		}
 
 		#endregion Dependencies
@@ -366,29 +368,29 @@ $@"
 		{
 			return
 $@"
-{GetObsolete(endpoint)}
-{GetInterfaceReturnType(endpoint.ReturnType, false)} {endpoint.Name}
-(
+		{GetObsolete(endpoint)}
+		{GetInterfaceReturnType(endpoint.ReturnType, false)} {endpoint.Name}
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(GetParameter))}
-);
+		);
 
-{GetObsolete(endpoint)}
-{GetInterfaceReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
-(
+		{GetObsolete(endpoint)}
+		{GetInterfaceReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(GetParameter))}
-);
+		);
 
-{GetObsolete(endpoint)}
-{GetInterfaceReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
-(
+		{GetObsolete(endpoint)}
+		{GetInterfaceReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(GetParameter))}
-);
+		);
 
-{GetObsolete(endpoint)}
-{GetInterfaceReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}Raw
-(
+		{GetObsolete(endpoint)}
+		{GetInterfaceReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}RawAsync
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(GetParameter))}
-);
+		);
 
 ";
 		}
@@ -398,41 +400,41 @@ $@"
 			return
 $@"
 
-{GetObsolete(endpoint)}
-public {GetImplementationReturnType(endpoint.ReturnType, false)} {endpoint.Name}
-(
+		{GetObsolete(endpoint)}
+		public {GetImplementationReturnType(endpoint.ReturnType, false)} {endpoint.Name}
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(GetParameter))}
-)
-{{
+		)
+		{{
 {GetMethodDetails(endpoint, false, false)}
-}}
+		}}
 
-{GetObsolete(endpoint)}
-public {GetImplementationReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
-(
+		{GetObsolete(endpoint)}
+		public {GetImplementationReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(GetParameter))}
-)
-{{
+		)
+		{{
 {GetMethodDetails(endpoint, false, true)}
-}}
+		}}
 
-{GetObsolete(endpoint)}
-public {GetImplementationReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
-(
+		{GetObsolete(endpoint)}
+		public {GetImplementationReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(GetParameter))}
-)
-{{
+		)
+		{{
 {GetMethodDetails(endpoint, true, false)}
-}}
+		}}
 
-{GetObsolete(endpoint)}
-public {GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}Raw
-(
+		{GetObsolete(endpoint)}
+		public {GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}RawAsync
+		(
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(GetParameter))}
-)
-{{
+		)
+		{{
 {GetMethodDetails(endpoint, true, true)}
-}}
+		}}
 
 ";
 		}
@@ -453,29 +455,53 @@ public {GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoin
 			var routeConstraints = endpoint.GetRouteConstraints();
 
 			return
-$@"
-{string.Join(Environment.NewLine, routeConstraints.Select(WriteRouteConstraint))}
+$@"{string.Join(Environment.NewLine, routeConstraints.Select(WriteRouteConstraint).NotNull())}
 {GetEndpointInfoVariables(endpoint)}
+			string url = $@""{GetRoute(endpoint)}"";
+			HttpResponseMessage response = null;
+			response = {GetAwait(async)}HttpOverride.GetResponseAsync({GetHttpMethod(endpoint.HttpType)}, url, null, {cancellationToken.Name}){GetAsyncEnding(async)};
 
-string url = $@""{GetRoute(endpoint)}"";
-HttpResponseMessage response = null;
-response = {GetAwait(async)}HttpOverride.GetResponseAsync(HttpMethod.{endpoint.HttpType.Method}, url, null, {cancellationToken.Name}){GetAsyncEnding(async)};
+			if(response == null)
+			{{
+				response = {GetAwait(async)}{clientDependency.Name}.{nameof(IClientWrapper.ClientWrapper)}
+							.Request(url)
+{string.Join($"				{Environment.NewLine}", requestModifiers.Select(WriteRequestModifiers).NotNull())}
+							.AllowAnyHttpStatus()
+							{GetHttpMethod(endpoint)}
+							{GetAsyncEnding(async)};
 
-if(response == null)
-{{
-	response = {GetAwait(async)}{clientDependency.Name}.{nameof(IClientWrapper.ClientWrapper)}
-				.Request(url)
-{string.Join($"				{Environment.NewLine}", requestModifiers.Select(WriteRequestModifiers))}
-				.AllowAnyHttpStatus()
-				{GetHttpMethod(endpoint)}
-				{GetAsyncEnding(async)};
+				{GetAwait(async)}HttpOverride.OnNonOverridedResponseAsync({GetHttpMethod(endpoint.HttpType)}, url, {bodyVariable}, response, {cancellationToken.Name}){GetAsyncEnding(async)};
+			}}
+{string.Join(Environment.NewLine, responseTypes.Select(x => WriteResponseType(x, async, raw)).NotNull())}
+{WriteActionResultReturn(endpoint, async, raw)}";
+		}
 
-{GetAwait(async)}HttpOverride.OnNonOverridedResponseAsync(HttpMethod.{endpoint.HttpType.Method}, url, {bodyVariable}, response, {cancellationToken.Name}){GetAsyncEnding(async)};
-}}
-
-{string.Join(Environment.NewLine, responseTypes.Select(x => WriteResponseType(x, async, raw)))}
-{WriteActionResultReturn(endpoint, async, raw)}
-";
+		private static string GetHttpMethod(HttpMethod method)
+		{
+			if (method.Method == HttpMethod.Delete.Method)
+			{
+				return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Delete)}";
+			}
+			else if (method.Method == HttpMethod.Get.Method)
+			{
+				return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Get)}";
+			}
+			else if (method.Method == HttpMethod.Put.Method)
+			{
+				return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Put)}";
+			}
+			else if (method.Method == new HttpMethod("PATCH").Method)
+			{
+				return $@"new {nameof(HttpMethod)}(""PATCH"")";
+			}
+			else if (method.Method == HttpMethod.Post.Method)
+			{
+				return $"{nameof(HttpMethod)}.{nameof(HttpMethod.Post)}";
+			}
+			else
+			{
+				return $"#error Unsupported HttpMethod of {method.Method}";
+			}
 		}
 
 		private static string WriteRouteConstraint(RouteConstraint constraint)
@@ -564,9 +590,9 @@ if(response == null)
 			{
 				return $@"
 			if(!long.TryParse({constraint.ParameterName}.ToString(),out _))
-		{{
-			throw new InvalidRouteException(""Parameter {constraint.ParameterName} does not parse into an long."");
-		}}";
+			{{
+				throw new InvalidRouteException(""Parameter {constraint.ParameterName} does not parse into an long."");
+			}}";
 			}
 			else if (constraint is MaxConstraint)
 			{
@@ -646,21 +672,21 @@ if(response == null)
 		{
 			if (raw)
 			{
-				return null;
+				return @"			return response;";
 			}
 
 			if (endpoint.ReturnType != null)
 			{
 				return
 $@"
-if(response.IsSuccessStatusCode)
-{{
-	return {GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){GetAsyncEnding(async)};
-}}
-else
-{{
-	return default({endpoint.ReturnType});
-}}
+			if(response.IsSuccessStatusCode)
+			{{
+				return {GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){GetAsyncEnding(async)};
+			}}
+			else
+			{{
+				return default({endpoint.ReturnType});
+			}}
 ";
 			}
 
@@ -671,7 +697,7 @@ else
 		{
 			if (raw)
 			{
-				return $@"return response;";
+				return null;
 			}
 
 			return
@@ -684,11 +710,10 @@ $@"
 		private static string GetResponseTypeCheck(ResponseType responseType)
 		{
 			return
-$@"
-if({responseType.Name} != null && {responseType.Name}.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-{{
-	throw new NotSupportedException(""Async void action delegates for {responseType.Name} are not supported.As they will run out of the scope of this call."");
-}}
+$@"			if({responseType.Name} != null && {responseType.Name}.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{{
+				throw new NotSupportedException(""Async void action delegates for {responseType.Name} are not supported.As they will run out of the scope of this call."");
+			}}
 ";
 		}
 
@@ -696,16 +721,21 @@ if({responseType.Name} != null && {responseType.Name}.Method.IsDefined(typeof(As
 		{
 			if (responseType.Status == null)
 			{
-				return $@"{responseType.Name}?.Invoke(response);";
+				return $@"			{responseType.Name}?.Invoke(response);";
 			}
 			else
 			{
+				string content = null;
+				if (responseType.ActionType != null)
+				{
+					content = $@"{GetAwait(async)}Serializer.Deserialize<{responseType.ActionType}>(response.Content){GetAsyncEnding(async)}";
+				}
+
 				return
-$@"
-if(response.StatusCode == System.Net.HttpStatusCode.{responseType.Status})
-{{
-	{responseType.Name}?.Invoke(Serializer.Deserialize<{responseType.ActionType}>(response.Content).{GetAsyncEnding(async)});
-}}
+$@"			if(response.StatusCode == System.Net.HttpStatusCode.{responseType.Status})
+			{{
+				{responseType.Name}?.Invoke({content});
+			}}
 ";
 			}
 		}
@@ -714,7 +744,17 @@ if(response.StatusCode == System.Net.HttpStatusCode.{responseType.Status})
 		{
 			var cancellationToken = endpoint.GetRequestModifiers().OfType<CancellationTokenModifier>().SingleOrDefault();
 			var bodyParameter = endpoint.GetBodyParameter();
-			string bodyComma = bodyParameter != null ? "," : "";
+
+			string bodyString = null;
+
+			if (bodyParameter?.Name == null)
+			{
+				bodyString = "null";
+			}
+			else
+			{
+				bodyString = $@"Serializer.Serialize({bodyParameter?.Name})";
+			}
 
 			if (endpoint.HttpType.Method == HttpMethod.Delete.Method)
 			{
@@ -726,15 +766,15 @@ if(response.StatusCode == System.Net.HttpStatusCode.{responseType.Status})
 			}
 			else if (endpoint.HttpType.Method == HttpMethod.Put.Method)
 			{
-				return $".{nameof(GeneratedExtensions.PutAsync)}({bodyParameter.Name}{bodyComma}{cancellationToken?.Name})";
+				return $".{nameof(GeneratedExtensions.PutAsync)}({bodyString}, {cancellationToken?.Name})";
 			}
 			else if (endpoint.HttpType.Method == new HttpMethod("PATCH").Method)
 			{
-				return $".{nameof(GeneratedExtensions.PatchAsync)}({bodyParameter.Name}{bodyComma}{cancellationToken?.Name})";
+				return $".{nameof(GeneratedExtensions.PatchAsync)}({bodyString}, {cancellationToken?.Name})";
 			}
 			else if (endpoint.HttpType.Method == HttpMethod.Post.Method)
 			{
-				return $".{nameof(GeneratedExtensions.PostAsync)}({bodyParameter.Name}{bodyComma}{cancellationToken?.Name})";
+				return $".{nameof(GeneratedExtensions.PostAsync)}({bodyString}, {cancellationToken?.Name})";
 			}
 			else
 			{
@@ -744,26 +784,39 @@ if(response.StatusCode == System.Net.HttpStatusCode.{responseType.Status})
 
 		private static string WriteRequestModifiers(IRequestModifier modifier)
 		{
+			string tabs = $@"							";
 			if (modifier is CookieModifier cm)
 			{
-				return $@".WithCookies({cm.Name})";
+				return $@"{tabs}.WithCookies({cm.Name})";
 			}
 			else if (modifier is HeadersModifier hm)
 			{
-				return $@".WithHeaders({hm.Name})";
+				return $@"{tabs}.WithHeaders({hm.Name})";
 			}
 			else if (modifier is RequestModifierDependency rm)
 			{
-				return $@".WithRequestModifiers({rm.Name})";
+				return $@"{tabs}.WithRequestModifiers({rm.Name})";
 			}
 			else if (modifier is SecurityModifier sm)
 			{
-				return $@".WithAuth({sm.Name})";
+				return $@"{tabs}.WithAuth({sm.Name})";
 			}
 			else if (modifier is TimeoutModifier tm)
 			{
 				var clientDependency = new ClientDependency(null);
-				return $@".WithTimeout({tm.Name} ?? {clientDependency.Name}.{nameof(IClientWrapper.Timeout)})";
+				return $@"{tabs}.WithTimeout({tm.Name} ?? {clientDependency.Name}.{nameof(IClientWrapper.Timeout)})";
+			}
+			else if (modifier is ConstantHeader ch)
+			{
+				return $@"{tabs}.WithHeader(""{ch.Key}"", ""{ch.Value}"")";
+			}
+			else if (modifier is ParameterHeader ph)
+			{
+				return $@"{tabs}.WithHeader(""{ph.Name}"", {ph.Name})";
+			}
+			else if (modifier is CancellationTokenModifier ctm)
+			{
+				return null;
 			}
 			else
 			{
@@ -778,22 +831,20 @@ if(response.StatusCode == System.Net.HttpStatusCode.{responseType.Status})
 			var actionVar = $@"			var {Constants.ActionRouteReserved} = ""{endpoint.Name}"";";
 
 
-			if (!endpoint.FullRoute.Contains($"{{{Constants.ControllerRouteReserved}}}"))
+			if (!endpoint.FullRoute.Contains($"[{Constants.ControllerRouteReserved}]"))
 			{
 				controllerVar = null;
 			}
 
-			if (!endpoint.FullRoute.Contains($"{{{Constants.ActionRouteReserved}}}"))
+			if (!endpoint.FullRoute.Contains($"[{Constants.ActionRouteReserved}]"))
 			{
 				actionVar = null;
 			}
 
 
 			return
-$@"
-{controllerVar}
-{actionVar}
-";
+$@"{controllerVar}
+{actionVar}";
 		}
 
 		private static string GetRoute(Endpoint endpoint)
@@ -805,8 +856,8 @@ $@"
 
 			var patterns = Regex.Matches(routeUnformatted, RouteParseRegex);
 
-			var routeParameters = endpoint.GetRouteParameters();
-			var queryParameters = endpoint.GetQueryParameters();
+			var routeParameters = endpoint.GetRouteParameters().ToList();
+			var queryParameters = endpoint.GetQueryParameters().ToList();
 
 			foreach (var group in patterns)
 			{
@@ -850,13 +901,9 @@ $@"
 			{
 				return $@"{{string.Join(""&"",{parameter.Name}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", parameter.Type)}}}""))}}";
 			}
-			else if (parameter.DefaultValue != null)
-			{
-				return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
-			}
 			else
 			{
-				return $"{{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
+				return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
 			}
 		}
 
@@ -935,7 +982,7 @@ $@"
 
 		private static string GetParameter(IParameter parameter)
 		{
-			return $@"{parameter.Type} {parameter.Name}{(parameter.DefaultValue != null ? $" = {parameter.DefaultValue}" : $"")}";
+			return $@"			{parameter.Type} {parameter.Name}{(parameter.DefaultValue != null ? $" = {parameter.DefaultValue}" : $"")}";
 		}
 
 		private static string GetObsolete(IObsolete ob)

@@ -24,6 +24,7 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		/// What the default value of the parameter is, if it has one. the string "null" should be used for an optional parameter
 		/// </summary>
 		public string DefaultValue => "default";
+		public int SortOrder => 10;
 
 
 		public IEnumerable<INavNode> GetChildren()

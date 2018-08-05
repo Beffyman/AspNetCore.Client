@@ -29,6 +29,7 @@ namespace TestBlazorApp.Clients
 
 
 
+
 	public static class TestBlazorAppClientInstaller
 	{
 		/// <summary>
@@ -52,7 +53,6 @@ namespace TestBlazorApp.Clients
 			return configuration.ApplyConfiguration(services);;
 		}
 	}
-
 
 
 
@@ -82,26 +82,35 @@ namespace TestBlazorApp.Clients
 	public interface ITestBlazorAppClient : IClient { }
 
 
+
+
+
 	public interface ITestBlazorAppClientRepository
 	{
-		ISampleDataClient SampleData { get; }
+		ISampleDataClient SampleDataClient { get; }
 	}
 
 	internal class TestBlazorAppClientRepository : ITestBlazorAppClientRepository
 	{
-		public ISampleDataClient SampleData { get; private set;}
+		public ISampleDataClient SampleDataClient { get; }
 
 		public TestBlazorAppClientRepository
 		(
-			ISampleDataClient sampledata
+			ISampleDataClient param_sampledataclient
 		)
 		{
-			this.SampleData = sampledata;
+			this.SampleDataClient = param_sampledataclient;
 		}
 	}
 
 
+
+
+
 }
+
+
+
 
 
 namespace TestBlazorApp.Clients
@@ -110,87 +119,115 @@ namespace TestBlazorApp.Clients
 
 
 
+
 	public interface ISampleDataClient : ITestBlazorAppClient
 	{
-		
-		IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage WeatherForecastsRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		IEnumerable<WeatherForecast> WeatherForecasts
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		HttpResponseMessage WeatherForecastsRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
 
 	}
 
 
+
+
 	internal class SampleDataClient : ISampleDataClient
 	{
-		public readonly ITestBlazorAppClientWrapper Client;
-		public readonly IHttpOverride HttpOverride;
-		public readonly IHttpSerializer Serializer;
-		public readonly IHttpRequestModifier Modifier;
+		protected readonly ITestBlazorAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpRequestModifier Modifier;
 
-		public SampleDataClient(ITestBlazorAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
+		public SampleDataClient(
+			ITestBlazorAppClientWrapper param_client,
+			IHttpOverride param_httpoverride,
+			IHttpSerializer param_serializer,
+			IHttpRequestModifier param_modifier)
 		{
-			Client = client;
-			HttpOverride = httpOverride;
-			Serializer = serializer;
-			Modifier = modifier;
+			Client = param_client;
+			HttpOverride = param_httpoverride;
+			Serializer = param_serializer;
+			Modifier = param_modifier;
 		}
 
 
-		public IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+		
+		public IEnumerable<WeatherForecast> WeatherForecasts
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "SampleData";
 			var action = "WeatherForecasts";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<IEnumerable<WeatherForecast>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -202,71 +239,80 @@ namespace TestBlazorApp.Clients
 
 		}
 
-
-		public HttpResponseMessage WeatherForecastsRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage WeatherForecastsRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "SampleData";
 			var action = "WeatherForecasts";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "SampleData";
 			var action = "WeatherForecasts";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<IEnumerable<WeatherForecast>>(response.Content).ConfigureAwait(false);
@@ -278,39 +324,47 @@ namespace TestBlazorApp.Clients
 
 		}
 
-
-		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "SampleData";
 			var action = "WeatherForecasts";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
 		}
 
+
 	}
 
 
+
+
 }
+
 
 

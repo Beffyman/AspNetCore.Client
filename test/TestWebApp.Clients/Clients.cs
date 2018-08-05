@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 namespace TestWebApp.Clients
 {
 
-#warning  File C:\Git_Github\AspNetCore.Client\test\TestWebApp\Controllers\ErrorController.cs is misconfigured for generation :: Controller must have a route to be valid for generation.
+#warning  File E:\Git_Github\AspNetCore.Client\test\TestWebApp\Controllers\ErrorController.cs is misconfigured for generation :: Controller must have a route to be valid for generation.
 
 
 	public static class TestWebAppClientInstaller
@@ -61,7 +61,6 @@ namespace TestWebApp.Clients
 
 
 
-
 	public interface ITestWebAppClientWrapper : IClientWrapper { }
 
 	public class TestWebAppClientWrapper :  ITestWebAppClientWrapper
@@ -88,68 +87,79 @@ namespace TestWebApp.Clients
 	public interface ITestWebAppClient : IClient { }
 
 
+
+
+
 	public interface ITestWebAppClientRepository
 	{
-		FancySuffix.INamespacedClient Namespaced { get; }
-		IValuesClient Values { get; }
+		FancySuffix.INamespacedClient NamespacedClient { get; }
+		IValuesClient ValuesClient { get; }
 	}
 
 	internal class TestWebAppClientRepository : ITestWebAppClientRepository
 	{
-		public FancySuffix.INamespacedClient Namespaced { get; private set;}
-		public IValuesClient Values { get; private set;}
+		public FancySuffix.INamespacedClient NamespacedClient { get; }
+		public IValuesClient ValuesClient { get; }
 
 		public TestWebAppClientRepository
 		(
-			FancySuffix.INamespacedClient namespaced,
-			IValuesClient values
+			FancySuffix.INamespacedClient param_namespacedclient,
+			IValuesClient param_valuesclient
 		)
 		{
-			this.Namespaced = namespaced;
-			this.Values = values;
+			this.NamespacedClient = param_namespacedclient;
+			this.ValuesClient = param_valuesclient;
 		}
 	}
+
 
 
 	public interface ITestWebAppClientV1Repository
 	{
-		V1.ITestClient Test { get; }
+		V1.ITestClient TestClient { get; }
 	}
 
 	internal class TestWebAppClientV1Repository : ITestWebAppClientV1Repository
 	{
-		public V1.ITestClient Test { get; private set;}
+		public V1.ITestClient TestClient { get; }
 
 		public TestWebAppClientV1Repository
 		(
-			V1.ITestClient test
+			V1.ITestClient param_testclient
 		)
 		{
-			this.Test = test;
+			this.TestClient = param_testclient;
 		}
 	}
+
 
 
 	public interface ITestWebAppClientV2Repository
 	{
-		V2.ITestClient Test { get; }
+		V2.ITestClient TestClient { get; }
 	}
 
 	internal class TestWebAppClientV2Repository : ITestWebAppClientV2Repository
 	{
-		public V2.ITestClient Test { get; private set;}
+		public V2.ITestClient TestClient { get; }
 
 		public TestWebAppClientV2Repository
 		(
-			V2.ITestClient test
+			V2.ITestClient param_testclient
 		)
 		{
-			this.Test = test;
+			this.TestClient = param_testclient;
 		}
 	}
 
 
+
+
+
 }
+
+
+
 
 
 namespace TestWebApp.Clients
@@ -159,188 +169,233 @@ namespace FancySuffix
 {
 
 
+
 	public interface INamespacedClient : ITestWebAppClient
 	{
-		
-		void Test(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage TestRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		void Test
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		Task TestAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		HttpResponseMessage TestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		ValueTask<HttpResponseMessage> TestRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		Task TestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> TestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
 
 	}
+
+
 
 
 	internal class NamespacedClient : INamespacedClient
 	{
-		public readonly ITestWebAppClientWrapper Client;
-		public readonly IHttpOverride HttpOverride;
-		public readonly IHttpSerializer Serializer;
-		public readonly IHttpRequestModifier Modifier;
+		protected readonly ITestWebAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpRequestModifier Modifier;
 
-		public NamespacedClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
+		public NamespacedClient(
+			ITestWebAppClientWrapper param_client,
+			IHttpOverride param_httpoverride,
+			IHttpSerializer param_serializer,
+			IHttpRequestModifier param_modifier)
 		{
-			Client = client;
-			HttpOverride = httpOverride;
-			Serializer = serializer;
-			Modifier = modifier;
+			Client = param_client;
+			HttpOverride = param_httpoverride;
+			Serializer = param_serializer;
+			Modifier = param_modifier;
 		}
 
 
-		public void Test(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
-		{
 
-			
+		
+		public void Test
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
 
 
 
 			string url = $@"api/namespaced/test";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage TestRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage TestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/namespaced/test";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task TestAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task TestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/namespaced/test";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> TestRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> TestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/namespaced/test";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
 		}
+
 
 	}
+
+
 }
+
 
 
 
@@ -348,789 +403,1119 @@ namespace FancySuffix
 
 	public interface IValuesClient : ITestWebAppClient
 	{
+
 		
-		IEnumerable<string> Get(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage GetRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<IEnumerable<string>> GetAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> GetRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		string Get(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage GetRaw(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<string> GetAsync(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> GetRawAsync(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void Post(string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage PostRaw(string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task PostAsync(string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> PostRawAsync(string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void Put(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage PutRaw(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task PutAsync(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> PutRawAsync(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void Delete(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage DeleteRaw(int id, 
-			int ControllerHeader = 0, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task DeleteAsync(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
-			int ControllerHeader = 0, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void CancellationTestEndpoint(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage CancellationTestEndpointRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task CancellationTestEndpointAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		string HeaderTestString(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage HeaderTestStringRaw(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<string> HeaderTestStringAsync(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> HeaderTestStringRawAsync(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		int HeaderTestInt(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage HeaderTestIntRaw(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<int> HeaderTestIntAsync(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> HeaderTestIntRawAsync(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void FancyDtoReturn(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage FancyDtoReturnRaw(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task FancyDtoReturnAsync(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void TaskReturn(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage TaskReturnRaw(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task TaskReturnAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> TaskReturnRawAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		MyFancyDto DtoForDto(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<MyFancyDto> DtoForDtoAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void GuidReturn(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage GuidReturnRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task GuidReturnAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> GuidReturnRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void DateTimeReturns(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<DateTime> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage DateTimeReturnsRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task DateTimeReturnsAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<DateTime> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void BoolReturns(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<bool> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage BoolReturnsRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task BoolReturnsAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<bool> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> BoolReturnsRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void PostWithNoBody(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage PostWithNoBodyRaw(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task PostWithNoBodyAsync(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void ComplexPost(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage ComplexPostRaw(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task ComplexPostAsync(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void PostWithSimpleBody(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task PostWithSimpleBodyAsync(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void EnumerableGet(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage EnumerableGetRaw(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task EnumerableGetAsync(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> EnumerableGetRawAsync(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void AttributeFormatting(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<int> NoContentCallback = null, 
-			Action<int> SeeOtherCallback = null, 
-			Action<string> NotModifiedCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task AttributeFormattingAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<int> NoContentCallback = null, 
-			Action<int> SeeOtherCallback = null, 
-			Action<string> NotModifiedCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		void QueryParameter(string name, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<string> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		HttpResponseMessage QueryParameterRaw(string name, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		Task QueryParameterAsync(string name, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<string> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
-
-		
-		ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		IEnumerable<string> Get
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage GetRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<IEnumerable<string>> GetAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> GetRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		string Get
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage GetRaw
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<string> GetAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> GetRawAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void Post
+		(
+			string value,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage PostRaw
+		(
+			string value,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task PostAsync
+		(
+			string value,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> PostRawAsync
+		(
+			string value,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void Put
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage PutRaw
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task PutAsync
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> PutRawAsync
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void Delete
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage DeleteRaw
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task DeleteAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> DeleteRawAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void CancellationTestEndpoint
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage CancellationTestEndpointRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task CancellationTestEndpointAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void IgnoreMe
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage IgnoreMeRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task IgnoreMeAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> IgnoreMeRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		string HeaderTestString
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage HeaderTestStringRaw
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<string> HeaderTestStringAsync
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> HeaderTestStringRawAsync
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		int HeaderTestInt
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage HeaderTestIntRaw
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<int> HeaderTestIntAsync
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> HeaderTestIntRawAsync
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void FancyDtoReturn
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage FancyDtoReturnRaw
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task FancyDtoReturnAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void TaskReturn
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage TaskReturnRaw
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task TaskReturnAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> TaskReturnRawAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		MyFancyDto DtoForDto
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage DtoForDtoRaw
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<MyFancyDto> DtoForDtoAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> DtoForDtoRawAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void GuidReturn
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage GuidReturnRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task GuidReturnAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> GuidReturnRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void DateTimeReturns
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<DateTime> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage DateTimeReturnsRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task DateTimeReturnsAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<DateTime> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void BoolReturns
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<bool> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage BoolReturnsRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task BoolReturnsAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<bool> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> BoolReturnsRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void PostWithNoBody
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage PostWithNoBodyRaw
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task PostWithNoBodyAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void ComplexPost
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage ComplexPostRaw
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task ComplexPostAsync
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> ComplexPostRawAsync
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void PostWithSimpleBody
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage PostWithSimpleBodyRaw
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task PostWithSimpleBodyAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void EnumerableGet
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage EnumerableGetRaw
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task EnumerableGetAsync
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> EnumerableGetRawAsync
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void AttributeFormatting
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<int> NoContentCallback = null,
+			Action<int> RedirectMethodCallback = null,
+			Action<string> NotModifiedCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage AttributeFormattingRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task AttributeFormattingAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<int> NoContentCallback = null,
+			Action<int> RedirectMethodCallback = null,
+			Action<string> NotModifiedCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> AttributeFormattingRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void QueryParameter
+		(
+			string name,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<string> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage QueryParameterRaw
+		(
+			string name,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task QueryParameterAsync
+		(
+			string name,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<string> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> QueryParameterRawAsync
+		(
+			string name,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
 
 	}
+
+
 
 
 	internal class ValuesClient : IValuesClient
@@ -1140,69 +1525,89 @@ namespace FancySuffix
 		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
 
-		public ValuesClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
+		public ValuesClient(
+			ITestWebAppClientWrapper param_client,
+			IHttpOverride param_httpoverride,
+			IHttpSerializer param_serializer,
+			IHttpRequestModifier param_modifier)
 		{
-			Client = client;
-			HttpOverride = httpOverride;
-			Serializer = serializer;
-			Modifier = modifier;
+			Client = param_client;
+			HttpOverride = param_httpoverride;
+			Serializer = param_serializer;
+			Modifier = param_modifier;
 		}
 
 
-		public IEnumerable<string> Get(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+		
+		public IEnumerable<string> Get
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<IEnumerable<string>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1214,94 +1619,112 @@ namespace FancySuffix
 
 		}
 
-
-		public HttpResponseMessage GetRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage GetRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async ValueTask<IEnumerable<string>> GetAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<IEnumerable<string>> GetAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.WithTimeout(timeout ?? Client.Timeout)
-				.AllowAnyHttpStatus()
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<IEnumerable<string>>(response.Content).ConfigureAwait(false);
@@ -1313,33 +1736,37 @@ namespace FancySuffix
 
 		}
 
-
-		public async ValueTask<HttpResponseMessage> GetRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> GetRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -1347,62 +1774,79 @@ namespace FancySuffix
 		}
 
 
-		public string Get(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public string Get
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("GEEET", "FULL")
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithHeader("GEEET", "FULL")				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1414,98 +1858,116 @@ namespace FancySuffix
 
 		}
 
-
-		public HttpResponseMessage GetRaw(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage GetRaw
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("GEEET", "FULL")
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithHeader("GEEET", "FULL")				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async ValueTask<string> GetAsync(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<string> GetAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("GEEET", "FULL")
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithHeader("GEEET", "FULL")				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false);
@@ -1517,35 +1979,39 @@ namespace FancySuffix
 
 		}
 
-
-		public async ValueTask<HttpResponseMessage> GetRawAsync(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> GetRawAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("GEEET", "FULL")
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithHeader("GEEET", "FULL")				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -1553,183 +2019,222 @@ namespace FancySuffix
 		}
 
 
-		public void Post(string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void Post
+		(
+			string value,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}?";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage PostRaw(string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage PostRaw
+		(
+			string value,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}?";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task PostAsync(string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task PostAsync
+		(
+			string value,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}?";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> PostRawAsync(string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> PostRawAsync
+		(
+			string value,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}?";
+			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, value, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -1737,187 +2242,226 @@ namespace FancySuffix
 		}
 
 
-		public void Put(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void Put
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}/{id}?";
+			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PutAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage PutRaw(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage PutRaw
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}/{id}?";
+			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PutAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task PutAsync(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task PutAsync
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}/{id}?";
+			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PutAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> PutRawAsync(int id, 
-			string value, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> PutRawAsync
+		(
+			string value,
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 
-
-			string url = $@"api/{controller}/{id}?";
+			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, value, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PutAsync(Serializer.Serialize(value),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PutAsync(Serializer.Serialize(value), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Put, url, value, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -1925,191 +2469,230 @@ namespace FancySuffix
 		}
 
 
-		public void Delete(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void Delete
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithAuth(auth)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithAuth(auth)
+							.AllowAnyHttpStatus()
+							.DeleteAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage DeleteRaw(int id, 
-			int ControllerHeader = 0, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage DeleteRaw
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithAuth(auth)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.DeleteAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithAuth(auth)
+							.AllowAnyHttpStatus()
+							.DeleteAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task DeleteAsync(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task DeleteAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithAuth(auth)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.DeleteAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithAuth(auth)
+							.AllowAnyHttpStatus()
+							.DeleteAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> DeleteRawAsync(int id, 
-			int ControllerHeader = 0, 
-			SecurityHeader auth = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> DeleteRawAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			SecurityHeader auth = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
-
 
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithAuth(auth)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.DeleteAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithAuth(auth)
+							.AllowAnyHttpStatus()
+							.DeleteAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Delete, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -2117,179 +2700,218 @@ namespace FancySuffix
 		}
 
 
-		public void CancellationTestEndpoint(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void CancellationTestEndpoint
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "CancellationTestEndpoint";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage CancellationTestEndpointRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage CancellationTestEndpointRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "CancellationTestEndpoint";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task CancellationTestEndpointAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task CancellationTestEndpointAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "CancellationTestEndpoint";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> CancellationTestEndpointRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "CancellationTestEndpoint";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -2297,64 +2919,300 @@ namespace FancySuffix
 		}
 
 
-		public string HeaderTestString(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void IgnoreMe
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
+			var controller = "Values";
+			var action = "IgnoreMe";
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+
+
+
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+
+
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public HttpResponseMessage IgnoreMeRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+			var controller = "Values";
+			var action = "IgnoreMe";
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		
+		public async Task IgnoreMeAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+			var controller = "Values";
+			var action = "IgnoreMe";
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+
+
+
+			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+
+
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public async ValueTask<HttpResponseMessage> IgnoreMeRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+			var controller = "Values";
+			var action = "IgnoreMe";
+			string url = $@"api/{controller}/{action}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+
+
+		
+		public string HeaderTestString
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
 			var controller = "Values";
 			var action = "HeaderTestString";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("SpecialValue2", SpecialValue2)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)				
+							.WithHeader("SpecialValue2", SpecialValue2)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -2366,102 +3224,120 @@ namespace FancySuffix
 
 		}
 
-
-		public HttpResponseMessage HeaderTestStringRaw(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage HeaderTestStringRaw
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "HeaderTestString";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("SpecialValue2", SpecialValue2)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)				
+							.WithHeader("SpecialValue2", SpecialValue2)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async ValueTask<string> HeaderTestStringAsync(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<string> HeaderTestStringAsync
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "HeaderTestString";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("SpecialValue2", SpecialValue2)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)				
+							.WithHeader("SpecialValue2", SpecialValue2)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false);
@@ -2473,37 +3349,41 @@ namespace FancySuffix
 
 		}
 
-
-		public async ValueTask<HttpResponseMessage> HeaderTestStringRawAsync(String SpecialValue1, 
-			string SpecialValue2, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> HeaderTestStringRawAsync
+		(
+			String SpecialValue1,
+			string SpecialValue2,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "HeaderTestString";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("SpecialValue2", SpecialValue2)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)				
+							.WithHeader("SpecialValue2", SpecialValue2)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -2511,62 +3391,79 @@ namespace FancySuffix
 		}
 
 
-		public int HeaderTestInt(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public int HeaderTestInt
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "HeaderTestInt";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -2578,98 +3475,116 @@ namespace FancySuffix
 
 		}
 
-
-		public HttpResponseMessage HeaderTestIntRaw(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage HeaderTestIntRaw
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "HeaderTestInt";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async ValueTask<int> HeaderTestIntAsync(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<int> HeaderTestIntAsync
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "HeaderTestInt";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false);
@@ -2681,35 +3596,39 @@ namespace FancySuffix
 
 		}
 
-
-		public async ValueTask<HttpResponseMessage> HeaderTestIntRawAsync(int SpecialValue1, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> HeaderTestIntRawAsync
+		(
+			int SpecialValue1,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "HeaderTestInt";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("SpecialValue1", SpecialValue1)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)				
+							.WithHeader("SpecialValue1", SpecialValue1)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -2717,217 +3636,264 @@ namespace FancySuffix
 		}
 
 
-		public void FancyDtoReturn(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void FancyDtoReturn
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
+
 			if(!int.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an int.");
 			}
-
-			
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage FancyDtoReturnRaw(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage FancyDtoReturnRaw
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!int.TryParse(id.ToString(),out int idOUT))
+
+			if(!int.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an int.");
 			}
-
-			
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task FancyDtoReturnAsync(int id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task FancyDtoReturnAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!int.TryParse(id.ToString(),out int idOUT))
+
+			if(!int.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an int.");
 			}
-
-			
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync(int id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> FancyDtoReturnRawAsync
+		(
+			int id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!int.TryParse(id.ToString(),out int idOUT))
+
+			if(!int.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an int.");
 			}
-
-			
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -2935,183 +3901,222 @@ namespace FancySuffix
 		}
 
 
-		public void TaskReturn(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void TaskReturn
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "TaskReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage TaskReturnRaw(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage TaskReturnRaw
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "TaskReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task TaskReturnAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task TaskReturnAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "TaskReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> TaskReturnRawAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> TaskReturnRawAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "TaskReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -3119,61 +4124,78 @@ namespace FancySuffix
 		}
 
 
-		public MyFancyDto DtoForDto(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public MyFancyDto DtoForDto
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DtoForDto";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -3185,96 +4207,114 @@ namespace FancySuffix
 
 		}
 
-
-		public HttpResponseMessage DtoForDtoRaw(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage DtoForDtoRaw
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DtoForDto";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async ValueTask<MyFancyDto> DtoForDtoAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<MyFancyDto> DtoForDtoAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DtoForDto";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			
+
+
 			if(response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false);
@@ -3286,34 +4326,38 @@ namespace FancySuffix
 
 		}
 
-
-		public async ValueTask<HttpResponseMessage> DtoForDtoRawAsync(MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> DtoForDtoRawAsync
+		(
+			MyFancyDto dto,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DtoForDto";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -3321,197 +4365,244 @@ namespace FancySuffix
 		}
 
 
-		public void GuidReturn(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void GuidReturn
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "GuidReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage GuidReturnRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage GuidReturnRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "GuidReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task GuidReturnAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task GuidReturnAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "GuidReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> GuidReturnRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> GuidReturnRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "GuidReturn";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -3519,197 +4610,244 @@ namespace FancySuffix
 		}
 
 
-		public void DateTimeReturns(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<DateTime> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void DateTimeReturns
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<DateTime> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DateTimeReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage DateTimeReturnsRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage DateTimeReturnsRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DateTimeReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task DateTimeReturnsAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<DateTime> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task DateTimeReturnsAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<DateTime> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DateTimeReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> DateTimeReturnsRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "DateTimeReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -3717,197 +4855,244 @@ namespace FancySuffix
 		}
 
 
-		public void BoolReturns(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<bool> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void BoolReturns
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<bool> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "BoolReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage BoolReturnsRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage BoolReturnsRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "BoolReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task BoolReturnsAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<bool> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task BoolReturnsAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<bool> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "BoolReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> BoolReturnsRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> BoolReturnsRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "BoolReturns";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -3915,217 +5100,264 @@ namespace FancySuffix
 		}
 
 
-		public void PostWithNoBody(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void PostWithNoBody
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+
+			if(!Guid.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "PostWithNoBody";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage PostWithNoBodyRaw(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage PostWithNoBodyRaw
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+
+			if(!Guid.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "PostWithNoBody";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task PostWithNoBodyAsync(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task PostWithNoBodyAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+
+			if(!Guid.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "PostWithNoBody";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke();
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> PostWithNoBodyRawAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(id.ToString(),out Guid idOUT))
+
+			if(!Guid.TryParse(id.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter id does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "PostWithNoBody";
-
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -4133,221 +5365,268 @@ namespace FancySuffix
 		}
 
 
-		public void ComplexPost(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void ComplexPost
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
+
+			if(!Guid.TryParse(testId.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "ComplexPost";
-
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage ComplexPostRaw(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage ComplexPostRaw
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
+
+			if(!Guid.TryParse(testId.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "ComplexPost";
-
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task ComplexPostAsync(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<MyFancyDto> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task ComplexPostAsync
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<MyFancyDto> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
+
+			if(!Guid.TryParse(testId.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "ComplexPost";
-
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> ComplexPostRawAsync(Guid testId, 
-			MyFancyDto dto, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> ComplexPostRawAsync
+		(
+			MyFancyDto dto,
+			Guid testId,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-			if(!Guid.TryParse(testId.ToString(),out Guid testIdOUT))
+
+			if(!Guid.TryParse(testId.ToString(),out _))
 			{
 				throw new InvalidRouteException("Parameter testId does not parse into an Guid.");
 			}
-
-			
 			var controller = "Values";
 			var action = "ComplexPost";
-
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, dto, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(dto),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(dto), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, dto, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -4355,201 +5634,248 @@ namespace FancySuffix
 		}
 
 
-		public void PostWithSimpleBody(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void PostWithSimpleBody
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "PostWithSimpleBody";
-
-			string url = $@"api/{controller}/{action}?";
+			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(id), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage PostWithSimpleBodyRaw(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage PostWithSimpleBodyRaw
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "PostWithSimpleBody";
-
-			string url = $@"api/{controller}/{action}?";
+			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(id), cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task PostWithSimpleBodyAsync(Guid id, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<Guid> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task PostWithSimpleBodyAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<Guid> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "PostWithSimpleBody";
-
-			string url = $@"api/{controller}/{action}?";
+			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(id), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync(Guid id, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> PostWithSimpleBodyRawAsync
+		(
+			Guid id,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "PostWithSimpleBody";
-
-			string url = $@"api/{controller}/{action}?";
+			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, id, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(Serializer.Serialize(id),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(Serializer.Serialize(id), cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, id, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -4557,205 +5883,252 @@ namespace FancySuffix
 		}
 
 
-		public void EnumerableGet(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void EnumerableGet
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "EnumerableGet";
-
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage EnumerableGetRaw(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage EnumerableGetRaw
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "EnumerableGet";
-
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task EnumerableGetAsync(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task EnumerableGetAsync
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "EnumerableGet";
-
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> EnumerableGetRawAsync(IEnumerable<int> ids, 
-			IEnumerable<bool> truth, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> EnumerableGetRawAsync
+		(
+			IEnumerable<int> customIds,
+			IEnumerable<bool> truth,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "EnumerableGet";
-
-			string url = $@"api/{controller}/{action}?{string.Join("&",ids.Select(x => $"customIds={x}"))}&{string.Join("&",truth.Select(x => $"truth={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&",customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&",truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -4763,251 +6136,322 @@ namespace FancySuffix
 		}
 
 
-		public void AttributeFormatting(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<int> NoContentCallback = null, 
-			Action<int> SeeOtherCallback = null, 
-			Action<string> NotModifiedCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void AttributeFormatting
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<int> NoContentCallback = null,
+			Action<int> RedirectMethodCallback = null,
+			Action<string> NotModifiedCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "AttributeFormatting";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(NoContentCallback != null && NoContentCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for NoContentCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for NoContentCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.NoContent)
 			{
 				NoContentCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
-			if(SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+
+
+
+			if(RedirectMethodCallback != null && RedirectMethodCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for SeeOtherCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for RedirectMethodCallback are not supported.As they will run out of the scope of this call.");
 			}
-			if(response.StatusCode == System.Net.HttpStatusCode.SeeOther)
+
+			if(response.StatusCode == System.Net.HttpStatusCode.RedirectMethod)
 			{
-				SeeOtherCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				RedirectMethodCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(NotModifiedCallback != null && NotModifiedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for NotModifiedCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for NotModifiedCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.NotModified)
 			{
 				NotModifiedCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage AttributeFormattingRaw(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage AttributeFormattingRaw
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "AttributeFormatting";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task AttributeFormattingAsync(int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<IEnumerable<int>> OKCallback = null, 
-			Action<int> NoContentCallback = null, 
-			Action<int> SeeOtherCallback = null, 
-			Action<string> NotModifiedCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task AttributeFormattingAsync
+		(
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<IEnumerable<int>> OKCallback = null,
+			Action<int> NoContentCallback = null,
+			Action<int> RedirectMethodCallback = null,
+			Action<string> NotModifiedCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "AttributeFormatting";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(NoContentCallback != null && NoContentCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for NoContentCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for NoContentCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.NoContent)
 			{
 				NoContentCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
 			}
-			if(SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+
+
+
+			if(RedirectMethodCallback != null && RedirectMethodCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for SeeOtherCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for RedirectMethodCallback are not supported.As they will run out of the scope of this call.");
 			}
-			if(response.StatusCode == System.Net.HttpStatusCode.SeeOther)
+
+			if(response.StatusCode == System.Net.HttpStatusCode.RedirectMethod)
 			{
-				SeeOtherCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+				RedirectMethodCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(NotModifiedCallback != null && NotModifiedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for NotModifiedCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for NotModifiedCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.NotModified)
 			{
 				NotModifiedCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> AttributeFormattingRawAsync(int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> AttributeFormattingRawAsync
+		(
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "AttributeFormatting";
-
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
@@ -5015,208 +6459,258 @@ namespace FancySuffix
 		}
 
 
-		public void QueryParameter(string name, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<string> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+
+
+		
+		public void QueryParameter
+		(
+			string name,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<string> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "QueryParameter";
-
-			string url = $@"api/{controller}/{action}?name={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage QueryParameterRaw(string name, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage QueryParameterRaw
+		(
+			string name,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "QueryParameter";
-
-			string url = $@"api/{controller}/{action}?name={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task QueryParameterAsync(string name, 
-			int ControllerHeader = 0, 
-			Action<string> BadRequestCallback = null, 
-			Action InternalServerErrorCallback = null, 
-			Action<string> OKCallback = null, 
-			Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task QueryParameterAsync
+		(
+			string name,
+			int ControllerHeader = 0,
+			Action<string> BadRequestCallback = null,
+			Action InternalServerErrorCallback = null,
+			Action<string> OKCallback = null,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "QueryParameter";
-
-			string url = $@"api/{controller}/{action}?name={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if(BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
 				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
 				InternalServerErrorCallback?.Invoke();
 			}
+
+
+
 			if(OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for OKCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
 				OKCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
 			}
+
+
+
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> QueryParameterRawAsync(string name, 
-			int ControllerHeader = 0, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> QueryParameterRawAsync
+		(
+			string name,
+			int ControllerHeader = 0,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
 
-			
 			var controller = "Values";
 			var action = "QueryParameter";
-
-			string url = $@"api/{controller}/{action}?name={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithHeader("ControllerHeader", ControllerHeader)
-				.WithHeader("Test", "EXTRA")
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.GetAsync(cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithHeader("Test", "EXTRA")				
+							.WithHeader("ControllerHeader", ControllerHeader)				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
 		}
 
+
 	}
+
+
 
 
 }
@@ -5228,187 +6722,231 @@ namespace TestWebApp.Clients.V1
 
 
 
+
 	public interface ITestClient : ITestWebAppClient
 	{
-		
-		void Endpoint(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage EndpointRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		void Endpoint
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		Task EndpointAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		HttpResponseMessage EndpointRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		ValueTask<HttpResponseMessage> EndpointRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		Task EndpointAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> EndpointRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
 
 	}
+
+
 
 
 	internal class TestClient : ITestClient
 	{
-		public readonly ITestWebAppClientWrapper Client;
-		public readonly IHttpOverride HttpOverride;
-		public readonly IHttpSerializer Serializer;
-		public readonly IHttpRequestModifier Modifier;
+		protected readonly ITestWebAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpRequestModifier Modifier;
 
-		public TestClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
+		public TestClient(
+			ITestWebAppClientWrapper param_client,
+			IHttpOverride param_httpoverride,
+			IHttpSerializer param_serializer,
+			IHttpRequestModifier param_modifier)
 		{
-			Client = client;
-			HttpOverride = httpOverride;
-			Serializer = serializer;
-			Modifier = modifier;
+			Client = param_client;
+			HttpOverride = param_httpoverride;
+			Serializer = param_serializer;
+			Modifier = param_modifier;
 		}
 
 
-		public void Endpoint(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
-		{
 
-			
+		
+		public void Endpoint
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
 
 
 
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage EndpointRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage EndpointRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task EndpointAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task EndpointAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> EndpointRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> EndpointRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
 		}
+
 
 	}
+
+
 
 
 }
@@ -5420,189 +6958,234 @@ namespace TestWebApp.Clients.V2
 
 
 
+
 	public interface ITestClient : ITestWebAppClient
 	{
-		
-		void Endpoint(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
 
 		
-		HttpResponseMessage EndpointRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		void Endpoint
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		Task EndpointAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		HttpResponseMessage EndpointRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
 
 		
-		ValueTask<HttpResponseMessage> EndpointRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken));
+		Task EndpointAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> EndpointRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
 
 	}
+
+
 
 
 	internal class TestClient : ITestClient
 	{
-		public readonly ITestWebAppClientWrapper Client;
-		public readonly IHttpOverride HttpOverride;
-		public readonly IHttpSerializer Serializer;
-		public readonly IHttpRequestModifier Modifier;
+		protected readonly ITestWebAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpRequestModifier Modifier;
 
-		public TestClient(ITestWebAppClientWrapper client, IHttpOverride httpOverride, IHttpSerializer serializer, IHttpRequestModifier modifier)
+		public TestClient(
+			ITestWebAppClientWrapper param_client,
+			IHttpOverride param_httpoverride,
+			IHttpSerializer param_serializer,
+			IHttpRequestModifier param_modifier)
 		{
-			Client = client;
-			HttpOverride = httpOverride;
-			Serializer = serializer;
-			Modifier = modifier;
+			Client = param_client;
+			HttpOverride = param_httpoverride;
+			Serializer = param_serializer;
+			Modifier = param_modifier;
 		}
 
 
-		public void Endpoint(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
-		{
 
-			
+		
+		public void Endpoint
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
 
 
 
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public HttpResponseMessage EndpointRaw(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public HttpResponseMessage EndpointRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			if(response == null)
 			{
 				response = Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
 		}
 
-
-		public async Task EndpointAsync(Action<HttpResponseMessage> ResponseCallback = null, 
-			TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async Task EndpointAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
-
 			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported. As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
+
 			ResponseCallback?.Invoke(response);
-			return;
+
+
 		}
 
-
-		public async ValueTask<HttpResponseMessage> EndpointRawAsync(TimeSpan? timeout = null, 
-			IEnumerable<Cookie> cookies = null, 
-			IDictionary<string, object> headers = null, 
-			CancellationToken cancellationToken = default(CancellationToken))
+		
+		public async ValueTask<HttpResponseMessage> EndpointRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
 		{
-
-			
 
 
 
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+
 			if(response == null)
 			{
 				response = await Client.ClientWrapper
-				.Request(url)
-				.WithCookies(cookies)
-				.WithHeaders(headers)
-				.WithRequestModifiers(Modifier)
-				.AllowAnyHttpStatus()
-				.WithTimeout(timeout ?? Client.Timeout)
-				.PostAsync(new StringContent(String.Empty),cancellationToken).ConfigureAwait(false);
+							.Request(url)
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.PostAsync(null, cancellationToken)
+							.ConfigureAwait(false);
+
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
 		}
+
 
 	}
 
 
+
+
 }
+
 
 

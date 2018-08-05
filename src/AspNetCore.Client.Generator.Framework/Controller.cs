@@ -24,6 +24,11 @@ namespace AspNetCore.Client.Generator.Framework
 		public string Name { get; set; }
 
 		/// <summary>
+		/// Name of the client generated
+		/// </summary>
+		public string ClientName => $@"{Name}Client";
+
+		/// <summary>
 		/// Version of the route, will group controllers with similar versions together
 		/// </summary>
 		public string NamespaceVersion { get; set; }
@@ -92,7 +97,10 @@ namespace AspNetCore.Client.Generator.Framework
 
 		public IEnumerable<INavNode> GetChildren()
 		{
-			return ResponseTypes.Cast<INavNode>().Union(ConstantHeader).Union(ParameterHeader);
+			return ResponseTypes.Cast<INavNode>()
+				.Union(ConstantHeader)
+				.Union(ParameterHeader)
+				.Union(GetInjectionDependencies().OfType<INavNode>());
 		}
 
 
@@ -104,6 +112,13 @@ namespace AspNetCore.Client.Generator.Framework
 		public IEnumerable<IDependency> GetInjectionDependencies()
 		{
 			return _allDependencies.Where(x => x != typeof(ClientDependency)).Select(x => Activator.CreateInstance(x) as IDependency);
+		}
+
+		public override string ToString()
+		{
+			string namespaceVersion = $@"{(NamespaceVersion != null ? $"{NamespaceVersion}." : "")}{(NamespaceSuffix != null ? $"{NamespaceSuffix}." : string.Empty)}";
+
+			return $"{namespaceVersion}{Name}";
 		}
 	}
 }

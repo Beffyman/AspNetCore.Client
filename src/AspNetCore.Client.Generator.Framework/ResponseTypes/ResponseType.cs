@@ -34,6 +34,7 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 		/// </summary>
 		public string ActionType { get; } = nameof(HttpResponseMessage);
 
+		public int SortOrder => 6;
 
 		/// <summary>
 		/// What status does the action trigger on
@@ -55,8 +56,18 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 		/// <param name="status"></param>
 		public ResponseType(string type, HttpStatusCode status)
 		{
-			ActionType = type;
 			Status = status;
+
+			if (Status == 0)
+			{
+				Status = null;
+			}
+
+
+			if (Status != 0 && Status != null)
+			{
+				ActionType = type;
+			}
 		}
 
 		/// <summary>
@@ -65,8 +76,12 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 		/// <param name="status"></param>
 		public ResponseType(HttpStatusCode status)
 		{
-			ActionType = null;
 			Status = status;
+
+			if (Status == 0)
+			{
+				Status = null;
+			}
 		}
 
 		public IEnumerable<INavNode> GetChildren()

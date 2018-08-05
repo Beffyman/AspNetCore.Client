@@ -14,6 +14,11 @@ namespace AspNetCore.Client.Generator
 {
 	internal static class Helpers
 	{
+		public static IEnumerable<T> NotNull<T>(this IEnumerable<T> source) where T : class
+		{
+			return source.Where(x => x != null);
+		}
+
 		public static HttpMethod HttpMethodFromEnum(HttpAttributeType type)
 		{
 			switch (type)
@@ -33,8 +38,13 @@ namespace AspNetCore.Client.Generator
 			}
 		}
 
-		public static T EnumParse<T>(string value) where T: Enum
+		public static T EnumParse<T>(string value) where T : Enum
 		{
+			if (value == null)
+			{
+				return default(T);
+			}
+
 			return (T)Enum.Parse(typeof(T), value);
 		}
 
