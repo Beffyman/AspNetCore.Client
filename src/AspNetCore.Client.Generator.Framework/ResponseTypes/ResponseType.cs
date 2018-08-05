@@ -17,7 +17,20 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 		/// <summary>
 		/// Display name of the parameter, based on the <see cref="Status"/>
 		/// </summary>
-		public string Name => $"{(Status == null ? "Response" : Status.ToString())}Callback";
+		public string Name
+		{
+			get
+			{
+				if (Status == HttpStatusCode.RedirectMethod)
+				{
+					return $"{nameof(HttpStatusCode.SeeOther)}Callback";
+				}
+				else
+				{
+					return $"{(Status == null ? "Response" : Status.ToString())}Callback";
+				}
+			}
+		}
 
 		/// <summary>
 		/// All Response Types are optional parameters, null
@@ -62,7 +75,10 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 			{
 				Status = null;
 			}
-
+			else if (Status == HttpStatusCode.RedirectMethod)
+			{
+				Status = HttpStatusCode.SeeOther;
+			}
 
 			if (Status != 0 && Status != null)
 			{
@@ -82,11 +98,21 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 			{
 				Status = null;
 			}
+			else if (Status == HttpStatusCode.RedirectMethod)
+			{
+				Status = HttpStatusCode.SeeOther;
+			}
 		}
 
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return null;
+		}
+
+
+		public override string ToString()
+		{
+			return $"{Type} {Name}";
 		}
 	}
 }

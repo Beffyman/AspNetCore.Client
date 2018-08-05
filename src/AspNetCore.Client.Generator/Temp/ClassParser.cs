@@ -180,8 +180,12 @@ namespace AspNetCore.Client.Generator.Temp
 
 			endpoint.ResponseTypes = responses.Select(x => new Framework.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
 
+			var duplicateResponseTypes = endpoint.GetResponseTypes().GroupBy(x => x.Status).Where(x => x.Count() > 1).ToList();
 
-
+			if (duplicateResponseTypes.Any())
+			{
+				throw new NotSupportedException($"Endpoint has multiple response types of the same status defined. {string.Join(", ", duplicateResponseTypes.Select(x => x.Key?.ToString()))}");
+			}
 
 			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.FullRoute)).ToList();
 

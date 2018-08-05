@@ -46,5 +46,11 @@ namespace AspNetCore.Client.Generator.Framework.Headers
 		{
 			return null;
 		}
+
+
+		public override string ToString()
+		{
+			return $"{Type} {Key} = {DefaultValue}";
+		}
 	}
 }

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -60,6 +61,7 @@ namespace AspNetCore.Client.Generator.Temp
 											.SelectMany(x => x.UsingStatements)
 											.Union(requiredUsingStatements)
 											.Distinct()
+											.OrderBy(x => x)
 											.ToArray();
 
 			var context = new GenerationContext();
@@ -731,8 +733,18 @@ $@"			if({responseType.Name} != null && {responseType.Name}.Method.IsDefined(typ
 					content = $@"{GetAwait(async)}Serializer.Deserialize<{responseType.ActionType}>(response.Content){GetAsyncEnding(async)}";
 				}
 
+				string statusValue = null;
+				if (responseType.Status == HttpStatusCode.RedirectMethod)
+				{
+					statusValue = nameof(HttpStatusCode.SeeOther);
+				}
+				else
+				{
+					statusValue = responseType.Status?.ToString();
+				}
+
 				return
-$@"			if(response.StatusCode == System.Net.HttpStatusCode.{responseType.Status})
+$@"			if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 			{{
 				{responseType.Name}?.Invoke({content});
 			}}

@@ -25,5 +25,11 @@ namespace AspNetCore.Client.Generator.Framework.Parameters
 		{
 			return null;
 		}
+
+
+		public override string ToString()
+		{
+			return $"{Type} {Name} = {DefaultValue}";
+		}
 	}
 }
