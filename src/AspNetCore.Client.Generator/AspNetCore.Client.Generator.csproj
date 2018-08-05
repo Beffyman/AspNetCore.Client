@@ -40,7 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AspNetCore.Client.Generator.Framework\AspNetCore.Client.Generator.Framework.csproj" />
+	  <ProjectReference Include="..\AspNetCore.Client.Generator.Framework\AspNetCore.Client.Generator.Framework.csproj" PrivateAssets="all" />
 	  <ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
 	</ItemGroup>
 

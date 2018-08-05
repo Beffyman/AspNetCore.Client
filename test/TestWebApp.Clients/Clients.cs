@@ -6,6 +6,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
 using TestWebApp.Contracts;
 using AspNetCore.Client;
 using AspNetCore.Client.Authorization;
@@ -15,14 +20,9 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace TestWebApp.Clients
 {
@@ -1412,7 +1412,7 @@ namespace FancySuffix
 			Action InternalServerErrorCallback = null,
 			Action<IEnumerable<int>> OKCallback = null,
 			Action<int> NoContentCallback = null,
-			Action<int> RedirectMethodCallback = null,
+			Action<int> SeeOtherCallback = null,
 			Action<string> NotModifiedCallback = null,
 			Action<HttpResponseMessage> ResponseCallback = null,
 			IDictionary<String,Object> headers = null,
@@ -1439,7 +1439,7 @@ namespace FancySuffix
 			Action InternalServerErrorCallback = null,
 			Action<IEnumerable<int>> OKCallback = null,
 			Action<int> NoContentCallback = null,
-			Action<int> RedirectMethodCallback = null,
+			Action<int> SeeOtherCallback = null,
 			Action<string> NotModifiedCallback = null,
 			Action<HttpResponseMessage> ResponseCallback = null,
 			IDictionary<String,Object> headers = null,
@@ -6146,7 +6146,7 @@ namespace FancySuffix
 			Action InternalServerErrorCallback = null,
 			Action<IEnumerable<int>> OKCallback = null,
 			Action<int> NoContentCallback = null,
-			Action<int> RedirectMethodCallback = null,
+			Action<int> SeeOtherCallback = null,
 			Action<string> NotModifiedCallback = null,
 			Action<HttpResponseMessage> ResponseCallback = null,
 			IDictionary<String,Object> headers = null,
@@ -6227,14 +6227,14 @@ namespace FancySuffix
 
 
 
-			if(RedirectMethodCallback != null && RedirectMethodCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			if(SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for RedirectMethodCallback are not supported.As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for SeeOtherCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			if(response.StatusCode == System.Net.HttpStatusCode.RedirectMethod)
+			if(response.StatusCode == System.Net.HttpStatusCode.SeeOther)
 			{
-				RedirectMethodCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				SeeOtherCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
 			}
 
 
@@ -6306,7 +6306,7 @@ namespace FancySuffix
 			Action InternalServerErrorCallback = null,
 			Action<IEnumerable<int>> OKCallback = null,
 			Action<int> NoContentCallback = null,
-			Action<int> RedirectMethodCallback = null,
+			Action<int> SeeOtherCallback = null,
 			Action<string> NotModifiedCallback = null,
 			Action<HttpResponseMessage> ResponseCallback = null,
 			IDictionary<String,Object> headers = null,
@@ -6387,14 +6387,14 @@ namespace FancySuffix
 
 
 
-			if(RedirectMethodCallback != null && RedirectMethodCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			if(SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
-				throw new NotSupportedException("Async void action delegates for RedirectMethodCallback are not supported.As they will run out of the scope of this call.");
+				throw new NotSupportedException("Async void action delegates for SeeOtherCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			if(response.StatusCode == System.Net.HttpStatusCode.RedirectMethod)
+			if(response.StatusCode == System.Net.HttpStatusCode.SeeOther)
 			{
-				RedirectMethodCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+				SeeOtherCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
 			}
 
 
