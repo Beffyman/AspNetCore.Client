@@ -15,7 +15,7 @@ using System.Net.Http;
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.Routes;
 
-namespace AspNetCore.Client.Generator.CSharp
+namespace AspNetCore.Client.Generator.RoslynParser
 {
 	public class MethodDefinition
 	{

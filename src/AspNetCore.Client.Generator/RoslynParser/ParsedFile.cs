@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AspNetCore.Client.Generator.CSharp
+namespace AspNetCore.Client.Generator.RoslynParser
 {
 	public class ParsedFile
 	{
@@ -77,7 +77,7 @@ namespace AspNetCore.Client.Generator.CSharp
 
 					foreach (var cd in classDeclarations)
 					{
-						Context.Clients.Add(ClassParser.ReadAsClient(cd));
+						Context.Clients.Add(RoslynClassParser.ReadAsClient(cd));
 					}
 				}
 			}

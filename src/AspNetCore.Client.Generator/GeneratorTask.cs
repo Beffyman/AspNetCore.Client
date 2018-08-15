@@ -1,10 +1,11 @@
 ﻿using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.CSharp;
+using AspNetCore.Client.Generator.RoslynParser;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AspNetCore.Client.Generator.Output;
+using AspNetCore.Client.Generator.ReflectionParser;
 
 namespace AspNetCore.Client.Generator
 {
@@ -22,6 +23,8 @@ namespace AspNetCore.Client.Generator
 		public string ClientInterfaceName { get; set; }
 		public string UseValueTask { get; set; }
 		public string UseInternalClients { get; set; }
+		public string UseReflection { get; set; }
+		public string ReflectionAssemblyName { get; set; }
 		public string ClientNamespace { get; set; }
 		public string AllowedNamespaces { get; set; }
 		public string ExcludedNamespaces { get; set; }
@@ -33,6 +36,8 @@ namespace AspNetCore.Client.Generator
 			ClientInterfaceName = properties[nameof(ClientInterfaceName)];
 			UseValueTask = properties[nameof(UseValueTask)];
 			UseInternalClients = properties[nameof(UseInternalClients)];
+			UseReflection = properties[nameof(UseReflection)];
+			ReflectionAssemblyName = properties[nameof(ReflectionAssemblyName)];
 			ClientNamespace = properties[nameof(ClientNamespace)];
 			AllowedNamespaces = properties[nameof(AllowedNamespaces)];
 			ExcludedNamespaces = properties[nameof(ExcludedNamespaces)];
@@ -57,7 +62,6 @@ namespace AspNetCore.Client.Generator
 #if NETSTANDARD2_0
 		protected override bool ExecuteIsolated()
 #endif
-
 		{
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] START");
 
@@ -72,6 +76,8 @@ namespace AspNetCore.Client.Generator
 			Settings.ClientInterfaceName = ClientInterfaceName;
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
 			Settings.UseInternalClients = bool.Parse(UseInternalClients ?? "false");
+			Settings.UseReflection = bool.Parse(UseReflection ?? "false");
+			Settings.ReflectionAssemblyName = ReflectionAssemblyName;
 			Settings.ClientNamespace = ClientNamespace;
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 			Settings.ExcludedNamespaces = ExcludedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -99,13 +105,26 @@ namespace AspNetCore.Client.Generator
 
 			//Start out by loading all cs files into memory
 
-			var parsedFiles = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
+
+			if (Settings.UseReflection)
+			{
+				var assemblies = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", $"*/{Settings.ReflectionAssemblyName}.dll", SearchOption.AllDirectories)
+											.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\"))
+											.Select(cs => new LoadedAssembly(cs))
+											.ToList();
+			}
+			else
+			{
+				var parsedFiles = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
 									.Select(cs => new ParsedFile(cs))
 									.ToList();
 
-			ClassWriter.WriteClientsFile(parsedFiles);
+				ClassWriter.WriteClientsFile(parsedFiles);
+			}
+
+
 
 			Log.LogCommandLine("Client Generation Successful!");
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] END");

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using AspNetCore.Client.Serializers;
 
-namespace AspNetCore.Client.Generator.CSharp
+namespace AspNetCore.Client.Generator.RoslynParser
 {
 	public class ResponseTypeDefinition
 	{

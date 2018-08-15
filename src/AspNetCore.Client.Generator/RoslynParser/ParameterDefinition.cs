@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace AspNetCore.Client.Generator.CSharp
+namespace AspNetCore.Client.Generator.RoslynParser
 {
 	public class ParameterDefinition
 	{

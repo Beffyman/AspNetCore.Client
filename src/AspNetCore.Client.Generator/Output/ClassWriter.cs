@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp;
+﻿using AspNetCore.Client.Generator.RoslynParser;
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
 using AspNetCore.Client.Generator.Framework.Dependencies;

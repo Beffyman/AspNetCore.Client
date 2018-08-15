@@ -1,5 +1,5 @@
 ﻿using AspNetCore.Client.Attributes;
-using AspNetCore.Client.Generator.CSharp;
+using AspNetCore.Client.Generator.RoslynParser;
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.Parameters;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.Output
 {
-	public static class ClassParser
+	public static class RoslynClassParser
 	{
 
 		private static Regex RouteVersionRegex = new Regex(@"\/([v|V]\d+)\/");
@@ -105,11 +105,6 @@ namespace AspNetCore.Client.Generator.Output
 			var endpoint = new Endpoint(parent);
 
 			endpoint.Name = syntax.Identifier.ValueText.Trim();
-
-
-
-
-
 
 
 
