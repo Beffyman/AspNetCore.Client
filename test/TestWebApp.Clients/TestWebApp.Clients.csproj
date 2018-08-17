@@ -16,6 +16,8 @@
 		<ClientInterfaceName>TestWebAppClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
+		<UseReflection>false</UseReflection>
+		<ReflectionAssemblyName></ReflectionAssemblyName>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>

@@ -9,6 +9,7 @@
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 		<LangVersion>latest</LangVersion>
 		<IsPackable>false</IsPackable>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
 
 		<!--Workaround for https://github.com/dotnet/cli/issues/9477-->
@@ -33,7 +34,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj" />
+		<ProjectReference Include="..\..\src\AspNetCore.Client.Generator\AspNetCore.Client.Generator.csproj" />
 	</ItemGroup>
 
 </Project>

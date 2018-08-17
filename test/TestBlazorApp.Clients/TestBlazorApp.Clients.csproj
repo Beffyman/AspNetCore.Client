@@ -16,6 +16,8 @@
 		<ClientInterfaceName>TestBlazorAppClient</ClientInterfaceName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
+		<UseReflection>true</UseReflection>
+		<ReflectionAssemblyName>TestBlazorApp.Server</ReflectionAssemblyName>
 		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>

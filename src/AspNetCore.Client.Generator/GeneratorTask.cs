@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using AspNetCore.Client.Generator.Output;
 using AspNetCore.Client.Generator.ReflectionParser;
+using System.Reflection;
 
 namespace AspNetCore.Client.Generator
 {
@@ -108,7 +109,14 @@ namespace AspNetCore.Client.Generator
 
 			if (Settings.UseReflection)
 			{
-				var assemblies = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", $"*/{Settings.ReflectionAssemblyName}.dll", SearchOption.AllDirectories)
+				if (string.IsNullOrEmpty(Settings.ReflectionAssemblyName))
+				{
+					Log.LogError($"{nameof(Settings.ReflectionAssemblyName)} is not provided");
+					return false;
+				}
+
+
+				var assemblies = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", $"{Settings.ReflectionAssemblyName}.dll", SearchOption.AllDirectories)
 											.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\"))
 											.Select(cs => new LoadedAssembly(cs))
 											.ToList();

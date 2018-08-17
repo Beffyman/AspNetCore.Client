@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 using AspNetCore.Client.Generator.Framework;
+using System.IO;
+using AspNetCore.Client.Generator.Output;
 
 namespace AspNetCore.Client.Generator.ReflectionParser
 {
@@ -24,6 +26,7 @@ namespace AspNetCore.Client.Generator.ReflectionParser
 		{
 			File = Assembly.LoadFile(file);
 
+
 			Context = new GenerationContext();
 
 			var baseControllerType = typeof(ControllerBase);
@@ -37,7 +40,7 @@ namespace AspNetCore.Client.Generator.ReflectionParser
 			{
 				foreach (var controller in ControllerTypes)
 				{
-
+					Context.Clients.Add(ReflectionClassParser.ReadAsClient(controller));
 				}
 			}
 			catch (NotSupportedException nse)
