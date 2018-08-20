@@ -27,7 +27,9 @@ using TestWebApp.Contracts;
 namespace TestWebApp.Clients
 {
 
-#warning  File E:\Git_Github\AspNetCore.Client\test\TestWebApp\Controllers\ErrorController.cs is misconfigured for generation :: Controller must have a route to be valid for generation.
+#warning  File Controllers\DuplicateParameterErrorController.cs is misconfigured for generation :: Endpoint has multiple parameters of the same name defined. id
+#warning  File Controllers\ErrorController.cs is misconfigured for generation :: Controller must have a route to be valid for generation.
+#warning  File Controllers\ResponseTypeErrorController.cs is misconfigured for generation :: Endpoint has multiple response types of the same status defined. OK
 
 
 	public static class TestWebAppClientInstaller

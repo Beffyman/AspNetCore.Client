@@ -47,6 +47,10 @@ namespace AspNetCore.Client.Generator.CSharp
 			{
 				Type = Regex.Replace(Type, @"typeof\((.+)\)", "$1 ")?.Trim();
 			}
+			else if (Type?.Contains("nameof") ?? false)
+			{
+				Type = Regex.Replace(Type, @"nameof\((.+)\)", "$1 ")?.Trim();
+			}
 
 		}
 
@@ -60,6 +64,10 @@ namespace AspNetCore.Client.Generator.CSharp
 			if (Type?.Contains("typeof") ?? false)
 			{
 				Type = Regex.Replace(Type, @"typeof\((.+)\)", "$1 ");
+			}
+			else if (Type?.Contains("nameof") ?? false)
+			{
+				Type = Regex.Replace(Type, @"nameof\((.+)\)", "$1 ")?.Trim();
 			}
 		}
 	}

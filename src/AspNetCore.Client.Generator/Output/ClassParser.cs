@@ -187,6 +187,9 @@ namespace AspNetCore.Client.Generator.Output
 				throw new NotSupportedException($"Endpoint has multiple response types of the same status defined. {string.Join(", ", duplicateResponseTypes.Select(x => x.Key?.ToString()))}");
 			}
 
+
+
+
 			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.FullRoute)).ToList();
 
 
@@ -196,11 +199,6 @@ namespace AspNetCore.Client.Generator.Output
 
 
 			endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParams }).NotNull().ToList();
-
-			if (endpoint.Parameters.Select(x => x.Name).Distinct().Count() != endpoint.Parameters.Select(x => x.Name).Count())
-			{
-				throw new Exception();
-			}
 
 			endpoint.Parameters.Add(new CancellationTokenModifier());
 			endpoint.Parameters.Add(new CookieModifier());
@@ -219,11 +217,11 @@ namespace AspNetCore.Client.Generator.Output
 
 
 
-
 			var headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(IncludeHeaderAttribute.AttributeName))
 				.Select(x => new HeaderDefinition(x))
 				.ToList();
 			endpoint.ConstantHeader = headers.Select(x => new Framework.Headers.ConstantHeader(x.Name, x.Value)).ToList();
+
 
 			var actionResultReturn = syntax.ReturnType.ToFullString().Contains(Constants.IActionResult);
 
@@ -250,6 +248,18 @@ namespace AspNetCore.Client.Generator.Output
 				returnType = null;
 			}
 			endpoint.ReturnType = returnType;
+
+
+
+			var duplicateParameters = endpoint.GetParametersWithoutResponseTypes().GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
+
+			if (duplicateParameters.Any())
+			{
+				throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+			}
+
+
+
 
 			return endpoint;
 		}
