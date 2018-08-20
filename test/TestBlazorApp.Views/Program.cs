@@ -13,7 +13,7 @@ namespace TestBlazorApp.Views
 		{
 			var serviceProvider = new BrowserServiceProvider(services =>
 			{
-				services.InstallClients(config=>
+				services.AddTestBlazorClients(config =>
 				{
 					config.UseBlazorSimpleJsonSerlaizer();
 				});

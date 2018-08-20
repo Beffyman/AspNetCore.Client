@@ -6,14 +6,34 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 {
 	public class ClientDependency : IDependency
 	{
-		public string Type { get; }
+		private string _type { get; }
 
-		public string Name => "Client";
+		public string GetDependencyFieldType(string clientName)
+		{
+			return GetDependencyParameterType(clientName);
+		}
+
+		public string GetDependencyParameterType(string clientName)
+		{
+			return _type;
+		}
+
+		public string GetDependencyName(string clientName)
+		{
+			return $"Client";
+		}
+
+		public bool HasAssignmentOverride => false;
+
+		public string GetAssignmentOverride(string value)
+		{
+			throw new NotImplementedException();
+		}
 
 
 		public ClientDependency(string type)
 		{
-			Type = type;
+			_type = type;
 		}
 	}
 }

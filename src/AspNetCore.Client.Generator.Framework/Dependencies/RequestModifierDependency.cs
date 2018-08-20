@@ -11,8 +11,28 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 {
 	public class RequestModifierDependency : IDependency, IRequestModifier
 	{
-		public string Type => nameof(IHttpRequestModifier);
-		public string Name => "Modifier";
+
+		public string GetDependencyFieldType(string clientName)
+		{
+			return GetDependencyParameterType(clientName);
+		}
+
+		public string GetDependencyParameterType(string clientName)
+		{
+			return nameof(IHttpRequestModifier);
+		}
+
+		public string GetDependencyName(string clientName)
+		{
+			return "Modifier";
+		}
+
+		public bool HasAssignmentOverride => false;
+
+		public string GetAssignmentOverride(string value)
+		{
+			throw new NotImplementedException();
+		}
 
 		public IEnumerable<INavNode> GetChildren()
 		{

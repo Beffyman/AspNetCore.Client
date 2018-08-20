@@ -8,7 +8,26 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 {
 	public class HttpSerializerDependency : IDependency
 	{
-		public string Type => nameof(IHttpSerializer);
-		public string Name => "Serializer";
+		public string GetDependencyFieldType(string clientName)
+		{
+			return nameof(IHttpSerializer);
+		}
+
+		public string GetDependencyParameterType(string clientName)
+		{
+			return $"Func<{clientName},{nameof(IHttpSerializer)}>";
+		}
+
+		public string GetDependencyName(string clientName)
+		{
+			return $"Serializer";
+		}
+
+		public bool HasAssignmentOverride => true;
+
+		public string GetAssignmentOverride(string value)
+		{
+			return $"{value}(this)";
+		}
 	}
 }

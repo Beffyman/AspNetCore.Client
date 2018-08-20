@@ -20,6 +20,7 @@ namespace AspNetCore.Client.Generator
 		public string CurrentDirectory { get; set; }
 		public string RouteToServiceProjectFolder { get; set; }
 		public string ClientInterfaceName { get; set; }
+		public string RegisterName { get; set; }
 		public string UseValueTask { get; set; }
 		public string UseInternalClients { get; set; }
 		public string ClientNamespace { get; set; }
@@ -30,7 +31,7 @@ namespace AspNetCore.Client.Generator
 		{
 			RouteToServiceProjectFolder = properties[nameof(RouteToServiceProjectFolder)];
 			ClientInterfaceName = properties[nameof(ClientInterfaceName)];
-			ClientInterfaceName = properties[nameof(ClientInterfaceName)];
+			RegisterName = properties[nameof(RegisterName)];
 			UseValueTask = properties[nameof(UseValueTask)];
 			UseInternalClients = properties[nameof(UseInternalClients)];
 			ClientNamespace = properties[nameof(ClientNamespace)];
@@ -70,6 +71,7 @@ namespace AspNetCore.Client.Generator
 
 			Settings.RouteToServiceProjectFolder = RouteToServiceProjectFolder;
 			Settings.ClientInterfaceName = ClientInterfaceName;
+			Settings.RegisterName = RegisterName;
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
 			Settings.UseInternalClients = bool.Parse(UseInternalClients ?? "false");
 			Settings.ClientNamespace = ClientNamespace;

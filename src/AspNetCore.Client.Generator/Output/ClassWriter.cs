@@ -8,6 +8,7 @@ using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.ResponseTypes;
 using AspNetCore.Client.Generator.Framework.Routes.Constraints;
 using Flurl.Http;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -131,7 +132,7 @@ $@"
 		/// <param name=""services""></param>
 		/// <param name=""configure"">Overrides for client configuration</param>
 		/// <returns></returns>
-		public static {nameof(IServiceCollection)} InstallClients(this {nameof(IServiceCollection)} services, Action<{nameof(ClientConfiguration)}> configure)
+		public static {nameof(IServiceCollection)} Add{Settings.RegisterName}Clients(this {nameof(IServiceCollection)} services, Action<{nameof(ClientConfiguration)}> configure)
 		{{
 			var configuration = new {nameof(ClientConfiguration)}();
 
@@ -143,7 +144,7 @@ $@"
 {string.Join(Environment.NewLine, versions.Select(WriteRepositoryRegistration))}
 {string.Join(Environment.NewLine, context.Clients.Where(x => !x.Ignored).Select(WriteClientRegistration))}
 
-			return configuration.{nameof(ClientConfiguration.ApplyConfiguration)}(services);;
+			return configuration.{nameof(ClientConfiguration.ApplyConfiguration)}<I{Settings.ClientInterfaceName}>(services);
 		}}
 	}}
 ";
@@ -356,17 +357,27 @@ $@"
 
 		private static string WriteDependenciesField(IDependency dependency)
 		{
-			return $@"		protected readonly {dependency.Type} {dependency.Name};";
+			return $@"		protected readonly {dependency.GetDependencyFieldType($"I{Settings.ClientInterfaceName}")} {dependency.GetDependencyName($"I{Settings.ClientInterfaceName}")};";
 		}
 
 		private static string WriteDependenciesParameter(IDependency dependency)
 		{
-			return $@"			{dependency.Type} param_{dependency.Name.ToLower()}";
+			return $@"			{dependency.GetDependencyParameterType($"I{Settings.ClientInterfaceName}")} param_{dependency.GetDependencyName($"I{Settings.ClientInterfaceName}").ToLower()}";
 		}
 
 		private static string WriteDependenciesAssignment(IDependency dependency)
 		{
-			return $@"			{dependency.Name} = param_{dependency.Name.ToLower()};";
+			string assignmentValue = $"param_{dependency.GetDependencyName($"I{Settings.ClientInterfaceName}").ToLower()}";
+
+			if (dependency.HasAssignmentOverride)
+			{
+				return $@"			{dependency.GetDependencyName($"I{Settings.ClientInterfaceName}")} = {dependency.GetAssignmentOverride(assignmentValue)};";
+			}
+			else
+			{
+				return $@"			{dependency.GetDependencyName($"I{Settings.ClientInterfaceName}")} = {assignmentValue};";
+			}
+
 		}
 
 		#endregion Dependencies
@@ -473,7 +484,7 @@ $@"{string.Join(Environment.NewLine, routeConstraints.Select(WriteRouteConstrain
 
 			if(response == null)
 			{{
-				response = {GetAwait(async)}{clientDependency.Name}.{nameof(IClientWrapper.ClientWrapper)}
+				response = {GetAwait(async)}{clientDependency.GetDependencyName($"I{Settings.ClientInterfaceName}")}.{nameof(IClientWrapper.ClientWrapper)}
 							.Request(url)
 {string.Join($"				{Environment.NewLine}", requestModifiers.Select(WriteRequestModifiers).NotNull())}
 							.AllowAnyHttpStatus()
@@ -815,7 +826,7 @@ $@"			if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 			}
 			else if (modifier is RequestModifierDependency rm)
 			{
-				return $@"{tabs}.WithRequestModifiers({rm.Name})";
+				return $@"{tabs}.WithRequestModifiers({rm.GetDependencyName($"I{Settings.ClientInterfaceName}")})";
 			}
 			else if (modifier is SecurityModifier sm)
 			{
@@ -824,7 +835,7 @@ $@"			if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 			else if (modifier is TimeoutModifier tm)
 			{
 				var clientDependency = new ClientDependency(null);
-				return $@"{tabs}.WithTimeout({tm.Name} ?? {clientDependency.Name}.{nameof(IClientWrapper.Timeout)})";
+				return $@"{tabs}.WithTimeout({tm.Name} ?? {clientDependency.GetDependencyName($"I{Settings.ClientInterfaceName}")}.{nameof(IClientWrapper.Timeout)})";
 			}
 			else if (modifier is ConstantHeader ch)
 			{

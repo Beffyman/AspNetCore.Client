@@ -9,6 +9,7 @@
 		<AspNetCore.Client.Generator.GeneratorTask CurrentDirectory="$(MSBuildProjectDirectory)"
 													RouteToServiceProjectFolder="$(RouteToServiceProjectFolder)"
 													ClientInterfaceName="$(ClientInterfaceName)"
+													RegisterName="$(RegisterName)"
 													UseValueTask="$(UseValueTask)"
 													UseInternalClients="$(UseInternalClients)"
 													ClientNamespace="$(ClientNamespace)"

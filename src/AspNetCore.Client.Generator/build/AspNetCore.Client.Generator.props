@@ -9,6 +9,7 @@
 		<GenerateClients>true</GenerateClients>
 		<RouteToServiceProjectFolder></RouteToServiceProjectFolder>
 		<ClientInterfaceName>MyServiceClient</ClientInterfaceName>
+		<RegisterName>MyService</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>MyService.Clients</ClientNamespace>

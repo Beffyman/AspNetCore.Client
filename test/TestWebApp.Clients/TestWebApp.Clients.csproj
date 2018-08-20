@@ -14,6 +14,7 @@
 		<GenerateClients>true</GenerateClients>
 		<RouteToServiceProjectFolder>../TestWebApp</RouteToServiceProjectFolder>
 		<ClientInterfaceName>TestWebAppClient</ClientInterfaceName>
+		<RegisterName>TestWeb</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
