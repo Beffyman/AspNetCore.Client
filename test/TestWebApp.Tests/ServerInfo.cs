@@ -24,7 +24,7 @@ namespace TestWebApp.Tests
 			Client = Server.CreateClient();
 
 			var services = new ServiceCollection();
-			services.InstallClients(ConfigureClient);
+			services.AddTestWebClients(ConfigureClient);
 
 			Provider = services.BuildServiceProvider();
 		}

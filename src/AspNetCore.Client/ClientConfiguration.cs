@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Text;
 
 namespace AspNetCore.Client
 {
+
 	/// <summary>
 	/// Configuration for the clients
 	/// </summary>
@@ -55,12 +57,14 @@ namespace AspNetCore.Client
 		/// </summary>
 		private Func<HttpClient, ClientSettings, IClientWrapper> _clientCreator = null;
 
+
+
 		/// <summary>
 		/// Applies the configurations to the <see cref="IServiceCollection"/>
 		/// </summary>
 		/// <param name="services"></param>
 		/// <returns></returns>
-		public IServiceCollection ApplyConfiguration(IServiceCollection services)
+		public IServiceCollection ApplyConfiguration<T>(IServiceCollection services) where T : IClient
 		{
 			if (SerializeType == null)
 			{
@@ -78,11 +82,13 @@ namespace AspNetCore.Client
 			}
 			else
 			{
-				throw new Exception("Error setting up client dependnecies register.");
+				throw new Exception("Error setting up client dependencies register.");
 			}
 
-			services.AddScoped(typeof(IHttpSerializer), SerializeType);
-			services.AddScoped(typeof(IHttpOverride), HttpOverrideType);
+			services.AddScoped(SerializeType);
+			services.AddScoped(HttpOverrideType);
+			services.AddScoped<Func<T, IHttpSerializer>>(provider => (_ => (IHttpSerializer)provider.GetService(SerializeType)));
+			services.AddScoped<Func<T, IHttpOverride>>(provider => (_ => (IHttpOverride)provider.GetService(HttpOverrideType)));
 
 			services.AddScoped<IHttpRequestModifier, HttpRequestModifier>((_) =>
 			{

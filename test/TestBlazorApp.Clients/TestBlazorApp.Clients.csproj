@@ -14,6 +14,7 @@
 		<GenerateClients>true</GenerateClients>
 		<RouteToServiceProjectFolder>../TestBlazorApp.Server</RouteToServiceProjectFolder>
 		<ClientInterfaceName>TestBlazorAppClient</ClientInterfaceName>
+		<RegisterName>TestBlazor</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>

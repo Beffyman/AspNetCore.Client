@@ -38,7 +38,7 @@ namespace TestWebApp.Clients
 		/// <param name="services"></param>
 		/// <param name="configure">Overrides for client configuration</param>
 		/// <returns></returns>
-		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
+		public static IServiceCollection AddTestWebClients(this IServiceCollection services, Action<ClientConfiguration> configure)
 		{
 			var configuration = new ClientConfiguration();
 
@@ -55,7 +55,7 @@ namespace TestWebApp.Clients
 			services.AddScoped<V1.ITestClient, V1.TestClient>();
 			services.AddScoped<V2.ITestClient, V2.TestClient>();
 
-			return configuration.ApplyConfiguration(services);;
+			return configuration.ApplyConfiguration<ITestWebAppClient>(services);
 		}
 	}
 
@@ -226,13 +226,13 @@ namespace FancySuffix
 
 		public NamespacedClient(
 			ITestWebAppClientWrapper param_client,
-			IHttpOverride param_httpoverride,
-			IHttpSerializer param_serializer,
+			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
+			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
 			IHttpRequestModifier param_modifier)
 		{
 			Client = param_client;
-			HttpOverride = param_httpoverride;
-			Serializer = param_serializer;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
 			Modifier = param_modifier;
 		}
 
@@ -1527,13 +1527,13 @@ namespace FancySuffix
 
 		public ValuesClient(
 			ITestWebAppClientWrapper param_client,
-			IHttpOverride param_httpoverride,
-			IHttpSerializer param_serializer,
+			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
+			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
 			IHttpRequestModifier param_modifier)
 		{
 			Client = param_client;
-			HttpOverride = param_httpoverride;
-			Serializer = param_serializer;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
 			Modifier = param_modifier;
 		}
 
@@ -6779,13 +6779,13 @@ namespace TestWebApp.Clients.V1
 
 		public TestClient(
 			ITestWebAppClientWrapper param_client,
-			IHttpOverride param_httpoverride,
-			IHttpSerializer param_serializer,
+			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
+			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
 			IHttpRequestModifier param_modifier)
 		{
 			Client = param_client;
-			HttpOverride = param_httpoverride;
-			Serializer = param_serializer;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
 			Modifier = param_modifier;
 		}
 
@@ -7015,13 +7015,13 @@ namespace TestWebApp.Clients.V2
 
 		public TestClient(
 			ITestWebAppClientWrapper param_client,
-			IHttpOverride param_httpoverride,
-			IHttpSerializer param_serializer,
+			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
+			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
 			IHttpRequestModifier param_modifier)
 		{
 			Client = param_client;
-			HttpOverride = param_httpoverride;
-			Serializer = param_serializer;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
 			Modifier = param_modifier;
 		}
 

@@ -25,7 +25,7 @@ namespace TestBlazorApp.Tests
 			Client = Server.CreateClient();
 
 			var services = new ServiceCollection();
-			services.InstallClients(ConfigureClient);
+			services.AddTestBlazorClients(ConfigureClient);
 
 			Provider = services.BuildServiceProvider();
 		}

@@ -38,7 +38,7 @@ namespace TestBlazorApp.Clients
 		/// <param name="services"></param>
 		/// <param name="configure">Overrides for client configuration</param>
 		/// <returns></returns>
-		public static IServiceCollection InstallClients(this IServiceCollection services, Action<ClientConfiguration> configure)
+		public static IServiceCollection AddTestBlazorClients(this IServiceCollection services, Action<ClientConfiguration> configure)
 		{
 			var configuration = new ClientConfiguration();
 
@@ -50,7 +50,7 @@ namespace TestBlazorApp.Clients
 			services.AddScoped<ITestBlazorAppClientRepository,TestBlazorAppClientRepository>();
 			services.AddScoped<ISampleDataClient, SampleDataClient>();
 
-			return configuration.ApplyConfiguration(services);;
+			return configuration.ApplyConfiguration<ITestBlazorAppClient>(services);
 		}
 	}
 
@@ -176,13 +176,13 @@ namespace TestBlazorApp.Clients
 
 		public SampleDataClient(
 			ITestBlazorAppClientWrapper param_client,
-			IHttpOverride param_httpoverride,
-			IHttpSerializer param_serializer,
+			Func<ITestBlazorAppClient,IHttpOverride> param_httpoverride,
+			Func<ITestBlazorAppClient,IHttpSerializer> param_serializer,
 			IHttpRequestModifier param_modifier)
 		{
 			Client = param_client;
-			HttpOverride = param_httpoverride;
-			Serializer = param_serializer;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
 			Modifier = param_modifier;
 		}
 

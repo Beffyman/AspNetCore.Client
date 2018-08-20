@@ -6,8 +6,10 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 {
 	public interface IDependency
 	{
-		string Type { get; }
-		string Name { get; }
-
+		string GetDependencyFieldType(string clientName);
+		string GetDependencyParameterType(string clientName);
+		string GetDependencyName(string clientName);
+		bool HasAssignmentOverride { get; }
+		string GetAssignmentOverride(string value);
 	}
 }
