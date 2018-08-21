@@ -43,7 +43,7 @@ namespace TestBlazorApp.Clients
 			var configuration = new ClientConfiguration();
 
 			configuration.RegisterClientWrapperCreator(TestBlazorAppClientWrapper.Create);
-			configuration.UseClientWrapper<ITestBlazorAppClientWrapper, TestBlazorAppClientWrapper>((provider) => new TestBlazorAppClientWrapper(provider.GetService<HttpClient>(), configuration.GetSettings()));
+			configuration.UseClientWrapper<ITestBlazorAppClientWrapper, TestBlazorAppClientWrapper>((provider) => new TestBlazorAppClientWrapper(provider.GetService<HttpClient>(), configuration.GetSettings(), provider));
 
 			configure?.Invoke(configuration);
 
@@ -63,19 +63,19 @@ namespace TestBlazorApp.Clients
 		public TimeSpan Timeout { get; internal set; }
 		public FlurlClient ClientWrapper { get; internal set; }
 
-		public TestBlazorAppClientWrapper(HttpClient client, ClientSettings settings)
+		public TestBlazorAppClientWrapper(HttpClient client, ClientSettings settings, IServiceProvider provider)
 		{
-			if (!string.IsNullOrEmpty(settings.BaseAddress))
+			if (settings.BaseAddress != null)
 			{
-				client.BaseAddress = new Uri(settings.BaseAddress);
+				client.BaseAddress = new Uri(settings.BaseAddress(provider));
 			}
 			ClientWrapper = new FlurlClient(client);
 			Timeout = settings.Timeout;
 		}
 
-		public static ITestBlazorAppClientWrapper Create(HttpClient client, ClientSettings settings)
+		public static ITestBlazorAppClientWrapper Create(HttpClient client, ClientSettings settings, IServiceProvider provider)
 		{
-			return new TestBlazorAppClientWrapper(client, settings);
+			return new TestBlazorAppClientWrapper(client, settings, provider);
 		}
 	}
 

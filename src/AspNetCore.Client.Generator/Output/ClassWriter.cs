@@ -137,7 +137,7 @@ $@"
 			var configuration = new {nameof(ClientConfiguration)}();
 
 			configuration.{nameof(ClientConfiguration.RegisterClientWrapperCreator)}({Settings.ClientInterfaceName}Wrapper.Create);
-			configuration.{nameof(ClientConfiguration.UseClientWrapper)}<I{Settings.ClientInterfaceName}Wrapper, {Settings.ClientInterfaceName}Wrapper>((provider) => new {Settings.ClientInterfaceName}Wrapper(provider.GetService<{nameof(HttpClient)}>(), configuration.{nameof(ClientConfiguration.GetSettings)}()));
+			configuration.{nameof(ClientConfiguration.UseClientWrapper)}<I{Settings.ClientInterfaceName}Wrapper, {Settings.ClientInterfaceName}Wrapper>((provider) => new {Settings.ClientInterfaceName}Wrapper(provider.GetService<{nameof(HttpClient)}>(), configuration.{nameof(ClientConfiguration.GetSettings)}(), provider));
 
 			configure?.Invoke(configuration);
 
@@ -178,19 +178,19 @@ $@"
 		public TimeSpan Timeout {{ get; internal set; }}
 		public {nameof(FlurlClient)} {Constants.FlurlClientVariable} {{ get; internal set; }}
 
-		public {Settings.ClientInterfaceName}Wrapper({nameof(HttpClient)} client, {nameof(ClientSettings)} settings)
+		public {Settings.ClientInterfaceName}Wrapper({nameof(HttpClient)} client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
 		{{
-			if (!string.IsNullOrEmpty(settings.{nameof(ClientSettings.BaseAddress)}))
+			if (settings.{nameof(ClientSettings.BaseAddress)} != null)
 			{{
-				client.BaseAddress = new Uri(settings.{nameof(ClientSettings.BaseAddress)});
+				client.BaseAddress = new Uri(settings.{nameof(ClientSettings.BaseAddress)}(provider));
 			}}
 			{Constants.FlurlClientVariable} = new {nameof(FlurlClient)}(client);
 			Timeout = settings.{nameof(ClientSettings.Timeout)};
 		}}
 
-		public static I{Settings.ClientInterfaceName}Wrapper Create(HttpClient client, {nameof(ClientSettings)} settings)
+		public static I{Settings.ClientInterfaceName}Wrapper Create(HttpClient client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
 		{{
-			return new {Settings.ClientInterfaceName}Wrapper(client, settings);
+			return new {Settings.ClientInterfaceName}Wrapper(client, settings, provider);
 		}}
 	}}
 
