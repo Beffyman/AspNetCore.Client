@@ -20,7 +20,7 @@ namespace AspNetCore.Client
 		/// <summary>
 		/// Base address to be used for a HttpClient being injected
 		/// </summary>
-		private string HttpBaseAddress { get; set; }
+		private Func<IServiceProvider, string> HttpBaseAddress { get; set; }
 
 		/// <summary>
 		/// What IHttpSerializer to use, defaults to json, allows for custom serialization of requests
@@ -55,7 +55,7 @@ namespace AspNetCore.Client
 		/// <summary>
 		/// Func that creates the client wrapper, comes from generated files
 		/// </summary>
-		private Func<HttpClient, ClientSettings, IClientWrapper> _clientCreator = null;
+		private Func<HttpClient, ClientSettings, IServiceProvider, IClientWrapper> _clientCreator = null;
 
 
 
@@ -107,7 +107,7 @@ namespace AspNetCore.Client
 		/// </summary>
 		/// <param name="baseAddress"></param>
 		/// <returns></returns>
-		public ClientConfiguration WithBaseAddress(string baseAddress)
+		public ClientConfiguration WithBaseAddress(Func<IServiceProvider, string> baseAddress)
 		{
 			HttpBaseAddress = baseAddress;
 
@@ -226,7 +226,7 @@ namespace AspNetCore.Client
 		/// </summary>
 		/// <param name="registrationFunc"></param>
 		/// <returns></returns>
-		public ClientConfiguration RegisterClientWrapperCreator(Func<HttpClient, ClientSettings, IClientWrapper> registrationFunc)
+		public ClientConfiguration RegisterClientWrapperCreator(Func<HttpClient, ClientSettings, IServiceProvider, IClientWrapper> registrationFunc)
 		{
 			_clientCreator = registrationFunc;
 
@@ -244,7 +244,7 @@ namespace AspNetCore.Client
 		{
 			_clientRegister = (IServiceCollection services) =>
 			{
-				services.AddScoped((_) => (TService)_clientCreator(client, this.GetSettings()));
+				services.AddScoped((provider) => (TService)_clientCreator(client, this.GetSettings(), provider));
 			};
 
 			return this;

@@ -12,7 +12,7 @@ namespace AspNetCore.Client
 		/// <summary>
 		/// BaseAddress for the HttpClient
 		/// </summary>
-		public string BaseAddress { get; set; }
+		public Func<IServiceProvider, string> BaseAddress { get; set; }
 
 		/// <summary>
 		/// Timeout for the HttpRequest
