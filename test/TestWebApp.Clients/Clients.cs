@@ -261,6 +261,8 @@ namespace FancySuffix
 			{
 				response = Client.ClientWrapper
 							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
 							.WithRequestModifiers(Modifier)				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				
@@ -302,6 +304,8 @@ namespace FancySuffix
 			{
 				response = Client.ClientWrapper
 							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
 							.WithRequestModifiers(Modifier)				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				
@@ -337,6 +341,8 @@ namespace FancySuffix
 			{
 				response = await Client.ClientWrapper
 							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
 							.WithRequestModifiers(Modifier)				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				
@@ -378,6 +384,8 @@ namespace FancySuffix
 			{
 				response = await Client.ClientWrapper
 							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
 							.WithRequestModifiers(Modifier)				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				

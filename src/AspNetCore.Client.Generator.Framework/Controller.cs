@@ -34,6 +34,22 @@ namespace AspNetCore.Client.Generator.Framework
 		public string NamespaceVersion { get; set; }
 
 		/// <summary>
+		/// Whether the controller should be generated or not.
+		/// </summary>
+		public bool Abstract { get; set; }
+
+		/// <summary>
+		/// Name of the base class of the controller
+		/// </summary>
+		public string BaseClass { get; set; }
+
+
+		/// <summary>
+		/// The base class of the controller, may contain methods/attributes
+		/// </summary>
+		public Controller BaseController { get; set; }
+
+		/// <summary>
 		/// List of response types that can be added to the context
 		/// </summary>
 		public IList<ResponseType> ResponseTypes { get; set; } = new List<ResponseType>();
@@ -59,6 +75,12 @@ namespace AspNetCore.Client.Generator.Framework
 		/// Route required to hit the endpoint
 		/// </summary>
 		public Route Route { get; set; }
+
+		/// <summary>
+		/// Whether to generate the client or not
+		/// </summary>
+		public bool Generated => !Ignored && !Abstract;
+
 
 		//IIgnored
 
@@ -98,9 +120,12 @@ namespace AspNetCore.Client.Generator.Framework
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return ResponseTypes.Cast<INavNode>()
+				.Union(BaseController?.GetChildren() ?? new List<INavNode>())
 				.Union(ConstantHeader)
 				.Union(ParameterHeader)
-				.Union(GetInjectionDependencies().OfType<INavNode>());
+				.Union(GetInjectionDependencies().OfType<INavNode>())
+				.Where(x => x != null)
+				.ToList();
 		}
 
 

@@ -70,6 +70,7 @@ namespace AspNetCore.Client.Generator.Output
 			{
 				context = context.Merge(file.Context);
 			}
+			context.MapRelatedInfo();
 
 			return
 $@"//------------------------------------------------------------------------------
@@ -117,7 +118,7 @@ namespace {Settings.ClientNamespace}
 
 		private static string WriteInstaller(GenerationContext context)
 		{
-			var versions = context.Clients.Where(x => !x.Ignored)
+			var versions = context.Clients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
 				.Select(x => x.Key)
 				.ToList();
@@ -142,7 +143,7 @@ $@"
 			configure?.Invoke(configuration);
 
 {string.Join(Environment.NewLine, versions.Select(WriteRepositoryRegistration))}
-{string.Join(Environment.NewLine, context.Clients.Where(x => !x.Ignored).Select(WriteClientRegistration))}
+{string.Join(Environment.NewLine, context.Clients.Where(x => x.Generated).Select(WriteClientRegistration))}
 
 			return configuration.{nameof(ClientConfiguration.ApplyConfiguration)}<I{Settings.ClientInterfaceName}>(services);
 		}}
@@ -203,7 +204,7 @@ $@"
 
 		private static string WriteRepositories(GenerationContext context)
 		{
-			var versions = context.Clients.Where(x => !x.Ignored)
+			var versions = context.Clients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
 				.ToList();
 
@@ -271,7 +272,7 @@ $@"
 
 		private static string WriteVersionBlocks(GenerationContext context)
 		{
-			var versions = context.Clients.Where(x => !x.Ignored)
+			var versions = context.Clients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
 				.ToList();
 
