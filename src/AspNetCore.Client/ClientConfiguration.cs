@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
+using Flurl.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -55,9 +56,12 @@ namespace AspNetCore.Client
 		/// <summary>
 		/// Func that creates the client wrapper, comes from generated files
 		/// </summary>
-		private Func<HttpClient, ClientSettings, IServiceProvider, IClientWrapper> _clientCreator = null;
+		private Func<IFlurlClient, ClientSettings, IServiceProvider, IClientWrapper> _clientCreator = null;
 
-
+		/// <summary>
+		/// Whether or not to inject HttpClient
+		/// </summary>
+		private bool HttpPool = false;
 
 		/// <summary>
 		/// Applies the configurations to the <see cref="IServiceCollection"/>
@@ -89,6 +93,30 @@ namespace AspNetCore.Client
 			services.AddScoped(HttpOverrideType);
 			services.AddScoped<Func<T, IHttpSerializer>>(provider => (_ => (IHttpSerializer)provider.GetService(SerializeType)));
 			services.AddScoped<Func<T, IHttpOverride>>(provider => (_ => (IHttpOverride)provider.GetService(HttpOverrideType)));
+
+			if (HttpPool)
+			{
+				services.AddHttpClient(typeof(T).Name);
+
+				services.AddTransient<HttpClient>(provider =>
+				{
+					return provider.GetService<IHttpClientFactory>().CreateClient(typeof(T).Name);
+				});
+
+				services.AddTransient<IFlurlClient>(provider =>
+				{
+					return new FlurlClient(provider.GetService<HttpClient>());
+				});
+			}
+			else
+			{
+				services.AddTransient<IFlurlClient>(provider =>
+				{
+					return new FlurlClient();
+				});
+			}
+
+
 
 			services.AddScoped<IHttpRequestModifier, HttpRequestModifier>((_) =>
 			{
@@ -203,6 +231,17 @@ namespace AspNetCore.Client
 		}
 
 		/// <summary>
+		/// Enables the use of Microsoft.Extensions.Http for injecting HttpClients that the IFlurlClient will use.
+		/// </summary>
+		/// <returns></returns>
+		public ClientConfiguration UseHttpClientFactory()
+		{
+			HttpPool = true;
+			return this;
+		}
+
+
+		/// <summary>
 		/// Delays registration of the client wrapper into the container, in case we need to override with a test server
 		/// </summary>
 		/// <typeparam name="TService"></typeparam>
@@ -226,7 +265,7 @@ namespace AspNetCore.Client
 		/// </summary>
 		/// <param name="registrationFunc"></param>
 		/// <returns></returns>
-		public ClientConfiguration RegisterClientWrapperCreator(Func<HttpClient, ClientSettings, IServiceProvider, IClientWrapper> registrationFunc)
+		public ClientConfiguration RegisterClientWrapperCreator(Func<IFlurlClient, ClientSettings, IServiceProvider, IClientWrapper> registrationFunc)
 		{
 			_clientCreator = registrationFunc;
 
@@ -244,7 +283,7 @@ namespace AspNetCore.Client
 		{
 			_clientRegister = (IServiceCollection services) =>
 			{
-				services.AddScoped((provider) => (TService)_clientCreator(client, this.GetSettings(), provider));
+				services.AddScoped((provider) => (TService)_clientCreator(new FlurlClient(client), this.GetSettings(), provider));
 			};
 
 			return this;

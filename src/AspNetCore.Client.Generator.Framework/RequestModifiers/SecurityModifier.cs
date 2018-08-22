@@ -31,5 +31,11 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		{
 			return null;
 		}
+
+
+		public string ToString()
+		{
+			return $"{Type} {Name} = {DefaultValue}";
+		}
 	}
 }

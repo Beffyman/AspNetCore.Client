@@ -45,7 +45,7 @@ namespace TestWebApp.Clients
 			var configuration = new ClientConfiguration();
 
 			configuration.RegisterClientWrapperCreator(TestWebAppClientWrapper.Create);
-			configuration.UseClientWrapper<ITestWebAppClientWrapper, TestWebAppClientWrapper>((provider) => new TestWebAppClientWrapper(provider.GetService<HttpClient>(), configuration.GetSettings(), provider));
+			configuration.UseClientWrapper<ITestWebAppClientWrapper, TestWebAppClientWrapper>((provider) => new TestWebAppClientWrapper(provider.GetService<IFlurlClient>(), configuration.GetSettings(), provider));
 
 			configure?.Invoke(configuration);
 
@@ -68,19 +68,19 @@ namespace TestWebApp.Clients
 	public class TestWebAppClientWrapper :  ITestWebAppClientWrapper
 	{
 		public TimeSpan Timeout { get; internal set; }
-		public FlurlClient ClientWrapper { get; internal set; }
+		public IFlurlClient ClientWrapper { get; internal set; }
 
-		public TestWebAppClientWrapper(HttpClient client, ClientSettings settings, IServiceProvider provider)
+		public TestWebAppClientWrapper(IFlurlClient client, ClientSettings settings, IServiceProvider provider)
 		{
 			if (settings.BaseAddress != null)
 			{
-				client.BaseAddress = new Uri(settings.BaseAddress(provider));
+				client.BaseUrl = settings.BaseAddress(provider);
 			}
-			ClientWrapper = new FlurlClient(client);
+			ClientWrapper = client;
 			Timeout = settings.Timeout;
 		}
 
-		public static ITestWebAppClientWrapper Create(HttpClient client, ClientSettings settings, IServiceProvider provider)
+		public static ITestWebAppClientWrapper Create(IFlurlClient client, ClientSettings settings, IServiceProvider provider)
 		{
 			return new TestWebAppClientWrapper(client, settings, provider);
 		}
@@ -214,6 +214,170 @@ namespace FancySuffix
 		);
 
 
+
+		
+		void NewTest
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage NewTestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task NewTestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> NewTestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void NewTest
+		(
+			int id,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage NewTestRaw
+		(
+			int id,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task NewTestAsync
+		(
+			int id,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> NewTestRawAsync
+		(
+			int id,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void OverrideTest
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage OverrideTestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task OverrideTestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> OverrideTestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
+
+		
+		void InheritTest
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		HttpResponseMessage InheritTestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		Task InheritTestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+		
+		ValueTask<HttpResponseMessage> InheritTestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		);
+
+
 	}
 
 
@@ -263,7 +427,6 @@ namespace FancySuffix
 							.Request(url)
 							.WithHeader("TestInheritance", "WORKS")				
 							.WithRequestModifiers(Modifier)				
-							.WithRequestModifiers(Modifier)				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				
 							.WithTimeout(timeout ?? Client.Timeout)
@@ -306,7 +469,6 @@ namespace FancySuffix
 							.Request(url)
 							.WithHeader("TestInheritance", "WORKS")				
 							.WithRequestModifiers(Modifier)				
-							.WithRequestModifiers(Modifier)				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				
 							.WithTimeout(timeout ?? Client.Timeout)
@@ -342,7 +504,6 @@ namespace FancySuffix
 				response = await Client.ClientWrapper
 							.Request(url)
 							.WithHeader("TestInheritance", "WORKS")				
-							.WithRequestModifiers(Modifier)				
 							.WithRequestModifiers(Modifier)				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				
@@ -386,7 +547,658 @@ namespace FancySuffix
 							.Request(url)
 							.WithHeader("TestInheritance", "WORKS")				
 							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+
+
+		
+		public void NewTest
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/NewTest123";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
 							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public HttpResponseMessage NewTestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/NewTest123";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		
+		public async Task NewTestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/NewTest123";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public async ValueTask<HttpResponseMessage> NewTestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/NewTest123";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+
+
+		
+		public void NewTest
+		(
+			int id,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+			if(!int.TryParse(id.ToString(),out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+
+			string url = $@"api/namespaced/NewTest123/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public HttpResponseMessage NewTestRaw
+		(
+			int id,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+			if(!int.TryParse(id.ToString(),out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+
+			string url = $@"api/namespaced/NewTest123/{id}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		
+		public async Task NewTestAsync
+		(
+			int id,
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+			if(!int.TryParse(id.ToString(),out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+
+			string url = $@"api/namespaced/NewTest123/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public async ValueTask<HttpResponseMessage> NewTestRawAsync
+		(
+			int id,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+			if(!int.TryParse(id.ToString(),out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+
+			string url = $@"api/namespaced/NewTest123/{id}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+
+
+		
+		public void OverrideTest
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/overwritten";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public HttpResponseMessage OverrideTestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/overwritten";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		
+		public async Task OverrideTestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/overwritten";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public async ValueTask<HttpResponseMessage> OverrideTestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/overwritten";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithRequestModifiers(Modifier)				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+
+
+
+		
+		public void InheritTest
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/InheritTest";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public HttpResponseMessage InheritTestRaw
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/InheritTest";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+
+			if(response == null)
+			{
+				response = Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false).GetAwaiter().GetResult();
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		
+		public async Task InheritTestAsync
+		(
+			Action<HttpResponseMessage> ResponseCallback = null,
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/InheritTest";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
+							.WithCookies(cookies)				
+							.WithHeaders(headers)				
+							.WithTimeout(timeout ?? Client.Timeout)
+							.AllowAnyHttpStatus()
+							.GetAsync(cancellationToken)
+							.ConfigureAwait(false);
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if(ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+
+
+		}
+
+		
+		public async ValueTask<HttpResponseMessage> InheritTestRawAsync
+		(
+			IDictionary<String,Object> headers = null,
+			IEnumerable<Cookie> cookies = null,
+			TimeSpan? timeout = null,
+			CancellationToken cancellationToken = default
+		)
+		{
+
+
+
+			string url = $@"api/namespaced/InheritTest";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+
+			if(response == null)
+			{
+				response = await Client.ClientWrapper
+							.Request(url)
+							.WithHeader("TestInheritance", "WORKS")				
 							.WithCookies(cookies)				
 							.WithHeaders(headers)				
 							.WithTimeout(timeout ?? Client.Timeout)

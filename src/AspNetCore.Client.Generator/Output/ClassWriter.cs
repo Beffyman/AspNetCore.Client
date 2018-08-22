@@ -138,7 +138,7 @@ $@"
 			var configuration = new {nameof(ClientConfiguration)}();
 
 			configuration.{nameof(ClientConfiguration.RegisterClientWrapperCreator)}({Settings.ClientInterfaceName}Wrapper.Create);
-			configuration.{nameof(ClientConfiguration.UseClientWrapper)}<I{Settings.ClientInterfaceName}Wrapper, {Settings.ClientInterfaceName}Wrapper>((provider) => new {Settings.ClientInterfaceName}Wrapper(provider.GetService<{nameof(HttpClient)}>(), configuration.{nameof(ClientConfiguration.GetSettings)}(), provider));
+			configuration.{nameof(ClientConfiguration.UseClientWrapper)}<I{Settings.ClientInterfaceName}Wrapper, {Settings.ClientInterfaceName}Wrapper>((provider) => new {Settings.ClientInterfaceName}Wrapper(provider.GetService<{nameof(IFlurlClient)}>(), configuration.{nameof(ClientConfiguration.GetSettings)}(), provider));
 
 			configure?.Invoke(configuration);
 
@@ -177,19 +177,19 @@ $@"
 	public class {Settings.ClientInterfaceName}Wrapper :  I{Settings.ClientInterfaceName}Wrapper
 	{{
 		public TimeSpan Timeout {{ get; internal set; }}
-		public {nameof(FlurlClient)} {Constants.FlurlClientVariable} {{ get; internal set; }}
+		public {nameof(IFlurlClient)} {Constants.FlurlClientVariable} {{ get; internal set; }}
 
-		public {Settings.ClientInterfaceName}Wrapper({nameof(HttpClient)} client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
+		public {Settings.ClientInterfaceName}Wrapper({nameof(IFlurlClient)} client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
 		{{
 			if (settings.{nameof(ClientSettings.BaseAddress)} != null)
 			{{
-				client.BaseAddress = new Uri(settings.{nameof(ClientSettings.BaseAddress)}(provider));
+				client.BaseUrl = settings.{nameof(ClientSettings.BaseAddress)}(provider);
 			}}
-			{Constants.FlurlClientVariable} = new {nameof(FlurlClient)}(client);
+			{Constants.FlurlClientVariable} = client;
 			Timeout = settings.{nameof(ClientSettings.Timeout)};
 		}}
 
-		public static I{Settings.ClientInterfaceName}Wrapper Create(HttpClient client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
+		public static I{Settings.ClientInterfaceName}Wrapper Create({nameof(IFlurlClient)} client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
 		{{
 			return new {Settings.ClientInterfaceName}Wrapper(client, settings, provider);
 		}}
@@ -324,7 +324,7 @@ $@"
 {GetObsolete(controller)}
 	public interface I{controller.ClientName} : I{Settings.ClientInterfaceName}
 	{{
-{string.Join($"{Environment.NewLine}", controller.Endpoints.Select(WriteEndpointInterface))}
+{string.Join($"{Environment.NewLine}", controller.GetEndpoints().Select(WriteEndpointInterface))}
 	}}
 ";
 		}
@@ -347,7 +347,7 @@ $@"
 {string.Join($"{Environment.NewLine}", dependencies.Select(WriteDependenciesAssignment))}
 		}}
 
-{string.Join($"{Environment.NewLine}", controller.Endpoints.Select(WriteEndpointImplementation))}
+{string.Join($"{Environment.NewLine}", controller.GetEndpoints().Select(x => WriteEndpointImplementation(controller, x)))}
 	}}
 ";
 		}
@@ -417,7 +417,7 @@ $@"
 ";
 		}
 
-		private static string WriteEndpointImplementation(Endpoint endpoint)
+		private static string WriteEndpointImplementation(Controller controller, Endpoint endpoint)
 		{
 			return
 $@"
@@ -428,7 +428,7 @@ $@"
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(GetParameter))}
 		)
 		{{
-{GetMethodDetails(endpoint, false, false)}
+{GetMethodDetails(controller, endpoint, false, false)}
 		}}
 
 		{GetObsolete(endpoint)}
@@ -437,7 +437,7 @@ $@"
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(GetParameter))}
 		)
 		{{
-{GetMethodDetails(endpoint, false, true)}
+{GetMethodDetails(controller, endpoint, false, true)}
 		}}
 
 		{GetObsolete(endpoint)}
@@ -446,7 +446,7 @@ $@"
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(GetParameter))}
 		)
 		{{
-{GetMethodDetails(endpoint, true, false)}
+{GetMethodDetails(controller, endpoint, true, false)}
 		}}
 
 		{GetObsolete(endpoint)}
@@ -455,14 +455,14 @@ $@"
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(GetParameter))}
 		)
 		{{
-{GetMethodDetails(endpoint, true, true)}
+{GetMethodDetails(controller, endpoint, true, true)}
 		}}
 
 ";
 		}
 
 
-		private static string GetMethodDetails(Endpoint endpoint, bool async, bool raw)
+		private static string GetMethodDetails(Controller controller, Endpoint endpoint, bool async, bool raw)
 		{
 			var cancellationToken = endpoint.GetRequestModifiers().OfType<CancellationTokenModifier>().SingleOrDefault();
 			var clientDependency = new ClientDependency($"I{Settings.ClientInterfaceName}Wrapper");
@@ -474,12 +474,12 @@ $@"
 
 			var responseTypes = endpoint.GetResponseTypes();
 
-			var routeConstraints = endpoint.GetRouteConstraints();
+			var routeConstraints = endpoint.GetRouteConstraints(controller);
 
 			return
 $@"{string.Join(Environment.NewLine, routeConstraints.Select(WriteRouteConstraint).NotNull())}
-{GetEndpointInfoVariables(endpoint)}
-			string url = $@""{GetRoute(endpoint)}"";
+{GetEndpointInfoVariables(controller, endpoint)}
+			string url = $@""{GetRoute(controller, endpoint)}"";
 			HttpResponseMessage response = null;
 			response = {GetAwait(async)}HttpOverride.GetResponseAsync({GetHttpMethod(endpoint.HttpType)}, url, null, {cancellationToken.Name}){GetAsyncEnding(async)};
 
@@ -856,19 +856,19 @@ $@"			if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 			}
 		}
 
-		private static string GetEndpointInfoVariables(Endpoint endpoint)
+		private static string GetEndpointInfoVariables(Controller controller, Endpoint endpoint)
 		{
 
 			var controllerVar = $@"			var {Constants.ControllerRouteReserved} = ""{endpoint.Parent.Name}"";";
 			var actionVar = $@"			var {Constants.ActionRouteReserved} = ""{endpoint.Name}"";";
 
 
-			if (!endpoint.FullRoute.Contains($"[{Constants.ControllerRouteReserved}]"))
+			if (!endpoint.GetFullRoute(controller).Contains($"[{Constants.ControllerRouteReserved}]"))
 			{
 				controllerVar = null;
 			}
 
-			if (!endpoint.FullRoute.Contains($"[{Constants.ActionRouteReserved}]"))
+			if (!endpoint.GetFullRoute(controller).Contains($"[{Constants.ActionRouteReserved}]"))
 			{
 				actionVar = null;
 			}
@@ -879,12 +879,12 @@ $@"{controllerVar}
 {actionVar}";
 		}
 
-		private static string GetRoute(Endpoint endpoint)
+		private static string GetRoute(Controller controller, Endpoint endpoint)
 		{
 
 			const string RouteParseRegex = @"{([^}]+)}";
 
-			string routeUnformatted = endpoint.FullRoute;
+			string routeUnformatted = endpoint.GetFullRoute(controller);
 
 			var patterns = Regex.Matches(routeUnformatted, RouteParseRegex);
 

@@ -53,11 +53,7 @@ namespace AspNetCore.Client.RequestModifiers
 		/// <returns></returns>
 		public T ApplyModifiers<T>(T clientOrRequest) where T : IHttpSettingsContainer
 		{
-			foreach (var header in PredefinedHeaders)
-			{
-				clientOrRequest.WithHeader(header.Key, header.Value);
-			}
-
+			clientOrRequest.WithHeaders(PredefinedHeaders);
 			clientOrRequest.WithCookies(PredefinedCookies);
 
 			return clientOrRequest;

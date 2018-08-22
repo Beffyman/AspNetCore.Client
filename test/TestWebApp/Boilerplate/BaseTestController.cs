@@ -13,6 +13,24 @@ namespace TestWebApp.Boilerplate
 	{
 
 
+		[HttpGet("InheritTest")]
+		public void InheritTest()
+		{
+
+
+		}
+
+		[HttpGet("NewTest")]
+		public void NewTest()
+		{
+
+		}
+
+		[HttpGet("OverrideTest")]
+		public virtual void OverrideTest()
+		{
+
+		}
 
 	}
 }

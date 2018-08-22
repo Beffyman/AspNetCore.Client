@@ -52,7 +52,7 @@ namespace AspNetCore.Client.Generator.Output
 				throw new NotSupportedException("Controller must have a route to be valid for generation.");
 			}
 
-			if(controller.Route != null)
+			if (controller.Route != null)
 			{
 				var match = RouteVersionRegex.Match(controller.Route.Value);
 				if (match.Success)
@@ -112,11 +112,9 @@ namespace AspNetCore.Client.Generator.Output
 			endpoint.Name = syntax.Identifier.ValueText.Trim();
 
 
-
-
-
-
-
+			endpoint.Virtual = syntax.Modifiers.Any(x => x.Text == "virtual");
+			endpoint.Override = syntax.Modifiers.Any(x => x.Text == "override");
+			endpoint.New = syntax.Modifiers.Any(x => x.Text == "new");
 
 
 			//Ignore generator attribute
@@ -195,7 +193,7 @@ namespace AspNetCore.Client.Generator.Output
 
 
 
-			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.FullRoute)).ToList();
+			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute(parent))).ToList();
 
 
 			var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
