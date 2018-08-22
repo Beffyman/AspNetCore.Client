@@ -17,7 +17,9 @@ namespace TestWebApp.Console
 			{
 				config.UseJsonClientSerializer();
 				config.WithJsonBody();
-				config.WithBaseAddress(_ => "http://localhost:62152");
+				config.UseHttpClientFactory();
+				//config.WithBaseAddress(_ => "http://localhost:62152");
+				config.WithBaseAddress("http://localhost:62152");
 			});
 
 			var provider = services.BuildServiceProvider();

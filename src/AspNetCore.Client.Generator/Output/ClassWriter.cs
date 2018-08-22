@@ -137,8 +137,8 @@ $@"
 		{{
 			var configuration = new {nameof(ClientConfiguration)}();
 
-			configuration.{nameof(ClientConfiguration.RegisterClientWrapperCreator)}({Settings.ClientInterfaceName}Wrapper.Create);
-			configuration.{nameof(ClientConfiguration.UseClientWrapper)}<I{Settings.ClientInterfaceName}Wrapper, {Settings.ClientInterfaceName}Wrapper>((provider) => new {Settings.ClientInterfaceName}Wrapper(provider.GetService<{nameof(IFlurlClient)}>(), configuration.{nameof(ClientConfiguration.GetSettings)}(), provider));
+			configuration.{nameof(ClientConfiguration.RegisterClientWrapperCreator)}<I{Settings.ClientInterfaceName}>({Settings.ClientInterfaceName}Wrapper.Create);
+			configuration.{nameof(ClientConfiguration.UseClientWrapper)}<I{Settings.ClientInterfaceName}Wrapper, {Settings.ClientInterfaceName}Wrapper>((provider) => new {Settings.ClientInterfaceName}Wrapper(provider.GetService<Func<I{Settings.ClientInterfaceName}, {nameof(IFlurlClient)}>>(), configuration.{nameof(ClientConfiguration.GetSettings)}(), provider));
 
 			configure?.Invoke(configuration);
 
@@ -179,17 +179,18 @@ $@"
 		public TimeSpan Timeout {{ get; internal set; }}
 		public {nameof(IFlurlClient)} {Constants.FlurlClientVariable} {{ get; internal set; }}
 
-		public {Settings.ClientInterfaceName}Wrapper({nameof(IFlurlClient)} client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
+		public {Settings.ClientInterfaceName}Wrapper(Func<I{Settings.ClientInterfaceName},{nameof(IFlurlClient)}> client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
 		{{
+			{Constants.FlurlClientVariable} = client(null);
 			if (settings.{nameof(ClientSettings.BaseAddress)} != null)
 			{{
-				client.BaseUrl = settings.{nameof(ClientSettings.BaseAddress)}(provider);
+				{Constants.FlurlClientVariable}.BaseUrl = settings.{nameof(ClientSettings.BaseAddress)}(provider);
 			}}
-			{Constants.FlurlClientVariable} = client;
+
 			Timeout = settings.{nameof(ClientSettings.Timeout)};
 		}}
 
-		public static I{Settings.ClientInterfaceName}Wrapper Create({nameof(IFlurlClient)} client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
+		public static I{Settings.ClientInterfaceName}Wrapper Create(Func<I{Settings.ClientInterfaceName},{nameof(IFlurlClient)}> client, {nameof(ClientSettings)} settings, {nameof(IServiceProvider)} provider)
 		{{
 			return new {Settings.ClientInterfaceName}Wrapper(client, settings, provider);
 		}}

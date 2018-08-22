@@ -2,6 +2,7 @@
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
+using Flurl.Http.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -22,6 +23,11 @@ namespace AspNetCore.Client
 		/// Base address to be used for a HttpClient being injected
 		/// </summary>
 		private Func<IServiceProvider, string> HttpBaseAddress { get; set; }
+
+		/// <summary>
+		/// Does the client have a constant base address? Allow improved pooling
+		/// </summary>
+		private bool ConstantBaseAddress = false;
 
 		/// <summary>
 		/// What IHttpSerializer to use, defaults to json, allows for custom serialization of requests
@@ -56,7 +62,7 @@ namespace AspNetCore.Client
 		/// <summary>
 		/// Func that creates the client wrapper, comes from generated files
 		/// </summary>
-		private Func<IFlurlClient, ClientSettings, IServiceProvider, IClientWrapper> _clientCreator = null;
+		private Func<Func<IClient, IFlurlClient>, ClientSettings, IServiceProvider, IClientWrapper> _clientCreator = null;
 
 		/// <summary>
 		/// Whether or not to inject HttpClient
@@ -96,23 +102,38 @@ namespace AspNetCore.Client
 
 			if (HttpPool)
 			{
-				services.AddHttpClient(typeof(T).Name);
-
-				services.AddTransient<HttpClient>(provider =>
+				if (ConstantBaseAddress)
 				{
-					return provider.GetService<IHttpClientFactory>().CreateClient(typeof(T).Name);
-				});
+					services.AddSingleton<IFlurlClientFactory, PerHostFlurlClientFactory>();
 
-				services.AddTransient<IFlurlClient>(provider =>
+					services.AddScoped<Func<T, IFlurlClient>>(provider =>
+					 {
+						 var factory = provider.GetService<IFlurlClientFactory>();
+						 return _ => factory.Get(new Flurl.Url(HttpBaseAddress(provider)));
+					 });
+				}
+				else
 				{
-					return new FlurlClient(provider.GetService<HttpClient>());
-				});
+					services.AddHttpClient(typeof(T).Name);
+
+					services.AddTransient<HttpClient>(provider =>
+					{
+						return provider.GetService<System.Net.Http.IHttpClientFactory>().CreateClient(typeof(T).Name);
+					});
+
+
+					services.AddTransient<Func<T, IFlurlClient>>(provider =>
+					{
+						return _ => new FlurlClient(provider.GetService<HttpClient>());
+					});
+				}
+
 			}
 			else
 			{
-				services.AddTransient<IFlurlClient>(provider =>
+				services.AddTransient<Func<T, IFlurlClient>>(provider =>
 				{
-					return new FlurlClient();
+					return (_ => new FlurlClient());
 				});
 			}
 
@@ -131,13 +152,27 @@ namespace AspNetCore.Client
 		}
 
 		/// <summary>
-		/// Sets the base address to be used for the injected HttpClients.
+		/// Sets the base address to be used for the injected Clients.
 		/// </summary>
 		/// <param name="baseAddress"></param>
 		/// <returns></returns>
 		public ClientConfiguration WithBaseAddress(Func<IServiceProvider, string> baseAddress)
 		{
+			ConstantBaseAddress = false;
 			HttpBaseAddress = baseAddress;
+
+			return this;
+		}
+
+		/// <summary>
+		/// Sets the base address to be used for the injected Clients. Using this override will enable Flurl http pooling
+		/// </summary>
+		/// <param name="baseAddress"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithBaseAddress(string baseAddress)
+		{
+			ConstantBaseAddress = true;
+			HttpBaseAddress = _ => baseAddress;
 
 			return this;
 		}
@@ -265,7 +300,8 @@ namespace AspNetCore.Client
 		/// </summary>
 		/// <param name="registrationFunc"></param>
 		/// <returns></returns>
-		public ClientConfiguration RegisterClientWrapperCreator(Func<IFlurlClient, ClientSettings, IServiceProvider, IClientWrapper> registrationFunc)
+		public ClientConfiguration RegisterClientWrapperCreator<TService>(Func<Func<TService, IFlurlClient>, ClientSettings, IServiceProvider, IClientWrapper> registrationFunc)
+			where TService : class, IClient
 		{
 			_clientCreator = registrationFunc;
 
@@ -283,7 +319,7 @@ namespace AspNetCore.Client
 		{
 			_clientRegister = (IServiceCollection services) =>
 			{
-				services.AddScoped((provider) => (TService)_clientCreator(new FlurlClient(client), this.GetSettings(), provider));
+				services.AddScoped((provider) => (TService)_clientCreator(_ => new FlurlClient(client), this.GetSettings(), provider));
 			};
 
 			return this;

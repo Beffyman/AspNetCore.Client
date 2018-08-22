@@ -44,8 +44,8 @@ namespace TestWebApp.Clients
 		{
 			var configuration = new ClientConfiguration();
 
-			configuration.RegisterClientWrapperCreator(TestWebAppClientWrapper.Create);
-			configuration.UseClientWrapper<ITestWebAppClientWrapper, TestWebAppClientWrapper>((provider) => new TestWebAppClientWrapper(provider.GetService<IFlurlClient>(), configuration.GetSettings(), provider));
+			configuration.RegisterClientWrapperCreator<ITestWebAppClient>(TestWebAppClientWrapper.Create);
+			configuration.UseClientWrapper<ITestWebAppClientWrapper, TestWebAppClientWrapper>((provider) => new TestWebAppClientWrapper(provider.GetService<Func<ITestWebAppClient, IFlurlClient>>(), configuration.GetSettings(), provider));
 
 			configure?.Invoke(configuration);
 
@@ -70,17 +70,18 @@ namespace TestWebApp.Clients
 		public TimeSpan Timeout { get; internal set; }
 		public IFlurlClient ClientWrapper { get; internal set; }
 
-		public TestWebAppClientWrapper(IFlurlClient client, ClientSettings settings, IServiceProvider provider)
+		public TestWebAppClientWrapper(Func<ITestWebAppClient,IFlurlClient> client, ClientSettings settings, IServiceProvider provider)
 		{
+			ClientWrapper = client(null);
 			if (settings.BaseAddress != null)
 			{
-				client.BaseUrl = settings.BaseAddress(provider);
+				ClientWrapper.BaseUrl = settings.BaseAddress(provider);
 			}
-			ClientWrapper = client;
+
 			Timeout = settings.Timeout;
 		}
 
-		public static ITestWebAppClientWrapper Create(IFlurlClient client, ClientSettings settings, IServiceProvider provider)
+		public static ITestWebAppClientWrapper Create(Func<ITestWebAppClient,IFlurlClient> client, ClientSettings settings, IServiceProvider provider)
 		{
 			return new TestWebAppClientWrapper(client, settings, provider);
 		}
