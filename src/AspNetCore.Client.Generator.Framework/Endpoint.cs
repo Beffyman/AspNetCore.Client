@@ -97,6 +97,10 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public bool IsSecured { get; set; }
 
+		public bool Virtual { get; set; }
+		public bool Override { get; set; }
+		public bool New { get; set; }
+
 
 		public Endpoint(Controller parent)
 		{
@@ -157,11 +161,14 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <summary>
 		/// Full route template for the endpoint
 		/// </summary>
-		public string FullRoute => Parent.Route.Merge(Route).Value;
-
-		public IEnumerable<RouteConstraint> GetRouteConstraints()
+		public string GetFullRoute(Controller caller)
 		{
-			return Parent.Route.Merge(Route).Constraints;
+			return caller.Route.Merge(Route).Value;
+		}
+
+		public IEnumerable<RouteConstraint> GetRouteConstraints(Controller caller)
+		{
+			return caller.Route.Merge(Route).Constraints;
 		}
 
 
@@ -170,11 +177,21 @@ namespace AspNetCore.Client.Generator.Framework
 			return GetChildren().OfType<IAuthorize>().Any(x => x.IsSecured);
 		}
 
+		public string ToString(Controller caller)
+		{
+			string namespaceVersion = $@"{(caller.NamespaceVersion != null ? $"{caller.NamespaceVersion}." : "")}{(caller.NamespaceSuffix != null ? $"{caller.NamespaceSuffix}." : string.Empty)}";
+
+			return $"{namespaceVersion}{caller.Name}.{Name}";
+		}
+
 		public override string ToString()
 		{
-			string namespaceVersion = $@"{(Parent.NamespaceVersion != null ? $"{Parent.NamespaceVersion}." : "")}{(Parent.NamespaceSuffix != null ? $"{Parent.NamespaceSuffix}." : string.Empty)}";
+			return ToString(Parent);
+		}
 
-			return $"{namespaceVersion}{Parent.Name}.{Name}";
+		public string GetSignature(Controller caller)
+		{
+			return $"{ToString(caller)}(${string.Join(", ", GetParameters().Select(x => x.ToString()))}";
 		}
 	}
 }

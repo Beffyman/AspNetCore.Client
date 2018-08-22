@@ -22,6 +22,6 @@ namespace AspNetCore.Client
 		/// <summary>
 		/// Client to be used by requests
 		/// </summary>
-		FlurlClient ClientWrapper { get; }
+		IFlurlClient ClientWrapper { get; }
 	}
 }

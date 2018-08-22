@@ -34,6 +34,22 @@ namespace AspNetCore.Client.Generator.Framework
 		public string NamespaceVersion { get; set; }
 
 		/// <summary>
+		/// Whether the controller should be generated or not.
+		/// </summary>
+		public bool Abstract { get; set; }
+
+		/// <summary>
+		/// Name of the base class of the controller
+		/// </summary>
+		public string BaseClass { get; set; }
+
+
+		/// <summary>
+		/// The base class of the controller, may contain methods/attributes
+		/// </summary>
+		public Controller BaseController { get; set; }
+
+		/// <summary>
 		/// List of response types that can be added to the context
 		/// </summary>
 		public IList<ResponseType> ResponseTypes { get; set; } = new List<ResponseType>();
@@ -59,6 +75,12 @@ namespace AspNetCore.Client.Generator.Framework
 		/// Route required to hit the endpoint
 		/// </summary>
 		public Route Route { get; set; }
+
+		/// <summary>
+		/// Whether to generate the client or not
+		/// </summary>
+		public bool Generated => !Ignored && !Abstract;
+
 
 		//IIgnored
 
@@ -98,9 +120,12 @@ namespace AspNetCore.Client.Generator.Framework
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return ResponseTypes.Cast<INavNode>()
+				.Union(BaseController?.GetChildren() ?? new List<INavNode>())
 				.Union(ConstantHeader)
 				.Union(ParameterHeader)
-				.Union(GetInjectionDependencies().OfType<INavNode>());
+				.Union(GetInjectionDependencies().OfType<INavNode>())
+				.Where(x => x != null)
+				.ToList();
 		}
 
 
@@ -111,7 +136,70 @@ namespace AspNetCore.Client.Generator.Framework
 											.ToList();
 		public IEnumerable<IDependency> GetInjectionDependencies()
 		{
+			if (Abstract)
+			{
+				return new List<IDependency>();
+			}
+
 			return _allDependencies.Where(x => x != typeof(ClientDependency)).Select(x => Activator.CreateInstance(x) as IDependency);
+		}
+
+		public IEnumerable<Endpoint> GetEndpoints()
+		{
+			var resolvedEndpoints = Endpoints.Union(BaseController?.GetEndpoints() ?? new List<Endpoint>())
+											.ToList();
+
+			var overwrittenEndpoints = resolvedEndpoints.GroupBy(x => x.Name)
+														.Where(x => x.Count() > 1
+																&& x.Any(y => y.Virtual)
+																&& x.Any(y => y.Override))
+														.ToList();
+
+			//Any duplicates of name w/ a virtual and override
+			if (overwrittenEndpoints.Any())
+			{
+				foreach (var group in overwrittenEndpoints)
+				{
+					resolvedEndpoints.RemoveAll(x => x.Name == group.Key && x.Virtual);
+				}
+			}
+
+			var newEndpoints = resolvedEndpoints.GroupBy(x => x.Name)
+												.Where(x => x.Any(y => y.New))
+												.ToList();
+
+			if (newEndpoints.Any())
+			{
+				foreach (var group in newEndpoints)
+				{
+					if (group.Count() == 1)
+					{
+						//do nothing, new with no inherited method...OK, warning
+					}
+					else if (group.Count() == 2)
+					{
+						resolvedEndpoints.RemoveAll(x => x.Name == group.Key && !x.New);
+					}
+					else if (group.Count() > 2)
+					{
+						var duplicateSignatures = group.GroupBy(x => x.GetSignature(this))
+														.Where(x => x.Count() > 1 && x.Any(y => y.New))
+														.ToList();
+
+						foreach (var dupGroup in duplicateSignatures)
+						{
+							foreach (var ep in dupGroup.Skip(1))
+							{
+								resolvedEndpoints.Remove(ep);
+							}
+						}
+					}
+				}
+			}
+
+
+
+			return resolvedEndpoints;
 		}
 
 		public override string ToString()

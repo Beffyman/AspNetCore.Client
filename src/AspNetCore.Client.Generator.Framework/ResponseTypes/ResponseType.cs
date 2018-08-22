@@ -112,7 +112,7 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 
 		public override string ToString()
 		{
-			return $"{Type} {Name}";
+			return $"{Type} {Name} = {DefaultValue}";
 		}
 	}
 }

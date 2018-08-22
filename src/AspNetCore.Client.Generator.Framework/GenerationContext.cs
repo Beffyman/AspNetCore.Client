@@ -10,6 +10,7 @@ namespace AspNetCore.Client.Generator.Framework
 	/// </summary>
 	public class GenerationContext
 	{
+
 		/// <summary>
 		/// Clients that will be generated
 		/// </summary>
@@ -27,6 +28,20 @@ namespace AspNetCore.Client.Generator.Framework
 			{
 				Clients = this.Clients.Union(other.Clients).ToList()
 			};
+		}
+
+		/// <summary>
+		/// Maps the related information together, like base controllers
+		/// </summary>
+		public void MapRelatedInfo()
+		{
+			foreach (var client in Clients)
+			{
+				if (!string.IsNullOrEmpty(client.BaseClass))
+				{
+					client.BaseController = Clients.SingleOrDefault(x => x.Name == client.BaseClass);
+				}
+			}
 		}
 	}
 }

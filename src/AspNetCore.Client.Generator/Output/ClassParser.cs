@@ -27,7 +27,9 @@ namespace AspNetCore.Client.Generator.Output
 			var controller = new Controller();
 			controller.Name = $@"{syntax.Identifier.ValueText.Trim().Replace("Controller", "")}";
 
+			controller.Abstract = syntax.Modifiers.Any(x => x.Text == "abstract");
 
+			controller.BaseClass = syntax.BaseList.Types.Where(x => x.ToFullString().Trim().EndsWith("Controller")).SingleOrDefault()?.ToFullString().Trim().Replace("Controller", "");
 
 			controller.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NoClientAttribute.AttributeName)) != null;
 
@@ -44,17 +46,20 @@ namespace AspNetCore.Client.Generator.Output
 				controller.Route = new Route(routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", ""));
 			}
 
-			if (controller.Route == null)//No Route, invalid controller
+			if (controller.Route == null && !controller.Abstract)//No Route, invalid controller
 			{
 				controller.Ignored = true;
 				throw new NotSupportedException("Controller must have a route to be valid for generation.");
 			}
 
-			var match = RouteVersionRegex.Match(controller.Route.Value);
-			if (match.Success)
+			if (controller.Route != null)
 			{
-				var group = match.Groups[1];
-				controller.NamespaceVersion = group.Value.ToUpper();
+				var match = RouteVersionRegex.Match(controller.Route.Value);
+				if (match.Success)
+				{
+					var group = match.Groups[1];
+					controller.NamespaceVersion = group.Value.ToUpper();
+				}
 			}
 
 
@@ -107,11 +112,9 @@ namespace AspNetCore.Client.Generator.Output
 			endpoint.Name = syntax.Identifier.ValueText.Trim();
 
 
-
-
-
-
-
+			endpoint.Virtual = syntax.Modifiers.Any(x => x.Text == "virtual");
+			endpoint.Override = syntax.Modifiers.Any(x => x.Text == "override");
+			endpoint.New = syntax.Modifiers.Any(x => x.Text == "new");
 
 
 			//Ignore generator attribute
@@ -190,7 +193,7 @@ namespace AspNetCore.Client.Generator.Output
 
 
 
-			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.FullRoute)).ToList();
+			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute(parent))).ToList();
 
 
 			var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
