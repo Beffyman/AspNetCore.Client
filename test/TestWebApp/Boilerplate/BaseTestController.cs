@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TestWebApp.Boilerplate
 {
 	[ApiController]
-	[IncludeHeader("TestInheritance","WORKS")]
+	[IncludeHeader("TestInheritance", "WORKS")]
 	public abstract class BaseTestController : ControllerBase
 	{
 
@@ -28,6 +28,12 @@ namespace TestWebApp.Boilerplate
 
 		[HttpGet("OverrideTest")]
 		public virtual void OverrideTest()
+		{
+
+		}
+
+
+		public void TestNonMethod()
 		{
 
 		}

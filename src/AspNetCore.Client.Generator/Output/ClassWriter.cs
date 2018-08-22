@@ -103,7 +103,7 @@ namespace {Settings.ClientNamespace}
 
 		private static string WriteErrorMessage(ParsedFile file)
 		{
-			return $@"#warning {(file.UnexpectedFailure ? "PLEASE MAKE A GITHUB REPO ISSUE" : "")} File {GetRelativePath(file.FileName)} {(file.UnexpectedFailure ? "has failed generation withunexpected error" : "is misconfigured for generation")} :: {file.Error.Replace('\r', ' ').Replace('\n', ' ')}";
+			return $@"#warning {(file.UnexpectedFailure ? "PLEASE MAKE A GITHUB REPO ISSUE" : "")} File {GetRelativePath(file.FileName)} {(file.UnexpectedFailure ? "has failed generation with unexpected error" : "is misconfigured for generation")} :: {file.Error.Replace('\r', ' ').Replace('\n', ' ')}";
 		}
 
 		private static string GetRelativePath(string file)

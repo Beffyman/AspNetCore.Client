@@ -199,7 +199,7 @@ namespace AspNetCore.Client.Generator.Framework
 
 
 
-			return resolvedEndpoints;
+			return resolvedEndpoints.Where(x => !x.Ignored).ToList();
 		}
 
 		public override string ToString()

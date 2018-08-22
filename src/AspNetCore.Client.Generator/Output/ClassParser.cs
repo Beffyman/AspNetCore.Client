@@ -159,10 +159,18 @@ namespace AspNetCore.Client.Generator.Output
 
 
 
-			if (endpoint.Route == null && httpAttribute.ArgumentList != null)//If Route was never fetched from RouteAttribute or if they used the Http(template) override
+			if (endpoint.Route == null && httpAttribute?.ArgumentList != null)//If Route was never fetched from RouteAttribute or if they used the Http(template) override
 			{
 				endpoint.Route = new Route(httpAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim());
 			}
+
+			//Ignore method if it doesn't have a route or http attribute
+			if (endpoint.Route == null && httpAttribute == null)
+			{
+				endpoint.Ignored = true;
+				return endpoint;
+			}
+
 
 			//Obsolete Attribute
 			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Obsolete));
