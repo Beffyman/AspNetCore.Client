@@ -395,12 +395,12 @@ namespace FancySuffix
 			ITestWebAppClientWrapper param_client,
 			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
 			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
-			IHttpRequestModifier param_modifier)
+			Func<ITestWebAppClient,IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
 			Serializer = param_serializer(this);
-			Modifier = param_modifier;
+			Modifier = param_modifier(this);
 		}
 
 
@@ -2304,12 +2304,12 @@ namespace FancySuffix
 			ITestWebAppClientWrapper param_client,
 			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
 			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
-			IHttpRequestModifier param_modifier)
+			Func<ITestWebAppClient,IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
 			Serializer = param_serializer(this);
-			Modifier = param_modifier;
+			Modifier = param_modifier(this);
 		}
 
 
@@ -7337,12 +7337,12 @@ namespace TestWebApp.Clients.V1
 			ITestWebAppClientWrapper param_client,
 			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
 			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
-			IHttpRequestModifier param_modifier)
+			Func<ITestWebAppClient,IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
 			Serializer = param_serializer(this);
-			Modifier = param_modifier;
+			Modifier = param_modifier(this);
 		}
 
 
@@ -7573,12 +7573,12 @@ namespace TestWebApp.Clients.V2
 			ITestWebAppClientWrapper param_client,
 			Func<ITestWebAppClient,IHttpOverride> param_httpoverride,
 			Func<ITestWebAppClient,IHttpSerializer> param_serializer,
-			IHttpRequestModifier param_modifier)
+			Func<ITestWebAppClient,IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
 			Serializer = param_serializer(this);
-			Modifier = param_modifier;
+			Modifier = param_modifier(this);
 		}
 
 

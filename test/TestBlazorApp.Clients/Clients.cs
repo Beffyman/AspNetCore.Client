@@ -179,12 +179,12 @@ namespace TestBlazorApp.Clients
 			ITestBlazorAppClientWrapper param_client,
 			Func<ITestBlazorAppClient,IHttpOverride> param_httpoverride,
 			Func<ITestBlazorAppClient,IHttpSerializer> param_serializer,
-			IHttpRequestModifier param_modifier)
+			Func<ITestBlazorAppClient,IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
 			Serializer = param_serializer(this);
-			Modifier = param_modifier;
+			Modifier = param_modifier(this);
 		}
 
 

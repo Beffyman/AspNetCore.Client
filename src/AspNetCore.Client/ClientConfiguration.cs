@@ -139,14 +139,14 @@ namespace AspNetCore.Client
 
 
 
-			services.AddScoped<IHttpRequestModifier, HttpRequestModifier>((_) =>
-			{
-				return new HttpRequestModifier
-				{
-					PredefinedHeaders = PredefinedHeaders,
-					PredefinedCookies = PredefinedCookies
-				};
-			});
+			services.AddScoped<Func<T, IHttpRequestModifier>>((provider) =>
+			 {
+				 return _ => new HttpRequestModifier
+				 {
+					 PredefinedHeaders = PredefinedHeaders,
+					 PredefinedCookies = PredefinedCookies
+				 };
+			 });
 
 			return services;
 		}

@@ -14,7 +14,6 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 	/// </summary>
 	public class RequestModifierDependency : IDependency, IRequestModifier
 	{
-
 		/// <summary>
 		/// Injection Field
 		/// </summary>
@@ -22,7 +21,7 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 		/// <returns></returns>
 		public string GetDependencyFieldType(string clientName)
 		{
-			return GetDependencyParameterType(clientName);
+			return nameof(IHttpRequestModifier);
 		}
 
 		/// <summary>
@@ -32,7 +31,7 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 		/// <returns></returns>
 		public string GetDependencyParameterType(string clientName)
 		{
-			return nameof(IHttpRequestModifier);
+			return $"Func<{clientName},{nameof(IHttpRequestModifier)}>";
 		}
 
 		/// <summary>
@@ -42,13 +41,13 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 		/// <returns></returns>
 		public string GetDependencyName(string clientName)
 		{
-			return "Modifier";
+			return $"Modifier";
 		}
 
 		/// <summary>
 		/// Whether or not to use GetAssignmentOverride for the constructor assignment
 		/// </summary>
-		public bool HasAssignmentOverride => false;
+		public bool HasAssignmentOverride => true;
 
 		/// <summary>
 		/// Overwritten constructor assignment
@@ -57,7 +56,7 @@ namespace AspNetCore.Client.Generator.Framework.Dependencies
 		/// <returns></returns>
 		public string GetAssignmentOverride(string value)
 		{
-			throw new NotImplementedException();
+			return $"{value}(this)";
 		}
 
 		/// <summary>
