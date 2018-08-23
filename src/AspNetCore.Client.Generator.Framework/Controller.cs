@@ -117,6 +117,10 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public bool IsSecured { get; set; }
 
+		/// <summary>
+		/// Gets all the children of this controller and any it inherits.
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return ResponseTypes.Cast<INavNode>()
@@ -134,6 +138,11 @@ namespace AspNetCore.Client.Generator.Framework
 											.GetTypes()
 											.Where(x => typeof(IDependency).IsAssignableFrom(x) && !x.GetTypeInfo().IsAbstract)
 											.ToList();
+
+		/// <summary>
+		/// Gets all of the injectable properties for the clients generated
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerable<IDependency> GetInjectionDependencies()
 		{
 			if (Abstract)
@@ -144,6 +153,10 @@ namespace AspNetCore.Client.Generator.Framework
 			return _allDependencies.Where(x => x != typeof(ClientDependency)).Select(x => Activator.CreateInstance(x) as IDependency);
 		}
 
+		/// <summary>
+		/// Gets all the endpoints under this controller that will filter based on overrides/virtual/new and inherit from base classes.
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerable<Endpoint> GetEndpoints()
 		{
 			var resolvedEndpoints = Endpoints.Union(BaseController?.GetEndpoints() ?? new List<Endpoint>())
@@ -202,6 +215,10 @@ namespace AspNetCore.Client.Generator.Framework
 			return resolvedEndpoints.Where(x => !x.Ignored).ToList();
 		}
 
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			string namespaceVersion = $@"{(NamespaceVersion != null ? $"{NamespaceVersion}." : "")}{(NamespaceSuffix != null ? $"{NamespaceSuffix}." : string.Empty)}";

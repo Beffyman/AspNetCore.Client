@@ -8,6 +8,9 @@ using System.Text;
 
 namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 {
+	/// <summary>
+	/// Parameter for the additional cookies for the request
+	/// </summary>
 	public class CookieModifier : IRequestModifier, IParameter
 	{
 
@@ -25,15 +28,26 @@ namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 		/// What the default value of the parameter is, if it has one. the string "null" should be used for an optional parameter
 		/// </summary>
 		public string DefaultValue => "null";
+
+		/// <summary>
+		/// Order in which the parameter is inside the generated file
+		/// </summary>
 		public int SortOrder => 8;
 
-
+		/// <summary>
+		/// Retrieve all the <see cref="INavNode"/> implemented children of this node
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return null;
 		}
 
-		public string ToString()
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
 		{
 			return $"{Type} {Name} = {DefaultValue}";
 		}

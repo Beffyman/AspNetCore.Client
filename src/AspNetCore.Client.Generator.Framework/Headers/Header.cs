@@ -26,6 +26,10 @@ namespace AspNetCore.Client.Generator.Framework.Headers
 			Key = key;
 		}
 
+		/// <summary>
+		/// Retrieve all the <see cref="INavNode"/> implemented children of this node
+		/// </summary>
+		/// <returns></returns>
 		public abstract IEnumerable<INavNode> GetChildren();
 	}
 }

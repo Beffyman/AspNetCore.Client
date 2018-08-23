@@ -10,7 +10,7 @@ namespace AspNetCore.Client
 	public class ClientSettings
 	{
 		/// <summary>
-		/// BaseAddress for the HttpClient
+		/// Method to retrieve the BaseAddress for the client
 		/// </summary>
 		public Func<IServiceProvider, string> BaseAddress { get; set; }
 

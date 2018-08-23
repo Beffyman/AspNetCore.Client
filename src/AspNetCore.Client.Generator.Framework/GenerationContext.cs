@@ -21,7 +21,11 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public IEnumerable<Endpoint> Endpoints => Clients.SelectMany(x => x.Endpoints);
 
-
+		/// <summary>
+		/// Merge this and another context into a new one
+		/// </summary>
+		/// <param name="other"></param>
+		/// <returns></returns>
 		public GenerationContext Merge(GenerationContext other)
 		{
 			return new GenerationContext

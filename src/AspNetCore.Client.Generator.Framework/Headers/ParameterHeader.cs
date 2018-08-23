@@ -28,6 +28,9 @@ namespace AspNetCore.Client.Generator.Framework.Headers
 		/// </summary>
 		public string DefaultValue { get; set; }
 
+		/// <summary>
+		/// Sort order used for the display/writing of the parameter
+		/// </summary>
 		public int SortOrder => 4;
 
 		/// <summary>
@@ -42,12 +45,19 @@ namespace AspNetCore.Client.Generator.Framework.Headers
 			DefaultValue = defaultValue;
 		}
 
+		/// <summary>
+		/// Retrieve all the <see cref="INavNode"/> implemented children of this node
+		/// </summary>
+		/// <returns></returns>
 		public override IEnumerable<INavNode> GetChildren()
 		{
 			return null;
 		}
 
-
+		/// <summary>
+		/// Returns a string that represents the current object
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return $"{Type} {Key} = {DefaultValue}";

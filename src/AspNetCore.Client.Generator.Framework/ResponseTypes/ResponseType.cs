@@ -47,6 +47,9 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 		/// </summary>
 		public string ActionType { get; } = nameof(HttpResponseMessage);
 
+		/// <summary>
+		/// Order in which the parameter is inside the generated file
+		/// </summary>
 		public int SortOrder => 6;
 
 		/// <summary>
@@ -104,12 +107,19 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 			}
 		}
 
+		/// <summary>
+		/// Retrieve all the <see cref="INavNode"/> implemented children of this node
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerable<INavNode> GetChildren()
 		{
 			return null;
 		}
 
-
+		/// <summary>
+		/// Returns a string that represents the current object
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return $"{Type} {Name} = {DefaultValue}";

@@ -7,12 +7,25 @@ using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.Framework.Routes
 {
+	/// <summary>
+	/// Route details
+	/// </summary>
 	public class Route
 	{
+		/// <summary>
+		/// Raw route
+		/// </summary>
 		public string Value { get; set; }
 
+		/// <summary>
+		/// Constraints interpreted from the {:xyz}s in the route
+		/// </summary>
 		public IEnumerable<RouteConstraint> Constraints { get; set; } = new List<RouteConstraint>();
 
+		/// <summary>
+		/// Creates a route and interprets the contraints from it
+		/// </summary>
+		/// <param name="value"></param>
 		public Route(string value)
 		{
 			Value = value;

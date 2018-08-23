@@ -26,11 +26,19 @@ namespace AspNetCore.Client.Generator.Framework.Headers
 			Value = value;
 		}
 
+		/// <summary>
+		/// Retrieve all the <see cref="INavNode"/> implemented children of this node
+		/// </summary>
+		/// <returns></returns>
 		public override IEnumerable<INavNode> GetChildren()
 		{
 			return null;
 		}
 
+		/// <summary>
+		/// Returns a string that represents the current object
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return $"{Key} : {Value}";
