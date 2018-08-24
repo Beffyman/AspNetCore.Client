@@ -39,7 +39,7 @@ namespace TestBlazorApp.Tests
 		protected override void ConfigureClient(ClientConfiguration configure)
 		{
 			configure.UseTestServerClient<ITestBlazorAppClientWrapper>(Client);
-			configure.UseBlazorSimpleJsonSerlaizer();
+			configure.UseBlazorSimpleJsonSerializer();
 		}
 	}
 }

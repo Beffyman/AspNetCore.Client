@@ -39,7 +39,7 @@ namespace TestWebApp.Tests
 		{
 			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client);
 			configure.WithProtobufBody();
-			configure.UseProtobufSerlaizer();
+			configure.UseProtobufSerializer();
 		}
 	}
 

@@ -15,7 +15,7 @@ namespace AspNetCore.Client
 		/// Uses <see cref="BlazorSimpleJsonSerializer"/> to serialize and deserialize requests
 		/// </summary>
 		/// <param name="config"></param>
-		public static ClientConfiguration UseBlazorSimpleJsonSerlaizer(this ClientConfiguration config)
+		public static ClientConfiguration UseBlazorSimpleJsonSerializer(this ClientConfiguration config)
 		{
 			return config.UseSerializer<BlazorSimpleJsonSerializer>();
 		}

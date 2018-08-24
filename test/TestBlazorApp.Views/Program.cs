@@ -15,7 +15,7 @@ namespace TestBlazorApp.Views
 			{
 				services.AddTestBlazorClients(config =>
 				{
-					config.UseBlazorSimpleJsonSerlaizer();
+					config.UseBlazorSimpleJsonSerializer();
 				});
 				// Add any custom services here
 			});

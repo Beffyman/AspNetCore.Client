@@ -62,7 +62,7 @@ Contains a blazor simpleJson serializer which can override the default json one 
 ```c#
 services.InstallClients(config=>
 {
-	config.UseBlazorSimpleJsonSerlaizer();
+	config.UseBlazorSimpleJsonSerializer();
 });
 
 ```

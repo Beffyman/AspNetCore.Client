@@ -16,7 +16,7 @@ namespace AspNetCore.Client
 		/// Uses <see cref="ProtobufSerializer"/> to serialize and deserialize requests
 		/// </summary>
 		/// <param name="config"></param>
-		public static ClientConfiguration UseProtobufSerlaizer(this ClientConfiguration config)
+		public static ClientConfiguration UseProtobufSerializer(this ClientConfiguration config)
 		{
 			return config.UseSerializer<ProtobufSerializer>();
 		}
