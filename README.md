@@ -7,7 +7,7 @@ If you are anything like me, you look at
 ```c#
 using(var client = new HttpClient())
 {
-	var request = await client.client.GetAsync($"api/mysuperspecialroute/{id}");
+	var request = await client.GetAsync($"api/mysuperspecialroute/{id}");
 	//Now to make sure what came back is what is expected, in every case...
 }
 ```
@@ -48,7 +48,7 @@ Contains a protobuf serializer which can override the default json one via the U
 ```c#
 services.InstallClients(config=>
 {
-	config.UseProtobufSerlaizer();
+	config.UseProtobufSerializer();
 	config.WithProtobufBody();
 });
 
