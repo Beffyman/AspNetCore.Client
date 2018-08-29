@@ -151,7 +151,7 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <returns></returns>
 		public IEnumerable<IParameter> GetParametersWithoutResponseTypes()
 		{
-			return GetChildren().Where(x => !(x is ResponseType)).OfType<IParameter>().OrderBy(x => x.SortOrder).ThenBy(x => x.DefaultValue == null ? 0 : 1);
+			return GetChildren().Where(x => !(x is ResponseType) || (x is ExceptionResponseType)).OfType<IParameter>().OrderBy(x => x.SortOrder).ThenBy(x => x.DefaultValue == null ? 0 : 1);
 		}
 
 		/// <summary>

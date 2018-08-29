@@ -3,6 +3,7 @@ using AspNetCore.Client.Generator.CSharp;
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.Parameters;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.ResponseTypes;
 using AspNetCore.Client.Generator.Framework.Routes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -25,80 +26,96 @@ namespace AspNetCore.Client.Generator.Output
 
 
 			var controller = new Controller();
-			controller.Name = $@"{syntax.Identifier.ValueText.Trim().Replace("Controller", "")}";
-
-			controller.Abstract = syntax.Modifiers.Any(x => x.Text == "abstract");
-
-			controller.BaseClass = syntax.BaseList.Types.Where(x => x.ToFullString().Trim().EndsWith("Controller")).SingleOrDefault()?.ToFullString().Trim().Replace("Controller", "");
-
-			controller.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NoClientAttribute.AttributeName)) != null;
-
-
-			var namespaceAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NamespaceSuffixAttribute.AttributeName));
-			if (namespaceAttribute != null)
+			try
 			{
-				controller.NamespaceSuffix = namespaceAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
-			}
+				controller.Name = $@"{syntax.Identifier.ValueText.Trim().Replace("Controller", "")}";
 
-			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Route));
-			if (routeAttribute != null)//Fetch route from RouteAttribute
-			{
-				controller.Route = new Route(routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", ""));
-			}
+				controller.Abstract = syntax.Modifiers.Any(x => x.Text == "abstract");
 
-			if (controller.Route == null && !controller.Abstract)//No Route, invalid controller
-			{
-				controller.Ignored = true;
-				throw new NotSupportedException("Controller must have a route to be valid for generation.");
-			}
+				controller.BaseClass = syntax.BaseList.Types.Where(x => x.ToFullString().Trim().EndsWith("Controller")).SingleOrDefault()?.ToFullString().Trim().Replace("Controller", "");
 
-			if (controller.Route != null)
-			{
-				var match = RouteVersionRegex.Match(controller.Route.Value);
-				if (match.Success)
+				controller.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NoClientAttribute.AttributeName)) != null;
+
+
+				var namespaceAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(NamespaceSuffixAttribute.AttributeName));
+				if (namespaceAttribute != null)
 				{
-					var group = match.Groups[1];
-					controller.NamespaceVersion = group.Value.ToUpper();
+					controller.NamespaceSuffix = namespaceAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
 				}
+
+				var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Route));
+				if (routeAttribute != null)//Fetch route from RouteAttribute
+				{
+					controller.Route = new Route(routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", ""));
+				}
+
+				if (controller.Route == null && !controller.Abstract)//No Route, invalid controller
+				{
+					controller.Ignored = true;
+					throw new NotSupportedException("Controller must have a route to be valid for generation.");
+				}
+
+				if (controller.Route != null)
+				{
+					var match = RouteVersionRegex.Match(controller.Route.Value);
+					if (match.Success)
+					{
+						var group = match.Groups[1];
+						controller.NamespaceVersion = group.Value.ToUpper();
+					}
+				}
+
+
+				//Response types
+				var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(Constants.ProducesResponseType));
+				var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
+				controller.ResponseTypes = responses.Select(x => new Framework.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
+
+
+
+				var parameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(HeaderParameterAttribute.AttributeName))
+					.Select(x => new ParameterHeaderDefinition(x))
+					.ToList();
+				controller.ParameterHeader = parameterHeaders.Select(x => new Framework.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
+
+
+
+				var headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(IncludeHeaderAttribute.AttributeName))
+					.Select(x => new HeaderDefinition(x))
+					.ToList();
+				controller.ConstantHeader = headers.Select(x => new Framework.Headers.ConstantHeader(x.Name, x.Value)).ToList();
+
+				//Authorize Attribute
+				controller.IsSecured = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Authorize)) != null;
+
+				//Obsolete Attribute
+				var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Obsolete));
+				if (obsoleteAttribute != null)
+				{
+					controller.Obsolete = true;
+					controller.ObsoleteMessage = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				}
+
+				//Only public endpoints can be hit anyways
+				var methods = syntax.DescendantNodes().OfType<MethodDeclarationSyntax>()
+					.Where(x => x.Modifiers.Any(y => y.Text == "public"))
+					.ToList();
+				controller.Endpoints = methods.Select(x => ReadAsEndpoint(controller, x)).ToList();
+
 			}
-
-
-			//Response types
-			var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(Constants.ProducesResponseType));
-			var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
-			controller.ResponseTypes = responses.Select(x => new Framework.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
-
-
-
-			var parameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(HeaderParameterAttribute.AttributeName))
-				.Select(x => new ParameterHeaderDefinition(x))
-				.ToList();
-			controller.ParameterHeader = parameterHeaders.Select(x => new Framework.Headers.ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
-
-
-
-			var headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(IncludeHeaderAttribute.AttributeName))
-				.Select(x => new HeaderDefinition(x))
-				.ToList();
-			controller.ConstantHeader = headers.Select(x => new Framework.Headers.ConstantHeader(x.Name, x.Value)).ToList();
-
-			//Authorize Attribute
-			controller.IsSecured = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Authorize)) != null;
-
-			//Obsolete Attribute
-			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(Constants.Obsolete));
-			if (obsoleteAttribute != null)
+			catch (NotSupportedException nse)
 			{
-				controller.Obsolete = true;
-				controller.ObsoleteMessage = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				controller.Failed = true;
+				controller.Error = nse.Message;
 			}
-
-			//Only public endpoints can be hit anyways
-			var methods = syntax.DescendantNodes().OfType<MethodDeclarationSyntax>()
-				.Where(x => x.Modifiers.Any(y => y.Text == "public"))
-				.ToList();
-			controller.Endpoints = methods.Select(x => ReadAsEndpoint(controller, x)).ToList();
-
+#if !DEBUG
+			catch (Exception ex)
+			{
+				controller.Failed = true;
+				controller.UnexpectedFailure = true;
+				controller.Error = ex.Message;
+			}
+#endif
 			return controller;
 		}
 
@@ -189,7 +206,7 @@ namespace AspNetCore.Client.Generator.Output
 			var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
 			responses.Add(new ResponseTypeDefinition(true));
 
-			endpoint.ResponseTypes = responses.Select(x => new Framework.ResponseTypes.ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
+			endpoint.ResponseTypes = responses.Select(x => new ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
 
 			var duplicateResponseTypes = endpoint.GetResponseTypes().GroupBy(x => x.Status).Where(x => x.Count() > 1).ToList();
 
@@ -197,6 +214,8 @@ namespace AspNetCore.Client.Generator.Output
 			{
 				throw new NotSupportedException($"Endpoint has multiple response types of the same status defined. {string.Join(", ", duplicateResponseTypes.Select(x => x.Key?.ToString()))}");
 			}
+			//Add after so we don't get duplicate error from the null Status
+			endpoint.ResponseTypes.Add(new ExceptionResponseType());
 
 
 

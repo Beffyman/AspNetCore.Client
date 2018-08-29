@@ -24,76 +24,57 @@ namespace AspNetCore.Client.Generator.CSharp
 
 		public GenerationContext Context { get; set; }
 
-		public bool Failed { get; }
-		public bool UnexpectedFailure { get; }
-		public string Error { get; }
-
 		public ParsedFile(string file)
 		{
 			Name = Path.GetFileNameWithoutExtension(file);
 			FileName = file;
-			try
+
+			FileText = Helpers.SafelyReadFromFile(file);
+
+
+			Syntax = CSharpSyntaxTree.ParseText(FileText, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
+
+			Context = new GenerationContext();
+			Root = Syntax.GetRoot() as CompilationUnitSyntax;
+			var usingStatements = Root.DescendantNodes().OfType<UsingDirectiveSyntax>().ToList();
+
+			Regex allowedUsings;
+			Regex unallowedUsings;
+
+			if (Settings.AllowedNamespaces?.Any() ?? false)
 			{
-				FileText = Helpers.SafelyReadFromFile(file);
+				allowedUsings = new Regex($"({string.Join("|", Settings.AllowedNamespaces)})");
+			}
+			else
+			{
+				allowedUsings = new Regex($"(.+)");
+			}
 
+			if (Settings.ExcludedNamespaces?.Any() ?? false)
+			{
+				unallowedUsings = new Regex($"({string.Join("|", Settings.ExcludedNamespaces)})");
+			}
+			else
+			{
+				unallowedUsings = new Regex($"(^[.]+)");
+			}
 
-				Syntax = CSharpSyntaxTree.ParseText(FileText, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
+			UsingStatements = usingStatements.Select(x => x.WithoutLeadingTrivia().WithoutTrailingTrivia().ToFullString())
+											.Where(x => allowedUsings.IsMatch(x)
+													&& !unallowedUsings.IsMatch(x))
+											.ToList();
 
-				Context = new GenerationContext();
-				Root = Syntax.GetRoot() as CompilationUnitSyntax;
-				var usingStatements = Root.DescendantNodes().OfType<UsingDirectiveSyntax>().ToList();
+			var namespaceDeclarations = Root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().ToList();
 
-				Regex allowedUsings;
-				Regex unallowedUsings;
+			foreach (var nsd in namespaceDeclarations)
+			{
+				var classDeclarations = nsd.DescendantNodes().OfType<ClassDeclarationSyntax>().ToList();
 
-				if (Settings.AllowedNamespaces?.Any() ?? false)
+				foreach (var cd in classDeclarations)
 				{
-					allowedUsings = new Regex($"({string.Join("|", Settings.AllowedNamespaces)})");
-				}
-				else
-				{
-					allowedUsings = new Regex($"(.+)");
-				}
-
-				if (Settings.ExcludedNamespaces?.Any() ?? false)
-				{
-					unallowedUsings = new Regex($"({string.Join("|", Settings.ExcludedNamespaces)})");
-				}
-				else
-				{
-					unallowedUsings = new Regex($"(^[.]+)");
-				}
-
-				UsingStatements = usingStatements.Select(x => x.WithoutLeadingTrivia().WithoutTrailingTrivia().ToFullString())
-												.Where(x => allowedUsings.IsMatch(x)
-														&& !unallowedUsings.IsMatch(x))
-												.ToList();
-
-				var namespaceDeclarations = Root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().ToList();
-
-				foreach (var nsd in namespaceDeclarations)
-				{
-					var classDeclarations = nsd.DescendantNodes().OfType<ClassDeclarationSyntax>().ToList();
-
-					foreach (var cd in classDeclarations)
-					{
-						Context.Clients.Add(ClassParser.ReadAsClient(cd));
-					}
+					Context.Clients.Add(ClassParser.ReadAsClient(cd));
 				}
 			}
-			catch (NotSupportedException nse)
-			{
-				Failed = true;
-				Error = nse.Message;
-			}
-#if !DEBUG
-			catch (Exception ex)
-			{
-				Failed = true;
-				UnexpectedFailure = true;
-				Error = ex.Message;
-			}
-#endif
 
 		}
 	}

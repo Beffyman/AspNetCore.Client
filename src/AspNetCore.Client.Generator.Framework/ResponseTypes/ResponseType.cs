@@ -17,7 +17,7 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 		/// <summary>
 		/// Display name of the parameter, based on the <see cref="Status"/>
 		/// </summary>
-		public string Name
+		public virtual string Name
 		{
 			get
 			{
@@ -35,27 +35,27 @@ namespace AspNetCore.Client.Generator.Framework.ResponseTypes
 		/// <summary>
 		/// All Response Types are optional parameters, null
 		/// </summary>
-		public string DefaultValue => "null";
+		public virtual string DefaultValue => "null";
 
 		/// <summary>
 		/// Type of the action
 		/// </summary>
-		public string Type => $"{nameof(Action)}{(ActionType == null ? "" : "<")}{ActionType}{(ActionType == null ? "" : ">")}";
+		public virtual string Type => $"{nameof(Action)}{(ActionType == null ? "" : "<")}{ActionType}{(ActionType == null ? "" : ">")}";
 
 		/// <summary>
 		/// Type of the action parameter
 		/// </summary>
-		public string ActionType { get; } = nameof(HttpResponseMessage);
+		public virtual string ActionType { get; } = nameof(HttpResponseMessage);
 
 		/// <summary>
 		/// Order in which the parameter is inside the generated file
 		/// </summary>
-		public int SortOrder => 6;
+		public virtual int SortOrder => 6;
 
 		/// <summary>
 		/// What status does the action trigger on
 		/// </summary>
-		public HttpStatusCode? Status { get; set; } = null;
+		public virtual HttpStatusCode? Status { get; set; } = null;
 
 		/// <summary>
 		/// A Empty ResponseType means it is the generic handler of <see cref="Action"/>&lt;<see cref="HttpResponseMessage"/>&gt; ResponseCallback = null

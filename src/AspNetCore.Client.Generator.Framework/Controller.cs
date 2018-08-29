@@ -79,7 +79,7 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <summary>
 		/// Whether to generate the client or not
 		/// </summary>
-		public bool Generated => !Ignored && !Abstract;
+		public bool Generated => !Ignored && !Abstract && !Failed;
 
 
 		//IIgnored
@@ -116,6 +116,23 @@ namespace AspNetCore.Client.Generator.Framework
 		/// Should this endpoint require credentials
 		/// </summary>
 		public bool IsSecured { get; set; }
+
+		/// <summary>
+		/// Whether of not the controller loaded correctly
+		/// </summary>
+		public bool Failed { get; set; }
+
+		/// <summary>
+		/// Unexpected error found
+		/// </summary>
+		public bool UnexpectedFailure { get; set; }
+
+		/// <summary>
+		/// Expected error found
+		/// </summary>
+		public string Error { get; set; }
+
+
 
 		/// <summary>
 		/// Gets all the children of this controller and any it inherits.
