@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.5.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.5.1" />
 	</ItemGroup>
 
 	<ItemGroup>
