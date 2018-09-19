@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp;
+﻿using AspNetCore.Client.Generator.CSharp.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -293,9 +293,15 @@ namespace AspNetCore.Client.Generator
 			}
 		}
 
+		private static readonly Regex _attributeRegex = new Regex(@"(.+)Attribute");
+
 		public static bool MatchesAttribute(this string str, string attribute)
 		{
-			return str.Equals(attribute) || str.Equals($"{attribute}Attribute");
+			var match = _attributeRegex.Match(attribute);
+			var attributeName = match.Groups[1].Value;
+
+			return (!string.IsNullOrEmpty(attribute) && (str.Equals(attribute) || str.Equals($"{attribute}Attribute")))
+				|| (!string.IsNullOrEmpty(attributeName) && (str.Equals(attributeName) || str.Equals($"{attributeName}Attribute")));
 		}
 	}
 }

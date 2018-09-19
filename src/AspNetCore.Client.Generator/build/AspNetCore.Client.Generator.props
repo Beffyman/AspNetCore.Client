@@ -13,6 +13,7 @@
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>MyService.Clients</ClientNamespace>
+		<HubNamespace>MyService.Hubs</HubNamespace>
 		<AllowedNamespaces>System*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>
 	</PropertyGroup>

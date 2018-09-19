@@ -7,6 +7,7 @@
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 		<LangVersion>latest</LangVersion>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\AspNetCore.Client.xml</DocumentationFile>
 	</PropertyGroup>
 
@@ -25,6 +26,7 @@
 	<ItemGroup>
 		<PackageReference Include="Flurl.Http" Version="2.3.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="2.1.0" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />

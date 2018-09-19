@@ -1,5 +1,5 @@
 ﻿using AspNetCore.Client;
-using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +11,7 @@ namespace TestWebApp.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[NoClient]//Ignores the controller inside the generator
+	[NotGenerated]//Ignores the controller inside the generator
 	public class IgnoredController : ControllerBase
 	{
 		// GET api/values

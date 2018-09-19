@@ -12,7 +12,12 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using AspNetCore.Client;
 using Flurl.Http;
+using Microsoft.AspNetCore.Http.Connections.Client;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -28,6 +33,7 @@ namespace TestWebApp.Clients
 #warning DuplicateParameterErrorController is misconfigured for generation :: Endpoint has multiple parameters of the same name defined. id
 #warning ErrorController is misconfigured for generation :: Controller must have a route to be valid for generation.
 #warning ResponseTypeErrorController is misconfigured for generation :: Endpoint has multiple response types of the same status defined. OK
+#warning ErrorHub is misconfigured for generation :: Hub has multiple messages with different parameters defined. ReceiveMessage
 	public static class TestWebAppClientInstaller
 	{
 		/// <summary>
@@ -5057,6 +5063,77 @@ namespace TestWebApp.Clients.V2
 			}
 
 			return response;
+		}
+	}
+}
+
+namespace TestWebApp.Hubs
+{
+	public class ChatHubConnectionBuilder : HubConnectionBuilder
+	{
+		private bool _hubConnectionBuilt;
+		public ChatHubConnectionBuilder(string host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
+		{
+			//Remove default HubConnection to use custom one
+			Services.Remove(Services.Where(x => x.ServiceType == typeof(HubConnection)).Single());
+			Services.AddSingleton<ChatHubConnection>();
+			Services.Configure<HttpConnectionOptions>(o =>
+			{
+				o.Url = new Uri($"{host}/Chat");
+				if (transports != null)
+				{
+					o.Transports = transports.Value;
+				}
+			}
+
+			);
+			if (configureHttpConnection != null)
+			{
+				Services.Configure(configureHttpConnection);
+			}
+
+			Services.AddSingleton<IConnectionFactory, HttpConnectionFactory>();
+		}
+
+		public new ChatHubConnection Build()
+		{
+			// Build can only be used once
+			if (_hubConnectionBuilt)
+			{
+				throw new InvalidOperationException("HubConnectionBuilder allows creation only of a single instance of HubConnection.");
+			}
+
+			_hubConnectionBuilt = true;
+			// The service provider is disposed by the HubConnection
+			var serviceProvider = Services.BuildServiceProvider();
+			var connectionFactory = serviceProvider.GetService<IConnectionFactory>();
+			if (connectionFactory == null)
+			{
+				throw new InvalidOperationException($"Cannot create {nameof(HubConnection)} instance.An {nameof(IConnectionFactory)} was not configured.");
+			}
+
+			return serviceProvider.GetService<ChatHubConnection>();
+		}
+	}
+
+	public class ChatHubConnection : HubConnection
+	{
+		public ChatHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, IServiceProvider serviceProvider, ILoggerFactory loggerFactory): base(connectionFactory, protocol, serviceProvider, loggerFactory)
+		{
+		}
+
+		public ChatHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, ILoggerFactory loggerFactory): base(connectionFactory, protocol, loggerFactory)
+		{
+		}
+
+		public Task SendMessageAsync(string user, string message, CancellationToken cancellationToken = default)
+		{
+			return this.InvokeAsync("SendMessage", user, message, cancellationToken);
+		}
+
+		public IDisposable OnReceiveMessage(Action<string, string> action)
+		{
+			return this.On("ReceiveMessage", action);
 		}
 	}
 }

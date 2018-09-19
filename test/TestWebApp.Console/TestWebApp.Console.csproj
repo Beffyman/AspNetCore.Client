@@ -8,6 +8,7 @@
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
 		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
 		<LangVersion>latest</LangVersion>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 

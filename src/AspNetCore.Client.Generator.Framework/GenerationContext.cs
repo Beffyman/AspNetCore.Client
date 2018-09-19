@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using AspNetCore.Client.Generator.Framework.Http;
+using AspNetCore.Client.Generator.Framework.SignalR;
 
 namespace AspNetCore.Client.Generator.Framework
 {
@@ -14,12 +16,34 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <summary>
 		/// Clients that will be generated
 		/// </summary>
-		public IList<Controller> Clients { get; set; } = new List<Controller>();
+		public IList<HttpController> HttpClients { get; set; } = new List<HttpController>();
 
 		/// <summary>
 		/// All of the endpoints inside the clients
 		/// </summary>
-		public IEnumerable<Endpoint> Endpoints => Clients.SelectMany(x => x.Endpoints);
+		public IEnumerable<HttpEndpoint> HttpEndpoints => HttpClients.SelectMany(x => x.Endpoints);
+
+
+
+
+		/// <summary>
+		/// Clients that will be generated
+		/// </summary>
+		public IList<HubController> HubClients { get; set; } = new List<HubController>();
+
+		/// <summary>
+		/// All of the endpoints inside the clients
+		/// </summary>
+		public IEnumerable<HubEndpoint> HubEndpoints => HubClients.SelectMany(x => x.Endpoints);
+
+
+
+
+
+
+
+
+
 
 		/// <summary>
 		/// Merge this and another context into a new one
@@ -30,7 +54,8 @@ namespace AspNetCore.Client.Generator.Framework
 		{
 			return new GenerationContext
 			{
-				Clients = this.Clients.Union(other.Clients).ToList()
+				HttpClients = this.HttpClients.Union(other.HttpClients).ToList(),
+				HubClients = this.HubClients.Union(other.HubClients).ToList()
 			};
 		}
 
@@ -39,11 +64,19 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public void MapRelatedInfo()
 		{
-			foreach (var client in Clients)
+			foreach (var client in HttpClients)
 			{
 				if (!string.IsNullOrEmpty(client.BaseClass))
 				{
-					client.BaseController = Clients.SingleOrDefault(x => x.Name == client.BaseClass);
+					client.BaseController = HttpClients.SingleOrDefault(x => x.Name == client.BaseClass);
+				}
+			}
+
+			foreach (var client in HubClients)
+			{
+				if (!string.IsNullOrEmpty(client.BaseClass))
+				{
+					client.BaseController = HubClients.SingleOrDefault(x => x.Name == client.BaseClass);
 				}
 			}
 		}

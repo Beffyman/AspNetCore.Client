@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AspNetCore.Client;
-using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -69,7 +69,7 @@ namespace TestWebApp.Controllers
 			await Task.Delay(10000);
 		}
 
-		[NoClient]
+		[NotGenerated]
 		[HttpGet("[action]")]
 		public void IgnoreMe()
 		{
