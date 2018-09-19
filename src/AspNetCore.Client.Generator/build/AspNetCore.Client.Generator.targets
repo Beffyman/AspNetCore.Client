@@ -13,6 +13,7 @@
 													UseValueTask="$(UseValueTask)"
 													UseInternalClients="$(UseInternalClients)"
 													ClientNamespace="$(ClientNamespace)"
+													HubNamespace="$(HubNamespace)"
 													AllowedNamespaces="$(AllowedNamespaces)"
 													ExcludedNamespaces="$(ExcludedNamespaces)"/>
 
