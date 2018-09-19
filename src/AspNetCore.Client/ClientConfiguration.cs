@@ -70,6 +70,11 @@ namespace AspNetCore.Client
 		private bool HttpPool = false;
 
 		/// <summary>
+		/// Does the container already have an httpclient injected?  AKA blazor?
+		/// </summary>
+		private bool ExistingHttpClient = false;
+
+		/// <summary>
 		/// Applies the configurations to the <see cref="IServiceCollection"/>
 		/// </summary>
 		/// <param name="services"></param>
@@ -100,42 +105,54 @@ namespace AspNetCore.Client
 			services.AddScoped<Func<T, IHttpSerializer>>(provider => (_ => (IHttpSerializer)provider.GetService(SerializeType)));
 			services.AddScoped<Func<T, IHttpOverride>>(provider => (_ => (IHttpOverride)provider.GetService(HttpOverrideType)));
 
-			if (HttpPool)
-			{
-				if (ConstantBaseAddress)
-				{
-					services.AddSingleton<IFlurlClientFactory, PerHostFlurlClientFactory>();
-
-					services.AddScoped<Func<T, IFlurlClient>>(provider =>
-					 {
-						 var factory = provider.GetService<IFlurlClientFactory>();
-						 return _ => factory.Get(new Flurl.Url(HttpBaseAddress(provider)));
-					 });
-				}
-				else
-				{
-					services.AddHttpClient(typeof(T).Name);
-
-					services.AddTransient<HttpClient>(provider =>
-					{
-						return provider.GetService<System.Net.Http.IHttpClientFactory>().CreateClient(typeof(T).Name);
-					});
-
-
-					services.AddTransient<Func<T, IFlurlClient>>(provider =>
-					{
-						return _ => new FlurlClient(provider.GetService<HttpClient>());
-					});
-				}
-
-			}
-			else
+			if (ExistingHttpClient)
 			{
 				services.AddTransient<Func<T, IFlurlClient>>(provider =>
 				{
-					return (_ => new FlurlClient());
+					return _ => new FlurlClient(provider.GetService<HttpClient>());
 				});
 			}
+			else
+			{
+				if (HttpPool)
+				{
+					if (ConstantBaseAddress)
+					{
+						services.AddSingleton<IFlurlClientFactory, PerHostFlurlClientFactory>();
+
+						services.AddScoped<Func<T, IFlurlClient>>(provider =>
+						{
+							var factory = provider.GetService<IFlurlClientFactory>();
+							return _ => factory.Get(new Flurl.Url(HttpBaseAddress(provider)));
+						});
+					}
+					else
+					{
+						services.AddHttpClient(typeof(T).Name);
+
+						services.AddTransient<HttpClient>(provider =>
+						{
+							return provider.GetService<System.Net.Http.IHttpClientFactory>().CreateClient(typeof(T).Name);
+						});
+
+
+						services.AddTransient<Func<T, IFlurlClient>>(provider =>
+						{
+							return _ => new FlurlClient(provider.GetService<HttpClient>());
+						});
+					}
+
+				}
+				else
+				{
+					services.AddTransient<Func<T, IFlurlClient>>(provider =>
+					{
+						return (_ => new FlurlClient());
+					});
+				}
+			}
+
+
 
 
 
@@ -272,6 +289,16 @@ namespace AspNetCore.Client
 		public ClientConfiguration UseHttpClientFactory()
 		{
 			HttpPool = true;
+			return this;
+		}
+
+		/// <summary>
+		/// Uses the existing http client injection inside the container, not compatible with <see cref="UseHttpClientFactory"/> and <see cref="WithBaseAddress(string)"/>
+		/// </summary>
+		/// <returns></returns>
+		public ClientConfiguration UseExistingHttpClient()
+		{
+			ExistingHttpClient = true;
 			return this;
 		}
 
