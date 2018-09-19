@@ -17,7 +17,7 @@ namespace AspNetCore.Client.Generator.Framework.SignalR
 		/// <summary>
 		/// Name of the client generated
 		/// </summary>
-		public string ClientName => $@"{Name}Client";
+		public string HubName => $@"{Name}Hub";
 
 		/// <summary>
 		/// Version of the route, will group controllers with similar versions together

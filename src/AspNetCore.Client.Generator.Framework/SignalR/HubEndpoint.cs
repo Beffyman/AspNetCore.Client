@@ -24,11 +24,6 @@ namespace AspNetCore.Client.Generator.Framework.SignalR
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Determines whether or not to have a void method depending on if it is a ActionResult return
-		/// </summary>
-		public string ReturnType { get; set; }
-
-		/// <summary>
 		/// List of response types that can be added to the context
 		/// </summary>
 		public IList<Message> Messages { get; set; } = new List<Message>();
