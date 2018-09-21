@@ -194,7 +194,7 @@ public class {controller.Name}HubConnectionBuilder : HubConnectionBuilder
 {{
 	private bool _hubConnectionBuilt;
 
-	public {controller.Name}HubConnectionBuilder(string host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null) : base()
+	public {controller.Name}HubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null) : base()
 	{{
 		//Remove default HubConnection to use custom one
 		Services.Remove(Services.Where(x => x.ServiceType == typeof(HubConnection)).Single());
@@ -202,7 +202,7 @@ public class {controller.Name}HubConnectionBuilder : HubConnectionBuilder
 
 		Services.Configure<HttpConnectionOptions>(o =>
 		{{
-			o.Url = new Uri($""{{host}}/{controller.Route}"");
+			o.Url = new Uri(host,""{controller.Route}"");
 			if (transports != null)
 			{{
 				o.Transports = transports.Value;

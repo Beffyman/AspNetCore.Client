@@ -5072,14 +5072,14 @@ namespace TestWebApp.Hubs
 	public class ChatHubConnectionBuilder : HubConnectionBuilder
 	{
 		private bool _hubConnectionBuilt;
-		public ChatHubConnectionBuilder(string host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
+		public ChatHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
 		{
 			//Remove default HubConnection to use custom one
 			Services.Remove(Services.Where(x => x.ServiceType == typeof(HubConnection)).Single());
 			Services.AddSingleton<ChatHubConnection>();
 			Services.Configure<HttpConnectionOptions>(o =>
 			{
-				o.Url = new Uri($"{host}/Chat");
+				o.Url = new Uri(host, "Chat");
 				if (transports != null)
 				{
 					o.Transports = transports.Value;
