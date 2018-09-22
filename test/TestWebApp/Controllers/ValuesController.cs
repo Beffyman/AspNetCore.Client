@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -203,6 +204,21 @@ namespace TestWebApp.Controllers
 			byte[] randomizeFile = System.Text.Encoding.UTF8.GetBytes("Hello World Text");
 
 			return File(randomizeFile, "text/plain");
+		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(Stream), (int)HttpStatusCode.OK)]
+		public IActionResult FileReturnResponseTypes(bool pass)
+		{
+			if (pass)
+			{
+				byte[] randomizeFile = System.Text.Encoding.UTF8.GetBytes("Hello World Text");
+				return File(randomizeFile, "text/plain");
+			}
+			else
+			{
+				return BadRequest("Fail");
+			}
 		}
 	}
 }

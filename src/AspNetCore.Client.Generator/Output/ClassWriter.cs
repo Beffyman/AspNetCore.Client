@@ -983,7 +983,11 @@ if({responseType.Name} != null && {responseType.Name}.Method.IsDefined(typeof(As
 				else
 				{
 					string content = null;
-					if (responseType.ActionType != null)
+					if (responseType.ActionType == nameof(Stream))
+					{
+						content = $@"{GetAwait(async)}response.Content.ReadAsStreamAsync(){GetAsyncEnding(async)}";
+					}
+					else if (responseType.ActionType != null)
 					{
 						content = $@"{GetAwait(async)}Serializer.Deserialize<{responseType.ActionType}>(response.Content){GetAsyncEnding(async)}";
 					}
