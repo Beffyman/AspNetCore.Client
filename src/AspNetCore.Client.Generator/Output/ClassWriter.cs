@@ -29,25 +29,21 @@ namespace AspNetCore.Client.Generator.Output
 {
 	public static class ClassWriter
 	{
-		public static void WriteClientsFile(IList<ClientCSharpFile> httpFiles, IList<HubCSharpFile> hubFiles)
+		public static void WriteClientsFile(GenerationContext context)
 		{
-			var str = WriteFile(httpFiles, hubFiles);
+			var str = WriteFile(context);
 
 			var syntaxTree = CSharpSyntaxTree.ParseText(str, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
 
 			str = syntaxTree.GetRoot().NormalizeWhitespace("	", false).ToFullString();
 
-
 			Helpers.SafelyWriteToFile($"{Environment.CurrentDirectory}/Clients.cs", str);
-
-
-
 		}
 
 
-		public static string WriteFile(IEnumerable<ClientCSharpFile> httpFiles, IList<HubCSharpFile> hubFiles)
+		public static string WriteFile(GenerationContext context)
 		{
-			IList<string> requiredUsingStatements = new List<string>
+			var usings = new List<string>
 			{
 				@"using AspNetCore.Client;",
 				"using AspNetCore.Client.Authorization;",
@@ -69,27 +65,12 @@ namespace AspNetCore.Client.Generator.Output
 				"using Microsoft.AspNetCore.Http.Connections;",
 				"using Microsoft.AspNetCore.Http.Connections.Client;",
 				"using Microsoft.AspNetCore.SignalR.Protocol;",
-				"using Microsoft.Extensions.Logging;"
-			};
-
-			var distinctUsingStatements = httpFiles
-											.SelectMany(x => x.UsingStatements)
-											.Union(hubFiles.SelectMany(x => x.UsingStatements))
-											.Union(requiredUsingStatements)
-											.Distinct()
-											.OrderBy(x => x)
-											.ToArray();
-
-			var context = new GenerationContext();
-			foreach (var file in httpFiles)
-			{
-				context = context.Merge(file.Context);
-			}
-			foreach (var file in hubFiles)
-			{
-				context = context.Merge(file.Context);
-			}
-			context.MapRelatedInfo();
+				"using Microsoft.Extensions.Logging;",
+				"using System.IO;"
+			}.Union(context.UsingStatements)
+			.Distinct()
+			.OrderBy(x => x)
+			.ToList();
 
 			return
 $@"//------------------------------------------------------------------------------
@@ -100,7 +81,7 @@ $@"//---------------------------------------------------------------------------
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-{string.Join(Environment.NewLine, distinctUsingStatements)}
+{string.Join(Environment.NewLine, usings)}
 
 namespace {Settings.ClientNamespace}
 {{
@@ -926,10 +907,26 @@ if(!(new Regex(@""{value}"").IsMatch({constraint.ParameterName})))
 					return @"return response;";
 				}
 
-				if (endpoint.ReturnType != null)
+				if (endpoint.ReturnsStream)
 				{
 					return
-	$@"
+$@"
+if(response.IsSuccessStatusCode)
+{{
+	return {GetAwait(async)}response.Content.ReadAsStreamAsync(){GetAsyncEnding(async)};
+}}
+else
+{{
+	return default({endpoint.ReturnType});
+}}
+";
+				}
+				else
+				{
+					if (endpoint.ReturnType != null)
+					{
+						return
+		$@"
 if(response.IsSuccessStatusCode)
 {{
 	return {GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){GetAsyncEnding(async)};
@@ -939,7 +936,10 @@ else
 	return default({endpoint.ReturnType});
 }}
 ";
+					}
 				}
+
+
 
 				return "return;";
 			}

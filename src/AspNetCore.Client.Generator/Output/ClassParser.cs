@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -282,6 +283,21 @@ namespace AspNetCore.Client.Generator.Output
 				{
 					returnType = null;
 				}
+
+				HashSet<string> fileResults = new HashSet<string>()
+				{
+					nameof(PhysicalFileResult),
+					nameof(FileResult),
+					nameof(FileContentResult),
+					nameof(FileStreamResult),
+					nameof(VirtualFileResult)
+				};
+
+				if (fileResults.Contains(returnType))
+				{
+					returnType = nameof(Stream);
+					endpoint.ReturnsStream = true;
+				}
 			}
 			else
 			{
@@ -367,15 +383,6 @@ namespace AspNetCore.Client.Generator.Output
 					.Where(x => x.Modifiers.Any(y => y.Text == "public"))
 					.ToList();
 				controller.Endpoints = methods.Select(x => ReadMethodAsHubEndpoint(controller, x)).ToList();
-
-
-				var duplicateMessages = controller.GetMessages().GroupBy(x => x.Name).Where(x => x.Count() > 1 && !x.All(y => y.Types.SequenceEqual(x.First().Types))).ToList();
-
-				if (duplicateMessages.Any())
-				{
-					throw new NotSupportedException($"Hub has multiple messages with different parameters defined. {string.Join(", ", duplicateMessages.Select(x => x.Key?.ToString()))}");
-				}
-
 
 			}
 			catch (NotSupportedException nse)

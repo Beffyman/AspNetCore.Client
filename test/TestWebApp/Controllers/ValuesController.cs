@@ -190,5 +190,19 @@ namespace TestWebApp.Controllers
 		{
 			return Ok(name);
 		}
+
+
+		[HttpGet("[action]")]
+		public FileResult FileReturn()
+		{
+			//PhysicalFileResult
+			//FileResult
+			//FileContentResult
+			//FileStreamResult
+			//VirtualFileResult
+			byte[] randomizeFile = System.Text.Encoding.UTF8.GetBytes("Hello World Text");
+
+			return File(randomizeFile, "text/plain");
+		}
 	}
 }

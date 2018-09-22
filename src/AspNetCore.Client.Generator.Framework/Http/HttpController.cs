@@ -243,5 +243,33 @@ namespace AspNetCore.Client.Generator.Framework.Http
 
 			return $"{namespaceVersion}{Name}";
 		}
+
+		/// <summary>
+		/// Validates the controller for anything that might lead to a compile or runtime error
+		/// </summary>
+		public void Validate()
+		{
+			try
+			{
+				foreach (var endpoint in Endpoints)
+				{
+					endpoint.Validate();
+				}
+
+			}
+			catch (NotSupportedException nse)
+			{
+				Failed = true;
+				Error = nse.Message;
+			}
+#if !DEBUG
+			catch (Exception ex)
+			{
+				Failed = true;
+				UnexpectedFailure = true;
+				Error = ex.Message;
+			}
+#endif
+		}
 	}
 }

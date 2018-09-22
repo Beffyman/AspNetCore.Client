@@ -103,7 +103,7 @@ namespace AspNetCore.Client.Generator.Framework.SignalR
 		{
 			return GetChildren()
 				.OfType<IParameter>()
-				.Union(new List<IParameter> { new CancellationTokenModifier()})
+				.Union(new List<IParameter> { new CancellationTokenModifier() })
 				.OrderBy(x => x.SortOrder)
 				.ThenBy(x => x.DefaultValue == null ? 0 : 1);
 		}
@@ -137,6 +137,14 @@ namespace AspNetCore.Client.Generator.Framework.SignalR
 		public string GetSignature(HubController caller)
 		{
 			return $"{ToString(caller)}(${string.Join(", ", GetParameters().Select(x => x.ToString()))}";
+		}
+
+		/// <summary>
+		/// Validates the endpoint for anything that might lead to a compile or runtime error
+		/// </summary>
+		public void Validate()
+		{
+
 		}
 	}
 }

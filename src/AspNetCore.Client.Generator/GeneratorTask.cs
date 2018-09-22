@@ -118,7 +118,19 @@ namespace AspNetCore.Client.Generator
 									.Select(cs => new HubCSharpFile(cs))
 									.ToList();
 
-			ClassWriter.WriteClientsFile(parsedControllers, parsedHubs);
+			var context = new GenerationContext();
+			foreach (var file in parsedControllers)
+			{
+				context = context.Merge(file.Context);
+			}
+			foreach (var file in parsedHubs)
+			{
+				context = context.Merge(file.Context);
+			}
+			context.MapRelatedInfo();
+			context.Validate();
+
+			ClassWriter.WriteClientsFile(context);
 
 			Log.LogCommandLine("Client Generation Successful!");
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] END");

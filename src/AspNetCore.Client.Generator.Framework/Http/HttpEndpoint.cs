@@ -40,6 +40,11 @@ namespace AspNetCore.Client.Generator.Framework.Http
 		public string ReturnType { get; set; }
 
 		/// <summary>
+		/// Indicates that the endpoint returns a stream and to not deserialize it
+		/// </summary>
+		public bool ReturnsStream { get; set; }
+
+		/// <summary>
 		/// List of response types that can be added to the context
 		/// </summary>
 		public IList<ResponseType> ResponseTypes { get; set; } = new List<ResponseType>();
@@ -266,6 +271,35 @@ namespace AspNetCore.Client.Generator.Framework.Http
 		public string GetSignature(HttpController caller)
 		{
 			return $"{ToString(caller)}(${string.Join(", ", GetParameters().Select(x => x.ToString()))}";
+		}
+
+
+		/// <summary>
+		/// Validates the endpoint for anything that might lead to a compile or runtime error
+		/// </summary>
+		public void Validate()
+		{
+			var duplicateResponseTypes = this.GetResponseTypes().Where(x => x.Status != null).GroupBy(x => x.Status).Where(x => x.Count() > 1).ToList();
+
+			if (duplicateResponseTypes.Any())
+			{
+				throw new NotSupportedException($"Endpoint has multiple response types of the same status defined. {string.Join(", ", duplicateResponseTypes.Select(x => x.Key?.ToString()))}");
+			}
+
+
+			var duplicateParameters = this.GetParametersWithoutResponseTypes().GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
+
+			if (duplicateParameters.Any())
+			{
+				throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+			}
+
+			var duplicateHeaders = this.GetHeaders().GroupBy(x => x.Key).Where(x => x.Count() > 1).ToList();
+
+			if (duplicateHeaders.Any())
+			{
+				throw new NotSupportedException($"Endpoint has multiple headers of the same key defined. {string.Join(", ", duplicateHeaders.Select(x => x.Key?.ToString()))}");
+			}
 		}
 	}
 }

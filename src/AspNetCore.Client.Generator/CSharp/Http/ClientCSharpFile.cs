@@ -20,8 +20,6 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 		public SyntaxTree Syntax { get; set; }
 		public CompilationUnitSyntax Root { get; }
 
-		public List<string> UsingStatements { get; }
-
 		public GenerationContext Context { get; set; }
 
 		public ClientCSharpFile(string file)
@@ -59,7 +57,7 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 				unallowedUsings = new Regex($"(^[.]+)");
 			}
 
-			UsingStatements = usingStatements.Select(x => x.WithoutLeadingTrivia().WithoutTrailingTrivia().ToFullString())
+			Context.UsingStatements = usingStatements.Select(x => x.WithoutLeadingTrivia().WithoutTrailingTrivia().ToFullString())
 											.Where(x => allowedUsings.IsMatch(x)
 													&& !unallowedUsings.IsMatch(x))
 											.ToList();

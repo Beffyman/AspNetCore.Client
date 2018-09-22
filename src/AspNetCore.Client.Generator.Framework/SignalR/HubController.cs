@@ -196,5 +196,40 @@ namespace AspNetCore.Client.Generator.Framework.SignalR
 			return $"{namespaceVersion}{Name}";
 		}
 
+
+
+		/// <summary>
+		/// Validates the hub for anything that might lead to a compile or runtime error
+		/// </summary>
+		public void Validate()
+		{
+			try
+			{
+				foreach (var endpoint in Endpoints)
+				{
+					endpoint.Validate();
+				}
+
+				var duplicateMessages = this.GetMessages().GroupBy(x => x.Name).Where(x => x.Count() > 1 && !x.All(y => y.Types.SequenceEqual(x.First().Types))).ToList();
+
+				if (duplicateMessages.Any())
+				{
+					throw new NotSupportedException($"Hub has multiple messages with different parameters defined. {string.Join(", ", duplicateMessages.Select(x => x.Key?.ToString()))}");
+				}
+			}
+			catch (NotSupportedException nse)
+			{
+				Failed = true;
+				Error = nse.Message;
+			}
+#if !DEBUG
+			catch (Exception ex)
+			{
+				Failed = true;
+				UnexpectedFailure = true;
+				Error = ex.Message;
+			}
+#endif
+		}
 	}
 }

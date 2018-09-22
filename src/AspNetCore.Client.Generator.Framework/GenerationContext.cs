@@ -14,6 +14,11 @@ namespace AspNetCore.Client.Generator.Framework
 	{
 
 		/// <summary>
+		/// Using statements that were in the files
+		/// </summary>
+		public IList<string> UsingStatements { get; set; } = new List<string>();
+
+		/// <summary>
 		/// Clients that will be generated
 		/// </summary>
 		public IList<HttpController> HttpClients { get; set; } = new List<HttpController>();
@@ -38,13 +43,6 @@ namespace AspNetCore.Client.Generator.Framework
 
 
 
-
-
-
-
-
-
-
 		/// <summary>
 		/// Merge this and another context into a new one
 		/// </summary>
@@ -55,7 +53,8 @@ namespace AspNetCore.Client.Generator.Framework
 			return new GenerationContext
 			{
 				HttpClients = this.HttpClients.Union(other.HttpClients).ToList(),
-				HubClients = this.HubClients.Union(other.HubClients).ToList()
+				HubClients = this.HubClients.Union(other.HubClients).ToList(),
+				UsingStatements = this.UsingStatements.Union(other.UsingStatements).ToList()
 			};
 		}
 
@@ -78,6 +77,22 @@ namespace AspNetCore.Client.Generator.Framework
 				{
 					client.BaseController = HubClients.SingleOrDefault(x => x.Name == client.BaseClass);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Validates the context for anything that might lead to a compile or runtime error
+		/// </summary>
+		public void Validate()
+		{
+			foreach (var client in HttpClients)
+			{
+				client.Validate();
+			}
+
+			foreach (var client in HubClients)
+			{
+				client.Validate();
 			}
 		}
 	}
