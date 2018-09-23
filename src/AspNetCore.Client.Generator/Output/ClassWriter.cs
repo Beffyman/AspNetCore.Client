@@ -261,6 +261,11 @@ public class {controller.Name}HubConnection : HubConnection
 				{
 					parameterText = $"new object[]{{{string.Join(", ", parameters)}}}, ";
 				}
+				else
+				{
+
+					parameterText = $"null, ";
+				}
 
 				if (endpoint.Channel)
 				{

@@ -6359,7 +6359,7 @@ namespace TestWebApp.Hubs
 
 			public Task TestMessageAsync(CancellationToken cancellationToken = default)
 			{
-				return this.InvokeCoreAsync("TestMessage", cancellationToken);
+				return this.InvokeCoreAsync("TestMessage", null, cancellationToken);
 			}
 
 			public IDisposable OnTestMessage(Action<string> action)
