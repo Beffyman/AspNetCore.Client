@@ -38,6 +38,12 @@ namespace AspNetCore.Client.Generator.Framework.SignalR
 		/// </summary>
 		public HubController Parent { get; set; }
 
+		/// <summary>
+		/// Indicates that the endpoint is a channel and should be generated accordingly
+		/// </summary>
+		public bool Channel { get; set; }
+
+
 		//IIgnored
 
 		/// <summary>

@@ -256,6 +256,13 @@ namespace AspNetCore.Client.Generator.Framework.Http
 					endpoint.Validate();
 				}
 
+				var duplicateEndpoints = this.GetEndpoints().GroupBy(x => x.GetSignature(this)).Where(x => x.Count() > 1).ToList();
+
+				if (duplicateEndpoints.Any())
+				{
+					throw new NotSupportedException($"Controller has multiple endpoints with the same signature. {string.Join(", ", duplicateEndpoints.Select(x => x.Key?.ToString()))}");
+				}
+
 			}
 			catch (NotSupportedException nse)
 			{

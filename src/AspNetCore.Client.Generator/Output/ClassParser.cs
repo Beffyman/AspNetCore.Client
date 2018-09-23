@@ -22,6 +22,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 
 namespace AspNetCore.Client.Generator.Output
 {
@@ -138,7 +140,7 @@ namespace AspNetCore.Client.Generator.Output
 
 			var endpoint = new HttpEndpoint(parent);
 
-			endpoint.Name = syntax.Identifier.ValueText.Trim();
+			endpoint.Name = syntax.Identifier.ValueText.CleanMethodName();
 
 
 			endpoint.Virtual = syntax.Modifiers.Any(x => x.Text == "virtual");
@@ -264,46 +266,52 @@ namespace AspNetCore.Client.Generator.Output
 			endpoint.ConstantHeader = headers.Select(x => new ConstantHeader(x.Name, x.Value)).ToList();
 
 
-			var actionResultReturn = syntax.ReturnType.ToFullString().Contains(Constants.IActionResult);
+			var rawReturnType = syntax.ReturnType?.ToFullString();
 
-			var returnType = syntax.ReturnType?.ToFullString();
-			if (!actionResultReturn)
+			HashSet<string> returnContainerTypes = new HashSet<string>()
 			{
-				var regex = new Regex(@"(ValueTask|Task|ActionResult)<(.+)>");
-				var match = regex.Match(returnType);
-				if (match.Success)
-				{
-					returnType = match.Groups[2].Value;
-				}
-
-				returnType = returnType.Trim();
+				nameof(ValueTask),
+				nameof(Task),
+				nameof(ActionResult)
+			};
 
 
-				if (returnType == "void" || returnType == "Task")
-				{
-					returnType = null;
-				}
+			var returnType = Helpers.GetTypeFromString(rawReturnType.Trim());
 
-				HashSet<string> fileResults = new HashSet<string>()
-				{
-					nameof(PhysicalFileResult),
-					nameof(FileResult),
-					nameof(FileContentResult),
-					nameof(FileStreamResult),
-					nameof(VirtualFileResult)
-				};
-
-				if (fileResults.Contains(returnType))
-				{
-					returnType = nameof(Stream);
-					endpoint.ReturnsStream = true;
-				}
+			while (returnContainerTypes.Contains(returnType?.Name))
+			{
+				returnType = returnType.Arguments.SingleOrDefault();
 			}
-			else
+
+			if (returnType.Name == nameof(IActionResult))
 			{
 				returnType = null;
 			}
-			endpoint.ReturnType = returnType;
+
+			if (returnType?.Name == "void"
+				|| (returnType?.Name == nameof(Task) && (!returnType?.Arguments.Any() ?? false)))
+			{
+				returnType = null;
+			}
+
+			HashSet<string> fileResults = new HashSet<string>()
+			{
+				nameof(PhysicalFileResult),
+				nameof(FileResult),
+				nameof(FileContentResult),
+				nameof(FileStreamResult),
+				nameof(VirtualFileResult)
+			};
+
+			if (fileResults.Contains(returnType?.Name))
+			{
+				returnType = new Helpers.TypeString(nameof(Stream));
+				endpoint.ReturnsStream = true;
+			}
+
+			rawReturnType = returnType?.ToString();
+
+			endpoint.ReturnType = rawReturnType;
 
 
 
@@ -409,7 +417,7 @@ namespace AspNetCore.Client.Generator.Output
 
 			var endpoint = new HubEndpoint(parent);
 
-			endpoint.Name = syntax.Identifier.ValueText.Trim();
+			endpoint.Name = syntax.Identifier.ValueText.CleanMethodName();
 
 
 			endpoint.Virtual = syntax.Modifiers.Any(x => x.Text == "virtual");
@@ -455,6 +463,29 @@ namespace AspNetCore.Client.Generator.Output
 			{
 				throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
 			}
+
+
+			var rawReturnType = syntax.ReturnType?.ToFullString();
+
+			HashSet<string> returnContainerTypes = new HashSet<string>()
+			{
+				nameof(ValueTask),
+				nameof(Task)
+			};
+
+
+			var returnType = Helpers.GetTypeFromString(rawReturnType.Trim());
+
+			while (returnContainerTypes.Contains(returnType?.Name))
+			{
+				returnType = returnType.Arguments.SingleOrDefault();
+			}
+
+			if (returnType?.Name == "ChannelReader")
+			{
+				endpoint.Channel = true;
+			}
+
 
 			return endpoint;
 		}

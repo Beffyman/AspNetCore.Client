@@ -26,12 +26,44 @@ namespace TestWebApp.Controllers
 	{
 		// GET api/values
 		[HttpGet]
-		public ActionResult<IEnumerable<string>> Get()
+		public ActionResult<IEnumerable<string>> GetEnumerable()
 		{
 			return new string[] { "value1", "value2" };
 		}
 
-		// GET api/values/5
+		[HttpGet("getAsync")]
+		public async Task<ActionResult<IEnumerable<string>>> GetEnumerableTaskAsync()
+		{
+			await Task.CompletedTask;
+			return new string[] { "value1", "value2" };
+		}
+
+		[HttpGet("getQualified")]
+		public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.IEnumerable<string>>> GetFullyQualified()
+		{
+			await Task.CompletedTask;
+			return new string[] { "value1", "value2" };
+		}
+
+		[HttpGet("getTuple")]
+		public ActionResult<IEnumerable<(string, int, bool)>> GetTuple()
+		{
+			return new List<(string, int, bool)>()
+			{
+
+			};
+		}
+
+		[HttpGet("getNested")]
+		public async Task<ActionResult<IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>>> GetNestedTypesAsync()
+		{
+			await Task.CompletedTask;
+			return new Dictionary<string, IEnumerable<Tuple<string, int, bool, char>>>()
+			{
+
+			};
+		}
+
 		[HttpGet("{id}")]
 		[IncludeHeader("GEEET", "FULL")]
 		public ActionResult<string> Get(int id)
