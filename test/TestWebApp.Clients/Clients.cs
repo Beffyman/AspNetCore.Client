@@ -6269,6 +6269,21 @@ namespace TestWebApp.Hubs
 			return this.StreamAsChannelCoreAsync<int>("Counter", new object[]{count, delay}, cancellationToken);
 		}
 
+		public async Task<IEnumerable<int>> ReadCounterBlockingAsync(int count, int delay, CancellationToken cancellationToken = default)
+		{
+			var channel = await this.StreamAsChannelCoreAsync<int>("Counter", new object[]{count, delay}, cancellationToken);
+			IList<int> items = new List<int>();
+			while (await channel.WaitToReadAsync())
+			{
+				while (channel.TryRead(out var item))
+				{
+					items.Add(item);
+				}
+			}
+
+			return items;
+		}
+
 		public IDisposable OnReceiveMessage(Action<string, string> action)
 		{
 			return this.On("ReceiveMessage", action);

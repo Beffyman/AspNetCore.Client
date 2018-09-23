@@ -270,6 +270,21 @@ public Task<ChannelReader<{endpoint.ChannelType}>> Stream{endpoint.Name}Async({s
 {{
 	return this.StreamAsChannelCoreAsync<{endpoint.ChannelType}>(""{endpoint.Name}"", {parameterText}{cancellationToken});
 }}
+
+{SharedWriter.GetObsolete(endpoint)}
+public async Task<IEnumerable<{endpoint.ChannelType}>> Read{endpoint.Name}BlockingAsync({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter))})
+{{
+	var channel = await this.StreamAsChannelCoreAsync<{endpoint.ChannelType}>(""{endpoint.Name}"", {parameterText}{cancellationToken});
+	IList<{endpoint.ChannelType}> items = new List<{endpoint.ChannelType}>();
+	while(await channel.WaitToReadAsync())
+	{{
+		while (channel.TryRead(out var item))
+		{{
+			items.Add(item);
+		}}
+	}}
+	return items;
+}}
 ";
 				}
 				else

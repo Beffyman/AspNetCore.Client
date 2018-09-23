@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,6 +62,67 @@ namespace TestWebApp.Tests
 
 		}
 
+
+		[Test]
+		public async Task CounterChannelTest()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
+				config =>
+				{
+					config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
+				})
+				.Build();
+
+			int count = 100;
+			int delay = 20;
+
+			IList<int> results = new List<int>();
+
+			await hub.StartAsync();
+
+			var channel = await hub.StreamCounterAsync(count, delay);
+
+			while (await channel.WaitToReadAsync())
+			{
+				while (channel.TryRead(out int item))
+				{
+					results.Add(item);
+				}
+			}
+
+			await hub.StopAsync();
+
+			Assert.AreEqual(count, results.Count());
+
+		}
+
+
+		[Test]
+		public async Task CounterBlockingTest()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
+				config =>
+				{
+					config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
+				})
+				.Build();
+
+			int count = 100;
+			int delay = 20;
+
+			await hub.StartAsync();
+
+			IEnumerable<int> results = await hub.ReadCounterBlockingAsync(count, delay);
+
+			await hub.StopAsync();
+
+			Assert.AreEqual(count, results.Count());
+
+		}
 
 
 	}
