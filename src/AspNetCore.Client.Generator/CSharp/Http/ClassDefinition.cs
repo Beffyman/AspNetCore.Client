@@ -12,6 +12,7 @@ using System.Net;
 using AspNetCore.Client.Generator.Framework.Http.Routes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using AspNetCore.Client.Attributes;
 
 namespace AspNetCore.Client.Generator.CSharp.Http
 {

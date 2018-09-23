@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.Attributes.Http;
+﻿using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Attributes.Http;
 using AspNetCore.Client.Attributes.SignalR;
 using AspNetCore.Client.Generator.CSharp.Http;
 using AspNetCore.Client.Generator.CSharp.SignalR;

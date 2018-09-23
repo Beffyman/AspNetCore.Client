@@ -6297,4 +6297,75 @@ namespace TestWebApp.Hubs
 			return this.On("ReceiveMessage", action);
 		}
 	}
+
+	namespace FancySuffix
+	{
+		public class NamespacedHubConnectionBuilder : HubConnectionBuilder
+		{
+			private bool _hubConnectionBuilt;
+			public NamespacedHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
+			{
+				//Remove default HubConnection to use custom one
+				Services.Remove(Services.Where(x => x.ServiceType == typeof(HubConnection)).Single());
+				Services.AddSingleton<NamespacedHubConnection>();
+				Services.Configure<HttpConnectionOptions>(o =>
+				{
+					o.Url = new Uri(host, "Test");
+					if (transports != null)
+					{
+						o.Transports = transports.Value;
+					}
+				}
+
+				);
+				if (configureHttpConnection != null)
+				{
+					Services.Configure(configureHttpConnection);
+				}
+
+				Services.AddSingleton<IConnectionFactory, HttpConnectionFactory>();
+			}
+
+			public new NamespacedHubConnection Build()
+			{
+				// Build can only be used once
+				if (_hubConnectionBuilt)
+				{
+					throw new InvalidOperationException("HubConnectionBuilder allows creation only of a single instance of HubConnection.");
+				}
+
+				_hubConnectionBuilt = true;
+				// The service provider is disposed by the HubConnection
+				var serviceProvider = Services.BuildServiceProvider();
+				var connectionFactory = serviceProvider.GetService<IConnectionFactory>();
+				if (connectionFactory == null)
+				{
+					throw new InvalidOperationException($"Cannot create {nameof(HubConnection)} instance.An {nameof(IConnectionFactory)} was not configured.");
+				}
+
+				return serviceProvider.GetService<NamespacedHubConnection>();
+			}
+		}
+
+		public class NamespacedHubConnection : HubConnection
+		{
+			public NamespacedHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, IServiceProvider serviceProvider, ILoggerFactory loggerFactory): base(connectionFactory, protocol, serviceProvider, loggerFactory)
+			{
+			}
+
+			public NamespacedHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, ILoggerFactory loggerFactory): base(connectionFactory, protocol, loggerFactory)
+			{
+			}
+
+			public Task TestMessageAsync(CancellationToken cancellationToken = default)
+			{
+				return this.InvokeCoreAsync("TestMessage", cancellationToken);
+			}
+
+			public IDisposable OnTestMessage(Action<string> action)
+			{
+				return this.On("TestMessage", action);
+			}
+		}
+	}
 }
