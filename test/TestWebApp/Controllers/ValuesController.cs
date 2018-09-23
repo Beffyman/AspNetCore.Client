@@ -55,6 +55,7 @@ namespace TestWebApp.Controllers
 		}
 
 		[HttpGet("getNested")]
+		[Obsolete("Testing Obsolete")]
 		public async Task<ActionResult<IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>>> GetNestedTypesAsync()
 		{
 			await Task.CompletedTask;
