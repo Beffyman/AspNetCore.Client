@@ -43,6 +43,11 @@ namespace AspNetCore.Client.Generator.Framework.SignalR
 		/// </summary>
 		public bool Channel { get; set; }
 
+		/// <summary>
+		/// Type of the channel's return
+		/// </summary>
+		public string ChannelType { get; set; }
+
 
 		//IIgnored
 

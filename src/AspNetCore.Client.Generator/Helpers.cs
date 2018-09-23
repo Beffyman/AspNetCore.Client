@@ -18,6 +18,10 @@ namespace AspNetCore.Client.Generator
 		{
 			return source.Where(x => x != null);
 		}
+		public static IEnumerable<T> NotOfType<T, K>(this IEnumerable<T> source) where K : T
+		{
+			return source.Where(x => !typeof(K).IsAssignableFrom(x.GetType()));
+		}
 
 		public static HttpMethod HttpMethodFromEnum(HttpAttributeType type)
 		{
@@ -297,6 +301,9 @@ namespace AspNetCore.Client.Generator
 
 		public static bool MatchesAttribute(this string str, string attribute)
 		{
+			str = str.Split('.').Last();
+			attribute = attribute.Split('.').Last();
+
 			var match = _attributeRegex.Match(attribute);
 			var attributeName = match.Groups[1].Value;
 
@@ -406,6 +413,21 @@ namespace AspNetCore.Client.Generator
 
 		public static bool IsType(string fullyQualifiedType, string compareType)
 		{
+			if (string.IsNullOrEmpty(fullyQualifiedType) && string.IsNullOrEmpty(compareType))
+			{
+				return true;
+			}
+
+			if (string.IsNullOrEmpty(fullyQualifiedType))
+			{
+				return false;
+			}
+
+			if (string.IsNullOrEmpty(compareType))
+			{
+				return false;
+			}
+
 			var qualified = GetTypeFromString(fullyQualifiedType);
 			var compare = GetTypeFromString(compareType);
 
@@ -445,6 +467,11 @@ namespace AspNetCore.Client.Generator
 			}
 
 			return isType;
+		}
+
+		public static string CleanGenericTypeDefinition(this string str)
+		{
+			return str.Split('`').FirstOrDefault();
 		}
 	}
 }

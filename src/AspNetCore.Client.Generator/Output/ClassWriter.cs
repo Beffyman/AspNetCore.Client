@@ -66,7 +66,8 @@ namespace AspNetCore.Client.Generator.Output
 				"using Microsoft.AspNetCore.Http.Connections.Client;",
 				"using Microsoft.AspNetCore.SignalR.Protocol;",
 				"using Microsoft.Extensions.Logging;",
-				"using System.IO;"
+				"using System.IO;",
+				"using System.Threading.Channels;"
 			}.Union(context.UsingStatements)
 			.Distinct()
 			.OrderBy(x => x)
@@ -252,14 +253,38 @@ public class {controller.Name}HubConnection : HubConnection
 
 			private static string WriteEndpoint(HubEndpoint endpoint)
 			{
-				return $@"
+				var parameters = endpoint.GetParameters().NotOfType<IParameter, CancellationTokenModifier>().Select(x => x.Name);
+				var cancellationToken = endpoint.GetParameters().OfType<CancellationTokenModifier>().Select(x => x.Name).SingleOrDefault();
+
+				string parameterText = null;
+				if (parameters.Any())
+				{
+					parameterText = $"new object[]{{{string.Join(", ", parameters)}}}, ";
+				}
+
+				if (endpoint.Channel)
+				{
+					return $@"
+{SharedWriter.GetObsolete(endpoint)}
+public Task<ChannelReader<{endpoint.ChannelType}>> Stream{endpoint.Name}Async({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter))})
+{{
+	return this.StreamAsChannelCoreAsync<{endpoint.ChannelType}>(""{endpoint.Name}"", {parameterText}{cancellationToken});
+}}
+";
+				}
+				else
+				{
+					return $@"
 {SharedWriter.GetObsolete(endpoint)}
 public Task {endpoint.Name}Async({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter))})
 {{
-	return this.InvokeAsync(""{endpoint.Name}"", {string.Join(", ", endpoint.GetParameters().Select(x => x.Name))});
+	return this.InvokeCoreAsync(""{endpoint.Name}"", {parameterText}{cancellationToken});
 }}
 ";
+				}
+
 			}
+
 			private static string WriteMessage(Message message)
 			{
 				return $@"

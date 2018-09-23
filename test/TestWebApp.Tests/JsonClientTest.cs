@@ -24,7 +24,7 @@ namespace TestWebApp.Tests
 			var endpoint = new JsonServerInfo();
 
 			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var values = valuesClient.Get();
+			var values = valuesClient.GetEnumerable();
 
 
 			Assert.AreEqual(new List<string> { "value1", "value2" }, values);

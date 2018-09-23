@@ -270,26 +270,26 @@ namespace AspNetCore.Client.Generator.Output
 
 			HashSet<string> returnContainerTypes = new HashSet<string>()
 			{
-				nameof(ValueTask),
-				nameof(Task),
-				nameof(ActionResult)
+				typeof(ValueTask).FullName,
+				typeof(Task).FullName,
+				typeof(ActionResult).FullName
 			};
 
 
 			var returnType = Helpers.GetTypeFromString(rawReturnType.Trim());
 
-			while (returnContainerTypes.Contains(returnType?.Name))
+			while (returnContainerTypes.Any(x => Helpers.IsType(x, returnType?.Name)))
 			{
 				returnType = returnType.Arguments.SingleOrDefault();
 			}
 
-			if (returnType.Name == nameof(IActionResult))
+			if (Helpers.IsType(typeof(IActionResult).FullName, returnType?.Name))
 			{
 				returnType = null;
 			}
 
 			if (returnType?.Name == "void"
-				|| (returnType?.Name == nameof(Task) && (!returnType?.Arguments.Any() ?? false)))
+				|| (Helpers.IsType(typeof(Task).FullName, returnType?.Name) && (!returnType?.Arguments.Any() ?? false)))
 			{
 				returnType = null;
 			}
@@ -303,9 +303,9 @@ namespace AspNetCore.Client.Generator.Output
 				nameof(VirtualFileResult)
 			};
 
-			if (fileResults.Contains(returnType?.Name))
+			if (fileResults.Any(x => Helpers.IsType(x, returnType?.Name)))
 			{
-				returnType = new Helpers.TypeString(nameof(Stream));
+				returnType = new Helpers.TypeString(typeof(Stream).FullName);
 				endpoint.ReturnsStream = true;
 			}
 
@@ -469,21 +469,22 @@ namespace AspNetCore.Client.Generator.Output
 
 			HashSet<string> returnContainerTypes = new HashSet<string>()
 			{
-				nameof(ValueTask),
-				nameof(Task)
+				typeof(ValueTask).FullName,
+				typeof(Task).FullName
 			};
 
 
 			var returnType = Helpers.GetTypeFromString(rawReturnType.Trim());
 
-			while (returnContainerTypes.Contains(returnType?.Name))
+			while (returnContainerTypes.Any(x => Helpers.IsType(x, returnType?.Name)))
 			{
 				returnType = returnType.Arguments.SingleOrDefault();
 			}
 
-			if (returnType?.Name == "ChannelReader")
+			if (Helpers.IsType(typeof(ChannelReader<>).FullName.CleanGenericTypeDefinition(), returnType?.Name))
 			{
 				endpoint.Channel = true;
+				endpoint.ChannelType = returnType.Arguments.SingleOrDefault().ToString();
 			}
 
 
