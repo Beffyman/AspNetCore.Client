@@ -11,11 +11,6 @@ namespace AspNetCore.Client.Attributes
 	public class NamespaceSuffixAttribute : Attribute
 	{
 		/// <summary>
-		/// Name of the attribute the generator looks for
-		/// </summary>
-		public const string AttributeName = "NamespaceSuffix";
-
-		/// <summary>
 		/// Suffix to add to the namespace of the client.  TestWebApp.Clients.SUFFIX
 		/// </summary>
 		public string Suffix { get; }

@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp;
+﻿using AspNetCore.Client.Generator.CSharp.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -17,6 +17,10 @@ namespace AspNetCore.Client.Generator
 		public static IEnumerable<T> NotNull<T>(this IEnumerable<T> source) where T : class
 		{
 			return source.Where(x => x != null);
+		}
+		public static IEnumerable<T> NotOfType<T, K>(this IEnumerable<T> source) where K : T
+		{
+			return source.Where(x => !typeof(K).IsAssignableFrom(x.GetType()));
 		}
 
 		public static HttpMethod HttpMethodFromEnum(HttpAttributeType type)
@@ -293,9 +297,183 @@ namespace AspNetCore.Client.Generator
 			}
 		}
 
+		private static readonly Regex _attributeRegex = new Regex(@"(.+)Attribute");
+
 		public static bool MatchesAttribute(this string str, string attribute)
 		{
-			return str.Equals(attribute) || str.Equals($"{attribute}Attribute");
+			str = str.Split('.').Last();
+			attribute = attribute.Split('.').Last();
+
+			var match = _attributeRegex.Match(attribute);
+			var attributeName = match.Groups[1].Value;
+
+			return (!string.IsNullOrEmpty(attribute) && (str.Equals(attribute) || str.Equals($"{attribute}Attribute")))
+				|| (!string.IsNullOrEmpty(attributeName) && (str.Equals(attributeName) || str.Equals($"{attributeName}Attribute")));
+		}
+
+		public class TypeString
+		{
+			public string Name { get; set; }
+			public IEnumerable<TypeString> Arguments { get; set; } = new List<TypeString>();
+
+			public TypeString(string name)
+			{
+				Name = name;
+			}
+
+			public TypeString(string name, IEnumerable<TypeString> arguments)
+			{
+				Name = name;
+				Arguments = arguments;
+			}
+
+			public override string ToString()
+			{
+				if (Arguments.Any())
+				{
+					return $"{Name}<{string.Join(", ", Arguments.Select(x => x.ToString()))}>";
+				}
+				else
+				{
+					return $"{Name}";
+				}
+			}
+		}
+
+		private static readonly Regex _typeRegex = new Regex(@"(.*?)<(.*)>");
+
+		public static TypeString GetTypeFromString(string type)
+		{
+			var match = _typeRegex.Match(type);
+			if (!match.Success)
+			{
+				return new TypeString(type);
+			}
+
+
+			var name = match.Groups[1].Value;
+			var children = match.Groups[2].Value;
+
+			return new TypeString(name, SplitTypeParameters(children).Select(GetTypeFromString));
+		}
+
+		private static IEnumerable<string> SplitTypeParameters(string typeParameters)
+		{
+			List<string> parameters = new List<string>();
+			StringBuilder currentParam = new StringBuilder();
+			int openAngleBrakets = 0;
+			foreach (var c in typeParameters)
+			{
+				bool ignore = false;
+				if (c == ',')
+				{
+					if (openAngleBrakets == 0)
+					{
+						parameters.Add(currentParam.ToString());
+						currentParam.Clear();
+						ignore = true;
+					}
+				}
+				else if (c == '<' || c == '(')//Also need to check (string,int,bool) for tuples
+				{
+					openAngleBrakets++;
+				}
+				else if (c == '>' || c == ')')
+				{
+					openAngleBrakets--;
+				}
+
+				if (!ignore)
+				{
+					currentParam.Append(c);
+				}
+			}
+
+			if (currentParam.Length > 0)
+			{
+				parameters.Add(currentParam.ToString());
+				currentParam.Clear();
+			}
+
+			return parameters;
+		}
+
+		private static readonly Regex _asyncClean = new Regex(@"^(.+)Async$");
+
+		public static string CleanMethodName(this string str)
+		{
+			var match = _asyncClean.Match(str);
+			if (!match.Success)
+			{
+				return str.Trim();
+			}
+
+			return match.Groups[1].Value.Trim();
+		}
+
+		public static bool IsType(string fullyQualifiedType, string compareType)
+		{
+			if (string.IsNullOrEmpty(fullyQualifiedType) && string.IsNullOrEmpty(compareType))
+			{
+				return true;
+			}
+
+			if (string.IsNullOrEmpty(fullyQualifiedType))
+			{
+				return false;
+			}
+
+			if (string.IsNullOrEmpty(compareType))
+			{
+				return false;
+			}
+
+			var qualified = GetTypeFromString(fullyQualifiedType);
+			var compare = GetTypeFromString(compareType);
+
+			return IsTypeString(qualified, compare);
+		}
+
+		private static bool IsTypeString(TypeString fullyQualifiedType, TypeString compareType)
+		{
+			if (fullyQualifiedType == null && compareType == null)
+			{
+				return true;
+			}
+
+			bool isType = true;
+
+			var fq = fullyQualifiedType.Name.Split('.');
+			var ct = compareType.Name.Split('.');
+
+			isType &= !ct.Except(fq).Any();
+
+			if (fullyQualifiedType.Arguments.Count() != compareType.Arguments.Count())
+			{
+				return false;
+			}
+
+			if (!fullyQualifiedType.Arguments.Any())
+			{
+				return isType;
+			}
+
+			for (int i = 0; i < fullyQualifiedType.Arguments.Count(); i++)
+			{
+				var fqArg = fullyQualifiedType.Arguments.Skip(i).Take(1).SingleOrDefault();
+				var ctArg = compareType.Arguments.Skip(i).Take(1).SingleOrDefault();
+
+				isType &= IsTypeString(fqArg, ctArg);
+			}
+
+			return isType;
+		}
+
+		public static string CleanGenericTypeDefinition(this string str)
+		{
+			return str.Split('`').FirstOrDefault();
 		}
 	}
 }
+
+

@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Attributes.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

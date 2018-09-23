@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AspNetCore.Client;
-using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +26,45 @@ namespace TestWebApp.Controllers
 	{
 		// GET api/values
 		[HttpGet]
-		public ActionResult<IEnumerable<string>> Get()
+		public ActionResult<IEnumerable<string>> GetEnumerable()
 		{
 			return new string[] { "value1", "value2" };
 		}
 
-		// GET api/values/5
+		[HttpGet("getAsync")]
+		public async Task<ActionResult<IEnumerable<string>>> GetEnumerableTaskAsync()
+		{
+			await Task.CompletedTask;
+			return new string[] { "value1", "value2" };
+		}
+
+		[HttpGet("getQualified")]
+		public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.ActionResult<System.Collections.Generic.IEnumerable<string>>> GetFullyQualified()
+		{
+			await Task.CompletedTask;
+			return new string[] { "value1", "value2" };
+		}
+
+		[HttpGet("getTuple")]
+		public ActionResult<IEnumerable<(string, int, bool)>> GetTuple()
+		{
+			return new List<(string, int, bool)>()
+			{
+
+			};
+		}
+
+		[HttpGet("getNested")]
+		[Obsolete("Testing Obsolete")]
+		public async Task<ActionResult<IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>>> GetNestedTypesAsync()
+		{
+			await Task.CompletedTask;
+			return new Dictionary<string, IEnumerable<Tuple<string, int, bool, char>>>()
+			{
+
+			};
+		}
+
 		[HttpGet("{id}")]
 		[IncludeHeader("GEEET", "FULL")]
 		public ActionResult<string> Get(int id)
@@ -69,7 +103,7 @@ namespace TestWebApp.Controllers
 			await Task.Delay(10000);
 		}
 
-		[NoClient]
+		[NotGenerated]
 		[HttpGet("[action]")]
 		public void IgnoreMe()
 		{
@@ -189,6 +223,35 @@ namespace TestWebApp.Controllers
 		public IActionResult QueryParameter(string name)
 		{
 			return Ok(name);
+		}
+
+
+		[HttpGet("[action]")]
+		public FileResult FileReturn()
+		{
+			//PhysicalFileResult
+			//FileResult
+			//FileContentResult
+			//FileStreamResult
+			//VirtualFileResult
+			byte[] randomizeFile = System.Text.Encoding.UTF8.GetBytes("Hello World Text");
+
+			return File(randomizeFile, "text/plain");
+		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(Stream), (int)HttpStatusCode.OK)]
+		public IActionResult FileReturnResponseTypes(bool pass)
+		{
+			if (pass)
+			{
+				byte[] randomizeFile = System.Text.Encoding.UTF8.GetBytes("Hello World Text");
+				return File(randomizeFile, "text/plain");
+			}
+			else
+			{
+				return BadRequest("Fail");
+			}
 		}
 	}
 }

@@ -13,7 +13,7 @@ using(var client = new HttpClient())
 ```
 and think the following
 - Why not just inject clients?
-  - services.InstallClients();!
+  - services.AddTestWebClients();!
 - How can I pool the HttpClient usage? 
   - HttpClient is injected! Which allows you to control it's lifecycle
 - Yuck, hard coded routes, these can lead to issues if my endpoint is still under development. 
@@ -46,10 +46,10 @@ Can be included inside the web app to configure behavior.
 Contains a protobuf serializer which can override the default json one via the UseProtobufSerlaizer on the ClientConfiguration.
 
 ```c#
-services.InstallClients(config=>
+services.AddTestWebClients(config=>
 {
-	config.UseProtobufSerializer();
-	config.WithProtobufBody();
+	config.UseProtobufSerializer()
+			.WithProtobufBody();
 });
 
 ```
@@ -60,9 +60,10 @@ services.InstallClients(config=>
 Contains a blazor simpleJson serializer which can override the default json one via the UseBlazorSimpleJsonSerlaizer on the ClientConfiguration.
 
 ```c#
-services.InstallClients(config=>
+services.AddTestBlazorClients(config=>
 {
-	config.UseBlazorSimpleJsonSerializer();
+	config.UseBlazorSimpleJsonSerlaizer()
+            .UseExistingHttpClient();
 });
 
 ```

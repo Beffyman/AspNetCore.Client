@@ -1,10 +1,11 @@
 ﻿using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.CSharp;
+using AspNetCore.Client.Generator.CSharp.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AspNetCore.Client.Generator.Output;
+using AspNetCore.Client.Generator.CSharp.SignalR;
 
 namespace AspNetCore.Client.Generator
 {
@@ -24,6 +25,7 @@ namespace AspNetCore.Client.Generator
 		public string UseValueTask { get; set; }
 		public string UseInternalClients { get; set; }
 		public string ClientNamespace { get; set; }
+		public string HubNamespace { get; set; }
 		public string AllowedNamespaces { get; set; }
 		public string ExcludedNamespaces { get; set; }
 
@@ -35,6 +37,7 @@ namespace AspNetCore.Client.Generator
 			UseValueTask = properties[nameof(UseValueTask)];
 			UseInternalClients = properties[nameof(UseInternalClients)];
 			ClientNamespace = properties[nameof(ClientNamespace)];
+			HubNamespace = properties[nameof(HubNamespace)];
 			AllowedNamespaces = properties[nameof(AllowedNamespaces)];
 			ExcludedNamespaces = properties[nameof(ExcludedNamespaces)];
 		}
@@ -75,6 +78,7 @@ namespace AspNetCore.Client.Generator
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
 			Settings.UseInternalClients = bool.Parse(UseInternalClients ?? "false");
 			Settings.ClientNamespace = ClientNamespace;
+			Settings.HubNamespace = HubNamespace;
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 			Settings.ExcludedNamespaces = ExcludedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -101,13 +105,32 @@ namespace AspNetCore.Client.Generator
 
 			//Start out by loading all cs files into memory
 
-			var parsedFiles = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
+			var parsedControllers = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
-									.Select(cs => new ParsedFile(cs))
+									.Select(cs => new ClientCSharpFile(cs))
 									.ToList();
 
-			ClassWriter.WriteClientsFile(parsedFiles);
+
+			var parsedHubs = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Hub.cs", SearchOption.AllDirectories)
+									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
+											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
+									.Select(cs => new HubCSharpFile(cs))
+									.ToList();
+
+			var context = new GenerationContext();
+			foreach (var file in parsedControllers)
+			{
+				context = context.Merge(file.Context);
+			}
+			foreach (var file in parsedHubs)
+			{
+				context = context.Merge(file.Context);
+			}
+			context.MapRelatedInfo();
+			context.Validate();
+
+			ClassWriter.WriteClientsFile(context);
 
 			Log.LogCommandLine("Client Generation Successful!");
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] END");

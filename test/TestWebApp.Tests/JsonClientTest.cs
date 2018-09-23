@@ -11,6 +11,7 @@ using Flurl.Http;
 using TestWebApp.Contracts;
 using AspNetCore.Client;
 using NUnit.Framework;
+using System.IO;
 
 namespace TestWebApp.Tests
 {
@@ -23,7 +24,7 @@ namespace TestWebApp.Tests
 			var endpoint = new JsonServerInfo();
 
 			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var values = valuesClient.Get();
+			var values = valuesClient.GetEnumerable();
 
 
 			Assert.AreEqual(new List<string> { "value1", "value2" }, values);
@@ -242,6 +243,22 @@ namespace TestWebApp.Tests
 
 			Assert.AreEqual(expected, actual);
 		}
+
+
+		[Test]
+		public void FileResultTest()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+			var fileStream = valuesClient.FileReturn();
+			using (var reader = new StreamReader(fileStream))
+			{
+				var str = reader.ReadToEnd();
+				Assert.AreEqual("Hello World Text", str);
+			}
+		}
+
 
 		/// <summary>
 		/// Microsoft.AspNetCore.TestHost.ClientHandler does not respect the CancellationToken and will always complete a request. Their unit test around it ClientCancellationAbortsRequest has a "hack" that cancels in TestServer when the token is canceled.
