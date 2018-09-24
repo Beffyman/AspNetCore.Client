@@ -44,7 +44,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AspNetCore.Client.Generator.Framework\AspNetCore.Client.Generator.Framework.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" PrivateAssets="None"/>
+		<ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj"/>
 	</ItemGroup>
 
 	<!--Nerdbank.MSBuildExtension-->
