@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using AspNetCore.Client.Generator.Framework.Http;
 using AspNetCore.Client.Generator.Framework.SignalR;
+using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.Framework
 {
@@ -50,12 +51,19 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <returns></returns>
 		public GenerationContext Merge(GenerationContext other)
 		{
-			return new GenerationContext
+			if ((other.HttpClients?.Any() ?? false) || (other.HubClients?.Any() ?? false))
 			{
-				HttpClients = this.HttpClients.Union(other.HttpClients).ToList(),
-				HubClients = this.HubClients.Union(other.HubClients).ToList(),
-				UsingStatements = this.UsingStatements.Union(other.UsingStatements).ToList()
-			};
+				return new GenerationContext
+				{
+					HttpClients = this.HttpClients.Union(other.HttpClients).ToList(),
+					HubClients = this.HubClients.Union(other.HubClients).ToList(),
+					UsingStatements = this.UsingStatements.Union(other.UsingStatements).ToList()
+				};
+			}
+			else
+			{
+				return this;
+			}
 		}
 
 		/// <summary>
@@ -83,7 +91,7 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <summary>
 		/// Validates the context for anything that might lead to a compile or runtime error
 		/// </summary>
-		public void Validate()
+		public void Validate(string[] allowedNamespaces, string[] excludedNamespaces)
 		{
 			foreach (var client in HttpClients)
 			{
@@ -94,6 +102,31 @@ namespace AspNetCore.Client.Generator.Framework
 			{
 				client.Validate();
 			}
+
+			Regex allowedUsings;
+			Regex unallowedUsings;
+
+			if (allowedNamespaces?.Any() ?? false)
+			{
+				allowedUsings = new Regex($"({string.Join("|", allowedNamespaces)})");
+			}
+			else
+			{
+				allowedUsings = new Regex($"(.+)");
+			}
+
+			if (excludedNamespaces?.Any() ?? false)
+			{
+				unallowedUsings = new Regex($"({string.Join("|", excludedNamespaces)})");
+			}
+			else
+			{
+				unallowedUsings = new Regex($"(^[.]+)");
+			}
+
+			this.UsingStatements = UsingStatements.Where(x => allowedUsings.IsMatch(x)
+															&& !unallowedUsings.IsMatch(x))
+														.ToList();
 		}
 	}
 }

@@ -20,8 +20,8 @@
 		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
 		<HubNamespace>TestWebApp.Hubs</HubNamespace>
-		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts*;</AllowedNamespaces>
-		<ExcludedNamespaces></ExcludedNamespaces>
+		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.*;</AllowedNamespaces>
+		<ExcludedNamespaces>TestWebApp.FakeServices*;TestWebApp.GoodServices*;TestWebApp.Boilerplate*;</ExcludedNamespaces>
 	</PropertyGroup>
 
 	<ItemGroup>

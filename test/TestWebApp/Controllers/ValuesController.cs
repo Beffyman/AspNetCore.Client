@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestWebApp.Contracts;
+using TestWebApp.FakeServices;
+using TestWebApp.GoodServices;
 
 namespace TestWebApp.Controllers
 {
@@ -24,6 +26,13 @@ namespace TestWebApp.Controllers
 	[ApiController]
 	public class ValuesController : ControllerBase
 	{
+		protected readonly IGoodService _goodService;
+
+		public ValuesController(IGoodService goodService)
+		{
+			_goodService = goodService;
+		}
+
 		// GET api/values
 		[HttpGet]
 		public ActionResult<IEnumerable<string>> GetEnumerable()

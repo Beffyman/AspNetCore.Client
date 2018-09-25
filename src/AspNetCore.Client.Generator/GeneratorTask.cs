@@ -128,7 +128,7 @@ namespace AspNetCore.Client.Generator
 				context = context.Merge(file.Context);
 			}
 			context.MapRelatedInfo();
-			context.Validate();
+			context.Validate(Settings.AllowedNamespaces, Settings.ExcludedNamespaces);
 
 			ClassWriter.WriteClientsFile(context);
 
