@@ -67,7 +67,8 @@ namespace AspNetCore.Client.Generator.Output
 				"using Microsoft.AspNetCore.SignalR.Protocol;",
 				"using Microsoft.Extensions.Logging;",
 				"using System.IO;",
-				"using System.Threading.Channels;"
+				"using System.Threading.Channels;",
+				"using AspNetCore.Client.GeneratorExtensions;"
 			}.Union(context.UsingStatements)
 			.Distinct()
 			.OrderBy(x => x)
@@ -114,7 +115,7 @@ namespace {Settings.ClientNamespace}
 			{
 				if (controller.Failed)
 				{
-					return $@"#warning {(controller.UnexpectedFailure ? "PLEASE MAKE A GITHUB REPO ISSUE" : "")} {controller.Name}Hub {(controller.UnexpectedFailure ? "has failed generation with unexpected error" : "is misconfigured for generation")} :: {controller.Error.Replace('\r', ' ').Replace('\n', ' ')}";
+					return $@"{(controller.UnexpectedFailure ? "#error PLEASE MAKE A GITHUB REPO ISSUE" : "#warning")} {controller.Name}Hub {(controller.UnexpectedFailure ? "has failed generation with unexpected error" : "is misconfigured for generation")} :: {controller.Error.Replace('\r', ' ').Replace('\n', ' ')}";
 				}
 				else
 				{
@@ -1219,7 +1220,14 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 				}
 				else
 				{
-					return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
+					if (parameter.QueryObject)
+					{
+						return $"{{{parameter.Name}.{nameof(GeneratorExtensions.GeneratorExtensions.GetQueryObjectString)}(nameof({parameter.Name}))}}";
+					}
+					else
+					{
+						return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
+					}
 				}
 			}
 

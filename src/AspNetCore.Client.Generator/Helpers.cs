@@ -14,6 +14,15 @@ namespace AspNetCore.Client.Generator
 {
 	internal static class Helpers
 	{
+		public static K GetValueOrDefault<T, K>(this IDictionary<T, K> source, T key)
+		{
+			if (source.ContainsKey(key))
+			{
+				return source[key];
+			}
+			return default;
+		}
+
 		public static IEnumerable<T> NotNull<T>(this IEnumerable<T> source) where T : class
 		{
 			return source.Where(x => x != null);
@@ -226,9 +235,9 @@ namespace AspNetCore.Client.Generator
 		public static string GetRouteStringTransform(string parameterName, string type)
 		{
 			var transforms = new Dictionary<string, string>
-		{
-			{ typeof(DateTime).Name, "{0}.ToString(\"yyyy-MM-dd HH:mm:ss\")" }
-		};
+			{
+				{ typeof(DateTime).Name, "{0}.ToString(\"yyyy-MM-dd HH:mm:ss\")" }
+			};
 
 			if (IsEnumerable(type))
 			{

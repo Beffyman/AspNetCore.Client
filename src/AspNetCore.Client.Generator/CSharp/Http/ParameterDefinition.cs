@@ -26,6 +26,7 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 
 			Options = new ParameterAttributeOptions
 			{
+				FromQuery = attributes.Any(x => x.Name.ToFullString().MatchesAttribute(nameof(FromQueryAttribute))),
 				FromRoute = attributes.Any(x => x.Name.ToFullString().MatchesAttribute(nameof(FromRouteAttribute))),
 				FromBody = attributes.Any(x => x.Name.ToFullString().MatchesAttribute(nameof(FromBodyAttribute))) || !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
 			};
@@ -70,6 +71,12 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 			{
 				Options.FromRoute = false;
 				Options.RouteName = null;
+
+				if (Options.FromBody)
+				{
+					Options.QueryObject = true;
+					Options.FromBody = false;
+				}
 			}
 
 			if (Options.FromBody)
@@ -135,5 +142,6 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 
 		public bool FromQuery { get; set; }
 		public string QueryName { get; set; }
+		public bool QueryObject { get; set; }
 	}
 }

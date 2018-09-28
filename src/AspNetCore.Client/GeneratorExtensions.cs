@@ -8,8 +8,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Globalization;
 
-namespace AspNetCore.Client
+namespace AspNetCore.Client.GeneratorExtensions
 {
 	/// <summary>
 	/// Extensions to be used inside the generated clients
@@ -83,5 +85,65 @@ namespace AspNetCore.Client
 			return clientOrRequest;
 		}
 
+		/// <summary>
+		/// Converts the object into a query data string that can be parsed by the client
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="parameterName"></param>
+		/// <returns></returns>
+		public static string GetQueryObjectString(this object obj, string parameterName)
+		{
+			var keyValueContent = obj.ToKeyValue(parameterName);
+			var formUrlEncodedContent = new FormUrlEncodedContent(keyValueContent);
+			return formUrlEncodedContent.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+		}
+
+		/// <summary>
+		/// https://geeklearning.io/serialize-an-object-to-an-url-encoded-string-in-csharp/
+		/// </summary>
+		/// <param name="metaToken"></param>
+		/// <param name="parameterName"></param>
+		/// <returns></returns>
+		private static IDictionary<string, string> ToKeyValue(this object metaToken, string parameterName)
+		{
+			if (metaToken == null)
+			{
+				return null;
+			}
+
+			JToken token = metaToken as JToken;
+			if (token == null)
+			{
+				return ToKeyValue(JObject.FromObject(metaToken), parameterName);
+			}
+
+			if (token.HasValues)
+			{
+				var contentData = new Dictionary<string, string>();
+				foreach (var child in token.Children().ToList())
+				{
+					var childContent = child.ToKeyValue(null);
+					if (childContent != null)
+					{
+						contentData = contentData.Concat(childContent)
+												 .ToDictionary(k => k.Key, v => v.Value);
+					}
+				}
+
+				return contentData.ToDictionary(x => $"{parameterName}{(!string.IsNullOrEmpty(parameterName) ? "." : string.Empty)}{x.Key}", y => y.Value);
+			}
+
+			var jValue = token as JValue;
+			if (jValue?.Value == null)
+			{
+				return null;
+			}
+
+			var value = jValue?.Type == JTokenType.Date ?
+							jValue?.ToString("o", CultureInfo.InvariantCulture) :
+							jValue?.ToString(CultureInfo.InvariantCulture);
+
+			return new Dictionary<string, string> { { token.Path, value } };
+		}
 	}
 }

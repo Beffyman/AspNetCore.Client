@@ -31,15 +31,15 @@ namespace AspNetCore.Client.Generator
 
 		public void Fill(IDictionary<string, string> properties)
 		{
-			RouteToServiceProjectFolder = properties[nameof(RouteToServiceProjectFolder)];
-			ClientInterfaceName = properties[nameof(ClientInterfaceName)];
-			RegisterName = properties[nameof(RegisterName)];
-			UseValueTask = properties[nameof(UseValueTask)];
-			UseInternalClients = properties[nameof(UseInternalClients)];
-			ClientNamespace = properties[nameof(ClientNamespace)];
-			HubNamespace = properties[nameof(HubNamespace)];
-			AllowedNamespaces = properties[nameof(AllowedNamespaces)];
-			ExcludedNamespaces = properties[nameof(ExcludedNamespaces)];
+			RouteToServiceProjectFolder = properties.GetValueOrDefault(nameof(RouteToServiceProjectFolder));
+			ClientInterfaceName = properties.GetValueOrDefault(nameof(ClientInterfaceName));
+			RegisterName = properties.GetValueOrDefault(nameof(RegisterName));
+			UseValueTask = properties.GetValueOrDefault(nameof(UseValueTask));
+			UseInternalClients = properties.GetValueOrDefault(nameof(UseInternalClients));
+			ClientNamespace = properties.GetValueOrDefault(nameof(ClientNamespace));
+			HubNamespace = properties.GetValueOrDefault(nameof(HubNamespace));
+			AllowedNamespaces = properties.GetValueOrDefault(nameof(AllowedNamespaces));
+			ExcludedNamespaces = properties.GetValueOrDefault(nameof(ExcludedNamespaces));
 		}
 
 		public bool ByPassExecute()
