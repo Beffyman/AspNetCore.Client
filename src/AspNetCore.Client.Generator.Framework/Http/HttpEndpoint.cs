@@ -149,7 +149,7 @@ namespace AspNetCore.Client.Generator.Framework.Http
 		/// <returns></returns>
 		public IEnumerable<IParameter> GetParameters()
 		{
-			return GetChildren().OfType<IParameter>().OrderBy(x => x.SortOrder).ThenBy(x => x.DefaultValue == null ? 0 : 1);
+			return GetChildren().OfType<IParameter>().OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
 		}
 
 		/// <summary>
@@ -158,7 +158,7 @@ namespace AspNetCore.Client.Generator.Framework.Http
 		/// <returns></returns>
 		public IEnumerable<IParameter> GetParametersWithoutResponseTypes()
 		{
-			return GetChildren().Where(x => !(x is ResponseType) || (x is ExceptionResponseType)).OfType<IParameter>().OrderBy(x => x.SortOrder).ThenBy(x => x.DefaultValue == null ? 0 : 1);
+			return GetChildren().Where(x => !(x is ResponseType) || (x is ExceptionResponseType)).OfType<IParameter>().OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
 		}
 
 		/// <summary>

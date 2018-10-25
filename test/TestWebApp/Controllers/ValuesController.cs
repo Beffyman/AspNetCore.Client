@@ -119,6 +119,13 @@ namespace TestWebApp.Controllers
 
 		}
 
+		[HttpGet("[action]/{id:int}")]
+		[HeaderParameter("TestId", typeof(int?))]
+		public void NullableParameterOrdering(int id, bool deleted = false)
+		{
+
+		}
+
 		[HeaderParameterAttribute("SpecialValue1", typeof(String))]
 		[HeaderParameterAttribute("SpecialValue2", "string")]
 		[HttpGet("[action]")]
