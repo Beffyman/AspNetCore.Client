@@ -12,6 +12,7 @@ using TestWebApp.Contracts;
 using AspNetCore.Client;
 using NUnit.Framework;
 using System.IO;
+using AspNetCore.Client.Authorization;
 
 namespace TestWebApp.Tests
 {
@@ -257,6 +258,33 @@ namespace TestWebApp.Tests
 				var str = reader.ReadToEnd();
 				Assert.AreEqual("Hello World Text", str);
 			}
+		}
+
+
+		[Test]
+		public void DeleteAuth()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+
+			bool success = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test123"));
+			bool failed = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"));
+
+			Assert.IsTrue(success);
+			Assert.IsFalse(failed);
+		}
+
+		[Test]
+		public void TestPreFunc()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+
+			bool success = valuesClient.TestPreFunc();
+
+			Assert.IsTrue(success);
 		}
 
 

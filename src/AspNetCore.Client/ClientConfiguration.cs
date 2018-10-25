@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.Http;
+﻿using AspNetCore.Client.Authorization;
+using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
@@ -38,6 +39,11 @@ namespace AspNetCore.Client
 		/// What IHttpOverride to use, allows for pre-post request calls
 		/// </summary>
 		private Type HttpOverrideType { get; set; } = typeof(DefaultHttpOverride);
+
+		/// <summary>
+		/// Functions that will always be ran on a request
+		/// </summary>
+		private ICollection<Func<IHttpSettingsContainer, IHttpSettingsContainer>> PredefinedFunctions { get; } = new List<Func<IHttpSettingsContainer, IHttpSettingsContainer>>();
 
 		/// <summary>
 		/// Headers that will always be included with every request
@@ -161,7 +167,8 @@ namespace AspNetCore.Client
 				 return _ => new HttpRequestModifier
 				 {
 					 PredefinedHeaders = PredefinedHeaders,
-					 PredefinedCookies = PredefinedCookies
+					 PredefinedCookies = PredefinedCookies,
+					 PredefinedFunctions = PredefinedFunctions
 				 };
 			 });
 
@@ -215,6 +222,35 @@ namespace AspNetCore.Client
 		public ClientConfiguration WithPredefinedHeader(string name, string value)
 		{
 			PredefinedHeaders.Add(name, value);
+			return this;
+		}
+
+		/// <summary>
+		/// Adds the security header onto every request unless overwritten by a specific client call via the parameters.
+		/// </summary>
+		/// <param name="auth"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithSecurity(SecurityHeader auth)
+		{
+			Func<IHttpSettingsContainer, IHttpSettingsContainer> func = (IHttpSettingsContainer request) =>
+			{
+				return auth.AddAuth(request);
+			};
+
+			PredefinedFunctions.Add(func);
+
+			return this;
+		}
+
+		/// <summary>
+		/// Adds the following method call onto every request.
+		/// </summary>
+		/// <param name="requestModifier"></param>
+		/// <returns></returns>
+		public ClientConfiguration WithRequestModifier(Func<IHttpSettingsContainer, IHttpSettingsContainer> requestModifier)
+		{
+			PredefinedFunctions.Add(requestModifier);
+
 			return this;
 		}
 

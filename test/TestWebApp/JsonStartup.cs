@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Options;
 using TestWebApp.FakeServices;
 using TestWebApp.GoodServices;
 using TestWebApp.Hubs;
+using TestWebApp.Security;
 
 namespace TestWebApp
 {
@@ -29,6 +31,9 @@ namespace TestWebApp
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+			services.AddAuthentication("BasicAuthentication")
+				.AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuthentication", null);
+
 			services.AddSignalR();
 
 			services.AddTransient<IFakeService, FakeService>();
@@ -43,6 +48,8 @@ namespace TestWebApp
 			{
 				app.UseDeveloperExceptionPage();
 			}
+
+			app.UseAuthentication();
 
 			app.UseSignalR(routes =>
 			{
