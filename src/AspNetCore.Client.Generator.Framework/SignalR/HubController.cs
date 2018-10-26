@@ -1,4 +1,5 @@
-﻿using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
+﻿using AspNetCore.Client.Attributes.Http;
+using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
 using AspNetCore.Client.Generator.Framework.Navigation;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,9 @@ using System.Text;
 
 namespace AspNetCore.Client.Generator.Framework.SignalR
 {
+	/// <summary>
+	/// Data structure that represents a HubController and all associated properties used for generation
+	/// </summary>
 	public class HubController : IIgnored, INamespaceSuffix, IObsolete, INavNode
 	{
 		/// <summary>

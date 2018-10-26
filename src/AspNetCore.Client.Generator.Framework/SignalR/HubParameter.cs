@@ -5,6 +5,9 @@ using System.Text;
 
 namespace AspNetCore.Client.Generator.Framework.SignalR
 {
+	/// <summary>
+	/// Represents a parameter that can be used inside a Hub Endpoint
+	/// </summary>
 	public class HubParameter : IParameter
 	{
 		/// <summary>

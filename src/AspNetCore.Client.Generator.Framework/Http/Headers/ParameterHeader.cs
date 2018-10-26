@@ -5,6 +5,7 @@ using AspNetCore.Client.Generator.Framework.Http.RequestModifiers;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using AspNetCore.Client.Attributes.Http;
 
 namespace AspNetCore.Client.Generator.Framework.Http.Headers
 {

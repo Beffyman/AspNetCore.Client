@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Client.Attributes;
+using AspNetCore.Client.Attributes.Http;
 using AspNetCore.Client.Generator.Framework.Navigation;
 using System;
 using System.Collections.Generic;
