@@ -103,8 +103,16 @@ namespace TestWebApp.Controllers
 		// DELETE api/values/5
 		[HttpDelete("{id}")]
 		[Authorize]
-		public void Delete(int id)
+		public bool Delete(int id)
 		{
+			return true;
+		}
+
+
+		[HttpGet("[action]")]
+		public bool TestPreFunc()
+		{
+			return Request.Headers.ContainsKey("TestPre");
 		}
 
 		[HttpGet("[action]")]

@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Client;
+using Flurl.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +50,10 @@ namespace TestWebApp.Tests
 		{
 			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
 				.WithJsonBody()
+				.WithRequestModifier(request =>
+				{
+					return request.WithHeader("TestPre", "YES");
+				})
 				.UseJsonClientSerializer();
 		}
 	}

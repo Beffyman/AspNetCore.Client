@@ -46,6 +46,12 @@ namespace AspNetCore.Client.RequestModifiers
 		public IEnumerable<Cookie> PredefinedCookies { get; set; }
 
 		/// <summary>
+		/// Functions that will always be ran on a request
+		/// </summary>
+		public ICollection<Func<IHttpSettingsContainer, IHttpSettingsContainer>> PredefinedFunctions { get; set; }
+
+
+		/// <summary>
 		/// Applies header modifications to the request
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
@@ -53,10 +59,18 @@ namespace AspNetCore.Client.RequestModifiers
 		/// <returns></returns>
 		public T ApplyModifiers<T>(T clientOrRequest) where T : IHttpSettingsContainer
 		{
-			clientOrRequest.WithHeaders(PredefinedHeaders);
-			clientOrRequest.WithCookies(PredefinedCookies);
+			var request =  clientOrRequest.WithHeaders(PredefinedHeaders)
+											.WithCookies(PredefinedCookies);
 
-			return clientOrRequest;
+			if(PredefinedFunctions != null)
+			{
+				foreach(var func in PredefinedFunctions)
+				{
+					request = (T)func(request);
+				}
+			}
+
+			return request;
 		}
 	}
 }
