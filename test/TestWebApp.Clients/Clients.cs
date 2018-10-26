@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 using AspNetCore.Client.Authorization;
 using AspNetCore.Client.Exceptions;
+using AspNetCore.Client.GeneratorExtensions;
 using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
@@ -54,6 +55,7 @@ namespace TestWebApp.Clients
 			services.AddScoped<ITestWebAppClientRepository, TestWebAppClientRepository>();
 			services.AddScoped<ITestWebAppClientV1Repository, TestWebAppClientV1Repository>();
 			services.AddScoped<ITestWebAppClientV2Repository, TestWebAppClientV2Repository>();
+			services.AddScoped<IFullClient, FullClient>();
 			services.AddScoped<FancySuffix.INamespacedClient, FancySuffix.NamespacedClient>();
 			services.AddScoped<IValuesClient, ValuesClient>();
 			services.AddScoped<V1.ITestClient, V1.TestClient>();
@@ -103,6 +105,11 @@ namespace TestWebApp.Clients
 
 	public interface ITestWebAppClientRepository
 	{
+		IFullClient Full
+		{
+			get;
+		}
+
 		FancySuffix.INamespacedClient Namespaced
 		{
 			get;
@@ -116,6 +123,11 @@ namespace TestWebApp.Clients
 
 	internal class TestWebAppClientRepository : ITestWebAppClientRepository
 	{
+		public IFullClient Full
+		{
+			get;
+		}
+
 		public FancySuffix.INamespacedClient Namespaced
 		{
 			get;
@@ -126,8 +138,9 @@ namespace TestWebApp.Clients
 			get;
 		}
 
-		public TestWebAppClientRepository(FancySuffix.INamespacedClient param_namespaced, IValuesClient param_values)
+		public TestWebAppClientRepository(IFullClient param_full, FancySuffix.INamespacedClient param_namespaced, IValuesClient param_values)
 		{
+			this.Full = param_full;
 			this.Namespaced = param_namespaced;
 			this.Values = param_values;
 		}
@@ -178,6 +191,175 @@ namespace TestWebApp.Clients
 
 namespace TestWebApp.Clients
 {
+	public interface IFullClient : ITestWebAppClient
+	{
+		MyFancyDto GetQueryObject(MyFancyDto dto, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage GetQueryObjectRaw(MyFancyDto dto, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<MyFancyDto> GetQueryObjectAsync(MyFancyDto dto, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> GetQueryObjectRawAsync(MyFancyDto dto, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+	}
+
+	internal class FullClient : IFullClient
+	{
+		protected readonly ITestWebAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpRequestModifier Modifier;
+		public FullClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		{
+			Client = param_client;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
+			Modifier = param_modifier(this);
+		}
+
+		public MyFancyDto GetQueryObject(MyFancyDto dto, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Full";
+			var action = "GetQueryObject";
+			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false).GetAwaiter().GetResult()}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					ExceptionCallback?.Invoke(fhex);
+					return default(MyFancyDto);
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+			if (response.IsSuccessStatusCode)
+			{
+				return Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+			else
+			{
+				return default(MyFancyDto);
+			}
+		}
+
+		public HttpResponseMessage GetQueryObjectRaw(MyFancyDto dto, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Full";
+			var action = "GetQueryObject";
+			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false).GetAwaiter().GetResult()}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					ExceptionCallback?.Invoke(fhex);
+					return null;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		public async ValueTask<MyFancyDto> GetQueryObjectAsync(MyFancyDto dto, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Full";
+			var action = "GetQueryObject";
+			string url = $@"api/{controller}/{action}?{await dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false)}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					ExceptionCallback?.Invoke(fhex);
+					return default(MyFancyDto);
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+			if (response.IsSuccessStatusCode)
+			{
+				return await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false);
+			}
+			else
+			{
+				return default(MyFancyDto);
+			}
+		}
+
+		public async ValueTask<HttpResponseMessage> GetQueryObjectRawAsync(MyFancyDto dto, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Full";
+			var action = "GetQueryObject";
+			string url = $@"api/{controller}/{action}?{await dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false)}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					ExceptionCallback?.Invoke(fhex);
+					return null;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+	}
+
 	namespace FancySuffix
 	{
 		public interface INamespacedClient : ITestWebAppClient

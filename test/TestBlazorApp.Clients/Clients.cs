@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 using AspNetCore.Client.Authorization;
 using AspNetCore.Client.Exceptions;
+using AspNetCore.Client.GeneratorExtensions;
 using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;

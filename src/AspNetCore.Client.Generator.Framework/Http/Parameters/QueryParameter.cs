@@ -26,6 +26,11 @@ namespace AspNetCore.Client.Generator.Framework.Http.Parameters
 		public string DefaultValue { get; }
 
 		/// <summary>
+		/// Whether or not this parameter needs to be converted into a query string from its properties
+		/// </summary>
+		public bool QueryObject { get; }
+
+		/// <summary>
 		/// Order in which the parameter is inside the generated file
 		/// </summary>
 		public int SortOrder => 3;
@@ -36,11 +41,13 @@ namespace AspNetCore.Client.Generator.Framework.Http.Parameters
 		/// <param name="name"></param>
 		/// <param name="type"></param>
 		/// <param name="defaultValue"></param>
-		public QueryParameter(string name, string type, string defaultValue = null)
+		/// <param name="queryObject"></param>
+		public QueryParameter(string name, string type, string defaultValue, bool queryObject)
 		{
 			Name = name;
 			Type = type;
 			DefaultValue = defaultValue;
+			QueryObject = queryObject;
 		}
 
 		/// <summary>

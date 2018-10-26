@@ -67,7 +67,8 @@ namespace AspNetCore.Client.Generator.Output
 				"using Microsoft.AspNetCore.SignalR.Protocol;",
 				"using Microsoft.Extensions.Logging;",
 				"using System.IO;",
-				"using System.Threading.Channels;"
+				"using System.Threading.Channels;",
+				"using AspNetCore.Client.GeneratorExtensions;"
 			}.Union(context.UsingStatements)
 			.Distinct()
 			.OrderBy(x => x)
@@ -114,7 +115,7 @@ namespace {Settings.ClientNamespace}
 			{
 				if (controller.Failed)
 				{
-					return $@"#warning {(controller.UnexpectedFailure ? "PLEASE MAKE A GITHUB REPO ISSUE" : "")} {controller.Name}Hub {(controller.UnexpectedFailure ? "has failed generation with unexpected error" : "is misconfigured for generation")} :: {controller.Error.Replace('\r', ' ').Replace('\n', ' ')}";
+					return $@"{(controller.UnexpectedFailure ? "#error PLEASE MAKE A GITHUB REPO ISSUE" : "#warning")} {controller.Name}Hub {(controller.UnexpectedFailure ? "has failed generation with unexpected error" : "is misconfigured for generation")} :: {controller.Error.Replace('\r', ' ').Replace('\n', ' ')}";
 				}
 				else
 				{
@@ -710,7 +711,7 @@ public {GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoin
 				return
 	$@"{string.Join(Environment.NewLine, routeConstraints.Select(WriteRouteConstraint).NotNull())}
 {GetEndpointInfoVariables(controller, endpoint)}
-string url = $@""{GetRoute(controller, endpoint)}"";
+string url = $@""{GetRoute(controller, endpoint, async)}"";
 HttpResponseMessage response = null;
 response = {GetAwait(async)}HttpOverride.GetResponseAsync({GetHttpMethod(endpoint.HttpType)}, url, null, {cancellationToken.Name}){GetAsyncEnding(async)};
 
@@ -1163,7 +1164,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 {actionVar}";
 			}
 
-			public static string GetRoute(HttpController controller, HttpEndpoint endpoint)
+			public static string GetRoute(HttpController controller, HttpEndpoint endpoint, bool async)
 			{
 
 				const string RouteParseRegex = @"{([^}]+)}";
@@ -1197,7 +1198,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 
 				if (queryParameters.Any())
 				{
-					string queryString = $"?{string.Join("&", queryParameters.Select(WriteQueryParameter))}";
+					string queryString = $"?{string.Join("&", queryParameters.Select(x => WriteQueryParameter(x, async)))}";
 
 					routeUnformatted += $"{queryString}";
 				}
@@ -1209,7 +1210,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 				return routeUnformatted;
 			}
 
-			public static string WriteQueryParameter(QueryParameter parameter)
+			public static string WriteQueryParameter(QueryParameter parameter, bool async)
 			{
 				string name = $"{{nameof({parameter.Name})}}";
 
@@ -1219,7 +1220,14 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 				}
 				else
 				{
-					return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
+					if (parameter.QueryObject)
+					{
+						return $"{{{GetAwait(async)}{parameter.Name}.{nameof(GeneratorExtensions.GeneratorExtensions.GetQueryObjectString)}(nameof({parameter.Name})){GetAsyncEnding(async)}}}";
+					}
+					else
+					{
+						return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
+					}
 				}
 			}
 
