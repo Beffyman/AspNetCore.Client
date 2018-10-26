@@ -59,12 +59,12 @@ namespace AspNetCore.Client.RequestModifiers
 		/// <returns></returns>
 		public T ApplyModifiers<T>(T clientOrRequest) where T : IHttpSettingsContainer
 		{
-			var request =  clientOrRequest.WithHeaders(PredefinedHeaders)
+			var request = clientOrRequest.WithHeaders(PredefinedHeaders)
 											.WithCookies(PredefinedCookies);
 
-			if(PredefinedFunctions != null)
+			if (PredefinedFunctions != null)
 			{
-				foreach(var func in PredefinedFunctions)
+				foreach (var func in PredefinedFunctions)
 				{
 					request = (T)func(request);
 				}

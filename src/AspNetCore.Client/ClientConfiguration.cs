@@ -164,8 +164,7 @@ namespace AspNetCore.Client
 
 			services.AddScoped<Func<T, IHttpRequestModifier>>((provider) =>
 			 {
-				 return _ => new HttpRequestModifier
-				 {
+				 return _ => new HttpRequestModifier {
 					 PredefinedHeaders = PredefinedHeaders,
 					 PredefinedCookies = PredefinedCookies,
 					 PredefinedFunctions = PredefinedFunctions
@@ -394,8 +393,7 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public ClientSettings GetSettings()
 		{
-			return new ClientSettings
-			{
+			return new ClientSettings {
 				BaseAddress = HttpBaseAddress,
 				Timeout = Timeout
 			};
