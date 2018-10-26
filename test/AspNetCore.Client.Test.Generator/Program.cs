@@ -20,7 +20,6 @@ namespace AspNetCore.Client.Test.Generator
 
 		static void Main()
 		{
-
 			var webApp = GoUpUntilDirectory(WEBAPP, FAILURE_DIR);
 			var blazor = GoUpUntilDirectory(BLAZOR, FAILURE_DIR);
 

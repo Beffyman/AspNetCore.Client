@@ -9,6 +9,7 @@ using AspNetCore.Client.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TestWebApp.Contracts;
 using TestWebApp.FakeServices;
 using TestWebApp.GoodServices;
@@ -277,5 +278,6 @@ namespace TestWebApp.Controllers
 				return BadRequest("Fail");
 			}
 		}
+
 	}
 }

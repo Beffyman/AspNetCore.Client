@@ -128,7 +128,7 @@ namespace AspNetCore.Client.Generator.Output
 			{
 				controller.Failed = true;
 				controller.UnexpectedFailure = true;
-				controller.Error = ex.Message;
+				controller.Error = ex.ToString();
 			}
 #endif
 			return controller;
@@ -238,7 +238,7 @@ namespace AspNetCore.Client.Generator.Output
 
 
 			var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
-			var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Options.QueryName, x.Type, x.Default)).ToList();
+			var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Options.QueryName, x.Type, x.Default, x.Options.QueryObject)).ToList();
 			var bodyParams = parameters.Where(x => x.Options.FromBody).Select(x => new BodyParameter(x.Name, x.Type, x.Default)).SingleOrDefault();
 
 
@@ -404,7 +404,7 @@ namespace AspNetCore.Client.Generator.Output
 			{
 				controller.Failed = true;
 				controller.UnexpectedFailure = true;
-				controller.Error = ex.Message;
+				controller.Error = ex.ToString();
 			}
 #endif
 			return controller;
