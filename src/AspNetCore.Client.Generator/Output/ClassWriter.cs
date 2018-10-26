@@ -711,7 +711,7 @@ public {GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoin
 				return
 	$@"{string.Join(Environment.NewLine, routeConstraints.Select(WriteRouteConstraint).NotNull())}
 {GetEndpointInfoVariables(controller, endpoint)}
-string url = $@""{GetRoute(controller, endpoint)}"";
+string url = $@""{GetRoute(controller, endpoint, async)}"";
 HttpResponseMessage response = null;
 response = {GetAwait(async)}HttpOverride.GetResponseAsync({GetHttpMethod(endpoint.HttpType)}, url, null, {cancellationToken.Name}){GetAsyncEnding(async)};
 
@@ -1164,7 +1164,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 {actionVar}";
 			}
 
-			public static string GetRoute(HttpController controller, HttpEndpoint endpoint)
+			public static string GetRoute(HttpController controller, HttpEndpoint endpoint, bool async)
 			{
 
 				const string RouteParseRegex = @"{([^}]+)}";
@@ -1198,7 +1198,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 
 				if (queryParameters.Any())
 				{
-					string queryString = $"?{string.Join("&", queryParameters.Select(WriteQueryParameter))}";
+					string queryString = $"?{string.Join("&", queryParameters.Select(x => WriteQueryParameter(x, async)))}";
 
 					routeUnformatted += $"{queryString}";
 				}
@@ -1210,7 +1210,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 				return routeUnformatted;
 			}
 
-			public static string WriteQueryParameter(QueryParameter parameter)
+			public static string WriteQueryParameter(QueryParameter parameter, bool async)
 			{
 				string name = $"{{nameof({parameter.Name})}}";
 
@@ -1222,7 +1222,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 				{
 					if (parameter.QueryObject)
 					{
-						return $"{{{parameter.Name}.{nameof(GeneratorExtensions.GeneratorExtensions.GetQueryObjectString)}(nameof({parameter.Name}))}}";
+						return $"{{{GetAwait(async)}{parameter.Name}.{nameof(GeneratorExtensions.GeneratorExtensions.GetQueryObjectString)}(nameof({parameter.Name})){GetAsyncEnding(async)}}}";
 					}
 					else
 					{

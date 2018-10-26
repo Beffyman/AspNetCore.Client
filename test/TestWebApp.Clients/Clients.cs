@@ -217,7 +217,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Full";
 			var action = "GetQueryObject";
-			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto))}";
+			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if (response == null)
@@ -260,7 +260,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Full";
 			var action = "GetQueryObject";
-			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto))}";
+			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			if (response == null)
@@ -290,7 +290,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Full";
 			var action = "GetQueryObject";
-			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto))}";
+			string url = $@"api/{controller}/{action}?{await dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if (response == null)
@@ -333,7 +333,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Full";
 			var action = "GetQueryObject";
-			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto))}";
+			string url = $@"api/{controller}/{action}?{await dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if (response == null)

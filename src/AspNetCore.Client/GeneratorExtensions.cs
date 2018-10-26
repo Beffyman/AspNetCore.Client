@@ -91,11 +91,11 @@ namespace AspNetCore.Client.GeneratorExtensions
 		/// <param name="obj"></param>
 		/// <param name="parameterName"></param>
 		/// <returns></returns>
-		public static string GetQueryObjectString(this object obj, string parameterName)
+		public static async Task<string> GetQueryObjectString(this object obj, string parameterName)
 		{
 			var keyValueContent = obj.ToKeyValue(parameterName);
 			var formUrlEncodedContent = new FormUrlEncodedContent(keyValueContent);
-			return formUrlEncodedContent.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+			return await formUrlEncodedContent.ReadAsStringAsync().ConfigureAwait(false);
 		}
 
 		/// <summary>
