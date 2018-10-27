@@ -158,7 +158,15 @@ namespace TestBlazorApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<WeatherForecast>);
 				}
 
@@ -201,7 +209,15 @@ namespace TestBlazorApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -231,7 +247,15 @@ namespace TestBlazorApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<WeatherForecast>);
 				}
 
@@ -274,7 +298,15 @@ namespace TestBlazorApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 

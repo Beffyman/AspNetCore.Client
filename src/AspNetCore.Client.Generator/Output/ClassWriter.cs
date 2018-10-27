@@ -1019,7 +1019,16 @@ if({responseType.Name} != null && {responseType.Name}.Method.IsDefined(typeof(As
 			{
 				if (responseType is ExceptionResponseType)
 				{
-					return $@"{responseType.Name}?.Invoke(fhex);";
+					return
+$@"if({responseType.Name} != null)
+{{
+	{responseType.Name}?.Invoke(fhex);
+}}
+else
+{{
+	throw fhex;
+}}
+";
 				}
 
 				if (responseType.Status == null)
