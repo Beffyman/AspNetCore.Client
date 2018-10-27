@@ -233,7 +233,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(MyFancyDto);
 				}
 
@@ -276,7 +284,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -306,7 +322,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(MyFancyDto);
 				}
 
@@ -349,7 +373,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -418,7 +450,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -452,7 +492,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -480,7 +528,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -514,7 +570,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -542,7 +606,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -576,7 +648,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -604,7 +684,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -638,7 +726,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -671,7 +767,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -710,7 +814,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -743,7 +855,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -782,7 +902,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -810,7 +938,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -844,7 +980,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -872,7 +1016,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -906,7 +1058,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -934,7 +1094,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -968,7 +1136,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -996,7 +1172,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return;
 					}
 
@@ -1030,7 +1214,15 @@ namespace TestWebApp.Clients
 							throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 						}
 
-						ExceptionCallback?.Invoke(fhex);
+						if (ExceptionCallback != null)
+						{
+							ExceptionCallback?.Invoke(fhex);
+						}
+						else
+						{
+							throw fhex;
+						}
+
 						return null;
 					}
 
@@ -1195,7 +1387,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<string>);
 				}
 
@@ -1257,7 +1457,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1286,7 +1494,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<string>);
 				}
 
@@ -1348,7 +1564,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1377,7 +1601,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<string>);
 				}
 
@@ -1439,7 +1671,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1468,7 +1708,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<string>);
 				}
 
@@ -1530,7 +1778,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1559,7 +1815,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(System.Collections.Generic.IEnumerable<string>);
 				}
 
@@ -1621,7 +1885,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1650,7 +1922,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(System.Collections.Generic.IEnumerable<string>);
 				}
 
@@ -1712,7 +1992,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1741,7 +2029,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<(string, int, bool)>);
 				}
 
@@ -1803,7 +2099,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1832,7 +2136,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IEnumerable<(string, int, bool)>);
 				}
 
@@ -1894,7 +2206,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -1924,7 +2244,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 				}
 
@@ -1987,7 +2315,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2017,7 +2353,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 				}
 
@@ -2080,7 +2424,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2109,7 +2461,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(string);
 				}
 
@@ -2171,7 +2531,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2200,7 +2568,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(string);
 				}
 
@@ -2262,7 +2638,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2291,7 +2675,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -2346,7 +2738,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2375,7 +2775,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -2430,7 +2838,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2459,7 +2875,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -2514,7 +2938,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2543,7 +2975,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -2598,7 +3038,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2627,7 +3075,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(bool);
 				}
 
@@ -2689,7 +3145,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2718,7 +3182,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(bool);
 				}
 
@@ -2780,7 +3252,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2810,7 +3290,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(bool);
 				}
 
@@ -2873,7 +3361,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2903,7 +3399,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(bool);
 				}
 
@@ -2966,7 +3470,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -2996,7 +3508,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -3052,7 +3572,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3082,7 +3610,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -3138,7 +3674,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3173,7 +3717,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -3234,7 +3786,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3269,7 +3829,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -3330,7 +3898,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3360,7 +3936,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(string);
 				}
 
@@ -3423,7 +4007,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3453,7 +4045,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(string);
 				}
 
@@ -3516,7 +4116,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3546,7 +4154,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(int);
 				}
 
@@ -3609,7 +4225,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3639,7 +4263,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(int);
 				}
 
@@ -3702,7 +4334,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3737,7 +4377,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -3808,7 +4456,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3843,7 +4499,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -3914,7 +4578,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -3944,7 +4616,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4000,7 +4680,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4030,7 +4718,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4086,7 +4782,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4116,7 +4820,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(MyFancyDto);
 				}
 
@@ -4179,7 +4891,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4209,7 +4929,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(MyFancyDto);
 				}
 
@@ -4272,7 +5000,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4302,7 +5038,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4368,7 +5112,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4398,7 +5150,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4464,7 +5224,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4494,7 +5262,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4560,7 +5336,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4590,7 +5374,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4656,7 +5448,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4686,7 +5486,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4752,7 +5560,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4782,7 +5598,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4848,7 +5672,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4883,7 +5715,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -4954,7 +5794,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -4989,7 +5837,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5060,7 +5916,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5095,7 +5959,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5166,7 +6038,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5201,7 +6081,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5272,7 +6160,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5302,7 +6198,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5368,7 +6272,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5398,7 +6310,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5464,7 +6384,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5494,7 +6422,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5560,7 +6496,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5590,7 +6534,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5656,7 +6608,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5686,7 +6646,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5782,7 +6750,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5812,7 +6788,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -5908,7 +6892,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -5938,7 +6930,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6004,7 +7004,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6034,7 +7042,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6100,7 +7116,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6130,7 +7154,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(System.IO.Stream);
 				}
 
@@ -6193,7 +7225,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6223,7 +7263,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return default(System.IO.Stream);
 				}
 
@@ -6286,7 +7334,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6316,7 +7372,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6382,7 +7446,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6412,7 +7484,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6478,7 +7558,15 @@ namespace TestWebApp.Clients
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6532,7 +7620,15 @@ namespace TestWebApp.Clients.V1
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6566,7 +7662,15 @@ namespace TestWebApp.Clients.V1
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6594,7 +7698,15 @@ namespace TestWebApp.Clients.V1
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6628,7 +7740,15 @@ namespace TestWebApp.Clients.V1
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6682,7 +7802,15 @@ namespace TestWebApp.Clients.V2
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6716,7 +7844,15 @@ namespace TestWebApp.Clients.V2
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
@@ -6744,7 +7880,15 @@ namespace TestWebApp.Clients.V2
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return;
 				}
 
@@ -6778,7 +7922,15 @@ namespace TestWebApp.Clients.V2
 						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
 					}
 
-					ExceptionCallback?.Invoke(fhex);
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
 					return null;
 				}
 
