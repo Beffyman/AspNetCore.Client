@@ -310,6 +310,7 @@ namespace AspNetCore.Client.Generator
 
 		public static bool MatchesAttribute(this string str, string attribute)
 		{
+			str = str.Trim();
 			str = str.Split('.').Last();
 			attribute = attribute.Split('.').Last();
 

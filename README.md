@@ -25,7 +25,7 @@ and think the following
   - HeaderParameterAttribute! Which makes a header a parameter inside the generated methods, which may or may not be required.
   - IncludeHeaderAttribute! Which defines a constant header value to be included
 - How do I tell my teammates that an endpoint has known response types for status codes?
-  - ProducesResponseType! Generates action paramters that allow custom logic depending on the status code returned, without needing to manually check it.
+  - ProducesResponseType! Generates action parameters that allow custom logic depending on the status code returned, without needing to manually check it.
 - What if sometimes I want to intercept requests before they go out? 
   - IHttpOverride! Which allows for potential cache interception of requests.
 - If I own the endpoint's code, why can't I just generate clients from it to make interacting with it as simple as injecting it?
