@@ -24,11 +24,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="protobuf-net" Version="2.4.0" />
+		<PackageReference Include="protobuf-net" Version="2.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
+		<ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
 	</ItemGroup>
 
 </Project>

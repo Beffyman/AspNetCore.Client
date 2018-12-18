@@ -225,6 +225,30 @@ namespace TestWebApp.Tests
 			Assert.AreEqual(expected, returnedEnumerable);
 		}
 
+		[Test]
+		public void EnumerableRouteGetCustom()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+
+			IEnumerable<int> returnedEnumerable = null;
+
+			var expected = new List<int>
+			{
+				1,2,3
+			};
+
+			valuesClient.EnumerableGetCustom(expected, new List<bool> { true },
+			OKCallback: (_) =>
+			{
+				returnedEnumerable = _;
+			});
+
+
+			Assert.AreEqual(expected, returnedEnumerable);
+		}
+
 
 		[Test]
 		public void QueryParameterReturns()

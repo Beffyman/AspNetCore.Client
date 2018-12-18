@@ -4,14 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using AspNetCore.Client;
 using AspNetCore.Client.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TestWebApp.Contracts;
-using TestWebApp.FakeServices;
 using TestWebApp.GoodServices;
 
 namespace TestWebApp.Controllers
@@ -220,12 +217,22 @@ namespace TestWebApp.Controllers
 			return Ok(id);
 		}
 
-#warning Until 2.2, the FromQuery with no params doesn't work.  https://github.com/aspnet/Mvc/issues/7712
 		[HttpGet("[action]")]
 		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
-		public IActionResult EnumerableGet([FromQuery(Name = "customIds")]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
+		public IActionResult EnumerableGet([FromQuery]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
 		{
-			if (!truth.Any())
+			if (truth.Any())
+			{
+				return Ok(ids);
+			}
+			return BadRequest("BAD");
+		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
+		public IActionResult EnumerableGetCustom([FromQuery(Name = "customIds")]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
+		{
+			if (truth.Any())
 			{
 				return Ok(ids);
 			}
