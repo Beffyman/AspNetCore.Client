@@ -51,7 +51,7 @@ dotnet build -c Release -v m;
 #Run the test project generators
 Push-Location -Path $testGenerator -StackName "Run";
 Write-Host ">> dotnet run -c Release -v m;" -ForegroundColor Magenta;
-dotnet run -c Release -v m --framework netcoreapp2.1;
+dotnet run -c Release -v m --framework netcoreapp2.2;
 Pop-Location -StackName "Run";
 
 #Build again, making sure that our clients that were just regenerated via the previous command build
