@@ -59,6 +59,7 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 			Options.FromRoute = Options.FromRoute || (Helpers.IsRouteParameter(Name, fullRoute) || (Helpers.IsEnumerable(Type) && Helpers.IsRoutableType(Helpers.GetEnumerableType(Type))));
 
 
+			//Is it a query string parameter type, but isn't labeled as such?
 			if ((Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)))
 				&& !Options.FromRoute
 				&& !Options.FromBody)
@@ -67,11 +68,13 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 				Options.QueryName = Name;
 			}
 
+			//if it is a query param, it can't be in the route
 			if (Options.FromQuery)
 			{
 				Options.FromRoute = false;
 				Options.RouteName = null;
 
+				//A query object also can't be in the body
 				if (Options.FromBody)
 				{
 					Options.QueryObject = true;
@@ -79,9 +82,20 @@ namespace AspNetCore.Client.Generator.CSharp.Http
 				}
 			}
 
+			//If it is a body param, it also can't be in the route
 			if (Options.FromBody)
 			{
 				Options.FromRoute = false;
+			}
+
+			//Get Default if it exists inside the route constraint
+			if (Options.FromRoute)
+			{
+				var defaultRouteConstraint = Helpers.GetDefaultRouteConstraint(Name, fullRoute);
+				if (!string.IsNullOrEmpty(defaultRouteConstraint))
+				{
+					Default = defaultRouteConstraint;
+				}
 			}
 
 			var types = new List<bool>

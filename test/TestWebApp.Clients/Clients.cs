@@ -1356,6 +1356,14 @@ namespace TestWebApp.Clients
 		HttpResponseMessage FileReturnResponseTypesRaw(bool pass, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		Task FileReturnResponseTypesAsync(bool pass, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<Stream> OKCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> FileReturnResponseTypesRawAsync(bool pass, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		int? DefaultRouteConstraint(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage DefaultRouteConstraintRaw(int? x = 5, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<int? > DefaultRouteConstraintAsync(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> DefaultRouteConstraintRawAsync(int? x = 5, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		int? OptionalRouteConstraint(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage OptionalRouteConstraintRaw(int? x, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<int? > OptionalRouteConstraintAsync(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> OptionalRouteConstraintRawAsync(int? x, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 	}
 
 	internal class ValuesClient : IValuesClient
@@ -7771,6 +7779,442 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 			var action = "FileReturnResponseTypes";
 			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+		public int? DefaultRouteConstraint(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "DefaultRouteConstraint";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int? );
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+			if (response.IsSuccessStatusCode)
+			{
+				return Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+			else
+			{
+				return default(int? );
+			}
+		}
+
+		public HttpResponseMessage DefaultRouteConstraintRaw(int? x = 5, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "DefaultRouteConstraint";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		public async ValueTask<int? > DefaultRouteConstraintAsync(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "DefaultRouteConstraint";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int? );
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+			if (response.IsSuccessStatusCode)
+			{
+				return await Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false);
+			}
+			else
+			{
+				return default(int? );
+			}
+		}
+
+		public async ValueTask<HttpResponseMessage> DefaultRouteConstraintRawAsync(int? x = 5, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "DefaultRouteConstraint";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+		public int? OptionalRouteConstraint(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "OptionalRouteConstraint";
+			string url = $@"api/{controller}/{action}/optional/{x}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int? );
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+			if (response.IsSuccessStatusCode)
+			{
+				return Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+			else
+			{
+				return default(int? );
+			}
+		}
+
+		public HttpResponseMessage OptionalRouteConstraintRaw(int? x, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "OptionalRouteConstraint";
+			string url = $@"api/{controller}/{action}/optional/{x}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		public async ValueTask<int? > OptionalRouteConstraintAsync(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "OptionalRouteConstraint";
+			string url = $@"api/{controller}/{action}/optional/{x}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int? );
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				InternalServerErrorCallback?.Invoke();
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			ResponseCallback?.Invoke(response);
+			if (response.IsSuccessStatusCode)
+			{
+				return await Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false);
+			}
+			else
+			{
+				return default(int? );
+			}
+		}
+
+		public async ValueTask<HttpResponseMessage> OptionalRouteConstraintRawAsync(int? x, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "OptionalRouteConstraint";
+			string url = $@"api/{controller}/{action}/optional/{x}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			if (response == null)
