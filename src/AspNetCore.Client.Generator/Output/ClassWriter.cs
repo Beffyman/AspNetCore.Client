@@ -24,6 +24,7 @@ using AspNetCore.Client.Generator.Framework.Http;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework.SignalR;
+using Microsoft.AspNetCore.Routing.Template;
 
 namespace AspNetCore.Client.Generator.Output
 {
@@ -1180,28 +1181,28 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 
 				string routeUnformatted = endpoint.GetFullRoute(controller);
 
-				var patterns = Regex.Matches(routeUnformatted, RouteParseRegex);
+
+				var template = TemplateParser.Parse(routeUnformatted);
 
 				var routeParameters = endpoint.GetRouteParameters().ToList();
 				var queryParameters = endpoint.GetQueryParameters().ToList();
 
-				foreach (var group in patterns)
+				foreach (var parameter in template.Parameters)
 				{
-					Match match = group as Match;
-					string filtered = match.Value.Replace("{", "").Replace("}", "");
-					string[] split = filtered.Split(new char[] { ':' });
-
-					string variable = split[0];
-
-
-					if (!routeParameters.Any(x => x.Name.Equals(variable, StringComparison.CurrentCultureIgnoreCase)))
+					if(parameter.Name == "y")
 					{
-						throw new Exception($"{variable} is missing from passed in parameters. Please check your route.");
+
 					}
-					var parameter = routeParameters.SingleOrDefault(x => x.Name.Equals(variable, StringComparison.CurrentCultureIgnoreCase));
-					if (Helpers.IsRoutableType(parameter.Type))
+
+					if (!routeParameters.Any(x => x.Name.Equals(parameter.Name, StringComparison.CurrentCultureIgnoreCase)))
 					{
-						routeUnformatted = routeUnformatted.Replace(match.Value, $"{{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}");
+						throw new Exception($"{parameter.Name} is missing from passed in parameters. Please check your route.");
+					}
+
+					var routeParameter = routeParameters.SingleOrDefault(x => x.Name.Equals(parameter.Name, StringComparison.CurrentCultureIgnoreCase));
+					if (Helpers.IsRoutableType(routeParameter.Type))
+					{
+						routeUnformatted = routeUnformatted.Replace(parameter.BackToRouteParameter(), $"{{{Helpers.GetRouteStringTransform(routeParameter.Name, routeParameter.Type)}}}");
 					}
 				}
 

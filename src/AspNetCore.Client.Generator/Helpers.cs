@@ -1,4 +1,5 @@
 ﻿using AspNetCore.Client.Generator.CSharp.Http;
+using Microsoft.AspNetCore.Routing.Template;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -136,17 +137,17 @@ namespace AspNetCore.Client.Generator
 			MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead
 		};
 
-		public static string Serialize(this object obj)
+		public static string SerializeToJson(this object obj)
 		{
 			return JsonConvert.SerializeObject(obj, SETTINGS);
 		}
 
-		public static T Deserialize<T>(this string str)
+		public static T DeserializeFromJson<T>(this string str)
 		{
 			return JsonConvert.DeserializeObject<T>(str, SETTINGS);
 		}
 
-		public static object Deserialize(this string str, Type t)
+		public static object DeserializeFromJson(this string str, Type t)
 		{
 			return JsonConvert.DeserializeObject(str, t, SETTINGS);
 		}
@@ -166,6 +167,36 @@ namespace AspNetCore.Client.Generator
 		"SortedSet<(.+)>",
 		"LinkedList<(.+)>"
 		};
+
+		public static string BackToRouteParameter(this TemplatePart templatePart)
+		{
+			string route = "{";
+
+			route += templatePart.Name;
+
+
+			if (templatePart.InlineConstraints?.Any() ?? false)
+			{
+				foreach (var ic in templatePart.InlineConstraints)
+				{
+					route += $":{ic.Constraint}";
+				}
+			}
+
+
+			if (templatePart.IsOptional)
+			{
+				route += "?";
+			}
+
+			if (templatePart.DefaultValue != null)
+			{
+				route += $"={templatePart.DefaultValue}";
+			}
+
+
+			return route + "}";
+		}
 
 		public static bool IsEnumerable(string type)
 		{
@@ -220,7 +251,7 @@ namespace AspNetCore.Client.Generator
 			var matches = matchNullable.Matches(type);
 			if (matches.Count > 0)
 			{
-				type = matches[matches.Count - 1].Value;
+				type = matches[matches.Count - 1].Groups[2].Value;
 			}
 
 			return KnownPrimitives.Contains(type, StringComparer.CurrentCultureIgnoreCase);
@@ -230,6 +261,17 @@ namespace AspNetCore.Client.Generator
 		{
 			var routeArgs = fullRouteTemplate.GetRouteParameters();
 			return routeArgs.ContainsKey(name);
+		}
+
+		public static string GetDefaultRouteConstraint(string name, string fullRouteTemplate)
+		{
+			var routeArgs = fullRouteTemplate.GetRouteParameters();
+			if (routeArgs.ContainsKey(name))
+			{
+				return routeArgs[name].defaultValue;
+			}
+
+			return null;
 		}
 
 		public static string GetRouteStringTransform(string parameterName, string type)
@@ -254,11 +296,9 @@ namespace AspNetCore.Client.Generator
 			}
 		}
 
-		const string RouteParseRegex = @"{((.+?(?=:)):(.+?(?=}\/))|(.+?(?=}\/)))}";
-
-		public static IDictionary<string, string> GetRouteParameters(this string route)
+		public static IDictionary<string, (string type, string defaultValue)> GetRouteParameters(this string route)
 		{
-			IDictionary<string, string> parameters = new Dictionary<string, string>();
+			IDictionary<string, (string type, string defaultValue)> parameters = new Dictionary<string, (string type, string defaultValue)>();
 
 			if (!route.EndsWith("/"))
 			{
@@ -269,29 +309,10 @@ namespace AspNetCore.Client.Generator
 			{
 				return parameters;
 			}
-			var patterns = Regex.Matches(route, RouteParseRegex);
 
-			foreach (var group in patterns)
-			{
-				Match match = group as Match;
-				string filtered = match.Value.Replace("{", "").Replace("}", "");
-				string[] split = filtered.Split(new char[] { ':' });
-				if (split.Length == 1)
-				{
-					string variable = split[0];
-					string parsedType = null;
-					parameters.Add(variable, parsedType);
-				}
-				else
-				{
-					string variable = split[0];
+			var template = TemplateParser.Parse(route);
 
-					string type = split[1];
-					parameters.Add(variable, type);
-				}
-
-			}
-			return parameters;
+			return template.Parameters.ToDictionary(x => x.Name, y => (y?.InlineConstraints.FirstOrDefault()?.Constraint, y.DefaultValue?.ToString()));
 		}
 
 		public static string GetTaskType()

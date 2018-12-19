@@ -286,5 +286,17 @@ namespace TestWebApp.Controllers
 			}
 		}
 
+		[HttpGet("[action]/defaultConstraint/{x=5}")]
+		public int? DefaultRouteConstraint(int? x)
+		{
+			return x;
+		}
+
+		[HttpGet("[action]/optional/{x?}")]
+		public int? OptionalRouteConstraint(int? x)
+		{
+			return x;
+		}
+
 	}
 }
