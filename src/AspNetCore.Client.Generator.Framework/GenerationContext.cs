@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using AspNetCore.Client.Generator.Framework.Http;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
 using AspNetCore.Client.Generator.Framework.SignalR;
 using System.Text.RegularExpressions;
 
@@ -22,12 +22,12 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <summary>
 		/// Clients that will be generated
 		/// </summary>
-		public IList<HttpController> HttpClients { get; set; } = new List<HttpController>();
+		public IList<AspNetCoreHttpController> HttpClients { get; set; } = new List<AspNetCoreHttpController>();
 
 		/// <summary>
 		/// All of the endpoints inside the clients
 		/// </summary>
-		public IEnumerable<HttpEndpoint> HttpEndpoints => HttpClients.SelectMany(x => x.Endpoints);
+		public IEnumerable<AspNetCoreHttpEndpoint> HttpEndpoints => HttpClients.SelectMany(x => x.Endpoints);
 
 
 

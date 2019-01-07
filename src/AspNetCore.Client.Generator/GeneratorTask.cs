@@ -1,5 +1,5 @@
 ﻿using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.CSharp.Http;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using System;
 using System.Collections.Generic;
 using System.IO;

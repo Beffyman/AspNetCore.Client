@@ -3,36 +3,35 @@ using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.RequestModifiers;
 
-namespace AspNetCore.Client.Generator.Framework.RequestModifiers
+namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers
 {
 	/// <summary>
-	/// Parameter for the cancellation token for the request
+	/// Parameter for the timeout of the request
 	/// </summary>
-	public class CancellationTokenModifier : IRequestModifier, IParameter
+	public class TimeoutModifier : IRequestModifier, IParameter
 	{
 
 		/// <summary>
 		/// Display name of the parameter
 		/// </summary>
-		public string Name => "cancellationToken";
+		public string Name => "timeout";
 
 		/// <summary>
 		/// Type of the parameter
 		/// </summary>
-		public string Type => $"{nameof(CancellationToken)}";
+		public string Type => $"{nameof(TimeSpan)}?";
 
 		/// <summary>
 		/// What the default value of the parameter is, if it has one. the string "null" should be used for an optional parameter
 		/// </summary>
-		public string DefaultValue => "default";
+		public string DefaultValue => "null";
 
 		/// <summary>
 		/// Order in which the parameter is inside the generated file
 		/// </summary>
-		public int SortOrder => 10;
+		public int SortOrder => 9;
 
 		/// <summary>
 		/// Retrieve all the <see cref="INavNode"/> implemented children of this node

@@ -1,12 +1,12 @@
-﻿using AspNetCore.Client.Generator.CSharp.Http;
+﻿using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
-using AspNetCore.Client.Generator.Framework.Http.Dependencies;
-using AspNetCore.Client.Generator.Framework.Http.Headers;
-using AspNetCore.Client.Generator.Framework.Http.Parameters;
-using AspNetCore.Client.Generator.Framework.Http.RequestModifiers;
-using AspNetCore.Client.Generator.Framework.Http.ResponseTypes;
-using AspNetCore.Client.Generator.Framework.Http.Routes.Constraints;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints;
 using Flurl.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.CodeAnalysis;
@@ -20,7 +20,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
-using AspNetCore.Client.Generator.Framework.Http;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework.SignalR;
@@ -326,7 +326,7 @@ public IDisposable On{message.Name}(Action<{string.Join(",", message.Types)}> ac
 		#region HTTP
 		public static class HttpClassWriter
 		{
-			public static string WriteErrorMessage(HttpController controller)
+			public static string WriteErrorMessage(AspNetCoreHttpController controller)
 			{
 				if (controller.Failed)
 				{
@@ -388,7 +388,7 @@ public IDisposable On{message.Name}(Action<{string.Join(",", message.Types)}> ac
 				return $@"			services.AddScoped<I{Settings.ClientInterfaceName}{version}Repository,{Settings.ClientInterfaceName}{version}Repository>();";
 			}
 
-			public static string WriteClientRegistration(HttpController controller)
+			public static string WriteClientRegistration(AspNetCoreHttpController controller)
 			{
 				string namespaceVersion = $@"{(controller.NamespaceVersion != null ? $"{controller.NamespaceVersion}." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}";
 				string interfaceName = $@"{namespaceVersion}I{controller.ClientName}";
@@ -450,7 +450,7 @@ public interface I{Settings.ClientInterfaceName} : {nameof(IClient)} {{ }}
 ";
 			}
 
-			public static string WriteRepository(IGrouping<string, HttpController> version)
+			public static string WriteRepository(IGrouping<string, AspNetCoreHttpController> version)
 			{
 
 
@@ -478,22 +478,22 @@ public interface I{Settings.ClientInterfaceName}{version.Key}Repository
 			}
 
 
-			public static string WriteRepositoryInterfaceProperty(string key, HttpController controller)
+			public static string WriteRepositoryInterfaceProperty(string key, AspNetCoreHttpController controller)
 			{
 				return $@"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.Name} {{ get; }}";
 			}
 
-			public static string WriteRepositoryProperty(string key, HttpController controller)
+			public static string WriteRepositoryProperty(string key, AspNetCoreHttpController controller)
 			{
 				return $@"public {key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.Name} {{ get; }}";
 			}
 
-			public static string WriteRepositoryParameter(string key, HttpController controller)
+			public static string WriteRepositoryParameter(string key, AspNetCoreHttpController controller)
 			{
 				return $@"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} param_{controller.Name.ToLower()}";
 			}
 
-			public static string WriteRepositoryAssignment(string key, HttpController controller)
+			public static string WriteRepositoryAssignment(string key, AspNetCoreHttpController controller)
 			{
 				return $@"this.{controller.Name} = param_{controller.Name.ToLower()};";
 			}
@@ -518,7 +518,7 @@ public interface I{Settings.ClientInterfaceName}{version.Key}Repository
 
 			}
 
-			public static string WriteVersionGroup(IGrouping<string, HttpController> version)
+			public static string WriteVersionGroup(IGrouping<string, AspNetCoreHttpController> version)
 			{
 				return
 	$@"
@@ -535,7 +535,7 @@ namespace { Settings.ClientNamespace }{(version.Key != null ? "." : "")}{version
 			#region Class
 
 
-			public static string WriteController(HttpController controller)
+			public static string WriteController(AspNetCoreHttpController controller)
 			{
 				return
 	$@"
@@ -550,7 +550,7 @@ namespace { Settings.ClientNamespace }{(version.Key != null ? "." : "")}{version
 ";
 			}
 
-			public static string WriteClassInterface(HttpController controller)
+			public static string WriteClassInterface(AspNetCoreHttpController controller)
 			{
 				return
 	$@"
@@ -562,7 +562,7 @@ public interface I{controller.ClientName} : I{Settings.ClientInterfaceName}
 ";
 			}
 
-			public static string WriteClassImplementation(HttpController controller)
+			public static string WriteClassImplementation(AspNetCoreHttpController controller)
 			{
 				var dependencies = controller.GetInjectionDependencies().ToList();
 				dependencies.Insert(0, new ClientDependency($"I{Settings.ClientInterfaceName}Wrapper"));
@@ -619,7 +619,7 @@ public interface I{controller.ClientName} : I{Settings.ClientInterfaceName}
 
 			#region Endpoint
 
-			public static string WriteEndpointInterface(HttpEndpoint endpoint)
+			public static string WriteEndpointInterface(AspNetCoreHttpEndpoint endpoint)
 			{
 				return
 	$@"
@@ -650,7 +650,7 @@ public interface I{controller.ClientName} : I{Settings.ClientInterfaceName}
 ";
 			}
 
-			public static string WriteEndpointImplementation(HttpController controller, HttpEndpoint endpoint)
+			public static string WriteEndpointImplementation(AspNetCoreHttpController controller, AspNetCoreHttpEndpoint endpoint)
 			{
 				return
 	$@"
@@ -695,7 +695,7 @@ public {GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoin
 			}
 
 
-			public static string GetMethodDetails(HttpController controller, HttpEndpoint endpoint, bool async, bool raw)
+			public static string GetMethodDetails(AspNetCoreHttpController controller, AspNetCoreHttpEndpoint endpoint, bool async, bool raw)
 			{
 				var cancellationToken = endpoint.GetRequestModifiers().OfType<CancellationTokenModifier>().SingleOrDefault();
 				var clientDependency = new ClientDependency($"I{Settings.ClientInterfaceName}Wrapper");
@@ -932,7 +932,7 @@ if(!(new Regex(@""{value}"").IsMatch({constraint.ParameterName})))
 			}
 
 
-			public static string WriteErrorActionResultReturn(HttpEndpoint endpoint, bool async, bool raw)
+			public static string WriteErrorActionResultReturn(AspNetCoreHttpEndpoint endpoint, bool async, bool raw)
 			{
 				if (raw)
 				{
@@ -947,7 +947,7 @@ if(!(new Regex(@""{value}"").IsMatch({constraint.ParameterName})))
 				return "return;";
 			}
 
-			public static string WriteActionResultReturn(HttpEndpoint endpoint, bool async, bool raw)
+			public static string WriteActionResultReturn(AspNetCoreHttpEndpoint endpoint, bool async, bool raw)
 			{
 				if (raw)
 				{
@@ -1068,7 +1068,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 				}
 			}
 
-			public static string GetHttpMethod(HttpEndpoint endpoint)
+			public static string GetHttpMethod(AspNetCoreHttpEndpoint endpoint)
 			{
 				var cancellationToken = endpoint.GetRequestModifiers().OfType<CancellationTokenModifier>().SingleOrDefault();
 				var bodyParameter = endpoint.GetBodyParameter();
@@ -1151,7 +1151,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 				}
 			}
 
-			public static string GetEndpointInfoVariables(HttpController controller, HttpEndpoint endpoint)
+			public static string GetEndpointInfoVariables(AspNetCoreHttpController controller, AspNetCoreHttpEndpoint endpoint)
 			{
 
 				var controllerVar = $@"var {Constants.ControllerRouteReserved} = ""{endpoint.Parent.Name}"";";
@@ -1174,7 +1174,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 {actionVar}";
 			}
 
-			public static string GetRoute(HttpController controller, HttpEndpoint endpoint, bool async)
+			public static string GetRoute(AspNetCoreHttpController controller, AspNetCoreHttpEndpoint endpoint, bool async)
 			{
 
 				const string RouteParseRegex = @"{([^}]+)}";

@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp.Http;
+﻿using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

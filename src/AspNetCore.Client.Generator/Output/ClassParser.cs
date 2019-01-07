@@ -1,15 +1,15 @@
 ﻿using AspNetCore.Client.Attributes;
 using AspNetCore.Client.Attributes.Http;
 using AspNetCore.Client.Attributes.SignalR;
-using AspNetCore.Client.Generator.CSharp.Http;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.Framework.Http;
-using AspNetCore.Client.Generator.Framework.Http.Headers;
-using AspNetCore.Client.Generator.Framework.Http.Parameters;
-using AspNetCore.Client.Generator.Framework.Http.RequestModifiers;
-using AspNetCore.Client.Generator.Framework.Http.ResponseTypes;
-using AspNetCore.Client.Generator.Framework.Http.Routes;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.SignalR;
 using AspNetCore.Client.Generator.SignalR;
@@ -35,12 +35,12 @@ namespace AspNetCore.Client.Generator.Output
 
 		#region Http
 
-		public static HttpController ReadClassAsHttpController(ClassDeclarationSyntax syntax)
+		public static AspNetCoreHttpController ReadClassAsHttpController(ClassDeclarationSyntax syntax)
 		{
 			var attributes = syntax.AttributeLists.SelectMany(x => x.Attributes).ToList();
 
 
-			var controller = new HttpController();
+			var controller = new AspNetCoreHttpController();
 			try
 			{
 				controller.Name = $@"{syntax.Identifier.ValueText.Trim().Replace("Controller", "")}";
@@ -135,11 +135,11 @@ namespace AspNetCore.Client.Generator.Output
 		}
 
 
-		private static HttpEndpoint ReadMethodAsHttpEndpoint(HttpController parent, MethodDeclarationSyntax syntax)
+		private static AspNetCoreHttpEndpoint ReadMethodAsHttpEndpoint(AspNetCoreHttpController parent, MethodDeclarationSyntax syntax)
 		{
 			var attributes = syntax.DescendantNodes().OfType<AttributeListSyntax>().SelectMany(x => x.Attributes).ToList();
 
-			var endpoint = new HttpEndpoint(parent);
+			var endpoint = new AspNetCoreHttpEndpoint(parent);
 
 			endpoint.Name = syntax.Identifier.ValueText.CleanMethodName();
 

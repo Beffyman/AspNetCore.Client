@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Linq;
-using AspNetCore.Client.Generator.Framework.Http.Dependencies;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies;
 using System.Reflection;
 using AspNetCore.Client.Attributes.Http;
 using AspNetCore.Client.Generator.Framework.AttributeInterfaces;

@@ -1,4 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp.Http;
+﻿using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using Microsoft.AspNetCore.Routing.Template;
 using Newtonsoft.Json;
 using System;
