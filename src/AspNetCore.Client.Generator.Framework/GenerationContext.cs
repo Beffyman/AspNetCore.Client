@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
 using AspNetCore.Client.Generator.Framework.SignalR;
-using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.Framework
 {

@@ -1,12 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-namespace AspNetCore.Client.Generator
+﻿namespace AspNetCore.Client.Generator
 {
 	internal class Settings
 	{

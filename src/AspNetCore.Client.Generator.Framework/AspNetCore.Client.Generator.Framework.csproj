@@ -13,7 +13,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
+	  <ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
+	  <ProjectReference Include="..\AspNetCore.Server\AspNetCore.Server.csproj" />
 	</ItemGroup>
 
 </Project>

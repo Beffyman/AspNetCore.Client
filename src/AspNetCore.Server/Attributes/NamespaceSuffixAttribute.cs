@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Attributes
+namespace AspNetCore.Server.Attributes
 {
 	/// <summary>
 	/// Modifies the namespace of the client to have the provided value added onto it

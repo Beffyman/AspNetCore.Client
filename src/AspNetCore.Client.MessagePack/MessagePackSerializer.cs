@@ -1,0 +1,37 @@
+﻿using MessagePack.Resolvers;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace AspNetCore.Client.Serializers
+{
+	/// <summary>
+	/// Uses MessagePack for serializing and deserializing the http content
+	/// </summary>
+	internal class MessagePackSerializer : IHttpSerializer
+	{
+		/// <summary>
+		/// Deserializes the request content which is assumed to be MessagePack into a object of <typeparamref name="T"/>
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="content"></param>
+		/// <returns></returns>
+		public async Task<T> Deserialize<T>(HttpContent content)
+		{
+			return MessagePack.MessagePackSerializer.Deserialize<T>(await content.ReadAsStreamAsync().ConfigureAwait(false), ContractlessStandardResolver.Instance);
+		}
+
+		/// <summary>
+		/// Serializes the request into a StringContent with a MessagePack media type
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="request"></param>
+		/// <returns></returns>
+		public HttpContent Serialize<T>(T request)
+		{
+			var stream = new MemoryStream();
+			MessagePack.MessagePackSerializer.Serialize(stream, request, ContractlessStandardResolver.Instance);
+			return new StreamContent(stream);
+		}
+	}
+}

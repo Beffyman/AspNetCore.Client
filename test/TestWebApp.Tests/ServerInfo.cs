@@ -44,6 +44,17 @@ namespace TestWebApp.Tests
 		}
 	}
 
+
+	public class MessagePackServerInfo : ServerInfo<MessagePackStartup>
+	{
+		protected override void ConfigureClient(ClientConfiguration configure)
+		{
+			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
+				.WithMessagePackBody()
+				.UseMessagePackSerializer();
+		}
+	}
+
 	public class JsonServerInfo : ServerInfo<JsonStartup>
 	{
 		protected override void ConfigureClient(ClientConfiguration configure)

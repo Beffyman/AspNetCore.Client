@@ -1,6 +1,11 @@
-﻿using AspNetCore.Client.Attributes;
-using AspNetCore.Client.Attributes.Http;
-using AspNetCore.Client.Attributes.SignalR;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework;
@@ -13,18 +18,12 @@ using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.SignalR;
 using AspNetCore.Client.Generator.SignalR;
+using AspNetCore.Server.Attributes;
+using AspNetCore.Server.Attributes.Http;
+using AspNetCore.Server.Attributes.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace AspNetCore.Client.Generator.Output
 {

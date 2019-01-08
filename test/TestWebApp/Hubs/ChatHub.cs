@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCore.Server.Attributes.SignalR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AspNetCore.Client.Attributes.SignalR;
 using System.Threading.Channels;
+using System.Threading.Tasks;
 
 namespace TestWebApp.Hubs
 {

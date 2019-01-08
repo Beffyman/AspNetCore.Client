@@ -1,10 +1,4 @@
-﻿using AspNetCore.Client.Attributes;
-using AspNetCore.Client.Attributes.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
+﻿namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
 {
 	/// <summary>
 	/// Determines if the endpoint should not be generated because it has the <see cref="NotGeneratedAttribute"/> on it

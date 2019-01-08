@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Attributes.SignalR
+namespace AspNetCore.Server.Attributes.SignalR
 {
 	/// <summary>
 	/// Indicates that the method sends out a message with the types provided

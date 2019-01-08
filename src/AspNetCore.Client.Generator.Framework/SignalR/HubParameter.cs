@@ -1,7 +1,5 @@
-﻿using AspNetCore.Client.Generator.Framework.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using AspNetCore.Client.Generator.Framework.Navigation;
 
 namespace AspNetCore.Client.Generator.Framework.SignalR
 {

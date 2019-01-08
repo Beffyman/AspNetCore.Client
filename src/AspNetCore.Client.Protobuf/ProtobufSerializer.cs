@@ -1,11 +1,8 @@
-﻿using AspNetCore.Client.Serializers;
-using ProtoBuf;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace AspNetCore.Client.Serializers
 {
@@ -20,7 +17,7 @@ namespace AspNetCore.Client.Serializers
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
 		/// <returns></returns>
-		public async ValueTask<T> Deserialize<T>(HttpContent content)
+		public async Task<T> Deserialize<T>(HttpContent content)
 		{
 			return Serializer.Deserialize<T>(await content.ReadAsStreamAsync().ConfigureAwait(false));
 		}
@@ -33,13 +30,9 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			using (var stream = new MemoryStream())
-			using (var reader = new StreamReader(stream))
-			{
-				Serializer.Serialize(stream, request);
-				return new StringContent(reader.ReadToEnd(), Encoding.UTF8, "application/x-protobuf");
-			}
-
+			var stream = new MemoryStream();
+			Serializer.Serialize(stream, request);
+			return new StreamContent(stream);
 		}
 	}
 }

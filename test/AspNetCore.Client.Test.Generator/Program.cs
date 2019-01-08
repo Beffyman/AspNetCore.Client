@@ -2,13 +2,10 @@
 using Microsoft.Build.Framework;
 using Moq;
 using System;
-using System.Reflection;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Build.Evaluation;
-using System.Collections.Generic;
 using System.Xml.Linq;
-using Microsoft.Build.Construction;
 
 namespace AspNetCore.Client.Test.Generator
 {
@@ -16,14 +13,16 @@ namespace AspNetCore.Client.Test.Generator
 	{
 		const string WEBAPP = "TestWebApp.Clients";
 		const string BLAZOR = "TestBlazorApp.Clients";
+		const string FUNCTIONS = "TestAzureFunction.Clients";
 		const string FAILURE_DIR = "AspNetCore.Client";
 
 		static void Main()
 		{
 			var webApp = GoUpUntilDirectory(WEBAPP, FAILURE_DIR);
 			var blazor = GoUpUntilDirectory(BLAZOR, FAILURE_DIR);
+			var functions = GoUpUntilDirectory(FUNCTIONS, FAILURE_DIR);
 
-			if (!(Generate(webApp) && Generate(blazor)))
+			if (!(Generate(webApp) && Generate(blazor) && Generate(functions)))
 			{
 				Console.ReadKey();
 			}

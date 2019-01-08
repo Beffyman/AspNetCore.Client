@@ -1,15 +1,14 @@
-﻿using AspNetCore.Client.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using AspNetCore.Client.Authorization;
 using AspNetCore.Client.RequestModifiers;
 using Flurl.Http;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using System.Globalization;
 
 namespace AspNetCore.Client.GeneratorExtensions
 {

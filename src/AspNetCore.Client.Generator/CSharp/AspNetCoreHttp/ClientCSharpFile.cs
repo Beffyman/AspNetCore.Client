@@ -1,14 +1,11 @@
-﻿using AspNetCore.Client.Generator.Framework;
+﻿using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Output;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 {

@@ -362,6 +362,42 @@ namespace TestWebApp.Tests
 			Assert.AreEqual(expected2, result2);
 		}
 
+		[Test]
+		public void DateTimeRouteTests()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+			var date = DateTime.UtcNow;
+			var expected = DateTime.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+
+			DateTime result = valuesClient.CheckDateTime(date);
+
+			Assert.AreEqual(expected, result);
+
+			DateTime? nullableResult = valuesClient.CheckDateTimeNullable(date);
+
+			Assert.AreEqual(expected, nullableResult);
+		}
+
+		[Test]
+		public void DateTimeOffsetRouteTests()
+		{
+			var endpoint = new JsonServerInfo();
+
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+			var date = DateTimeOffset.UtcNow;
+			var expected = DateTimeOffset.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+
+			DateTimeOffset result = valuesClient.CheckDateTimeOffset(date);
+
+			Assert.AreEqual(expected, result);
+
+			DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date);
+
+			Assert.AreEqual(expected, nullableResult);
+		}
+
 		/// <summary>
 		/// Microsoft.AspNetCore.TestHost.ClientHandler does not respect the CancellationToken and will always complete a request. Their unit test around it ClientCancellationAbortsRequest has a "hack" that cancels in TestServer when the token is canceled.
 		/// When the HttpClient has the default HttpMessageHandler, the SendAsync will cancel approriately, until they match this functionality, this test will be disabled

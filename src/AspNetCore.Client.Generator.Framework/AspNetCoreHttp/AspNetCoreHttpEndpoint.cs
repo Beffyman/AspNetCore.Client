@@ -1,20 +1,14 @@
-﻿using AspNetCore.Client.Attributes;
-using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers;
-using AspNetCore.Client.Generator.Framework.Navigation;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Linq;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
+using System.Net.Http;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies;
-using System.Reflection;
-using AspNetCore.Client.Attributes.Http;
+using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
+using AspNetCore.Client.Generator.Framework.Navigation;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp

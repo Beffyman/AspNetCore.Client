@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
+﻿namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
 {
 	/// <summary>
 	/// This value is populated by the Obsolete attribute

@@ -20,7 +20,7 @@
 		<UseInternalClients>true</UseInternalClients>
 		<ClientNamespace>TestAzureFunction.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestAzureFunction.*;</AllowedNamespaces>
-		<ExcludedNamespaces></ExcludedNamespaces>
+		<ExcludedNamespaces>Microsoft.Extensions.Logging*;</ExcludedNamespaces>
 	</PropertyGroup>
 
 	<ItemGroup>

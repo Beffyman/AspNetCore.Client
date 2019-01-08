@@ -1,30 +1,25 @@
-﻿using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints;
+using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
+using AspNetCore.Client.Generator.Framework.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.SignalR;
 using Flurl.Http;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
-using AspNetCore.Client.Generator.Framework.RequestModifiers;
-using AspNetCore.Client.Generator.CSharp.SignalR;
-using AspNetCore.Client.Generator.Framework.SignalR;
-using Microsoft.AspNetCore.Routing.Template;
 
 namespace AspNetCore.Client.Generator.Output
 {
@@ -44,6 +39,22 @@ namespace AspNetCore.Client.Generator.Output
 
 		public static string WriteFile(GenerationContext context)
 		{
+			var generatorUsings = new List<string>();
+
+			if (context.HttpEndpoints.Any(x => !x.Ignored))
+			{
+				//generatorUsings.Add();
+			}
+			if (context.HubEndpoints.Any(x => !x.Ignored))
+			{
+				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Client; //Requires Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Protocol; //Requires Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using System.Threading.Channels; //Requires System.Threading.Channels");
+				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections; //Requires Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections.Client; //Requires Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using Microsoft.Extensions.Logging; //Requires Microsoft.Extensions.Logging");
+			}
+
 			var usings = new List<string>
 			{
 				@"using AspNetCore.Client;",
@@ -62,15 +73,11 @@ namespace AspNetCore.Client.Generator.Output
 				"using System.Runtime.CompilerServices;",
 				"using System.Threading;",
 				"using System.Threading.Tasks;",
-				"using Microsoft.AspNetCore.SignalR.Client;",
-				"using Microsoft.AspNetCore.Http.Connections;",
-				"using Microsoft.AspNetCore.Http.Connections.Client;",
-				"using Microsoft.AspNetCore.SignalR.Protocol;",
-				"using Microsoft.Extensions.Logging;",
 				"using System.IO;",
-				"using System.Threading.Channels;",
 				"using AspNetCore.Client.GeneratorExtensions;"
-			}.Union(context.UsingStatements)
+			}
+			.Union(context.UsingStatements)
+			.Union(generatorUsings)
 			.Distinct()
 			.OrderBy(x => x)
 			.ToList();
@@ -1189,7 +1196,7 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 
 				foreach (var parameter in template.Parameters)
 				{
-					if(parameter.Name == "y")
+					if (parameter.Name == "y")
 					{
 
 					}

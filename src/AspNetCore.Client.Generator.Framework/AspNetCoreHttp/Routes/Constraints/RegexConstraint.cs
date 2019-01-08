@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints

@@ -12,16 +12,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="wwwroot\" />
+	  <Compile Remove="wwwroot\**" />
+	  <Content Remove="wwwroot\**" />
+	  <None Remove="wwwroot\**" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="1.7.3.4" />
 		<PackageReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="WebApiContrib.Core.Formatter.Protobuf" Version="2.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\AspNetCore.Client\AspNetCore.Client.csproj" />
+		<ProjectReference Include="..\..\src\AspNetCore.Server\AspNetCore.Server.csproj" />
 		<ProjectReference Include="..\TestWebApp.Contracts\TestWebApp.Contracts.csproj" />
 	</ItemGroup>
 

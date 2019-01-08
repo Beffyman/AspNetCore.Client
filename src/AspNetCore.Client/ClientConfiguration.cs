@@ -1,16 +1,14 @@
-﻿using AspNetCore.Client.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using AspNetCore.Client.Authorization;
 using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
 using Flurl.Http.Configuration;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 
 namespace AspNetCore.Client
 {

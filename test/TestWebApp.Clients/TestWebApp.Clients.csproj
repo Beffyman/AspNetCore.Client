@@ -26,6 +26,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.Client.Generator" Version="*" Condition="'$(GenerateWithNuget)' == 'true'" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.0.0" />
 		<ProjectReference Include="..\..\src\AspNetCore.Client\AspNetCore.Client.csproj" />
 		<ProjectReference Include="..\TestWebApp.Contracts\TestWebApp.Contracts.csproj" />
 	</ItemGroup>

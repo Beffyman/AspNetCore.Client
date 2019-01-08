@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\AspNetCore.Client.MessagePack\AspNetCore.Client.MessagePack.csproj" />
 		<ProjectReference Include="..\..\src\AspNetCore.Client.Protobuf\AspNetCore.Client.Protobuf.csproj" />
 		<ProjectReference Include="..\TestWebApp.Clients\TestWebApp.Clients.csproj" />
 		<ProjectReference Include="..\TestWebApp\TestWebApp.csproj" />

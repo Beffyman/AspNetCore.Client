@@ -1,7 +1,4 @@
-﻿using AspNetCore.Client.Generator.Framework.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes
 {

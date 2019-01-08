@@ -58,9 +58,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Console", "test\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{344CED97-6C7C-4EC5-BA25-B967521598F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAzureFunction", "test\TestAzureFunction\TestAzureFunction.csproj", "{EC486723-64AF-45BE-AC74-8021A24994AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction", "test\TestAzureFunction\TestAzureFunction.csproj", "{EC486723-64AF-45BE-AC74-8021A24994AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAzureFunction.Clients", "test\TestAzureFunction.Clients\TestAzureFunction.Clients.csproj", "{54656466-4617-4B86-AD56-4DA8C15CA640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Clients", "test\TestAzureFunction.Clients\TestAzureFunction.Clients.csproj", "{54656466-4617-4B86-AD56-4DA8C15CA640}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAzureFunction.Contracts", "test\TestAzureFunction.Contracts\TestAzureFunction.Contracts.csproj", "{11133C2A-4AB2-45F5-876F-F22AB024A67C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Server", "src\AspNetCore.Server\AspNetCore.Server.csproj", "{60B21E11-0738-4A29-B518-329EA8470140}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.Client.MessagePack", "src\AspNetCore.Client.MessagePack\AspNetCore.Client.MessagePack.csproj", "{2075D5BC-D4B9-4B0D-948C-399200598110}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -140,6 +146,18 @@ Global
 		{54656466-4617-4B86-AD56-4DA8C15CA640}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54656466-4617-4B86-AD56-4DA8C15CA640}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54656466-4617-4B86-AD56-4DA8C15CA640}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11133C2A-4AB2-45F5-876F-F22AB024A67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11133C2A-4AB2-45F5-876F-F22AB024A67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11133C2A-4AB2-45F5-876F-F22AB024A67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11133C2A-4AB2-45F5-876F-F22AB024A67C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60B21E11-0738-4A29-B518-329EA8470140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60B21E11-0738-4A29-B518-329EA8470140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60B21E11-0738-4A29-B518-329EA8470140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60B21E11-0738-4A29-B518-329EA8470140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2075D5BC-D4B9-4B0D-948C-399200598110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2075D5BC-D4B9-4B0D-948C-399200598110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2075D5BC-D4B9-4B0D-948C-399200598110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2075D5BC-D4B9-4B0D-948C-399200598110}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +184,9 @@ Global
 		{344CED97-6C7C-4EC5-BA25-B967521598F5} = {765F8CBA-ECD0-4E5B-AB1D-AC0F508A05AC}
 		{EC486723-64AF-45BE-AC74-8021A24994AB} = {344CED97-6C7C-4EC5-BA25-B967521598F5}
 		{54656466-4617-4B86-AD56-4DA8C15CA640} = {344CED97-6C7C-4EC5-BA25-B967521598F5}
+		{11133C2A-4AB2-45F5-876F-F22AB024A67C} = {344CED97-6C7C-4EC5-BA25-B967521598F5}
+		{60B21E11-0738-4A29-B518-329EA8470140} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
+		{2075D5BC-D4B9-4B0D-948C-399200598110} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCFD7864-E2E5-4CF3-9A6D-D53B4F4E8AE0}

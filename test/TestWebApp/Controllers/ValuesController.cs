@@ -1,13 +1,13 @@
-﻿using System;
+﻿using AspNetCore.Server.Attributes.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using AspNetCore.Client.Attributes.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using TestWebApp.Contracts;
 using TestWebApp.GoodServices;
 
@@ -296,6 +296,32 @@ namespace TestWebApp.Controllers
 		public int? OptionalRouteConstraint(int? x)
 		{
 			return x;
+		}
+
+
+		[HttpGet("[action]/checkDate/{date}")]
+		public DateTime CheckDateTime(DateTime date)
+		{
+			return date;
+		}
+
+		[HttpGet("[action]/checkDate/{date?}")]
+		public DateTime CheckDateTimeNullable(DateTime? date)
+		{
+			return date ?? DateTime.UtcNow;
+		}
+
+
+		[HttpGet("[action]/checkDateOffset/{date}")]
+		public DateTimeOffset CheckDateTimeOffset(DateTimeOffset date)
+		{
+			return date;
+		}
+
+		[HttpGet("[action]/checkDateOffset/{date?}")]
+		public DateTimeOffset CheckDateTimeOffsetNullable(DateTimeOffset? date)
+		{
+			return date ?? DateTimeOffset.UtcNow;
 		}
 
 	}

@@ -1,9 +1,6 @@
-﻿using AspNetCore.Client.Attributes.Http;
+﻿using System;
+using AspNetCore.Server.Attributes.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 {

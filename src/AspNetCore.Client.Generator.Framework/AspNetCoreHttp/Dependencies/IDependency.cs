@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies
+﻿namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies
 {
 	/// <summary>
 	/// Indicates that the class can be injected into the client

@@ -27,6 +27,7 @@ namespace AspNetCore.Client.Serializers
 			{ typeof(string), (_)=> _.TrimStart('"').TrimEnd('"') },
 			{ typeof(bool), (_)=> bool.Parse(_) },
 			{ typeof(DateTime), (_)=> DateTime.Parse(_.TrimStart('"').TrimEnd('"')) },
+			{ typeof(DateTimeOffset), (_)=> DateTime.Parse(_.TrimStart('"').TrimEnd('"')) },
 			{ typeof(Guid), (_)=> Guid.Parse(_.TrimStart('"').TrimEnd('"')) },
 		};
 
@@ -37,7 +38,7 @@ namespace AspNetCore.Client.Serializers
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
 		/// <returns></returns>
-		public async ValueTask<T> Deserialize<T>(HttpContent content)
+		public async Task<T> Deserialize<T>(HttpContent content)
 		{
 			if (_knownJsonPrimitives.ContainsKey(typeof(T)))
 			{

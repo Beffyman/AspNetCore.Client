@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AspNetCore.Client.Serializers
@@ -17,7 +14,7 @@ namespace AspNetCore.Client.Serializers
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
 		/// <returns></returns>
-		ValueTask<T> Deserialize<T>(HttpContent content);
+		Task<T> Deserialize<T>(HttpContent content);
 
 		/// <summary>
 		///Serializes the request object into a string in the format of it's implementation

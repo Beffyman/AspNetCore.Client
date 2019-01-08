@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AspNetCore.Client.Attributes.Http
+namespace AspNetCore.Server.Attributes.Http
 {
 	/// <summary>
 	/// Used when you don't want a client generated for the endpoint, can be placed on classes and methods

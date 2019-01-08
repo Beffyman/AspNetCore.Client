@@ -1,9 +1,7 @@
-﻿using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 {

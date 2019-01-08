@@ -1,7 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
-using Microsoft.AspNetCore.Routing.Template;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +7,9 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
+using Microsoft.AspNetCore.Routing.Template;
+using Newtonsoft.Json;
 
 namespace AspNetCore.Client.Generator
 {
@@ -241,18 +241,31 @@ namespace AspNetCore.Client.Generator
 		"string",typeof(string).Name,
 		"bool",typeof(bool).Name,
 		"DateTime",typeof(DateTime).Name,
+		"DateTimeOffset",typeof(DateTimeOffset).Name,
 		"Guid",typeof(Guid).Name,
 		};
 
-		public static bool IsRoutableType(string type)
-		{
-			Regex matchNullable = new Regex(@"((.+)\?)|(Nullable<(.+)>)");
+		private static Regex NULLABLE_MATCHER = new Regex(@"((.+)\?)|(Nullable<(.+)>)");
 
-			var matches = matchNullable.Matches(type);
+		private static string ConvertFromNullable(string type, out bool wasNullable)
+		{
+			var matches = NULLABLE_MATCHER.Matches(type);
 			if (matches.Count > 0)
 			{
 				type = matches[matches.Count - 1].Groups[2].Value;
+				wasNullable = true;
 			}
+			else
+			{
+				wasNullable = false;
+			}
+
+			return type;
+		}
+
+		public static bool IsRoutableType(string type)
+		{
+			type = ConvertFromNullable(type, out _);
 
 			return KnownPrimitives.Contains(type, StringComparer.CurrentCultureIgnoreCase);
 		}
@@ -278,12 +291,22 @@ namespace AspNetCore.Client.Generator
 		{
 			var transforms = new Dictionary<string, string>
 			{
-				{ typeof(DateTime).Name, "{0}.ToString(\"yyyy-MM-dd HH:mm:ss\")" }
+				{ nameof(DateTime), "{0}.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" },
+				{ nameof(DateTimeOffset), "{0}.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" },
+				{ $"{nameof(DateTime)}?", "{0}?.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" },
+				{ $"{nameof(DateTimeOffset)}?", "{0}?.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" }
 			};
 
 			if (IsEnumerable(type))
 			{
 				type = GetEnumerableType(type);
+			}
+
+			type = ConvertFromNullable(type, out bool wasNullable);
+
+			if (wasNullable)
+			{
+				type = $"{type}?";
 			}
 
 			if (transforms.ContainsKey(type))

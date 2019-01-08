@@ -1,12 +1,7 @@
-﻿using AspNetCore.Client.Generator.Framework.Navigation;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
-using AspNetCore.Client.Http;
-using AspNetCore.Client.RequestModifiers;
-using AspNetCore.Client.Serializers;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using AspNetCore.Client.Generator.Framework.Navigation;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
+using AspNetCore.Client.RequestModifiers;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies
 {

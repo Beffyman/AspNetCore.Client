@@ -1,10 +1,5 @@
-﻿using AspNetCore.Client.Attributes;
-using AspNetCore.Client.Attributes.Http;
+﻿using AspNetCore.Server.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TestWebApp.Boilerplate;
 
 namespace TestWebApp.Controllers

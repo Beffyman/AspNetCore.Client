@@ -1,9 +1,5 @@
-﻿using AspNetCore.Client.Attributes;
-using AspNetCore.Client.Attributes.Http;
+﻿using System.Collections.Generic;
 using AspNetCore.Client.Generator.Framework.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers
 {

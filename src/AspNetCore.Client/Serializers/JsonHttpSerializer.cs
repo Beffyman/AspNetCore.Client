@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace AspNetCore.Client.Serializers
 {
@@ -36,7 +36,7 @@ namespace AspNetCore.Client.Serializers
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
 		/// <returns></returns>
-		public async ValueTask<T> Deserialize<T>(HttpContent content)
+		public async Task<T> Deserialize<T>(HttpContent content)
 		{
 			if (_knownJsonPrimitives.ContainsKey(typeof(T)))
 			{

@@ -1,11 +1,11 @@
-﻿using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AspNetCore.Client.Generator.Output;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
+using AspNetCore.Client.Generator.Framework;
+using AspNetCore.Client.Generator.Output;
 
 namespace AspNetCore.Client.Generator
 {

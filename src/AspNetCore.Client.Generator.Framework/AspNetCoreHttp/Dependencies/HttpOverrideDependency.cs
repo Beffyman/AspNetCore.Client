@@ -1,7 +1,4 @@
 ﻿using AspNetCore.Client.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies
 {

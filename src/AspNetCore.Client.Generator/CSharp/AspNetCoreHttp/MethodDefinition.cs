@@ -1,21 +1,11 @@
-﻿using AspNetCore.Client;
-using AspNetCore.Client.Attributes.Http;
-using AspNetCore.Client.Authorization;
-using AspNetCore.Client.Serializers;
-using Flurl.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Net.Http;
-using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
-using Microsoft.AspNetCore.Mvc;
+using AspNetCore.Server.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 {

@@ -86,17 +86,28 @@ namespace TestWebApp.Tests
 
 			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			var response = valuesClient.DtoForDtoRaw(new MyFancyDto
+			var dto = new MyFancyDto
 			{
 				Id = 1,
 				Collision = Guid.NewGuid(),
 				Description = "Helo",
-				When = DateTime.Now
-			});
+				When = DateTime.UtcNow
+			};
+
+			var response = valuesClient.DtoForDtoRaw(dto);
 
 
-			Assert.True(response.RequestMessage.Content.Headers.ContentType.MediaType == "application/x-protobuf");
+			Assert.False(response.RequestMessage.Content.Headers?.ContentType?.MediaType == "application/x-protobuf");//Use stream
 			Assert.True(response.Content.Headers.ContentType.MediaType == "application/x-protobuf");
+
+
+			var actual = valuesClient.DtoForDto(dto);
+
+
+			Assert.AreEqual(dto.Collision, actual.Collision);
+			Assert.AreEqual(dto.Description, actual.Description);
+			Assert.AreEqual(dto.Id, actual.Id);
+			Assert.AreEqual(dto.When, actual.When);
 		}
 
 		/// <summary>

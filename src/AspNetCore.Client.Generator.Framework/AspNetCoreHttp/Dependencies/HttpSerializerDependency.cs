@@ -1,8 +1,4 @@
-﻿using AspNetCore.Client.Http;
-using AspNetCore.Client.Serializers;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AspNetCore.Client.Serializers;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies
 {

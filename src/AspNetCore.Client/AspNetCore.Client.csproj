@@ -14,7 +14,7 @@
 	<PropertyGroup>
 		<Copyright>Copyright 2018</Copyright>
 		<Authors>Beffyman</Authors>
-		<Description>A helper package for AspNetCore.Client.Generator that contains known attributes that affect the generation</Description>
+		<Description>Implements registration of clients into a ServiceCollection</Description>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -25,10 +25,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Flurl.Http" Version="2.4.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.0" />
+		<!--<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.0.0" />-->
 		<PackageReference Include="Microsoft.Extensions.Http" Version="2.1.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.0" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
 	</ItemGroup>
 

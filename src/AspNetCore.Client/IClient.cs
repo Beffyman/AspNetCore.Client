@@ -1,7 +1,5 @@
-﻿using Flurl.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Flurl.Http;
 
 namespace AspNetCore.Client
 {

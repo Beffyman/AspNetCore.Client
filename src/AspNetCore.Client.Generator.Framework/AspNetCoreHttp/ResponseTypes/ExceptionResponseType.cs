@@ -1,9 +1,6 @@
-﻿using Flurl.Http;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net;
-using System.Net.Http;
-using System.Text;
+using Flurl.Http;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes
 {

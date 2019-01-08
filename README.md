@@ -36,9 +36,12 @@ and think the following
 ## AspNetCore.Client
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.svg)](https://www.nuget.org/packages/AspNetCore.Client)
 
-Package that contains required classes/attributes used by the generator package.
+Includes ServiceCollection registration logic, used on the Client
 
-Can be included inside the web app to configure behavior.
+## AspNetCore.Server
+[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Server.svg)](https://www.nuget.org/packages/AspNetCore.Server)
+
+Includes attributes that can affect generation, used on your AspNetCore api app
 
 ## AspNetCore.Client.Protobuf
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Protobuf.svg)](https://www.nuget.org/packages/AspNetCore.Client.Protobuf)
@@ -64,6 +67,20 @@ services.AddTestBlazorClients(config=>
 {
 	config.UseBlazorSimpleJsonSerlaizer()
             .UseExistingHttpClient();
+});
+
+```
+
+## AspNetCore.Client.MessagePack
+[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.MessagePack.svg)](https://www.nuget.org/packages/AspNetCore.Client.MessagePack)
+
+Contains a MessagePack serializer which can override the default json one via the UseMessagePackSerializer on the ClientConfiguration.
+
+```c#
+services.AddTestBlazorClients(config=>
+{
+	config.UseMessagePackSerializer()
+            .WithMessagePackBody();
 });
 
 ```

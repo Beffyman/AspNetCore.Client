@@ -7,11 +7,17 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using AspNetCore.Server.Attributes.Functions;
+using TestAzureFunction.Contracts;
 
 namespace TestAzureFunction
 {
 	public static class Function1
 	{
+		[ExpectedBodyParameter(nameof(HttpMethods.Post), typeof(User))]
+		[ExpectedQueryParameter("Get", "name", typeof(string))]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 		[FunctionName("Function1")]
 		public static async Task<IActionResult> Run(
 			[HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -19,11 +25,20 @@ namespace TestAzureFunction
 		{
 			log.LogInformation("C# HTTP trigger function processed a request.");
 
-			string name = req.Query["name"];
+			string queryName = req.Query["name"];
 
 			string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-			dynamic data = JsonConvert.DeserializeObject(requestBody);
-			name = name ?? data?.name;
+
+			string name = null;
+
+			if (HttpMethods.IsPost(req.Method))
+			{
+				name = JsonConvert.DeserializeObject<User>(requestBody)?.Name;
+			}
+			else
+			{
+				name = queryName;
+			}
 
 			return name != null
 				? (ActionResult)new OkObjectResult($"Hello, {name}")

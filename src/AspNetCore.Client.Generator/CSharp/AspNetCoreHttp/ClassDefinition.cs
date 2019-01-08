@@ -1,18 +1,13 @@
-﻿using AspNetCore.Client.Attributes.Http;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using AspNetCore.Client.Generator.Framework;
-using System.Net;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
-using Microsoft.AspNetCore.Mvc;
+using AspNetCore.Server.Attributes;
+using AspNetCore.Server.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
-using AspNetCore.Client.Attributes;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 {

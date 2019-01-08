@@ -1,10 +1,8 @@
-﻿using AspNetCore.Client.Generator.Framework.Navigation;
-using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using AspNetCore.Client.Generator.Framework.Navigation;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes
 {
