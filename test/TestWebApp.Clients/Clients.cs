@@ -13,25 +13,23 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using AspNetCore.Client;
 using Flurl.Http;
-using Microsoft.AspNetCore.Http.Connections.Client; //Requires Microsoft.AspNetCore.SignalR.Client
-using Microsoft.AspNetCore.Http.Connections; //Requires Microsoft.AspNetCore.SignalR.Client
-using Microsoft.AspNetCore.SignalR.Client; //Requires Microsoft.AspNetCore.SignalR.Client
-using Microsoft.AspNetCore.SignalR.Protocol; //Requires Microsoft.AspNetCore.SignalR.Client
+using Microsoft.AspNetCore.Http.Connections.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client
+using Microsoft.AspNetCore.Http.Connections; //Requires nuget Microsoft.AspNetCore.SignalR.Client
+using Microsoft.AspNetCore.SignalR.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client
+using Microsoft.AspNetCore.SignalR.Protocol; //Requires nuget Microsoft.AspNetCore.SignalR.Client
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging; //Requires Microsoft.Extensions.Logging
+using Microsoft.Extensions.Logging; //Requires nuget Microsoft.Extensions.Logging
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Runtime.CompilerServices;
-using System.Threading.Channels; //Requires System.Threading.Channels
+using System.Threading.Channels; //Requires nuget System.Threading.Channels
 using System.Threading.Tasks;
 using System.Threading;
 using System;
 using TestWebApp.Contracts;
-using TestWebApp.Hubs;
-using TestWebApp.Security;
 
 namespace TestWebApp.Clients
 {

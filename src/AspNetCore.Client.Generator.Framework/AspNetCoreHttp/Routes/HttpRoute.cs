@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints;
+using Microsoft.AspNetCore.Routing.Template;
 
 namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 {
@@ -29,49 +30,32 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 			Value = value;
 
 			Constraints = GetRouteParameters(Value)
-				.Select(x => RouteConstraint.GetConstraint(x.Key, x.Value))
+				.SelectMany(x => x.Value.Select(y => RouteConstraint.GetConstraint(x.Key, y)))
 				.Where(x => x != null)
 				.ToList();
 		}
 
-
-		const string RouteParseRegex = @"{((.+?(?=:)):(.+?(?=}\/))|(.+?(?=}\/)))}";
-
-		private static IDictionary<string, string> GetRouteParameters(string route)
+		private static IDictionary<string, IEnumerable<string>> GetRouteParameters(string route)
 		{
-			IDictionary<string, string> parameters = new Dictionary<string, string>();
+			IDictionary<string, IEnumerable<string>> parameters = new Dictionary<string, IEnumerable<string>>();
+
+			if (route == null)
+			{
+				return parameters;
+			}
 
 			if (!route.EndsWith("/"))
 			{
 				route += "/";//Need the extra / for the regex regex parse(yes two regex)
 			}
 
-			if (route == null)
+			var template = TemplateParser.Parse(route);
+
+			foreach (var para in template.Parameters)
 			{
-				return parameters;
+				parameters.Add(para.Name, para.InlineConstraints?.Select(x => x.Constraint)?.ToList() ?? new List<string>());
 			}
-			var patterns = Regex.Matches(route, RouteParseRegex);
 
-			foreach (var group in patterns)
-			{
-				Match match = group as Match;
-				string filtered = match.Value.Replace("{", "").Replace("}", "");
-				string[] split = filtered.Split(new char[] { ':' });
-				if (split.Length == 1)
-				{
-					string variable = split[0];
-					string parsedType = null;
-					parameters.Add(variable, parsedType);
-				}
-				else
-				{
-					string variable = split[0];
-
-					string type = split[1];
-					parameters.Add(variable, type);
-				}
-
-			}
 			return parameters;
 		}
 

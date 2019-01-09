@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 {
-	public class ClientCSharpFile
+	public class HttpControllerCSharpFile
 	{
 		public string Name { get; }
 		public string FileName { get; }
@@ -19,7 +19,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 
 		public GenerationContext Context { get; set; }
 
-		public ClientCSharpFile(string file)
+		public HttpControllerCSharpFile(string file)
 		{
 			Name = Path.GetFileNameWithoutExtension(file);
 			FileName = file;

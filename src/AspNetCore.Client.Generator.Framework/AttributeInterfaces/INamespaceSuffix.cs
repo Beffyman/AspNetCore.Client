@@ -1,4 +1,6 @@
-﻿namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
+﻿using AspNetCore.Server.Attributes;
+
+namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
 {
 	/// <summary>
 	/// This value is populated by the <see cref="NamespaceSuffixAttribute"/>

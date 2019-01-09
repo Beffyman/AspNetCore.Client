@@ -12,22 +12,17 @@ using AspNetCore.Client.Generator.Framework.Navigation;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Server.Attributes.Http;
 
-namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
+namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 {
 	/// <summary>
 	/// The information about an endpoint used for generation
 	/// </summary>
-	public class AspNetCoreHttpEndpoint : IResponseTypes, IHeaders, IIgnored, IObsolete, INavNode, IAuthorize
+	public class FunctionEndpoint : IResponseTypes, IHeaders, IIgnored, IObsolete, INavNode
 	{
 		/// <summary>
 		/// Name of the endpoint/controller generated from
 		/// </summary>
 		public string Name { get; set; }
-
-		/// <summary>
-		/// What HTTP method is required to hit this endpoint
-		/// </summary>
-		public HttpMethod HttpType { get; set; }
 
 		/// <summary>
 		/// Determines whether or not to have a void method depending on if it is a ActionResult return
@@ -60,14 +55,19 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		public IList<IParameter> Parameters { get; set; } = new List<IParameter>();
 
 		/// <summary>
-		/// Parent of this endpoint
+		/// Parameters specific to a specific http method that is expected
 		/// </summary>
-		public AspNetCoreHttpController Parent { get; set; }
+		public IDictionary<HttpMethod, IList<IParameter>> HttpParameters { get; set; } = new Dictionary<HttpMethod, IList<IParameter>>();
+
+		/// <summary>
+		/// Supported HttpMethods listed out
+		/// </summary>
+		public IList<HttpMethod> SupportedMethods { get; set; } = new List<HttpMethod>();
 
 		//IRoute
 
 		/// <summary>
-		/// Route required to hit the endpoint
+		/// Route required to hit the function, can be null
 		/// </summary>
 		public HttpRoute Route { get; set; }
 
@@ -91,36 +91,28 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		/// </summary>
 		public string ObsoleteMessage { get; set; }
 
-
-		//IAuthoize
+		/// <summary>
+		/// Whether of not the controller loaded correctly
+		/// </summary>
+		public bool Failed { get; set; }
 
 		/// <summary>
-		/// Should this endpoint require credentials
+		/// Unexpected error found
 		/// </summary>
-		public bool IsSecured { get; set; }
+		public bool UnexpectedFailure { get; set; }
 
 		/// <summary>
-		/// Method has the virtual modifier
+		/// Expected error found
 		/// </summary>
-		public bool Virtual { get; set; }
+		public string Error { get; set; }
+
+
 
 		/// <summary>
-		/// Method has the override modifier
+		/// Creates an function
 		/// </summary>
-		public bool Override { get; set; }
-
-		/// <summary>
-		/// Method has the new modifier
-		/// </summary>
-		public bool New { get; set; }
-
-		/// <summary>
-		/// Creates an endpoint assosicated with the controller
-		/// </summary>
-		/// <param name="parent"></param>
-		public AspNetCoreHttpEndpoint(AspNetCoreHttpController parent)
+		public FunctionEndpoint()
 		{
-			Parent = parent;
 		}
 
 		/// <summary>
@@ -129,8 +121,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		/// <returns></returns>
 		public IEnumerable<INavNode> GetChildren()
 		{
-			return new List<INavNode>() { Parent }
-				.Union(Parent.GetChildren())
+			return new List<INavNode>() { }
 				.Union(ResponseTypes)
 				.Union(ConstantHeader)
 				.Union(Parameters)
@@ -139,7 +130,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		}
 
 		/// <summary>
-		/// Gets all of the parameters for this endpoint that is sorted
+		/// Gets all of the parameters for this function that is sorted
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerable<IParameter> GetParameters()
@@ -148,7 +139,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		}
 
 		/// <summary>
-		/// Gets all the parameters of the endpoint that are not response types, used for creating a Raw request
+		/// Gets all the parameters of the function that are not response types, used for creating a Raw request
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerable<IParameter> GetParametersWithoutResponseTypes()
@@ -213,9 +204,9 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		/// <summary>
 		/// Full route template for the endpoint
 		/// </summary>
-		public string GetFullRoute(AspNetCoreHttpController caller)
+		public string GetFullRoute()
 		{
-			return caller.Route.Merge(Route).Value;
+			return Route?.Value;
 		}
 
 		/// <summary>
@@ -229,43 +220,21 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		}
 
 		/// <summary>
-		/// Check if the endpoint requires authorization
-		/// </summary>
-		/// <returns></returns>
-		public bool RequiresAuthorization()
-		{
-			return GetChildren().OfType<IAuthorize>().Any(x => x.IsSecured);
-		}
-
-		/// <summary>
 		/// Returns a string that represents the current object under the context of the caller
-		/// </summary>
-		/// <param name="caller"></param>
-		/// <returns></returns>
-		public string ToString(AspNetCoreHttpController caller)
-		{
-			string namespaceVersion = $@"{(caller.NamespaceVersion != null ? $"{caller.NamespaceVersion}." : "")}{(caller.NamespaceSuffix != null ? $"{caller.NamespaceSuffix}." : string.Empty)}";
-
-			return $"{namespaceVersion}{caller.Name}.{Name}";
-		}
-
-		/// <summary>
-		/// Returns a string that represents the current object
 		/// </summary>
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return ToString(Parent);
+			return $"{Name}";
 		}
 
 		/// <summary>
 		/// Get the signature of the endpoint, for equality/grouping purposes
 		/// </summary>
-		/// <param name="caller"></param>
 		/// <returns></returns>
-		public string GetSignature(AspNetCoreHttpController caller)
+		public string GetSignature()
 		{
-			return $"{ToString(caller)}(${string.Join(", ", GetParameters().Select(x => x.ToString()))}";
+			return $"{ToString()}(${string.Join(", ", GetParameters().Select(x => x.ToString()))}";
 		}
 
 

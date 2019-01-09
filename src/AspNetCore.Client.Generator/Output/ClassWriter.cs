@@ -47,12 +47,12 @@ namespace AspNetCore.Client.Generator.Output
 			}
 			if (context.HubEndpoints.Any(x => !x.Ignored))
 			{
-				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Client; //Requires Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Protocol; //Requires Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using System.Threading.Channels; //Requires System.Threading.Channels");
-				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections; //Requires Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections.Client; //Requires Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using Microsoft.Extensions.Logging; //Requires Microsoft.Extensions.Logging");
+				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Protocol; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using System.Threading.Channels; //Requires nuget System.Threading.Channels");
+				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("using Microsoft.Extensions.Logging; //Requires nuget Microsoft.Extensions.Logging");
 			}
 
 			var usings = new List<string>
@@ -331,6 +331,7 @@ public IDisposable On{message.Name}(Action<{string.Join(",", message.Types)}> ac
 		#endregion SignalR
 
 		#region HTTP
+
 		public static class HttpClassWriter
 		{
 			public static string WriteErrorMessage(AspNetCoreHttpController controller)
@@ -1196,11 +1197,6 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 
 				foreach (var parameter in template.Parameters)
 				{
-					if (parameter.Name == "y")
-					{
-
-					}
-
 					if (!routeParameters.Any(x => x.Name.Equals(parameter.Name, StringComparison.CurrentCultureIgnoreCase)))
 					{
 						throw new Exception($"{parameter.Name} is missing from passed in parameters. Please check your route.");
@@ -1325,6 +1321,15 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 			#endregion Endpoint
 		}
 		#endregion HTTP
+
+		#region Functions
+
+		public static class FunctionClassWriter
+		{
+
+		}
+
+		#endregion Functions
 
 		public static class SharedWriter
 		{

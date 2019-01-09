@@ -3,6 +3,7 @@ using System.Linq;
 using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
 using AspNetCore.Client.Generator.Framework.Navigation;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
+using AspNetCore.Server.Attributes.Http;
 
 namespace AspNetCore.Client.Generator.Framework.SignalR
 {

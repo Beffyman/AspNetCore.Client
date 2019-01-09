@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
 using AspNetCore.Client.Generator.Framework.SignalR;
 
 namespace AspNetCore.Client.Generator.Framework
@@ -40,6 +41,10 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public IEnumerable<HubEndpoint> HubEndpoints => HubClients.SelectMany(x => x.Endpoints);
 
+		/// <summary>
+		/// Clients for functions that will be generated
+		/// </summary>
+		public IList<FunctionEndpoint> Functions { get; set; } = new List<FunctionEndpoint>();
 
 
 		/// <summary>

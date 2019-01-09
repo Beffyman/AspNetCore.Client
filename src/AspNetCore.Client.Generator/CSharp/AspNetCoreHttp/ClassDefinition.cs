@@ -30,7 +30,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 
 		public ClassDefinition(string @namespace,
 			string className,
-			ClientCSharpFile file,
+			HttpControllerCSharpFile file,
 			ClassDeclarationSyntax classDeclaration,
 			IList<AttributeSyntax> attributes,
 			IList<MethodDeclarationSyntax> methods)

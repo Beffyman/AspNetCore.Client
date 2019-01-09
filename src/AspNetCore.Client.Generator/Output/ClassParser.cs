@@ -10,6 +10,7 @@ using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
@@ -23,6 +24,7 @@ using AspNetCore.Server.Attributes.Http;
 using AspNetCore.Server.Attributes.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AspNetCore.Client.Generator.Output
@@ -30,7 +32,7 @@ namespace AspNetCore.Client.Generator.Output
 	public static class ClassParser
 	{
 
-		private static Regex RouteVersionRegex = new Regex(@"\/([v|V]\d+)\/");
+		private static readonly Regex RouteVersionRegex = new Regex(@"\/([v|V]\d+)\/");
 
 		#region Http
 
@@ -54,19 +56,19 @@ namespace AspNetCore.Client.Generator.Output
 
 				controller.BaseClass = syntax.BaseList.Types.Where(x => x.ToFullString().Trim().EndsWith("Controller")).SingleOrDefault()?.ToFullString().Trim().Replace("Controller", "");
 
-				controller.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NotGeneratedAttribute))) != null;
+				controller.Ignored = attributes.HasAttribute<NotGeneratedAttribute>();
 
 
-				var namespaceAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NamespaceSuffixAttribute)));
+				var namespaceAttribute = attributes.GetAttribute<NamespaceSuffixAttribute>();
 				if (namespaceAttribute != null)
 				{
-					controller.NamespaceSuffix = namespaceAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
+					controller.NamespaceSuffix = namespaceAttribute.GetAttributeValue();
 				}
 
-				var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(RouteAttribute)));
+				var routeAttribute = attributes.GetAttribute<RouteAttribute>();
 				if (routeAttribute != null)//Fetch route from RouteAttribute
 				{
-					controller.Route = new HttpRoute(routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", ""));
+					controller.Route = new HttpRoute(routeAttribute.GetAttributeValue());
 				}
 
 				if (controller.Route == null && !controller.Abstract && !controller.Ignored)//No Route, invalid controller
@@ -106,14 +108,14 @@ namespace AspNetCore.Client.Generator.Output
 				controller.ConstantHeader = headers.Select(x => new ConstantHeader(x.Name, x.Value)).ToList();
 
 				//Authorize Attribute
-				controller.IsSecured = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(AuthorizeAttribute))) != null;
+				controller.IsSecured = attributes.HasAttribute<AuthorizeAttribute>();
 
 				//Obsolete Attribute
-				var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(ObsoleteAttribute)));
+				var obsoleteAttribute = attributes.GetAttribute<ObsoleteAttribute>();
 				if (obsoleteAttribute != null)
 				{
 					controller.Obsolete = true;
-					controller.ObsoleteMessage = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+					controller.ObsoleteMessage = obsoleteAttribute.GetAttributeValue();
 				}
 
 				//Only public endpoints can be hit anyways
@@ -164,15 +166,15 @@ namespace AspNetCore.Client.Generator.Output
 
 
 			//Ignore generator attribute
-			endpoint.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NotGeneratedAttribute))) != null;
+			endpoint.Ignored = attributes.HasAttribute<NotGeneratedAttribute>();
 
 
 			//Route Attribute
 
-			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(RouteAttribute)));
+			var routeAttribute = attributes.GetAttribute<RouteAttribute>();
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
-				endpoint.Route = new HttpRoute(routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim());
+				endpoint.Route = new HttpRoute(routeAttribute.GetAttributeValue());
 			}
 
 
@@ -206,7 +208,7 @@ namespace AspNetCore.Client.Generator.Output
 
 			if (endpoint.Route == null && httpAttribute?.ArgumentList != null)//If Route was never fetched from RouteAttribute or if they used the Http(template) override
 			{
-				endpoint.Route = new HttpRoute(httpAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim());
+				endpoint.Route = new HttpRoute(httpAttribute.GetAttributeValue());
 			}
 
 			//Ignore method if it doesn't have a route or http attribute
@@ -218,15 +220,15 @@ namespace AspNetCore.Client.Generator.Output
 
 
 			//Obsolete Attribute
-			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(ObsoleteAttribute)));
+			var obsoleteAttribute = attributes.GetAttribute<ObsoleteAttribute>();
 			if (obsoleteAttribute != null)
 			{
 				endpoint.Obsolete = true;
-				endpoint.ObsoleteMessage = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				endpoint.ObsoleteMessage = obsoleteAttribute.GetAttributeValue();
 			}
 
 			//Authorize Attribute
-			endpoint.IsSecured = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(AuthorizeAttribute))) != null;
+			endpoint.IsSecured = attributes.HasAttribute<AuthorizeAttribute>();
 
 
 			//Response types
@@ -253,10 +255,10 @@ namespace AspNetCore.Client.Generator.Output
 
 			var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
 			var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Options.QueryName, x.Type, x.Default, x.Options.QueryObject)).ToList();
-			var bodyParams = parameters.Where(x => x.Options.FromBody).Select(x => new BodyParameter(x.Name, x.Type, x.Default)).SingleOrDefault();
+			var bodyParam = parameters.Where(x => x.Options.FromBody).Select(x => new BodyParameter(x.Name, x.Type, x.Default)).SingleOrDefault();
 
 
-			endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParams }).NotNull().ToList();
+			endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParam }).NotNull().ToList();
 
 			endpoint.Parameters.Add(new CancellationTokenModifier());
 			endpoint.Parameters.Add(new CookieModifier());
@@ -283,17 +285,9 @@ namespace AspNetCore.Client.Generator.Output
 
 			var rawReturnType = syntax.ReturnType?.ToFullString();
 
-			HashSet<string> returnContainerTypes = new HashSet<string>()
-			{
-				typeof(ValueTask).FullName,
-				typeof(Task).FullName,
-				typeof(ActionResult).FullName
-			};
-
-
 			var returnType = Helpers.GetTypeFromString(rawReturnType.Trim());
 
-			while (returnContainerTypes.Any(x => Helpers.IsType(x, returnType?.Name)))
+			while (returnType.IsContainerReturnType())
 			{
 				returnType = returnType.Arguments.SingleOrDefault();
 			}
@@ -309,16 +303,7 @@ namespace AspNetCore.Client.Generator.Output
 				returnType = null;
 			}
 
-			HashSet<string> fileResults = new HashSet<string>()
-			{
-				nameof(PhysicalFileResult),
-				nameof(FileResult),
-				nameof(FileContentResult),
-				nameof(FileStreamResult),
-				nameof(VirtualFileResult)
-			};
-
-			if (fileResults.Any(x => Helpers.IsType(x, returnType?.Name)))
+			if (returnType.IsFileReturnType())
 			{
 				returnType = new Helpers.TypeString(typeof(Stream).FullName);
 				endpoint.ReturnsStream = true;
@@ -365,7 +350,7 @@ namespace AspNetCore.Client.Generator.Output
 					return controller;
 				}
 
-				var generatedAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(GenerateHubAttribute)));
+				var generatedAttribute = attributes.GetAttribute<GenerateHubAttribute>();
 				if (generatedAttribute == null)
 				{
 					controller.Ignored = true;
@@ -374,16 +359,16 @@ namespace AspNetCore.Client.Generator.Output
 
 				controller.BaseClass = syntax.BaseList.Types.Where(x => x.ToFullString().Trim().EndsWith("Hub")).SingleOrDefault()?.ToFullString().Trim().Replace("Hub", "");
 
-				controller.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NotGeneratedAttribute))) != null;
+				controller.Ignored = attributes.HasAttribute<NotGeneratedAttribute>();
 
 
-				var namespaceAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NamespaceSuffixAttribute)));
+				var namespaceAttribute = attributes.GetAttribute<NamespaceSuffixAttribute>();
 				if (namespaceAttribute != null)
 				{
 					controller.NamespaceSuffix = namespaceAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
 				}
 
-				var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(RouteAttribute)));
+				var routeAttribute = attributes.GetAttribute<RouteAttribute>();
 				if (routeAttribute != null)//Fetch route from RouteAttribute
 				{
 					controller.Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
@@ -406,11 +391,11 @@ namespace AspNetCore.Client.Generator.Output
 				}
 
 				//Obsolete Attribute
-				var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(ObsoleteAttribute)));
+				var obsoleteAttribute = attributes.GetAttribute<ObsoleteAttribute>();
 				if (obsoleteAttribute != null)
 				{
 					controller.Obsolete = true;
-					controller.ObsoleteMessage = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+					controller.ObsoleteMessage = obsoleteAttribute.GetAttributeValue();
 				}
 
 				//Only public endpoints can be hit anyways
@@ -462,14 +447,14 @@ namespace AspNetCore.Client.Generator.Output
 
 
 			//Ignore generator attribute
-			endpoint.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NotGeneratedAttribute))) != null;
+			endpoint.Ignored = attributes.HasAttribute<NotGeneratedAttribute>();
 
 			//Obsolete Attribute
-			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(ObsoleteAttribute)));
+			var obsoleteAttribute = attributes.GetAttribute<ObsoleteAttribute>();
 			if (obsoleteAttribute != null)
 			{
 				endpoint.Obsolete = true;
-				endpoint.ObsoleteMessage = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				endpoint.ObsoleteMessage = obsoleteAttribute.GetAttributeValue();
 			}
 
 			//Response types
@@ -503,16 +488,9 @@ namespace AspNetCore.Client.Generator.Output
 
 			var rawReturnType = syntax.ReturnType?.ToFullString();
 
-			HashSet<string> returnContainerTypes = new HashSet<string>()
-			{
-				typeof(ValueTask).FullName,
-				typeof(Task).FullName
-			};
-
-
 			var returnType = Helpers.GetTypeFromString(rawReturnType.Trim());
 
-			while (returnContainerTypes.Any(x => Helpers.IsType(x, returnType?.Name)))
+			while (returnType.IsContainerReturnType())
 			{
 				returnType = returnType.Arguments.SingleOrDefault();
 			}
@@ -531,5 +509,151 @@ namespace AspNetCore.Client.Generator.Output
 
 
 		#endregion SignalR
+
+
+		#region Functions
+
+		public static FunctionEndpoint ReadMethodAsFunction(MethodDeclarationSyntax syntax)
+		{
+			var attributes = syntax.DescendantNodes().OfType<AttributeListSyntax>().SelectMany(x => x.Attributes).ToList();
+
+			var endpoint = new FunctionEndpoint();
+			try
+			{
+				var endpointName = attributes.GetAttribute<FunctionNameAttribute>();
+
+				if (endpointName == null)
+				{
+					return null;
+				}
+
+				endpoint.Name = endpointName.GetAttributeValue();
+
+				//Ignore generator attribute
+				endpoint.Ignored = attributes.HasAttribute<NotGeneratedAttribute>();
+
+
+				//Obsolete Attribute
+				var obsoleteAttribute = attributes.GetAttribute<ObsoleteAttribute>();
+				if (obsoleteAttribute != null)
+				{
+					endpoint.Obsolete = true;
+					endpoint.ObsoleteMessage = obsoleteAttribute.GetAttributeValue();
+				}
+
+				//Response types
+				var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(ProducesResponseTypeAttribute)));
+				var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
+				responses.Add(new ResponseTypeDefinition(true));
+
+				endpoint.ResponseTypes = responses.Select(x => new ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
+
+				var duplicateResponseTypes = endpoint.GetResponseTypes().GroupBy(x => x.Status).Where(x => x.Count() > 1).ToList();
+
+				if (duplicateResponseTypes.Any())
+				{
+					throw new NotSupportedException($"Endpoint has multiple response types of the same status defined. {string.Join(", ", duplicateResponseTypes.Select(x => x.Key?.ToString()))}");
+				}
+				//Add after so we don't get duplicate error from the null Status
+				endpoint.ResponseTypes.Add(new ExceptionResponseType());
+
+
+
+
+				var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute())).ToList();
+
+
+				var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
+				var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Options.QueryName, x.Type, x.Default, x.Options.QueryObject)).ToList();
+				//var bodyParam = parameters.Where(x => x.Options.FromBody).Select(x => new BodyParameter(x.Name, x.Type, x.Default)).SingleOrDefault();
+				BodyParameter bodyParam = null;
+
+				endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParam }).NotNull().ToList();
+
+				endpoint.Parameters.Add(new CancellationTokenModifier());
+				endpoint.Parameters.Add(new CookieModifier());
+				endpoint.Parameters.Add(new HeadersModifier());
+				endpoint.Parameters.Add(new TimeoutModifier());
+				endpoint.Parameters.Add(new SecurityModifier());
+
+
+				var parameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(HeaderParameterAttribute)))
+					.Select(x => new ParameterHeaderDefinition(x))
+					.ToList();
+				endpoint.ParameterHeader = parameterHeaders.Select(x => new ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
+
+
+
+				var headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(IncludeHeaderAttribute)))
+					.Select(x => new HeaderDefinition(x))
+					.ToList();
+				endpoint.ConstantHeader = headers.Select(x => new ConstantHeader(x.Name, x.Value)).ToList();
+
+
+				var rawReturnType = syntax.ReturnType?.ToFullString();
+
+				var returnType = Helpers.GetTypeFromString(rawReturnType.Trim());
+
+				while (returnType.IsContainerReturnType())
+				{
+					returnType = returnType.Arguments.SingleOrDefault();
+				}
+
+				if (Helpers.IsType(typeof(IActionResult).FullName, returnType?.Name))
+				{
+					returnType = null;
+				}
+
+				if (returnType?.Name == "void"
+					|| (Helpers.IsType(typeof(Task).FullName, returnType?.Name) && (!returnType?.Arguments.Any() ?? false)))
+				{
+					returnType = null;
+				}
+
+				if (returnType.IsFileReturnType())
+				{
+					returnType = new Helpers.TypeString(typeof(Stream).FullName);
+					endpoint.ReturnsStream = true;
+				}
+
+				rawReturnType = returnType?.ToString();
+
+				endpoint.ReturnType = rawReturnType;
+
+
+
+				var duplicateParameters = endpoint.GetParametersWithoutResponseTypes().GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
+
+				if (duplicateParameters.Any())
+				{
+					throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+				}
+
+
+			}
+			catch (NotSupportedException nse)
+			{
+				if (endpoint.Ignored)
+				{
+					return endpoint;
+				}
+
+				endpoint.Failed = true;
+				endpoint.Error = nse.Message;
+			}
+#if !DEBUG
+			catch (Exception ex)
+			{
+				endpoint.Failed = true;
+				endpoint.UnexpectedFailure = true;
+				endpoint.Error = ex.ToString();
+			}
+#endif
+
+
+			return endpoint;
+		}
+
+		#endregion
 	}
 }

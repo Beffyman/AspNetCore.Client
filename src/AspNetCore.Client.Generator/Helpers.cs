@@ -7,8 +7,11 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 
 namespace AspNetCore.Client.Generator
@@ -323,14 +326,14 @@ namespace AspNetCore.Client.Generator
 		{
 			IDictionary<string, (string type, string defaultValue)> parameters = new Dictionary<string, (string type, string defaultValue)>();
 
-			if (!route.EndsWith("/"))
-			{
-				route += "/";//Need the extra / for the regex regex parse(yes two regex)
-			}
-
 			if (route == null)
 			{
 				return parameters;
+			}
+
+			if (!route.EndsWith("/"))
+			{
+				route += "/";//Need the extra / for the regex regex parse(yes two regex)
 			}
 
 			var template = TemplateParser.Parse(route);
@@ -393,6 +396,33 @@ namespace AspNetCore.Client.Generator
 				}
 			}
 		}
+
+		private static readonly HashSet<string> FileResults = new HashSet<string>()
+		{
+			typeof(PhysicalFileResult).FullName,
+			typeof(FileResult).FullName,
+			typeof(FileContentResult).FullName,
+			typeof(FileStreamResult).FullName,
+			typeof(VirtualFileResult).FullName
+		};
+
+		public static bool IsFileReturnType(this TypeString type)
+		{
+			return FileResults.Any(x => Helpers.IsType(x, type?.Name));
+		}
+
+		private static readonly HashSet<string> ContainerResults = new HashSet<string>()
+		{
+			typeof(ValueTask).FullName,
+			typeof(Task).FullName,
+			typeof(ActionResult).FullName
+		};
+
+		public static bool IsContainerReturnType(this TypeString type)
+		{
+			return ContainerResults.Any(x => Helpers.IsType(x, type?.Name));
+		}
+
 
 		private static readonly Regex _typeRegex = new Regex(@"(.*?)<(.*)>");
 
@@ -526,6 +556,22 @@ namespace AspNetCore.Client.Generator
 		public static string CleanGenericTypeDefinition(this string str)
 		{
 			return str.Split('`').FirstOrDefault();
+		}
+
+
+		public static string GetAttributeValue(this AttributeSyntax attr)
+		{
+			return attr.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+		}
+
+		public static AttributeSyntax GetAttribute<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
+		{
+			return source.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(typeof(T).Name));
+		}
+
+		public static bool HasAttribute<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
+		{
+			return source.GetAttribute<T>() != null;
 		}
 	}
 }

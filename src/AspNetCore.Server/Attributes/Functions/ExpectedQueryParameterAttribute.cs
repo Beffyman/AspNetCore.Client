@@ -29,6 +29,7 @@ namespace AspNetCore.Server.Attributes.Functions
 		/// Default Constructor
 		/// </summary>
 		/// <param name="method"></param>
+		/// <param name="queryName"></param>
 		/// <param name="expectedType"></param>
 		public ExpectedQueryParameterAttribute(string method, string queryName, Type expectedType)
 		{

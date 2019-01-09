@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using AspNetCore.Server.Attributes.Functions;
 using TestAzureFunction.Contracts;
+using AspNetCore.Server.Attributes.Http;
 
 namespace TestAzureFunction
 {
@@ -18,12 +19,15 @@ namespace TestAzureFunction
 		[ExpectedQueryParameter("Get", "name", typeof(string))]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+		[HeaderParameter("test-header", typeof(Guid))]
 		[FunctionName("Function1")]
 		public static async Task<IActionResult> Run(
 			[HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
 			ILogger log)
 		{
 			log.LogInformation("C# HTTP trigger function processed a request.");
+
+			Guid header = Guid.Parse(req.Headers["test-header"]);
 
 			string queryName = req.Query["name"];
 

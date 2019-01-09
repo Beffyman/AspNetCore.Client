@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions;
 using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework;
@@ -108,7 +109,7 @@ namespace AspNetCore.Client.Generator
 			var parsedControllers = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
-									.Select(cs => new ClientCSharpFile(cs))
+									.Select(cs => new HttpControllerCSharpFile(cs))
 									.ToList();
 
 
@@ -116,6 +117,13 @@ namespace AspNetCore.Client.Generator
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
 									.Select(cs => new HubCSharpFile(cs))
+									.ToList();
+
+
+			var parsedFunctions = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
+									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
+											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
+									.Select(cs => new FunctionsCSharpFile(cs))
 									.ToList();
 
 			var context = new GenerationContext();
