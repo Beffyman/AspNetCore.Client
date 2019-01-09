@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace TestWebApp.Hubs
 {
 	[Route("Error")]
+	[GenerateHub]
 	public class ErrorHub : Hub
 	{
 		public ErrorHub()

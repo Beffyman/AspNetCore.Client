@@ -23,6 +23,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using TestAzureFunction.Contracts;
 
 namespace TestAzureFunction.Clients
 {

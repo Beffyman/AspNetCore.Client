@@ -30,11 +30,12 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using TestWebApp.Contracts;
+using TestWebApp.Hubs;
+using TestWebApp.Security;
 
 namespace TestWebApp.Clients
 {
 #warning DuplicateParameterErrorController is misconfigured for generation :: Endpoint has multiple parameters of the same name defined. id
-#warning ErrorController is misconfigured for generation :: Controller must have a route to be valid for generation.
 #warning InheritanceErrorsController is misconfigured for generation :: Endpoint has multiple headers of the same key defined. TestInheritance
 #warning ResponseTypeErrorController is misconfigured for generation :: Endpoint has multiple response types of the same status defined. OK
 #warning ErrorHub is misconfigured for generation :: Hub has multiple messages with different parameters defined. ReceiveMessage

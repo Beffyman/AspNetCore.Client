@@ -46,6 +46,12 @@ namespace AspNetCore.Client.Generator.Output
 
 				controller.Abstract = syntax.Modifiers.Any(x => x.Text == "abstract");
 
+				if (syntax.BaseList == null)
+				{
+					controller.Ignored = true;
+					return controller;
+				}
+
 				controller.BaseClass = syntax.BaseList.Types.Where(x => x.ToFullString().Trim().EndsWith("Controller")).SingleOrDefault()?.ToFullString().Trim().Replace("Controller", "");
 
 				controller.Ignored = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NotGeneratedAttribute))) != null;
@@ -116,9 +122,18 @@ namespace AspNetCore.Client.Generator.Output
 					.ToList();
 				controller.Endpoints = methods.Select(x => ReadMethodAsHttpEndpoint(controller, x)).ToList();
 
+				if (!controller.Endpoints.Any(x => !x.Ignored))
+				{
+					controller.Ignored = true;
+				}
 			}
 			catch (NotSupportedException nse)
 			{
+				if (controller.Ignored)
+				{
+					return controller;
+				}
+
 				controller.Failed = true;
 				controller.Error = nse.Message;
 			}
@@ -337,13 +352,25 @@ namespace AspNetCore.Client.Generator.Output
 		{
 			var attributes = syntax.AttributeLists.SelectMany(x => x.Attributes).ToList();
 
-
 			var controller = new HubController();
 			try
 			{
 				controller.Name = $@"{syntax.Identifier.ValueText.Trim().Replace("Hub", "")}";
 
 				controller.Abstract = syntax.Modifiers.Any(x => x.Text == "abstract");
+
+				if (syntax.BaseList == null)
+				{
+					controller.Ignored = true;
+					return controller;
+				}
+
+				var generatedAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(GenerateHubAttribute)));
+				if (generatedAttribute == null)
+				{
+					controller.Ignored = true;
+					return controller;
+				}
 
 				controller.BaseClass = syntax.BaseList.Types.Where(x => x.ToFullString().Trim().EndsWith("Hub")).SingleOrDefault()?.ToFullString().Trim().Replace("Hub", "");
 
@@ -392,9 +419,18 @@ namespace AspNetCore.Client.Generator.Output
 					.ToList();
 				controller.Endpoints = methods.Select(x => ReadMethodAsHubEndpoint(controller, x)).ToList();
 
+				if (!controller.Endpoints.Any(x => !x.Ignored))
+				{
+					controller.Ignored = true;
+				}
 			}
 			catch (NotSupportedException nse)
 			{
+				if (controller.Ignored)
+				{
+					return controller;
+				}
+
 				controller.Failed = true;
 				controller.Error = nse.Message;
 			}

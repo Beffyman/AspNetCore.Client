@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TestWebApp.Hubs
 {
 	[Route("Chat")]
+	[GenerateHub]
 	public class ChatHub : Hub
 	{
 		public ChatHub()

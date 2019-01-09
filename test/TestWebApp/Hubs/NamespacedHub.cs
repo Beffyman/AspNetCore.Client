@@ -8,6 +8,7 @@ namespace TestWebApp.Hubs
 {
 	[Route("Test")]
 	[NamespaceSuffix("FancySuffix")]
+	[GenerateHub]
 	public class NamespacedHub : Hub
 	{
 		public NamespacedHub()
