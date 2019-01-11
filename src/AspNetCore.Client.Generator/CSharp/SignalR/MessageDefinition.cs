@@ -13,12 +13,12 @@ namespace AspNetCore.Client.Generator.SignalR
 		{
 			if (attribute.ArgumentList.Arguments.Count == 1)//Only HTTP value was provided, assumed to have no body
 			{
-				Name = attribute.ArgumentList.Arguments.SingleOrDefault().ToFullString().TrimStart('"').TrimEnd('"');
+				Name = attribute.ArgumentList.Arguments.SingleOrDefault().ToFullString().TrimQuotes();
 				Types = new List<string>();
 			}
 			else//Has 2 or more arguments, parse rest as types
 			{
-				Name = attribute.ArgumentList.Arguments.FirstOrDefault().ToFullString().TrimStart('"').TrimEnd('"');
+				Name = attribute.ArgumentList.Arguments.FirstOrDefault().ToFullString().TrimQuotes();
 				Types = attribute.ArgumentList.Arguments.Skip(1).Select(x => x.ToFullString().Replace("typeof", "").Trim().TrimStart('(').TrimEnd(')'));
 			}
 		}

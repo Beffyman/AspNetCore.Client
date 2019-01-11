@@ -1,6 +1,7 @@
 ﻿using MessagePack.Resolvers;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace AspNetCore.Client.Serializers
@@ -31,7 +32,9 @@ namespace AspNetCore.Client.Serializers
 		{
 			var stream = new MemoryStream();
 			MessagePack.MessagePackSerializer.Serialize(stream, request, ContractlessStandardResolver.Instance);
-			return new StreamContent(stream);
+			var content = new StreamContent(stream);
+			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-msgpack");
+			return content;
 		}
 	}
 }

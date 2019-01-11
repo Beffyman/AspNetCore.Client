@@ -568,10 +568,31 @@ namespace AspNetCore.Client.Generator
 		{
 			return source.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(typeof(T).Name));
 		}
+		public static IEnumerable<AttributeSyntax> GetAttributes<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
+		{
+			return source.Where(x => x.Name.ToFullString().MatchesAttribute(typeof(T).Name));
+		}
 
 		public static bool HasAttribute<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
 		{
 			return source.GetAttribute<T>() != null;
+		}
+
+		public static string TrimQuotes(this string str)
+		{
+			str = str.Trim();
+
+			if (str.StartsWith("\"") && str.EndsWith("\""))
+			{
+				str = str.TrimStart(new char[] { '"' }).TrimEnd(new char[] { '"' }).Trim();
+			}
+
+			return str;
+		}
+
+		public static Dictionary<T, K> ToDictionary<T, K>(this IEnumerable<KeyValuePair<T, K>> source)
+		{
+			return source.ToDictionary(x => x.Key, y => y.Value);
 		}
 	}
 }

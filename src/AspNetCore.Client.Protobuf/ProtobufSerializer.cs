@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using ProtoBuf;
 
@@ -32,7 +32,9 @@ namespace AspNetCore.Client.Serializers
 		{
 			var stream = new MemoryStream();
 			Serializer.Serialize(stream, request);
-			return new StreamContent(stream);
+			var content = new StreamContent(stream);
+			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-protobuf");
+			return content;
 		}
 	}
 }

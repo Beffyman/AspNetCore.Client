@@ -57,7 +57,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <summary>
 		/// Parameters specific to a specific http method that is expected
 		/// </summary>
-		public IDictionary<HttpMethod, IList<IParameter>> HttpParameters { get; set; } = new Dictionary<HttpMethod, IList<IParameter>>();
+		public IDictionary<HttpMethod, IEnumerable<IParameter>> HttpParameters { get; set; } = new Dictionary<HttpMethod, IEnumerable<IParameter>>();
 
 		/// <summary>
 		/// Supported HttpMethods listed out
@@ -163,15 +163,6 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		public IEnumerable<QueryParameter> GetQueryParameters()
 		{
 			return GetChildren().OfType<QueryParameter>().OrderBy(x => x.SortOrder);
-		}
-
-		/// <summary>
-		/// Gets the parameter that may exist inside the body of the request
-		/// </summary>
-		/// <returns></returns>
-		public BodyParameter GetBodyParameter()
-		{
-			return GetChildren().OfType<BodyParameter>().SingleOrDefault();
 		}
 
 		/// <summary>

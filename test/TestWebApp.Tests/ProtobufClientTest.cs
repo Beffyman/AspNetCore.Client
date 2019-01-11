@@ -97,7 +97,7 @@ namespace TestWebApp.Tests
 			var response = valuesClient.DtoForDtoRaw(dto);
 
 
-			Assert.False(response.RequestMessage.Content.Headers?.ContentType?.MediaType == "application/x-protobuf");//Use stream
+			Assert.True(response.RequestMessage.Content.Headers?.ContentType?.MediaType == "application/x-protobuf");
 			Assert.True(response.Content.Headers.ContentType.MediaType == "application/x-protobuf");
 
 

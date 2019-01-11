@@ -6,6 +6,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions;
 using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework;
@@ -20,6 +21,7 @@ using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.SignalR;
 using AspNetCore.Client.Generator.SignalR;
 using AspNetCore.Server.Attributes;
+using AspNetCore.Server.Attributes.Functions;
 using AspNetCore.Server.Attributes.Http;
 using AspNetCore.Server.Attributes.SignalR;
 using Microsoft.AspNetCore.Authorization;
@@ -89,20 +91,20 @@ namespace AspNetCore.Client.Generator.Output
 
 
 				//Response types
-				var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(ProducesResponseTypeAttribute)));
+				var responseTypes = attributes.GetAttributes<ProducesResponseTypeAttribute>();
 				var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
 				controller.ResponseTypes = responses.Select(x => new ResponseType(x.Type, Helpers.EnumParse<HttpStatusCode>(x.StatusValue))).ToList();
 
 
 
-				var parameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(HeaderParameterAttribute)))
+				var parameterHeaders = attributes.GetAttributes<HeaderParameterAttribute>()
 					.Select(x => new ParameterHeaderDefinition(x))
 					.ToList();
 				controller.ParameterHeader = parameterHeaders.Select(x => new ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
 
 
 
-				var headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(IncludeHeaderAttribute)))
+				var headers = attributes.GetAttributes<IncludeHeaderAttribute>()
 					.Select(x => new HeaderDefinition(x))
 					.ToList();
 				controller.ConstantHeader = headers.Select(x => new ConstantHeader(x.Name, x.Value)).ToList();
@@ -232,7 +234,7 @@ namespace AspNetCore.Client.Generator.Output
 
 
 			//Response types
-			var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(ProducesResponseTypeAttribute)));
+			var responseTypes = attributes.GetAttributes<ProducesResponseTypeAttribute>();
 			var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
 			responses.Add(new ResponseTypeDefinition(true));
 
@@ -270,14 +272,14 @@ namespace AspNetCore.Client.Generator.Output
 			}
 
 
-			var parameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(HeaderParameterAttribute)))
+			var parameterHeaders = attributes.GetAttributes<HeaderParameterAttribute>()
 				.Select(x => new ParameterHeaderDefinition(x))
 				.ToList();
 			endpoint.ParameterHeader = parameterHeaders.Select(x => new ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
 
 
 
-			var headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(IncludeHeaderAttribute)))
+			var headers = attributes.GetAttributes<IncludeHeaderAttribute>()
 				.Select(x => new HeaderDefinition(x))
 				.ToList();
 			endpoint.ConstantHeader = headers.Select(x => new ConstantHeader(x.Name, x.Value)).ToList();
@@ -458,7 +460,7 @@ namespace AspNetCore.Client.Generator.Output
 			}
 
 			//Response types
-			var messageAttributes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(ProducesMessageAttribute)));
+			var messageAttributes = attributes.GetAttributes<ProducesMessageAttribute>();
 			var messages = messageAttributes.Select(x => new MessageDefinition(x)).ToList();
 
 			endpoint.Messages = messages.Select(x => new Message(x.Name, x.Types)).ToList();
@@ -542,7 +544,7 @@ namespace AspNetCore.Client.Generator.Output
 				}
 
 				//Response types
-				var responseTypes = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(ProducesResponseTypeAttribute)));
+				var responseTypes = attributes.GetAttributes<ProducesResponseTypeAttribute>();
 				var responses = responseTypes.Select(x => new ResponseTypeDefinition(x)).ToList();
 				responses.Add(new ResponseTypeDefinition(true));
 
@@ -558,17 +560,42 @@ namespace AspNetCore.Client.Generator.Output
 				endpoint.ResponseTypes.Add(new ExceptionResponseType());
 
 
+				//Need to check if the function has a HttpTrigger
+				var httpTriggerAttribute = syntax.ParameterList.Parameters.SingleOrDefault(x => x.AttributeLists.SelectMany(y => y.Attributes).HasAttribute<HttpTriggerAttribute>());
 
+				if (httpTriggerAttribute == null)
+				{
+					endpoint.Ignored = true;
+					return endpoint;
+				}
+
+				var triggerAttribute = new HttpTriggerParameter(httpTriggerAttribute);
+
+				endpoint.SupportedMethods = triggerAttribute.Methods;
+
+				if (triggerAttribute.Route != null)
+				{
+					endpoint.Route = new HttpRoute(triggerAttribute.Route);
+				}
+
+
+				var expectedBodyParameters = attributes.GetAttributes<ExpectedBodyParameterAttribute>()
+					.Select(x => new ExpectedBodyParamterDefinition(x))
+					.GroupBy(x => x.Method)
+					.ToDictionary(x => x.Key, y => y.Select(z => (IParameter)new BodyParameter("body", z.Type, null)));
+
+				var expectedQueryParameters = attributes.GetAttributes<ExpectedQueryParameterAttribute>()
+					.Select(x => new ExpectedQueryParamterDefinition(x))
+					.GroupBy(x => x.Method)
+					.ToDictionary(x => x.Key, y => y.Select(z => (IParameter)new QueryParameter(z.Name, z.Type, null, false)));
+
+				endpoint.HttpParameters = expectedBodyParameters.Union(expectedQueryParameters).ToDictionary();
 
 				var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute())).ToList();
 
-
 				var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
-				var queryParams = parameters.Where(x => x.Options.FromQuery).Select(x => new QueryParameter(x.Options.QueryName, x.Type, x.Default, x.Options.QueryObject)).ToList();
-				//var bodyParam = parameters.Where(x => x.Options.FromBody).Select(x => new BodyParameter(x.Name, x.Type, x.Default)).SingleOrDefault();
-				BodyParameter bodyParam = null;
 
-				endpoint.Parameters = routeParams.Cast<IParameter>().Union(queryParams).Union(new List<IParameter> { bodyParam }).NotNull().ToList();
+				endpoint.Parameters = routeParams.Cast<IParameter>().NotNull().ToList();
 
 				endpoint.Parameters.Add(new CancellationTokenModifier());
 				endpoint.Parameters.Add(new CookieModifier());
@@ -577,14 +604,14 @@ namespace AspNetCore.Client.Generator.Output
 				endpoint.Parameters.Add(new SecurityModifier());
 
 
-				var parameterHeaders = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(HeaderParameterAttribute)))
+				var parameterHeaders = attributes.GetAttributes<HeaderParameterAttribute>()
 					.Select(x => new ParameterHeaderDefinition(x))
 					.ToList();
 				endpoint.ParameterHeader = parameterHeaders.Select(x => new ParameterHeader(x.Name, x.Type, x.DefaultValue)).ToList();
 
 
 
-				var headers = attributes.Where(x => x.Name.ToFullString().MatchesAttribute(nameof(IncludeHeaderAttribute)))
+				var headers = attributes.GetAttributes<IncludeHeaderAttribute>()
 					.Select(x => new HeaderDefinition(x))
 					.ToList();
 				endpoint.ConstantHeader = headers.Select(x => new ConstantHeader(x.Name, x.Value)).ToList();

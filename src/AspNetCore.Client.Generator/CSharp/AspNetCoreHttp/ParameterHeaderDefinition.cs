@@ -27,14 +27,14 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 		{
 			if (syntax.ArgumentList.Arguments.Count == 2)
 			{
-				Name = syntax.ArgumentList.Arguments[0].ToFullString()?.Replace("\"", "").Trim();
-				Type = syntax.ArgumentList.Arguments[1].ToFullString()?.Replace("\"", "").Trim();
+				Name = syntax.ArgumentList.Arguments[0].ToFullString()?.TrimQuotes();
+				Type = syntax.ArgumentList.Arguments[1].ToFullString()?.TrimQuotes();
 			}
 			else if (syntax.ArgumentList.Arguments.Count == 3)
 			{
-				Name = syntax.ArgumentList.Arguments[0].ToFullString()?.Replace("\"", "").Trim();
-				Type = syntax.ArgumentList.Arguments[1].ToFullString()?.Replace("\"", "").Trim();
-				DefaultValue = syntax.ArgumentList.Arguments[2].ToFullString()?.Replace("\"", "").Trim();
+				Name = syntax.ArgumentList.Arguments[0].ToFullString()?.TrimQuotes();
+				Type = syntax.ArgumentList.Arguments[1].ToFullString()?.TrimQuotes();
+				DefaultValue = syntax.ArgumentList.Arguments[2].ToFullString()?.TrimQuotes();
 			}
 			else
 			{
@@ -54,9 +54,9 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 
 		public ParameterHeaderDefinition(string name, string type, string defaultValue)
 		{
-			Name = name?.Replace("\"", "").Trim();
-			Type = type?.Replace("\"", "").Trim();
-			DefaultValue = defaultValue?.Replace("\"", "").Trim();
+			Name = name?.TrimQuotes();
+			Type = type?.TrimQuotes();
+			DefaultValue = defaultValue?.TrimQuotes();
 
 
 			if (Type?.Contains("typeof") ?? false)

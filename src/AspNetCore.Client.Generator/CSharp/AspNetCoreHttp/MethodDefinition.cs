@@ -56,7 +56,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(RouteAttribute)));
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
-				Options.Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				Options.Route = routeAttribute.ArgumentList.Arguments.ToFullString().TrimQuotes();
 			}
 
 
@@ -86,7 +86,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 
 			if (Options.Route == null && httpAttribute.ArgumentList != null)//If Route was never fetched from RouteAttribute or if they used the Http(template) override
 			{
-				Options.Route = httpAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				Options.Route = httpAttribute.ArgumentList.Arguments.ToFullString().TrimQuotes();
 			}
 			else if (Options.Route == null)
 			{
@@ -97,7 +97,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(ObsoleteAttribute)));
 			if (obsoleteAttribute != null)
 			{
-				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().TrimQuotes();
 			}
 
 			//Authorize Attribute

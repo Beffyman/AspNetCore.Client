@@ -25,8 +25,8 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 		{
 			if (syntax.ArgumentList.Arguments.Count == 2)
 			{
-				Name = syntax.ArgumentList.Arguments[0].ToFullString()?.Replace("\"", "").Trim();
-				Value = syntax.ArgumentList.Arguments[1].ToFullString()?.Replace("\"", "").Trim();
+				Name = syntax.ArgumentList.Arguments[0].ToFullString()?.TrimQuotes();
+				Value = syntax.ArgumentList.Arguments[1].ToFullString()?.TrimQuotes();
 			}
 			else
 			{
@@ -36,8 +36,8 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 
 		public HeaderDefinition(string name, string value)
 		{
-			Name = name?.Replace("\"", "").Trim();
-			Value = value?.Replace("\"", "").Trim();
+			Name = name?.TrimQuotes();
+			Value = value?.TrimQuotes();
 		}
 	}
 }

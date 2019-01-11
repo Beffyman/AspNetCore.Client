@@ -34,7 +34,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			if (fromQueryAttribute != null)//Fetch route from RouteAttribute
 			{
 				Options.FromQuery = true;
-				Options.QueryName = fromQueryAttribute.ArgumentList?.Arguments.ToFullString().Replace("\"", "").Split('=')[1].Trim();
+				Options.QueryName = fromQueryAttribute.ArgumentList?.Arguments.ToFullString().TrimQuotes().Split('=')[1].TrimQuotes();
 
 				if (string.IsNullOrEmpty(Options.QueryName))
 				{
@@ -47,7 +47,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			if (fromRouteAttribute != null)//Fetch route from RouteAttribute
 			{
 				Options.FromRoute = true;
-				Options.RouteName = fromRouteAttribute.ArgumentList?.Arguments.ToFullString().Replace("\"", "").Split('=')[1].Trim();
+				Options.RouteName = fromRouteAttribute.ArgumentList?.Arguments.ToFullString().TrimQuotes().Split('=')[1].TrimQuotes();
 
 				if (string.IsNullOrEmpty(Options.RouteName))
 				{

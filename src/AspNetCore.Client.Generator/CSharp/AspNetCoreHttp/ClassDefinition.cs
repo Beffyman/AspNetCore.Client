@@ -50,13 +50,13 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			var namespaceAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(NamespaceSuffixAttribute)));
 			if (namespaceAttribute != null)
 			{
-				Options.NamespaceSuffix = namespaceAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
+				Options.NamespaceSuffix = namespaceAttribute.ArgumentList.Arguments.ToFullString().TrimQuotes();
 			}
 
 			var routeAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(RouteAttribute)));
 			if (routeAttribute != null)//Fetch route from RouteAttribute
 			{
-				Route = routeAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "");
+				Route = routeAttribute.ArgumentList.Arguments.ToFullString().TrimQuotes();
 			}
 
 			if (Route == null)//No Route, invalid controller
@@ -93,7 +93,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			var obsoleteAttribute = attributes.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(nameof(ObsoleteAttribute)));
 			if (obsoleteAttribute != null)
 			{
-				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+				Options.Obsolete = obsoleteAttribute.ArgumentList.Arguments.ToFullString().TrimQuotes();
 			}
 
 			//Only public or internal endpoints can be hit anyways
