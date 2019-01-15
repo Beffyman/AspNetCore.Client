@@ -6,10 +6,12 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.3" />
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
+		<PackageReference Include="MessagePack" Version="1.7.3.4" />
+		<PackageReference Include="protobuf-net" Version="2.4.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\AspNetCore.Server\AspNetCore.Server.csproj" />
-	  <ProjectReference Include="..\TestAzureFunction.Contracts\TestAzureFunction.Contracts.csproj" />
+		<ProjectReference Include="..\..\src\AspNetCore.Server\AspNetCore.Server.csproj" />
+		<ProjectReference Include="..\TestAzureFunction.Contracts\TestAzureFunction.Contracts.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="host.json">

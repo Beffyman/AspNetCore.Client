@@ -135,6 +135,10 @@ namespace AspNetCore.Client.Generator
 			{
 				context = context.Merge(file.Context);
 			}
+			foreach (var file in parsedFunctions)
+			{
+				context = context.Merge(file.Context);
+			}
 			context.MapRelatedInfo();
 			context.Validate(Settings.AllowedNamespaces, Settings.ExcludedNamespaces);
 

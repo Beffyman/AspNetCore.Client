@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using AspNetCore.Server.Attributes.Functions;
 using TestAzureFunction.Contracts;
 using AspNetCore.Server.Attributes.Http;
+using MessagePack.Resolvers;
+using ProtoBuf;
 
 namespace TestAzureFunction
 {
@@ -19,34 +21,63 @@ namespace TestAzureFunction
 		[ExpectedQueryParameter("Get", "name", typeof(string))]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-		[HeaderParameter("test-header", typeof(Guid))]
+		[HeaderParameter("ID", typeof(Guid))]
 		[FunctionName("Function1")]
 		public static async Task<IActionResult> Run(
-			[HttpTrigger(AuthorizationLevel.Function, "get", nameof(HttpMethods.Post), Route = null)] HttpRequest req,
+			[HttpTrigger(AuthorizationLevel.Function, "get", nameof(HttpMethods.Post), Route = "helloMe")] HttpRequest req,
 			ILogger log)
 		{
 			log.LogInformation("C# HTTP trigger function processed a request.");
 
-			Guid header = Guid.Parse(req.Headers["test-header"]);
+			if (!req.Headers.ContainsKey("ID"))
+			{
+				return new BadRequestObjectResult("Header ID was not found");
+			}
 
-			string queryName = req.Query["name"];
-
-			string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+			Guid header = Guid.Parse(req.Headers["ID"]);
 
 			string name = null;
 
-			if (HttpMethods.IsPost(req.Method))
+			if (req.Query.ContainsKey("name"))
 			{
-				name = JsonConvert.DeserializeObject<User>(requestBody)?.Name;
+				string queryName = req.Query["name"];
+				name = queryName;
 			}
 			else
 			{
-				name = queryName;
+				if (!HttpMethods.IsPost(req.Method))
+				{
+					return new BadRequestObjectResult("POST requires a body with Name field");
+				}
+
+
+				if (req.ContentType.Equals("application/json", StringComparison.CurrentCultureIgnoreCase))
+				{
+					string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+					name = JsonConvert.DeserializeObject<User>(requestBody)?.Name;
+				}
+				else if (req.ContentType.Equals("application/x-msgpack", StringComparison.CurrentCultureIgnoreCase))
+				{
+					name = MessagePack.MessagePackSerializer.Deserialize<User>(req.Body, ContractlessStandardResolver.Instance)?.Name;
+				}
+				else if (req.ContentType.Equals("application/x-protobuf", StringComparison.CurrentCultureIgnoreCase))
+				{
+					name = Serializer.Deserialize<User>(req.Body)?.Name;
+				}
+				else
+				{
+					return new BadRequestObjectResult("Content-Type of body not supported. Supported Content-Types are the following: [application/json],[application/x-msgpack],[application/x-protobuf]");
+				}
 			}
 
-			return name != null
-				? (ActionResult)new OkObjectResult($"Hello, {name}")
-				: new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+			if (name != null)
+			{
+				return new OkObjectResult($"Hello, {name}");
+			}
+			else
+			{
+				return new BadRequestObjectResult("Please pass a name on the query string or in the request body");
+			}
 		}
 	}
 }

@@ -41,5 +41,7 @@ namespace AspNetCore.Client.Generator
 		public const string HeadersParameter = "headers";
 
 		public const string ResponseCallback = "ResponseCallback";
+
+		public const string ResponseHandledVariable = "responseHandled";
 	}
 }

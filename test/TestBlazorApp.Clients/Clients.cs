@@ -122,9 +122,9 @@ namespace TestBlazorApp.Clients
 	{
 		protected readonly ITestBlazorAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpContentSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public SampleDataClient(ITestBlazorAppClientWrapper param_client, Func<ITestBlazorAppClient, IHttpOverride> param_httpoverride, Func<ITestBlazorAppClient, IHttpSerializer> param_serializer, Func<ITestBlazorAppClient, IHttpRequestModifier> param_modifier)
+		public SampleDataClient(ITestBlazorAppClientWrapper param_client, Func<ITestBlazorAppClient, IHttpOverride> param_httpoverride, Func<ITestBlazorAppClient, IHttpContentSerializer> param_serializer, Func<ITestBlazorAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -139,6 +139,7 @@ namespace TestBlazorApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -154,6 +155,7 @@ namespace TestBlazorApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -190,6 +192,7 @@ namespace TestBlazorApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -205,6 +208,7 @@ namespace TestBlazorApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -228,6 +232,7 @@ namespace TestBlazorApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -243,6 +248,7 @@ namespace TestBlazorApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -279,6 +285,7 @@ namespace TestBlazorApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -294,6 +301,7 @@ namespace TestBlazorApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else

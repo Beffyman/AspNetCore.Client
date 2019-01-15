@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Dependencies;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Headers;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
@@ -23,6 +25,11 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// Name of the endpoint/controller generated from
 		/// </summary>
 		public string Name { get; set; }
+
+		/// <summary>
+		/// Client name of the function
+		/// </summary>
+		public string ClientName => $"{Name}Client";
 
 		/// <summary>
 		/// Determines whether or not to have a void method depending on if it is a ActionResult return
@@ -106,7 +113,10 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// </summary>
 		public string Error { get; set; }
 
-
+		/// <summary>
+		/// Should this endpoint be generated
+		/// </summary>
+		public bool Generated => !Ignored && !Failed;
 
 		/// <summary>
 		/// Creates an function
@@ -121,7 +131,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <returns></returns>
 		public IEnumerable<INavNode> GetChildren()
 		{
-			return new List<INavNode>() { }
+			return Enumerable.Empty<INavNode>()
 				.Union(ResponseTypes)
 				.Union(ConstantHeader)
 				.Union(Parameters)
@@ -130,21 +140,23 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		}
 
 		/// <summary>
-		/// Gets all of the parameters for this function that is sorted
+		/// Gets all of the parameters for this function for the httpMethod that is sorted
 		/// </summary>
+		/// <param name="method"></param>
 		/// <returns></returns>
-		public IEnumerable<IParameter> GetParameters()
+		public IEnumerable<IParameter> GetParametersForHttpMethod(HttpMethod method)
 		{
-			return GetChildren().OfType<IParameter>().OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
+			return GetChildren().OfType<IParameter>().Union(HttpParameters[method]).OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
 		}
 
 		/// <summary>
-		/// Gets all the parameters of the function that are not response types, used for creating a Raw request
+		/// Gets all the parameters of the function for the httpMethod that are not response types, used for creating a Raw request
 		/// </summary>
+		/// <param name="method"></param>
 		/// <returns></returns>
-		public IEnumerable<IParameter> GetParametersWithoutResponseTypes()
+		public IEnumerable<IParameter> GetParametersWithoutResponseTypesForHttpMethod(HttpMethod method)
 		{
-			return GetChildren().Where(x => !(x is ResponseType) || (x is ExceptionResponseType)).OfType<IParameter>().OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
+			return GetChildren().Where(x => !(x is ResponseType) || (x is ExceptionResponseType)).OfType<IParameter>().Union(HttpParameters[method]).OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
 		}
 
 		/// <summary>
@@ -160,9 +172,19 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// Gets all the parameters that exist as query string in the uri
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerable<QueryParameter> GetQueryParameters()
+		public IEnumerable<QueryParameter> GetQueryParameters(HttpMethod method)
 		{
-			return GetChildren().OfType<QueryParameter>().OrderBy(x => x.SortOrder);
+			return GetChildren().Union(HttpParameters[method]).OfType<QueryParameter>().OrderBy(x => x.SortOrder);
+		}
+
+
+		/// <summary>
+		/// Gets the body parameter for the method
+		/// </summary>
+		/// <returns></returns>
+		public BodyParameter GetBodyParameter(HttpMethod method)
+		{
+			return GetChildren().Union(HttpParameters[method]).OfType<BodyParameter>().OrderBy(x => x.SortOrder).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -203,11 +225,10 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <summary>
 		/// Get all route constraints associated with the endpoint, with the caller being accounted for
 		/// </summary>
-		/// <param name="caller"></param>
 		/// <returns></returns>
-		public IEnumerable<RouteConstraint> GetRouteConstraints(AspNetCoreHttpController caller)
+		public IEnumerable<RouteConstraint> GetRouteConstraints()
 		{
-			return caller.Route.Merge(Route).Constraints;
+			return Route?.Constraints ?? Enumerable.Empty<RouteConstraint>();
 		}
 
 		/// <summary>
@@ -222,10 +243,11 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <summary>
 		/// Get the signature of the endpoint, for equality/grouping purposes
 		/// </summary>
+		/// <param name="method"></param>
 		/// <returns></returns>
-		public string GetSignature()
+		public string GetSignature(HttpMethod method)
 		{
-			return $"{ToString()}(${string.Join(", ", GetParameters().Select(x => x.ToString()))}";
+			return $"{ToString()}(${string.Join(", ", GetParametersForHttpMethod(method).Select(x => x.ToString()))}";
 		}
 
 
@@ -241,13 +263,17 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 				throw new NotSupportedException($"Endpoint has multiple response types of the same status defined. {string.Join(", ", duplicateResponseTypes.Select(x => x.Key?.ToString()))}");
 			}
 
-
-			var duplicateParameters = this.GetParametersWithoutResponseTypes().GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
-
-			if (duplicateParameters.Any())
+			foreach (var method in SupportedMethods)
 			{
-				throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+				var duplicateParameters = this.GetParametersWithoutResponseTypesForHttpMethod(method).GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
+
+				if (duplicateParameters.Any())
+				{
+					throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+				}
 			}
+
+
 
 			var duplicateHeaders = this.GetHeaders().GroupBy(x => x.Key).Where(x => x.Count() > 1).ToList();
 
@@ -255,6 +281,20 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 			{
 				throw new NotSupportedException($"Endpoint has multiple headers of the same key defined. {string.Join(", ", duplicateHeaders.Select(x => x.Key?.ToString()))}");
 			}
+		}
+
+		private static IEnumerable<Type> _allDependencies = typeof(IDependency).GetTypeInfo().Assembly
+											.GetTypes()
+											.Where(x => typeof(IDependency).IsAssignableFrom(x) && !x.GetTypeInfo().IsAbstract)
+											.ToList();
+
+		/// <summary>
+		/// Gets all of the injectable properties for the clients generated
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<IDependency> GetInjectionDependencies()
+		{
+			return _allDependencies.Where(x => x != typeof(ClientDependency)).Select(x => Activator.CreateInstance(x) as IDependency);
 		}
 	}
 }

@@ -27,13 +27,13 @@ using AspNetCore.Server.Attributes.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AspNetCore.Client.Generator.Output
 {
 	public static class ClassParser
 	{
-
 		private static readonly Regex RouteVersionRegex = new Regex(@"\/([v|V]\d+)\/");
 
 		#region Http
@@ -321,11 +321,15 @@ namespace AspNetCore.Client.Generator.Output
 
 			if (duplicateParameters.Any())
 			{
-				throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
 			}
 
+			var invalidParameters = endpoint.GetParameters().Where(x => !Microsoft.CodeAnalysis.CSharp.SyntaxFacts.IsValidIdentifier(x.Name)).ToList();
 
-
+			if (invalidParameters.Any())
+			{
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has parameters that are invalid variable names. {string.Join(", ", invalidParameters.Select(x => x.Name))}");
+			}
 
 			return endpoint;
 		}
@@ -487,6 +491,13 @@ namespace AspNetCore.Client.Generator.Output
 				throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
 			}
 
+			var invalidParameters = endpoint.GetParameters().Where(x => !Microsoft.CodeAnalysis.CSharp.SyntaxFacts.IsValidIdentifier(x.Name)).ToList();
+
+			if (invalidParameters.Any())
+			{
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has parameters that are invalid variable names. {string.Join(", ", invalidParameters.Select(x => x.Name))}");
+			}
+
 
 			var rawReturnType = syntax.ReturnType?.ToFullString();
 
@@ -526,7 +537,8 @@ namespace AspNetCore.Client.Generator.Output
 
 				if (endpointName == null)
 				{
-					return null;
+					endpoint.Ignored = true;
+					return endpoint;
 				}
 
 				endpoint.Name = endpointName.GetAttributeValue();
@@ -575,7 +587,17 @@ namespace AspNetCore.Client.Generator.Output
 
 				if (triggerAttribute.Route != null)
 				{
-					endpoint.Route = new HttpRoute(triggerAttribute.Route);
+					var route = triggerAttribute.Route.TrimStart('/');
+					if (!route.StartsWith("api"))
+					{
+						route = "api/" + route;
+					}
+					route = "/" + route;
+					endpoint.Route = new HttpRoute(route);
+				}
+				else
+				{
+					endpoint.Route = new HttpRoute($"api/{endpoint.Name}");
 				}
 
 
@@ -601,7 +623,29 @@ namespace AspNetCore.Client.Generator.Output
 				endpoint.Parameters.Add(new CookieModifier());
 				endpoint.Parameters.Add(new HeadersModifier());
 				endpoint.Parameters.Add(new TimeoutModifier());
-				endpoint.Parameters.Add(new SecurityModifier());
+
+				if (triggerAttribute.AuthLevel == AuthorizationLevel.User)
+				{
+					if (!endpoint.ResponseTypes.Any(x => x.Status == HttpStatusCode.Unauthorized))
+					{
+						endpoint.ResponseTypes.Add(new ResponseType(HttpStatusCode.Unauthorized));
+					}
+
+					endpoint.Parameters.Add(new SecurityModifier());
+				}
+				else if (triggerAttribute.AuthLevel == AuthorizationLevel.Anonymous)
+				{
+
+				}
+				else
+				{
+					if (!endpoint.ResponseTypes.Any(x => x.Status == HttpStatusCode.Unauthorized))
+					{
+						endpoint.ResponseTypes.Add(new ResponseType(HttpStatusCode.Unauthorized));
+					}
+
+					endpoint.Parameters.Add(new FunctionAuthModifier());
+				}
 
 
 				var parameterHeaders = attributes.GetAttributes<HeaderParameterAttribute>()
@@ -647,16 +691,23 @@ namespace AspNetCore.Client.Generator.Output
 
 				endpoint.ReturnType = rawReturnType;
 
-
-
-				var duplicateParameters = endpoint.GetParametersWithoutResponseTypes().GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
-
-				if (duplicateParameters.Any())
+				foreach (var method in endpoint.SupportedMethods)
 				{
-					throw new NotSupportedException($"Endpoint has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+					var duplicateParameters = endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
+
+					if (duplicateParameters.Any())
+					{
+						throw new NotSupportedException($"Function has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+					}
+
+
+					var invalidParameters = endpoint.GetParametersForHttpMethod(method).Where(x => !Microsoft.CodeAnalysis.CSharp.SyntaxFacts.IsValidIdentifier(x.Name)).ToList();
+
+					if (invalidParameters.Any())
+					{
+						throw new NotSupportedException($"Function {endpoint.Name} has parameters that are invalid variable names. {string.Join(", ", invalidParameters.Select(x => x.Name))}");
+					}
 				}
-
-
 			}
 			catch (NotSupportedException nse)
 			{

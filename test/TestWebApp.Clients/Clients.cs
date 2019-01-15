@@ -33,7 +33,7 @@ using TestWebApp.Contracts;
 
 namespace TestWebApp.Clients
 {
-#warning DuplicateParameterErrorController is misconfigured for generation :: Endpoint has multiple parameters of the same name defined. id
+#warning DuplicateParameterErrorController is misconfigured for generation :: Endpoint DuplicateParameterError.ErrorResponses has multiple parameters of the same name defined. id
 #warning InheritanceErrorsController is misconfigured for generation :: Endpoint has multiple headers of the same key defined. TestInheritance
 #warning ResponseTypeErrorController is misconfigured for generation :: Endpoint has multiple response types of the same status defined. OK
 #warning ErrorHub is misconfigured for generation :: Hub has multiple messages with different parameters defined. ReceiveMessage
@@ -202,9 +202,9 @@ namespace TestWebApp.Clients
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpContentSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public FullClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public FullClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -219,6 +219,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -234,6 +235,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -270,6 +272,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -285,6 +288,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -308,6 +312,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{await dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -323,6 +328,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -359,6 +365,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{await dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -374,6 +381,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -421,9 +429,9 @@ namespace TestWebApp.Clients
 		{
 			protected readonly ITestWebAppClientWrapper Client;
 			protected readonly IHttpOverride HttpOverride;
-			protected readonly IHttpSerializer Serializer;
+			protected readonly IHttpContentSerializer Serializer;
 			protected readonly IHttpRequestModifier Modifier;
-			public NamespacedClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+			public NamespacedClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 			{
 				Client = param_client;
 				HttpOverride = param_httpoverride(this);
@@ -436,6 +444,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/test";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -451,6 +460,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -478,6 +488,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/test";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -493,6 +504,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -514,6 +526,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/test";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -529,6 +542,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -556,6 +570,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/test";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -571,6 +586,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -592,6 +608,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -607,6 +624,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -634,6 +652,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -649,6 +668,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -670,6 +690,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -685,6 +706,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -712,6 +734,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -727,6 +750,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -753,6 +777,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123/{id}";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -768,6 +793,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -800,6 +826,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123/{id}";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -815,6 +842,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -841,6 +869,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123/{id}";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -856,6 +885,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -888,6 +918,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/NewTest123/{id}";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -903,6 +934,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -924,6 +956,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/overwritten";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -939,6 +972,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -966,6 +1000,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/overwritten";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -981,6 +1016,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -1002,6 +1038,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/overwritten";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -1017,6 +1054,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -1044,6 +1082,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/overwritten";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -1059,6 +1098,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -1080,6 +1120,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/InheritTest";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -1095,6 +1136,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -1122,6 +1164,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/InheritTest";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -1137,6 +1180,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -1158,6 +1202,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/InheritTest";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -1173,6 +1218,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -1200,6 +1246,7 @@ namespace TestWebApp.Clients
 				string url = $@"api/namespaced/InheritTest";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+				bool responseHandled = response != null;
 				if (response == null)
 				{
 					try
@@ -1215,6 +1262,7 @@ namespace TestWebApp.Clients
 
 						if (ExceptionCallback != null)
 						{
+							responseHandled = true;
 							ExceptionCallback?.Invoke(fhex);
 						}
 						else
@@ -1385,9 +1433,9 @@ namespace TestWebApp.Clients
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpContentSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public ValuesClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public ValuesClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -1401,6 +1449,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1416,6 +1465,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1436,7 +1486,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1446,7 +1500,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1471,6 +1529,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1486,6 +1545,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1508,6 +1568,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1523,6 +1584,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1543,7 +1605,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1553,7 +1619,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1578,6 +1648,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1593,6 +1664,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1615,6 +1687,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getAsync";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1630,6 +1703,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1650,7 +1724,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1660,7 +1738,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1685,6 +1767,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getAsync";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1700,6 +1783,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1722,6 +1806,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getAsync";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1737,6 +1822,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1757,7 +1843,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1767,7 +1857,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1792,6 +1886,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getAsync";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1807,6 +1902,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1829,6 +1925,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getQualified";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1844,6 +1941,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1864,7 +1962,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1874,7 +1976,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1899,6 +2005,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getQualified";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1914,6 +2021,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1936,6 +2044,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getQualified";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -1951,6 +2060,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -1971,7 +2081,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -1981,7 +2095,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2006,6 +2124,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getQualified";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2021,6 +2140,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2043,6 +2163,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getTuple";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2058,6 +2179,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2078,7 +2200,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2088,7 +2214,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2113,6 +2243,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getTuple";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2128,6 +2259,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2150,6 +2282,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getTuple";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2165,6 +2298,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2185,7 +2319,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2195,7 +2333,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2220,6 +2362,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getTuple";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2235,6 +2378,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2258,6 +2402,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getNested";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2273,6 +2418,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2293,7 +2439,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2303,7 +2453,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2329,6 +2483,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getNested";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2344,6 +2499,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2367,6 +2523,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getNested";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2382,6 +2539,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2402,7 +2560,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2412,7 +2574,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2438,6 +2604,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/getNested";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2453,6 +2620,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2475,6 +2643,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2490,6 +2659,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2510,7 +2680,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2520,7 +2694,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2545,6 +2723,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2560,6 +2739,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2582,6 +2762,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2597,6 +2778,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2617,7 +2799,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2627,7 +2813,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2652,6 +2842,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2667,6 +2858,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2689,6 +2881,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2704,6 +2897,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2724,7 +2918,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2734,7 +2932,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2752,6 +2954,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2767,6 +2970,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2789,6 +2993,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2804,6 +3009,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2824,7 +3030,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2834,7 +3044,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2852,6 +3066,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2867,6 +3082,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2889,6 +3105,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2904,6 +3121,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2924,7 +3142,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2934,7 +3156,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -2952,6 +3178,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -2967,6 +3194,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -2989,6 +3217,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3004,6 +3233,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3024,7 +3254,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3034,7 +3268,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3052,6 +3290,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3067,6 +3306,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3089,6 +3329,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3104,6 +3345,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3124,7 +3366,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3134,7 +3380,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3159,6 +3409,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3174,6 +3425,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3196,6 +3448,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3211,6 +3464,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3231,7 +3485,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3241,7 +3499,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3266,6 +3528,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3281,6 +3544,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3304,6 +3568,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3319,6 +3584,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3339,7 +3605,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3349,7 +3619,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3375,6 +3649,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3390,6 +3665,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3413,6 +3689,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3428,6 +3705,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3448,7 +3726,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3458,7 +3740,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3484,6 +3770,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3499,6 +3786,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3522,6 +3810,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3537,6 +3826,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3557,7 +3847,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3567,7 +3861,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3586,6 +3884,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3601,6 +3900,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3624,6 +3924,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3639,6 +3940,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3659,7 +3961,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3669,7 +3975,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3688,6 +3998,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3703,6 +4014,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3731,6 +4043,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3746,6 +4059,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3766,7 +4080,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3776,7 +4094,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3800,6 +4122,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3815,6 +4138,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3843,6 +4167,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3858,6 +4183,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3878,7 +4204,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3888,7 +4218,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3912,6 +4246,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3927,6 +4262,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3950,6 +4286,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -3965,6 +4302,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -3985,7 +4323,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -3995,7 +4337,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4021,6 +4367,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4036,6 +4383,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4059,6 +4407,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4074,6 +4423,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4094,7 +4444,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4104,7 +4458,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4130,6 +4488,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4145,6 +4504,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4168,6 +4528,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4183,6 +4544,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4203,7 +4565,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4213,7 +4579,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4239,6 +4609,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4254,6 +4625,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4277,6 +4649,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4292,6 +4665,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4312,7 +4686,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4322,7 +4700,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4348,6 +4730,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4363,6 +4746,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4391,6 +4775,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4406,6 +4791,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4426,7 +4812,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4436,7 +4826,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4446,7 +4840,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4470,6 +4868,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4485,6 +4884,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4513,6 +4913,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4528,6 +4929,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4548,7 +4950,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4558,7 +4964,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4568,7 +4978,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4592,6 +5006,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4607,6 +5022,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4630,6 +5046,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4645,6 +5062,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4665,7 +5083,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4675,7 +5097,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4694,6 +5120,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4709,6 +5136,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4732,6 +5160,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4747,6 +5176,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4767,7 +5197,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4777,7 +5211,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4796,6 +5234,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4811,6 +5250,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4834,6 +5274,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4849,6 +5290,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4869,7 +5311,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4879,7 +5325,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4905,6 +5355,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4920,6 +5371,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4943,6 +5395,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -4958,6 +5411,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -4978,7 +5432,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -4988,7 +5446,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5014,6 +5476,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5029,6 +5492,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5052,6 +5516,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5067,6 +5532,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5087,7 +5553,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5097,7 +5567,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5107,7 +5581,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5126,6 +5604,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5141,6 +5620,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5164,6 +5644,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5179,6 +5660,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5199,7 +5681,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5209,7 +5695,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5219,7 +5709,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5238,6 +5732,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5253,6 +5748,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5276,6 +5772,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5291,6 +5788,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5311,7 +5809,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5321,7 +5823,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5331,7 +5837,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5350,6 +5860,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5365,6 +5876,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5388,6 +5900,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5403,6 +5916,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5423,7 +5937,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5433,7 +5951,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5443,7 +5965,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5462,6 +5988,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5477,6 +6004,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5500,6 +6028,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5515,6 +6044,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5535,7 +6065,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5545,7 +6079,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5555,7 +6093,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5574,6 +6116,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5589,6 +6132,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5612,6 +6156,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5627,6 +6172,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5647,7 +6193,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5657,7 +6207,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5667,7 +6221,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5686,6 +6244,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5701,6 +6260,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5729,6 +6289,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5744,6 +6305,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5764,7 +6326,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5774,7 +6340,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5784,7 +6354,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke();
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5808,6 +6382,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5823,6 +6398,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5851,6 +6427,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5866,6 +6443,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5886,7 +6464,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5896,7 +6478,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5906,7 +6492,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke();
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -5930,6 +6520,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{id}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5945,6 +6536,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -5973,6 +6565,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -5988,6 +6581,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6008,7 +6602,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6018,7 +6616,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6028,7 +6630,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6052,6 +6658,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6067,6 +6674,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6095,6 +6703,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6110,6 +6719,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6130,7 +6740,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6140,7 +6754,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6150,7 +6768,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6174,6 +6796,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/{testId}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6189,6 +6812,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6212,6 +6836,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6227,6 +6852,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6247,7 +6873,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6257,7 +6887,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6267,7 +6901,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6286,6 +6924,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6301,6 +6940,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6324,6 +6964,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6339,6 +6980,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6359,7 +7001,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6369,7 +7015,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6379,7 +7029,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<Guid>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6398,6 +7052,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6413,6 +7068,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6436,6 +7092,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6451,6 +7108,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6471,7 +7129,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6481,7 +7143,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6491,7 +7157,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6510,6 +7180,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6525,6 +7196,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6548,6 +7220,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6563,6 +7236,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6583,7 +7257,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6593,7 +7271,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6603,7 +7285,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6622,6 +7308,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6637,6 +7324,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6660,6 +7348,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6675,6 +7364,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6695,7 +7385,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6705,7 +7399,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6715,7 +7413,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6734,6 +7436,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6749,6 +7452,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6772,6 +7476,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6787,6 +7492,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6807,7 +7513,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6817,7 +7527,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6827,7 +7541,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6846,6 +7564,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6861,6 +7580,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6884,6 +7604,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -6899,6 +7620,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -6919,7 +7641,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6929,7 +7655,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6939,7 +7669,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (NoContentCallback != null && NoContentCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6949,7 +7683,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
 			{
-				NoContentCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (NoContentCallback != null)
+				{
+					responseHandled = true;
+					NoContentCallback.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6959,7 +7697,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.SeeOther)
 			{
-				SeeOtherCallback?.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (SeeOtherCallback != null)
+				{
+					responseHandled = true;
+					SeeOtherCallback.Invoke(Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (NotModifiedCallback != null && NotModifiedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6969,7 +7711,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
 			{
-				NotModifiedCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (NotModifiedCallback != null)
+				{
+					responseHandled = true;
+					NotModifiedCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -6988,6 +7734,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7003,6 +7750,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7026,6 +7774,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7041,6 +7790,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7061,7 +7811,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7071,7 +7825,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7081,7 +7839,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<IEnumerable<int>>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (NoContentCallback != null && NoContentCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7091,7 +7853,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
 			{
-				NoContentCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+				if (NoContentCallback != null)
+				{
+					responseHandled = true;
+					NoContentCallback.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (SeeOtherCallback != null && SeeOtherCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7101,7 +7867,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.SeeOther)
 			{
-				SeeOtherCallback?.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+				if (SeeOtherCallback != null)
+				{
+					responseHandled = true;
+					SeeOtherCallback.Invoke(await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (NotModifiedCallback != null && NotModifiedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7111,7 +7881,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.NotModified)
 			{
-				NotModifiedCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (NotModifiedCallback != null)
+				{
+					responseHandled = true;
+					NotModifiedCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7130,6 +7904,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7145,6 +7920,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7168,6 +7944,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7183,6 +7960,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7203,7 +7981,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7213,7 +7995,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7223,7 +8009,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7242,6 +8032,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7257,6 +8048,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7280,6 +8072,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7295,6 +8088,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7315,7 +8109,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7325,7 +8123,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7335,7 +8137,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7354,6 +8160,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7369,6 +8176,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7392,6 +8200,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7407,6 +8216,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7427,7 +8237,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7437,7 +8251,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7463,6 +8281,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7478,6 +8297,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7501,6 +8321,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7516,6 +8337,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7536,7 +8358,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7546,7 +8372,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7572,6 +8402,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7587,6 +8418,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7610,6 +8442,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7625,6 +8458,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7645,7 +8479,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7655,7 +8493,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7665,7 +8507,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(response.Content.ReadAsStreamAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(response.Content.ReadAsStreamAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7684,6 +8530,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7699,6 +8546,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7722,6 +8570,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7737,6 +8586,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7757,7 +8607,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7767,7 +8621,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7777,7 +8635,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				OKCallback?.Invoke(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7796,6 +8658,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7811,6 +8674,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7834,6 +8698,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7849,6 +8714,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7869,7 +8735,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7879,7 +8749,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7905,6 +8779,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7920,6 +8795,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7943,6 +8819,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -7958,6 +8835,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -7978,7 +8856,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -7988,7 +8870,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8014,6 +8900,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8029,6 +8916,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8052,6 +8940,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/optional/{x}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8067,6 +8956,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8087,7 +8977,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8097,7 +8991,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8123,6 +9021,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/optional/{x}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8138,6 +9037,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8161,6 +9061,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/optional/{x}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8176,6 +9077,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8196,7 +9098,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8206,7 +9112,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8232,6 +9142,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/optional/{x}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8247,6 +9158,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8270,6 +9182,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8285,6 +9198,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8305,7 +9219,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8315,7 +9233,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8341,6 +9263,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8356,6 +9279,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8379,6 +9303,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8394,6 +9319,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8414,7 +9340,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8424,7 +9354,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8450,6 +9384,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8465,6 +9400,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8488,6 +9424,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8503,6 +9440,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8523,7 +9461,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8533,7 +9475,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8559,6 +9505,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8574,6 +9521,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8597,6 +9545,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8612,6 +9561,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8632,7 +9582,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8642,7 +9596,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8668,6 +9626,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8683,6 +9642,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8706,6 +9666,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8721,6 +9682,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8741,7 +9703,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8751,7 +9717,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8777,6 +9747,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8792,6 +9763,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8815,6 +9787,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8830,6 +9803,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8850,7 +9824,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8860,7 +9838,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8886,6 +9868,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8901,6 +9884,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8924,6 +9908,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -8939,6 +9924,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -8959,7 +9945,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8969,7 +9959,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -8995,6 +9989,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9010,6 +10005,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9033,6 +10029,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9048,6 +10045,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9068,7 +10066,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
 			{
-				BadRequestCallback?.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
 			}
 
 			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -9078,7 +10080,11 @@ namespace TestWebApp.Clients
 
 			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
 			{
-				InternalServerErrorCallback?.Invoke();
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -9104,6 +10110,7 @@ namespace TestWebApp.Clients
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9119,6 +10126,7 @@ namespace TestWebApp.Clients
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9151,9 +10159,9 @@ namespace TestWebApp.Clients.V1
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpContentSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -9166,6 +10174,7 @@ namespace TestWebApp.Clients.V1
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9181,6 +10190,7 @@ namespace TestWebApp.Clients.V1
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9208,6 +10218,7 @@ namespace TestWebApp.Clients.V1
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9223,6 +10234,7 @@ namespace TestWebApp.Clients.V1
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9244,6 +10256,7 @@ namespace TestWebApp.Clients.V1
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9259,6 +10272,7 @@ namespace TestWebApp.Clients.V1
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9286,6 +10300,7 @@ namespace TestWebApp.Clients.V1
 			string url = $@"api/v1/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9301,6 +10316,7 @@ namespace TestWebApp.Clients.V1
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9333,9 +10349,9 @@ namespace TestWebApp.Clients.V2
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpContentSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -9348,6 +10364,7 @@ namespace TestWebApp.Clients.V2
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9363,6 +10380,7 @@ namespace TestWebApp.Clients.V2
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9390,6 +10408,7 @@ namespace TestWebApp.Clients.V2
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9405,6 +10424,7 @@ namespace TestWebApp.Clients.V2
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9426,6 +10446,7 @@ namespace TestWebApp.Clients.V2
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9441,6 +10462,7 @@ namespace TestWebApp.Clients.V2
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else
@@ -9468,6 +10490,7 @@ namespace TestWebApp.Clients.V2
 			string url = $@"api/v2/test/endpoint";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
@@ -9483,6 +10506,7 @@ namespace TestWebApp.Clients.V2
 
 					if (ExceptionCallback != null)
 					{
+						responseHandled = true;
 						ExceptionCallback?.Invoke(fhex);
 					}
 					else

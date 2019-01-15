@@ -371,7 +371,7 @@ namespace AspNetCore.Client.Generator
 		public class TypeString
 		{
 			public string Name { get; set; }
-			public IEnumerable<TypeString> Arguments { get; set; } = new List<TypeString>();
+			public IEnumerable<TypeString> Arguments { get; set; } = Enumerable.Empty<TypeString>();
 
 			public TypeString(string name)
 			{

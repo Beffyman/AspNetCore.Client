@@ -1,4 +1,5 @@
 ﻿using MessagePack.Resolvers;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,8 +10,11 @@ namespace AspNetCore.Client.Serializers
 	/// <summary>
 	/// Uses MessagePack for serializing and deserializing the http content
 	/// </summary>
-	internal class MessagePackSerializer : IHttpSerializer
+	internal class MessagePackSerializer : IHttpContentSerializer
 	{
+		internal static readonly string CONTENT_TYPE = "application/x-msgpack";
+		public string ContentType => CONTENT_TYPE;
+
 		/// <summary>
 		/// Deserializes the request content which is assumed to be MessagePack into a object of <typeparamref name="T"/>
 		/// </summary>
@@ -33,7 +37,7 @@ namespace AspNetCore.Client.Serializers
 			var stream = new MemoryStream();
 			MessagePack.MessagePackSerializer.Serialize(stream, request, ContractlessStandardResolver.Instance);
 			var content = new StreamContent(stream);
-			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-msgpack");
+			content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
 			return content;
 		}
 	}

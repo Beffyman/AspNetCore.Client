@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
@@ -10,8 +11,11 @@ namespace AspNetCore.Client.Serializers
 	/// <summary>
 	/// Uses Blazor's SimpleJson for serializing and deserializing the http content
 	/// </summary>
-	internal class BlazorSimpleJsonSerializer : IHttpSerializer
+	internal class BlazorSimpleJsonSerializer : IHttpContentSerializer
 	{
+		internal static readonly string CONTENT_TYPE = "application/json";
+		public string ContentType => CONTENT_TYPE;
+
 		private static readonly IDictionary<Type, Func<string, object>> _knownJsonPrimitives = new Dictionary<Type, Func<string, object>>
 		{
 			{ typeof(char), (_)=> char.Parse(_) },
@@ -46,6 +50,7 @@ namespace AspNetCore.Client.Serializers
 			}
 			else
 			{
+				//Can't use the same stream reading as AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
 				var str = await content.ReadAsStringAsync().ConfigureAwait(false);
 				return Json.Deserialize<T>(str);
 			}
@@ -59,8 +64,10 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
+			//Can't use the same stream writing as AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
+
 			var json = Json.Serialize(request);
-			return new StringContent(json, Encoding.UTF8, "application/json");
+			return new StringContent(json, Encoding.UTF8, ContentType);
 		}
 	}
 }

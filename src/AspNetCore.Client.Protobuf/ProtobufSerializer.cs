@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -9,8 +10,11 @@ namespace AspNetCore.Client.Serializers
 	/// <summary>
 	/// Uses Google.Protobuf for serializing and deserializing the http content
 	/// </summary>
-	internal class ProtobufSerializer : IHttpSerializer
+	internal class ProtobufSerializer : IHttpContentSerializer
 	{
+		internal static readonly string CONTENT_TYPE = "application/x-protobuf";
+		public string ContentType => CONTENT_TYPE;
+
 		/// <summary>
 		/// Deserializes the request content which is assumed to be protobuf into a object of <typeparamref name="T"/>
 		/// </summary>
@@ -33,7 +37,7 @@ namespace AspNetCore.Client.Serializers
 			var stream = new MemoryStream();
 			Serializer.Serialize(stream, request);
 			var content = new StreamContent(stream);
-			content.Headers.ContentType = new MediaTypeHeaderValue("application/x-protobuf");
+			content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
 			return content;
 		}
 	}

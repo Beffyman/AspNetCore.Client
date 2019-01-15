@@ -22,7 +22,7 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public static ClientConfiguration WithMessagePackBody(this ClientConfiguration config)
 		{
-			return config.WithPredefinedHeader("Accept", "application/x-msgpack");
+			return config.WithPredefinedHeader("Accept", MessagePackSerializer.CONTENT_TYPE);
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public static ClientConfiguration WithProtobufBody(this ClientConfiguration config)
 		{
-			return config.WithPredefinedHeader("Accept", "application/x-protobuf");
+			return config.WithPredefinedHeader("Accept", ProtobufSerializer.CONTENT_TYPE);
 		}
 	}
 }

@@ -54,12 +54,15 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <returns></returns>
 		public GenerationContext Merge(GenerationContext other)
 		{
-			if ((other.HttpClients?.Any() ?? false) || (other.HubClients?.Any() ?? false))
+			if ((other.HttpClients?.Any() ?? false)
+				|| (other.HubClients?.Any() ?? false)
+				|| (other.Functions?.Any() ?? false))
 			{
 				return new GenerationContext
 				{
 					HttpClients = this.HttpClients.Union(other.HttpClients).ToList(),
 					HubClients = this.HubClients.Union(other.HubClients).ToList(),
+					Functions = this.Functions.Union(other.Functions).ToList(),
 					UsingStatements = this.UsingStatements.Union(other.UsingStatements).ToList()
 				};
 			}
@@ -101,9 +104,14 @@ namespace AspNetCore.Client.Generator.Framework
 				client.Validate();
 			}
 
-			foreach (var client in HubClients)
+			foreach (var hub in HubClients)
 			{
-				client.Validate();
+				hub.Validate();
+			}
+
+			foreach (var function in Functions)
+			{
+				function.Validate();
 			}
 
 			Regex allowedUsings;

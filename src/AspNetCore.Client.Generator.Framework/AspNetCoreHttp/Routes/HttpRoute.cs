@@ -19,7 +19,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 		/// <summary>
 		/// Constraints interpreted from the {:xyz}s in the route
 		/// </summary>
-		public IEnumerable<RouteConstraint> Constraints { get; set; } = new List<RouteConstraint>();
+		public IEnumerable<RouteConstraint> Constraints { get; set; } = Enumerable.Empty<RouteConstraint>();
 
 		/// <summary>
 		/// Creates a route and interprets the contraints from it
@@ -53,7 +53,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 
 			foreach (var para in template.Parameters)
 			{
-				parameters.Add(para.Name, para.InlineConstraints?.Select(x => x.Constraint)?.ToList() ?? new List<string>());
+				parameters.Add(para.Name, para.InlineConstraints?.Select(x => x.Constraint)?.ToList() ?? Enumerable.Empty<string>());
 			}
 
 			return parameters;

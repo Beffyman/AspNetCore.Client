@@ -14,7 +14,7 @@ namespace AspNetCore.Client.Generator.SignalR
 			if (attribute.ArgumentList.Arguments.Count == 1)//Only HTTP value was provided, assumed to have no body
 			{
 				Name = attribute.ArgumentList.Arguments.SingleOrDefault().ToFullString().TrimQuotes();
-				Types = new List<string>();
+				Types = Enumerable.Empty<string>();
 			}
 			else//Has 2 or more arguments, parse rest as types
 			{

@@ -35,6 +35,18 @@ namespace AspNetCore.Client.GeneratorExtensions
 		}
 
 		/// <summary>
+		/// Adds the x-functions-key header to the request with the provided authkey
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="clientOrRequest"></param>
+		/// <param name="AuthKey"></param>
+		/// <returns></returns>
+		public static T WithFunctionAuthorizationKey<T>(this T clientOrRequest, string AuthKey) where T : IHttpSettingsContainer
+		{
+			return clientOrRequest.WithHeader("x-functions-key", AuthKey);
+		}
+
+		/// <summary>
 		/// Applies request modifiers
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
