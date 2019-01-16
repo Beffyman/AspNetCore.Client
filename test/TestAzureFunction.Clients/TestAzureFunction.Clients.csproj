@@ -18,6 +18,7 @@
 		<RegisterName>TestFunction</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
+		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ClientNamespace>TestAzureFunction.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestAzureFunction.*;</AllowedNamespaces>
 		<ExcludedNamespaces>Microsoft.Extensions.Logging*;</ExcludedNamespaces>

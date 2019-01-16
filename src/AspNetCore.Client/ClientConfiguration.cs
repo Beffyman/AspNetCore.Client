@@ -30,9 +30,14 @@ namespace AspNetCore.Client
 		private bool ConstantBaseAddress = false;
 
 		/// <summary>
-		/// What IHttpSerializer to use, defaults to json, allows for custom serialization of requests
+		/// What serializer to use for these clients
 		/// </summary>
-		internal IList<Type> SerializeTypes { get; set; } = new List<Type>();
+		internal Type Serializer { get; set; }
+
+		/// <summary>
+		/// What deserializers that are supported
+		/// </summary>
+		internal ICollection<Type> Deserializers { get; set; } = new HashSet<Type>();
 
 		/// <summary>
 		/// What IHttpOverride to use, allows for pre-post request calls
@@ -86,11 +91,29 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public IServiceCollection ApplyConfiguration<T>(IServiceCollection services) where T : IClient
 		{
-			if (!SerializeTypes.Any())
+			if (!Deserializers.Any())
 			{
-				SerializeTypes.Add(typeof(JsonHttpSerializer));
-				SerializeTypes.Add(typeof(TextHttpSerializer));
+				Deserializers.Add(typeof(JsonHttpSerializer));
 			}
+
+			if (!Deserializers.Contains(typeof(TextHttpSerializer)))
+			{
+				Deserializers.Add(typeof(TextHttpSerializer));
+			}
+
+			if (Serializer == null)
+			{
+				Serializer = typeof(JsonHttpSerializer);
+			}
+
+
+			foreach(var deser in Deserializers)
+			{
+				services.AddScoped(deser);
+			}
+
+
+			services.AddScoped(Serializer);
 
 			if (HttpOverrideType == null)
 			{
@@ -106,9 +129,9 @@ namespace AspNetCore.Client
 				throw new Exception("Error setting up client dependencies register.");
 			}
 
-			services.AddSingleton<IHttpSerializer<T>>();
+			//services.AddSingleton<IHttpSerializer>();
 			services.AddScoped(HttpOverrideType);
-			services.AddSingleton<Func<T, IHttpSerializer<T>>>(provider => (_ => new HttpSerializer<T>(provider, this)));
+			services.AddSingleton<Func<T, IHttpSerializer>>(provider => (_ => new HttpSerializer(provider, this)));
 			services.AddScoped<Func<T, IHttpOverride>>(provider => (_ => (IHttpOverride)provider.GetService(HttpOverrideType)));
 
 			if (ExistingHttpClient)
@@ -299,7 +322,17 @@ namespace AspNetCore.Client
 		/// </summary>
 		public ClientConfiguration UseJsonClientSerializer()
 		{
-			SerializeTypes.Add(typeof(JsonHttpSerializer));
+			Serializer = typeof(JsonHttpSerializer);
+
+			return this;
+		}
+
+		/// <summary>
+		/// Uses <see cref="JsonHttpSerializer"/> to serialize and deserialize requests
+		/// </summary>
+		public ClientConfiguration UseJsonClientDeserializer()
+		{
+			Deserializers.Add(typeof(JsonHttpSerializer));
 
 			return this;
 		}
@@ -322,7 +355,18 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public ClientConfiguration UseSerializer<T>() where T : IHttpContentSerializer
 		{
-			SerializeTypes.Add(typeof(T));
+			Serializer = typeof(T);
+			return this;
+		}
+
+		/// <summary>
+		/// Adds the deserializer to be used when it's content type is detected
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public ClientConfiguration UseDeserializer<T>() where T : IHttpContentSerializer
+		{
+			Deserializers.Add(typeof(T));
 			return this;
 		}
 

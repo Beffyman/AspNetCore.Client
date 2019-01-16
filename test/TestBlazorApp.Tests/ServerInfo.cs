@@ -40,6 +40,7 @@ namespace TestBlazorApp.Tests
 		{
 			configure.UseTestServerClient<ITestBlazorAppClientWrapper>(Client)
 				.UseBlazorSimpleJsonSerializer()
+				.UseBlazorSimpleJsonDeserializer()
 				.UseExistingHttpClient();
 
 		}

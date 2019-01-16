@@ -12,6 +12,7 @@
 		<RegisterName>MyService</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
+		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ClientNamespace>MyService.Clients</ClientNamespace>
 		<HubNamespace>MyService.Hubs</HubNamespace>
 		<AllowedNamespaces>System*;</AllowedNamespaces>

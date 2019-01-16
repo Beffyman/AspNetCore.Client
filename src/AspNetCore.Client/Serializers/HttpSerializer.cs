@@ -7,18 +7,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCore.Client.Serializers
 {
-	public interface IHttpSerializer<T> where T : IClient
+	public interface IHttpSerializer
 	{
-		Task<T> Deserialize(HttpContent content);
-		HttpContent Serialize(T request, string contentType);
+		Task<T> Deserialize<T>(HttpContent content);
+		HttpContent Serialize<T>(T request);
 
 	}
 
-	internal class HttpSerializer<T> : IHttpSerializer<T> where T : IClient
+	internal class HttpSerializer : IHttpSerializer
 	{
 		private readonly ClientConfiguration _config;
 		private readonly IServiceProvider _provider;
-		private readonly IDictionary<string, IHttpContentSerializer> Serializers;
+		private readonly IHttpContentSerializer Serializer;
+		private readonly IDictionary<string, IHttpContentSerializer> Deserializers;
 
 
 		public HttpSerializer(IServiceProvider provider, ClientConfiguration config)
@@ -26,11 +27,13 @@ namespace AspNetCore.Client.Serializers
 			_provider = provider;
 			_config = config;
 
-			Serializers = new Dictionary<string, IHttpContentSerializer>();
-			foreach (var serType in _config.SerializeTypes)
+			Serializer = (IHttpContentSerializer)_provider.GetService(config.Serializer);
+
+			Deserializers = new Dictionary<string, IHttpContentSerializer>();
+			foreach (var serType in _config.Deserializers)
 			{
 				var ser = (IHttpContentSerializer)_provider.GetService(serType);
-				Serializers.Add(ser.ContentType, ser);
+				Deserializers.Add(ser.ContentType, ser);
 			}
 		}
 
@@ -41,11 +44,16 @@ namespace AspNetCore.Client.Serializers
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
 		/// <returns></returns>
-		public async Task<T> Deserialize(HttpContent content)
+		public async Task<T> Deserialize<T>(HttpContent content)
 		{
-			if (Serializers.ContainsKey(content.Headers.ContentType.MediaType))
+			if (content.Headers.ContentType == null)
 			{
-				var serializer = Serializers[content.Headers.ContentType.MediaType];
+				return await Deserializers[TextHttpSerializer.CONTENT_TYPE].Deserialize<T>(content).ConfigureAwait(false);
+			}
+
+			if (Deserializers.ContainsKey(content.Headers.ContentType.MediaType))
+			{
+				var serializer = Deserializers[content.Headers.ContentType.MediaType];
 				return await serializer.Deserialize<T>(content).ConfigureAwait(false);
 			}
 
@@ -57,17 +65,10 @@ namespace AspNetCore.Client.Serializers
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="request"></param>
-		/// <param name="contentType"></param>
 		/// <returns></returns>
-		public HttpContent Serialize(T request, string contentType)
+		public HttpContent Serialize<T>(T request)
 		{
-			if (Serializers.ContainsKey(contentType))
-			{
-				var serializer = Serializers[contentType];
-				return serializer.Serialize<T>(request);
-			}
-
-			throw new FormatException($"Serialize Content-Type of {contentType} was unexpected.");
+			return Serializer.Serialize<T>(request);
 		}
 
 	}

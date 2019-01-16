@@ -25,12 +25,22 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public async Task<T> Deserialize<T>(HttpContent content)
 		{
-			if (typeof(T) == typeof(string))
+			var str = await content.ReadAsStringAsync().ConfigureAwait(false);
+
+			if (string.IsNullOrEmpty(str))
 			{
-				return (T)Convert.ChangeType(await content.ReadAsStringAsync().ConfigureAwait(false), typeof(string));
+				return default(T);
 			}
 
-			throw new InvalidCastException($"Cannot convert string to type {typeof(T).Name}");
+			if (typeof(T).IsGenericType
+				&& typeof(T).GetGenericTypeDefinition() == typeof(Nullable<>))
+			{
+				return (T)Convert.ChangeType(str, Nullable.GetUnderlyingType(typeof(T)));
+			}
+			else
+			{
+				return (T)Convert.ChangeType(await content.ReadAsStringAsync().ConfigureAwait(false), typeof(T));
+			}
 		}
 
 		/// <summary>

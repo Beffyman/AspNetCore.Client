@@ -104,9 +104,9 @@ namespace TestAzureFunction.Clients
 	{
 		protected readonly ITestAzureFunctionClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpContentSerializer Serializer;
+		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public Function1Client(ITestAzureFunctionClientWrapper param_client, Func<ITestAzureFunctionClient, IHttpOverride> param_httpoverride, Func<ITestAzureFunctionClient, IHttpContentSerializer> param_serializer, Func<ITestAzureFunctionClient, IHttpRequestModifier> param_modifier)
+		public Function1Client(ITestAzureFunctionClientWrapper param_client, Func<ITestAzureFunctionClient, IHttpOverride> param_httpoverride, Func<ITestAzureFunctionClient, IHttpSerializer> param_serializer, Func<ITestAzureFunctionClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -182,7 +182,12 @@ namespace TestAzureFunction.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");
@@ -311,7 +316,12 @@ namespace TestAzureFunction.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");
@@ -440,7 +450,12 @@ namespace TestAzureFunction.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");
@@ -569,7 +584,12 @@ namespace TestAzureFunction.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");

@@ -67,6 +67,7 @@ namespace TestAzureFunction.Tests
 		{
 			configure.UseTestServerClient<ITestAzureFunctionClientWrapper>(Client)
 				.WithProtobufBody()
+				.UseProtobufDeserializer()
 				.UseProtobufSerializer();
 		}
 	}
@@ -78,6 +79,7 @@ namespace TestAzureFunction.Tests
 		{
 			configure.UseTestServerClient<ITestAzureFunctionClientWrapper>(Client)
 				.WithMessagePackBody()
+				.UseMessagePackDeserializer()
 				.UseMessagePackSerializer();
 		}
 	}
@@ -88,6 +90,7 @@ namespace TestAzureFunction.Tests
 		{
 			configure.UseTestServerClient<ITestAzureFunctionClientWrapper>(Client)
 				.WithJsonBody()
+				.UseJsonClientDeserializer()
 				.UseJsonClientSerializer();
 		}
 	}

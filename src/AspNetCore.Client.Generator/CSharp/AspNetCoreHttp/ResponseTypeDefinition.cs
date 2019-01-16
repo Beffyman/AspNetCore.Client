@@ -17,14 +17,6 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			IsResponseHandler = responseHandler;
 		}
 
-
-		public ResponseTypeDefinition(string expectedStatus, string type)
-		{
-			Type = type;
-			Status = $"(int){nameof(HttpStatusCode)}.{expectedStatus}";
-			StatusValue = expectedStatus;
-		}
-
 		public ResponseTypeDefinition(AttributeSyntax attribute)
 		{
 			if (attribute.ArgumentList.Arguments.Count == 1)//Only HTTP value was provided, assumed to have no body
@@ -34,7 +26,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			}
 			else//Has 2 arguments(else invalid syntax) type,status
 			{
-				Type = attribute.ArgumentList.Arguments.FirstOrDefault().ToFullString().Replace("typeof", "").Trim().TrimStart('(').TrimEnd(')');
+				Type = attribute.ArgumentList.Arguments.FirstOrDefault().ToFullString().Replace("typeof", "").Trim().TrimStart('(').TrimEnd(')').Trim();
 				Status = attribute.ArgumentList.Arguments.LastOrDefault().ToFullString();
 			}
 
@@ -51,7 +43,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 
 
 					var tmp = Type;
-					Type = Status.Replace("typeof", "").Trim().TrimStart('(').TrimEnd(')');
+					Type = Status.Replace("typeof", "").Trim().TrimStart('(').TrimEnd(')').Trim();
 					Status = tmp;
 				}
 			}

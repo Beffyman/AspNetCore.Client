@@ -313,7 +313,7 @@ namespace AspNetCore.Client.Generator.Output
 
 			rawReturnType = returnType?.ToString();
 
-			endpoint.ReturnType = rawReturnType;
+			endpoint.ReturnType = rawReturnType?.Trim();
 
 
 
@@ -689,7 +689,7 @@ namespace AspNetCore.Client.Generator.Output
 
 				rawReturnType = returnType?.ToString();
 
-				endpoint.ReturnType = rawReturnType;
+				endpoint.ReturnType = rawReturnType?.Trim();
 
 				foreach (var method in endpoint.SupportedMethods)
 				{

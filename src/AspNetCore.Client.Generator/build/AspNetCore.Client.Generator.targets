@@ -12,6 +12,7 @@
 													RegisterName="$(RegisterName)"
 													UseValueTask="$(UseValueTask)"
 													UseInternalClients="$(UseInternalClients)"
+													ClientRouteConstraints="$(ClientRouteConstraints)"
 													ClientNamespace="$(ClientNamespace)"
 													HubNamespace="$(HubNamespace)"
 													AllowedNamespaces="$(AllowedNamespaces)"

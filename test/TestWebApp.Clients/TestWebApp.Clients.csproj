@@ -18,6 +18,7 @@
 		<RegisterName>TestWeb</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
+		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
 		<HubNamespace>TestWebApp.Hubs</HubNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts.*;</AllowedNamespaces>

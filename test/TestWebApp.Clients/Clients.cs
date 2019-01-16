@@ -202,9 +202,9 @@ namespace TestWebApp.Clients
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpContentSerializer Serializer;
+		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public FullClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public FullClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -254,7 +254,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -347,7 +352,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false);
@@ -429,9 +439,9 @@ namespace TestWebApp.Clients
 		{
 			protected readonly ITestWebAppClientWrapper Client;
 			protected readonly IHttpOverride HttpOverride;
-			protected readonly IHttpContentSerializer Serializer;
+			protected readonly IHttpSerializer Serializer;
 			protected readonly IHttpRequestModifier Modifier;
-			public NamespacedClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+			public NamespacedClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 			{
 				Client = param_client;
 				HttpOverride = param_httpoverride(this);
@@ -479,7 +489,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -561,7 +576,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -643,7 +663,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -725,7 +750,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -812,7 +842,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -904,7 +939,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -991,7 +1031,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -1073,7 +1118,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -1155,7 +1205,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -1237,7 +1292,12 @@ namespace TestWebApp.Clients
 					throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 				}
 
-				ResponseCallback?.Invoke(response);
+				if (ResponseCallback != null)
+				{
+					responseHandled = true;
+					ResponseCallback.Invoke(response);
+				}
+
 				return;
 			}
 
@@ -1427,15 +1487,19 @@ namespace TestWebApp.Clients
 		HttpResponseMessage CheckDateTimeOffsetNullableRaw(DateTimeOffset? date, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<DateTimeOffset> CheckDateTimeOffsetNullableAsync(DateTimeOffset? date, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> CheckDateTimeOffsetNullableRawAsync(DateTimeOffset? date, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		void RouteConstraintCheck(string name, int id, bool val, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage RouteConstraintCheckRaw(string name, int id, bool val, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		Task RouteConstraintCheckAsync(string name, int id, bool val, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> RouteConstraintCheckRawAsync(string name, int id, bool val, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 	}
 
 	internal class ValuesClient : IValuesClient
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpContentSerializer Serializer;
+		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public ValuesClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public ValuesClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -1512,7 +1576,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<IEnumerable<string>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1631,7 +1700,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<IEnumerable<string>>(response.Content).ConfigureAwait(false);
@@ -1750,7 +1824,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<IEnumerable<string>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -1869,7 +1948,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<IEnumerable<string>>(response.Content).ConfigureAwait(false);
@@ -1988,7 +2072,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<System.Collections.Generic.IEnumerable<string>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -2107,7 +2196,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<System.Collections.Generic.IEnumerable<string>>(response.Content).ConfigureAwait(false);
@@ -2226,7 +2320,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<IEnumerable<(string, int, bool)>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -2345,7 +2444,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<IEnumerable<(string, int, bool)>>(response.Content).ConfigureAwait(false);
@@ -2465,7 +2569,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -2586,7 +2695,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>>(response.Content).ConfigureAwait(false);
@@ -2706,7 +2820,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -2825,7 +2944,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false);
@@ -2944,7 +3068,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -3056,7 +3185,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -3168,7 +3302,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -3280,7 +3419,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -3392,7 +3536,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -3511,7 +3660,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false);
@@ -3631,7 +3785,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -3752,7 +3911,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<bool>(response.Content).ConfigureAwait(false);
@@ -3873,7 +4037,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -3987,7 +4156,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -4106,7 +4280,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -4230,7 +4409,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -4349,7 +4533,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -4470,7 +4659,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false);
@@ -4591,7 +4785,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -4712,7 +4911,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false);
@@ -4852,7 +5056,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -4990,7 +5199,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -5109,7 +5323,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -5223,7 +5442,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -5337,7 +5561,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -5458,7 +5687,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<MyFancyDto>(response.Content).ConfigureAwait(false);
@@ -5593,7 +5827,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -5721,7 +5960,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -5849,7 +6093,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -5977,7 +6226,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -6105,7 +6359,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -6233,7 +6492,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -6366,7 +6630,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -6504,7 +6773,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -6642,7 +6916,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -6780,7 +7059,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -6913,7 +7197,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -7041,7 +7330,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -7169,7 +7463,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -7297,7 +7596,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -7425,7 +7729,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -7553,7 +7862,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -7723,7 +8037,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -7893,7 +8212,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -8021,7 +8345,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -8149,7 +8478,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -8263,7 +8597,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return response.Content.ReadAsStreamAsync().ConfigureAwait(false).GetAwaiter().GetResult();
@@ -8384,7 +8723,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -8519,7 +8863,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -8647,7 +8996,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -8761,7 +9115,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -8882,7 +9241,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false);
@@ -9003,7 +9367,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -9124,7 +9493,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false);
@@ -9245,7 +9619,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -9366,7 +9745,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false);
@@ -9487,7 +9871,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -9608,7 +9997,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<DateTime>(response.Content).ConfigureAwait(false);
@@ -9729,7 +10123,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<DateTimeOffset>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -9850,7 +10249,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<DateTimeOffset>(response.Content).ConfigureAwait(false);
@@ -9971,7 +10375,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<DateTimeOffset>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -10092,7 +10501,12 @@ namespace TestWebApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<DateTimeOffset>(response.Content).ConfigureAwait(false);
@@ -10108,6 +10522,264 @@ namespace TestWebApp.Clients
 			var controller = "Values";
 			var action = "CheckDateTimeOffsetNullable";
 			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+
+		public void RouteConstraintCheck(string name, int id, bool val, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(id.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			var controller = "Values";
+			var action = "RouteConstraintCheck";
+			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			return;
+		}
+
+		public HttpResponseMessage RouteConstraintCheckRaw(string name, int id, bool val, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(id.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			var controller = "Values";
+			var action = "RouteConstraintCheck";
+			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		public async Task RouteConstraintCheckAsync(string name, int id, bool val, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(id.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			var controller = "Values";
+			var action = "RouteConstraintCheck";
+			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			return;
+		}
+
+		public async ValueTask<HttpResponseMessage> RouteConstraintCheckRawAsync(string name, int id, bool val, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(id.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter id does not parse into an int.");
+			}
+
+			var controller = "Values";
+			var action = "RouteConstraintCheck";
+			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10159,9 +10831,9 @@ namespace TestWebApp.Clients.V1
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpContentSerializer Serializer;
+		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -10209,7 +10881,12 @@ namespace TestWebApp.Clients.V1
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -10291,7 +10968,12 @@ namespace TestWebApp.Clients.V1
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -10349,9 +11031,9 @@ namespace TestWebApp.Clients.V2
 	{
 		protected readonly ITestWebAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpContentSerializer Serializer;
+		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpContentSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		public TestClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -10399,7 +11081,12 @@ namespace TestWebApp.Clients.V2
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 
@@ -10481,7 +11168,12 @@ namespace TestWebApp.Clients.V2
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			return;
 		}
 

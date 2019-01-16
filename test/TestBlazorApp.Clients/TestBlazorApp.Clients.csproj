@@ -18,6 +18,7 @@
 		<RegisterName>TestBlazor</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
+		<ClientRouteConstraints>false</ClientRouteConstraints>
 		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
 		<HubNamespace>TestBlazorApp.Hubs</HubNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>

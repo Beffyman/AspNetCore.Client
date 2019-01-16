@@ -40,6 +40,7 @@ namespace TestWebApp.Tests
 		{
 			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
 				.WithProtobufBody()
+				.UseProtobufDeserializer()
 				.UseProtobufSerializer();
 		}
 	}
@@ -51,6 +52,7 @@ namespace TestWebApp.Tests
 		{
 			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
 				.WithMessagePackBody()
+				.UseMessagePackDeserializer()
 				.UseMessagePackSerializer();
 		}
 	}
@@ -65,6 +67,7 @@ namespace TestWebApp.Tests
 				{
 					return request.WithHeader("TestPre", "YES");
 				})
+				.UseJsonClientDeserializer()
 				.UseJsonClientSerializer();
 		}
 	}

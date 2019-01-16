@@ -7,6 +7,7 @@
 		public static string RegisterName { get; set; }
 		public static bool UseValueTask { get; set; }
 		public static bool UseInternalClients { get; set; }
+		public static bool ClientRouteConstraints { get; set; }
 		public static string ClientNamespace { get; set; }
 		public static string HubNamespace { get; set; }
 

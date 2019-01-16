@@ -375,7 +375,7 @@ namespace AspNetCore.Client.Generator
 
 			public TypeString(string name)
 			{
-				Name = name;
+				Name = name?.Trim();
 			}
 
 			public TypeString(string name, IEnumerable<TypeString> arguments)
@@ -388,11 +388,11 @@ namespace AspNetCore.Client.Generator
 			{
 				if (Arguments.Any())
 				{
-					return $"{Name}<{string.Join(", ", Arguments.Select(x => x.ToString()))}>";
+					return $"{Name}<{string.Join(", ", Arguments.Select(x => x.ToString()))}>"?.Trim();
 				}
 				else
 				{
-					return $"{Name}";
+					return $"{Name}"?.Trim();
 				}
 			}
 		}

@@ -28,7 +28,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes
 		/// <summary>
 		/// Type of the action
 		/// </summary>
-		public override string Type => $"{nameof(Action)}{(ActionType == null ? "" : "<")}{ActionType}{(ActionType == null ? "" : ">")}";
+		public override string Type => $"{nameof(Action)}{(ActionType == null ? string.Empty : "<")}{ActionType}{(ActionType == null ? string.Empty : ">")}";
 
 		/// <summary>
 		/// Type of the action parameter

@@ -1571,7 +1571,14 @@ else
 
 				if (responseType.Status == null)
 				{
-					return $@"{responseType.Name}?.Invoke(response);";
+					return
+$@"
+if({responseType.Name} != null)
+{{
+	{Constants.ResponseHandledVariable} = true;
+	{responseType.Name}.Invoke(response);
+}}
+";
 				}
 				else
 				{
@@ -1613,6 +1620,11 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 
 			public static string WriteRouteConstraint(RouteConstraint constraint)
 			{
+				if (!Settings.ClientRouteConstraints)
+				{
+					return string.Empty;
+				}
+
 				if (constraint is AlphaConstraint)
 				{
 					return $@"

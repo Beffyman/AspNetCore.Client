@@ -122,9 +122,9 @@ namespace TestBlazorApp.Clients
 	{
 		protected readonly ITestBlazorAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
-		protected readonly IHttpContentSerializer Serializer;
+		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public SampleDataClient(ITestBlazorAppClientWrapper param_client, Func<ITestBlazorAppClient, IHttpOverride> param_httpoverride, Func<ITestBlazorAppClient, IHttpContentSerializer> param_serializer, Func<ITestBlazorAppClient, IHttpRequestModifier> param_modifier)
+		public SampleDataClient(ITestBlazorAppClientWrapper param_client, Func<ITestBlazorAppClient, IHttpOverride> param_httpoverride, Func<ITestBlazorAppClient, IHttpSerializer> param_serializer, Func<ITestBlazorAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -174,7 +174,12 @@ namespace TestBlazorApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return Serializer.Deserialize<IEnumerable<WeatherForecast>>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -267,7 +272,12 @@ namespace TestBlazorApp.Clients
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
 			}
 
-			ResponseCallback?.Invoke(response);
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
 			if (response.IsSuccessStatusCode)
 			{
 				return await Serializer.Deserialize<IEnumerable<WeatherForecast>>(response.Content).ConfigureAwait(false);

@@ -38,7 +38,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes
 		/// <summary>
 		/// Type of the action
 		/// </summary>
-		public virtual string Type => $"{nameof(Action)}{(ActionType == null ? "" : "<")}{ActionType}{(ActionType == null ? "" : ">")}";
+		public virtual string Type => $"{nameof(Action)}{(ActionType == null ? string.Empty : "<")}{ActionType}{(ActionType == null ? string.Empty : ">")}";
 
 		/// <summary>
 		/// Type of the action parameter

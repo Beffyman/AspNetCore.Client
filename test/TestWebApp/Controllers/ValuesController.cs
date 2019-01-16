@@ -325,5 +325,12 @@ namespace TestWebApp.Controllers
 			return date ?? DateTimeOffset.UtcNow;
 		}
 
+
+		[HttpGet("[action]/routeCheck/{name}/{id:int}/{val}")]
+		public void RouteConstraintCheck(string name, int id, bool val)
+		{
+			return;
+		}
+
 	}
 }

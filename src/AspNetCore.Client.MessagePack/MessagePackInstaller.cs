@@ -8,12 +8,21 @@ namespace AspNetCore.Client
 	public static class MessagePackInstaller
 	{
 		/// <summary>
-		/// Uses <see cref="MessagePackSerializer"/> to serialize and deserialize requests
+		/// Uses <see cref="MessagePackSerializer"/> to serialize requests
 		/// </summary>
 		/// <param name="config"></param>
 		public static ClientConfiguration UseMessagePackSerializer(this ClientConfiguration config)
 		{
 			return config.UseSerializer<AspNetCore.Client.Serializers.MessagePackSerializer>();
+		}
+
+		/// <summary>
+		/// Uses <see cref="MessagePackSerializer"/> to deserialize requests when MessagePack content-type is detected
+		/// </summary>
+		/// <param name="config"></param>
+		public static ClientConfiguration UseMessagePackDeserializer(this ClientConfiguration config)
+		{
+			return config.UseDeserializer<AspNetCore.Client.Serializers.MessagePackSerializer>();
 		}
 
 		/// <summary>
