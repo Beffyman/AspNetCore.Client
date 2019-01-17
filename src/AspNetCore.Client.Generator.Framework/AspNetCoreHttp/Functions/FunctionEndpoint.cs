@@ -217,9 +217,9 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <summary>
 		/// Full route template for the endpoint
 		/// </summary>
-		public string GetFullRoute()
+		public HttpRoute GetFullRoute()
 		{
-			return Route?.Value;
+			return Route;
 		}
 
 		/// <summary>
@@ -247,7 +247,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <returns></returns>
 		public string GetSignature(HttpMethod method)
 		{
-			return $"{ToString()}(${string.Join(", ", GetParametersForHttpMethod(method).Select(x => x.ToString()))}";
+			return $"{ToString()}(${string.Join(", ", GetParametersForHttpMethod(method).Select(x => x.ToString()).Where(x => !string.IsNullOrEmpty(x)))}";
 		}
 
 

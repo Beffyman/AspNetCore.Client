@@ -11,7 +11,7 @@ using TestAzureFunction.Clients;
 
 namespace TestAzureFunction.Tests
 {
-	public abstract class FunctionInfo
+	public abstract class FunctionInfo : IDisposable
 	{
 		private readonly FunctiontInterceptorHttpHandler Handler;
 		private readonly IServiceProvider FunctionProvider;
@@ -59,6 +59,11 @@ namespace TestAzureFunction.Tests
 		}
 
 		protected abstract void ConfigureClient(ClientConfiguration collection);
+
+		public void Dispose()
+		{
+			Client.Dispose();
+		}
 	}
 
 	public class ProtobufServerInfo : FunctionInfo

@@ -11,7 +11,7 @@ using TestBlazorApp.Server;
 
 namespace TestBlazorApp.Tests
 {
-	public abstract class ServerInfo<T> where T : class
+	public abstract class ServerInfo<T> : IDisposable where T : class
 	{
 		public IServiceProvider Provider { get; }
 		public TestServer Server { get; }
@@ -31,6 +31,12 @@ namespace TestBlazorApp.Tests
 		}
 
 		protected abstract void ConfigureClient(ClientConfiguration configure);
+
+		public void Dispose()
+		{
+			Client.Dispose();
+			Server.Dispose();
+		}
 	}
 
 

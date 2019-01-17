@@ -213,9 +213,9 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		/// <summary>
 		/// Full route template for the endpoint
 		/// </summary>
-		public string GetFullRoute(AspNetCoreHttpController caller)
+		public HttpRoute GetFullRoute(AspNetCoreHttpController caller)
 		{
-			return caller.Route.Merge(Route).Value;
+			return caller.Route.Merge(Route);
 		}
 
 		/// <summary>
@@ -225,7 +225,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		/// <returns></returns>
 		public IEnumerable<RouteConstraint> GetRouteConstraints(AspNetCoreHttpController caller)
 		{
-			return caller.Route.Merge(Route).Constraints;
+			return caller.Route.Merge(Route).Constraints.Where(x => x.GetType() != typeof(ApiVersionContraint));
 		}
 
 		/// <summary>

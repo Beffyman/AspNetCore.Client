@@ -26,6 +26,7 @@ namespace AspNetCore.Client.Generator
 		public string UseValueTask { get; set; }
 		public string UseInternalClients { get; set; }
 		public string ClientRouteConstraints { get; set; }
+		public string ErrorOnUnhandledCallback { get; set; }
 		public string ClientNamespace { get; set; }
 		public string HubNamespace { get; set; }
 		public string AllowedNamespaces { get; set; }
@@ -39,6 +40,7 @@ namespace AspNetCore.Client.Generator
 			UseValueTask = properties.GetValueOrDefault(nameof(UseValueTask));
 			UseInternalClients = properties.GetValueOrDefault(nameof(UseInternalClients));
 			ClientRouteConstraints = properties.GetValueOrDefault(nameof(ClientRouteConstraints));
+			ErrorOnUnhandledCallback = properties.GetValueOrDefault(nameof(ErrorOnUnhandledCallback));
 			ClientNamespace = properties.GetValueOrDefault(nameof(ClientNamespace));
 			HubNamespace = properties.GetValueOrDefault(nameof(HubNamespace));
 			AllowedNamespaces = properties.GetValueOrDefault(nameof(AllowedNamespaces));
@@ -81,6 +83,7 @@ namespace AspNetCore.Client.Generator
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
 			Settings.UseInternalClients = bool.Parse(UseInternalClients ?? "false");
 			Settings.ClientRouteConstraints = bool.Parse(ClientRouteConstraints ?? "false");
+			Settings.ErrorOnUnhandledCallback = bool.Parse(ErrorOnUnhandledCallback ?? "false");
 			Settings.ClientNamespace = ClientNamespace;
 			Settings.HubNamespace = HubNamespace;
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -122,7 +125,7 @@ namespace AspNetCore.Client.Generator
 									.Select(cs => new HubCSharpFile(cs))
 									.ToList();
 
-
+#error read host.json for http:routePrefix
 			var parsedFunctions = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))

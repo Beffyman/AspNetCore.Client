@@ -39,6 +39,11 @@ namespace TestWebApp
 					})
 					.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			services.AddApiVersioning(options =>
+			{
+				options.AssumeDefaultVersionWhenUnspecified = true;
+			});
+
 			services.AddTransient<IFakeService, FakeService>();
 			services.AddTransient<IGoodService, GoodService>();
 		}

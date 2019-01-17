@@ -22,6 +22,11 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 		public IEnumerable<RouteConstraint> Constraints { get; set; } = Enumerable.Empty<RouteConstraint>();
 
 		/// <summary>
+		/// Version of the api
+		/// </summary>
+		public ApiVersion Version { get; set; }
+
+		/// <summary>
 		/// Creates a route and interprets the contraints from it
 		/// </summary>
 		/// <param name="value"></param>
@@ -59,6 +64,27 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 			return parameters;
 		}
 
+		public IDictionary<string, (string type, string defaultValue)> GetRouteParameters()
+		{
+			IDictionary<string, (string type, string defaultValue)> parameters = new Dictionary<string, (string type, string defaultValue)>();
+
+			string val = Value;
+
+			if (val == null)
+			{
+				return parameters;
+			}
+
+			if (!val.EndsWith("/"))
+			{
+				val += "/";//Need the extra / for the regex regex parse(yes two regex)
+			}
+
+			var template = TemplateParser.Parse(Value);
+
+			return template.Parameters.ToDictionary(x => x.Name, y => (y?.InlineConstraints.FirstOrDefault()?.Constraint, y.DefaultValue?.ToString()));
+		}
+
 
 		/// <summary>
 		/// Merges the routes together and regenerates the constraints
@@ -67,7 +93,20 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 		/// <returns></returns>
 		public HttpRoute Merge(HttpRoute route)
 		{
-			return new HttpRoute($"{this?.Value}/{route?.Value}");
+			return new HttpRoute($"{this?.Value}/{route?.Value}")
+			{
+				Version = this?.Version ?? route?.Version
+			};
+		}
+
+		public bool Contains(string str)
+		{
+			return Value?.Contains(str) ?? false;
+		}
+
+		public override string ToString()
+		{
+			return Value;
 		}
 	}
 }

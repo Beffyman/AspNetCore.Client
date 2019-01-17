@@ -186,6 +186,11 @@ namespace TestBlazorApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<WeatherForecast>);
 			}
 		}
@@ -284,6 +289,11 @@ namespace TestBlazorApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<WeatherForecast>);
 			}
 		}

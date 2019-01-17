@@ -22,92 +22,93 @@ namespace TestWebApp.Tests
 		[Test]
 		public void GetTest()
 		{
-			var endpoint = new MessagePackServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var values = valuesClient.GetEnumerable();
-
-
-			Assert.AreEqual(new List<string> { "value1", "value2" }, values);
+			using (var endpoint = new MessagePackServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var values = valuesClient.GetEnumerable();
 
 
+				Assert.AreEqual(new List<string> { "value1", "value2" }, values);
+			}
 		}
 
 		[Test]
 		public void HeaderTestString()
 		{
-			var endpoint = new MessagePackServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestString("Val1", "Val2");
-
-
-			Assert.AreEqual("Val1", value);
+			using (var endpoint = new MessagePackServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
+				Assert.AreEqual("Val1", value);
+			}
 		}
 
 		[Test]
 		public void HeaderTestInt()
 		{
-			var endpoint = new MessagePackServerInfo();
+			using (var endpoint = new MessagePackServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var value = valuesClient.HeaderTestInt(15);
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestInt(15);
 
-
-			Assert.AreEqual(15, value);
+				Assert.AreEqual(15, value);
+			}
 		}
 
 
 		[Test]
 		public void DtoReturns()
 		{
-			var endpoint = new MessagePackServerInfo();
+			using (var endpoint = new MessagePackServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				MyFancyDto dto = null;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			MyFancyDto dto = null;
-
-			valuesClient.FancyDtoReturn(15,
-				OKCallback: (_) =>
-				{
-					dto = _;
-				});
+				valuesClient.FancyDtoReturn(15,
+					OKCallback: (_) =>
+					{
+						dto = _;
+					});
 
 
-			Assert.AreEqual(15, dto.Id);
+				Assert.AreEqual(15, dto.Id);
+			}
 		}
 
 
 		[Test]
 		public void RequestAndResponseChecks()
 		{
-			var endpoint = new MessagePackServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-
-			var dto = new MyFancyDto
+			using (var endpoint = new MessagePackServerInfo())
 			{
-				Id = 1,
-				Collision = Guid.NewGuid(),
-				Description = "Helo",
-				When = DateTime.UtcNow
-			};
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			var response = valuesClient.DtoForDtoRaw(dto);
+				var dto = new MyFancyDto
+				{
+					Id = 1,
+					Collision = Guid.NewGuid(),
+					Description = "Helo",
+					When = DateTime.UtcNow
+				};
+
+				var response = valuesClient.DtoForDtoRaw(dto);
 
 
-			Assert.True(response.RequestMessage.Content.Headers?.ContentType?.MediaType == "application/x-msgpack");
-			Assert.True(response.Content.Headers.ContentType.MediaType == "application/x-msgpack");
+				Assert.True(response.RequestMessage.Content.Headers?.ContentType?.MediaType == "application/x-msgpack");
+				Assert.True(response.Content.Headers.ContentType.MediaType == "application/x-msgpack");
 
 
 
-			var actual = valuesClient.DtoForDto(dto);
+				var actual = valuesClient.DtoForDto(dto);
 
-			Assert.AreEqual(dto.Collision, actual.Collision);
-			Assert.AreEqual(dto.Description, actual.Description);
-			Assert.AreEqual(dto.Id, actual.Id);
-			Assert.AreEqual(dto.When, actual.When);
+				Assert.AreEqual(dto.Collision, actual.Collision);
+				Assert.AreEqual(dto.Description, actual.Description);
+				Assert.AreEqual(dto.Id, actual.Id);
+				Assert.AreEqual(dto.When, actual.When);
+			}
 		}
 
 		/// <summary>

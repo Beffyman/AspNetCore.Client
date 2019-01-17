@@ -19,6 +19,7 @@
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
 		<ClientRouteConstraints>true</ClientRouteConstraints>
+		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
 		<ClientNamespace>TestAzureFunction.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestAzureFunction.*;</AllowedNamespaces>
 		<ExcludedNamespaces>Microsoft.Extensions.Logging*;</ExcludedNamespaces>

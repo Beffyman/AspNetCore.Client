@@ -42,7 +42,6 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		/// </summary>
 		public string BaseClass { get; set; }
 
-
 		/// <summary>
 		/// The base class of the controller, may contain methods/attributes
 		/// </summary>

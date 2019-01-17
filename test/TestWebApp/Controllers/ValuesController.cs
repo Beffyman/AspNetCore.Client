@@ -100,6 +100,7 @@ namespace TestWebApp.Controllers
 
 		// DELETE api/values/5
 		[HttpDelete("{id}")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[Authorize]
 		public bool Delete(int id)
 		{

@@ -17,6 +17,7 @@ using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes.Constraints;
 using AspNetCore.Client.Generator.Framework.RequestModifiers;
 using AspNetCore.Client.Generator.Framework.SignalR;
 using AspNetCore.Client.Generator.SignalR;
@@ -88,7 +89,29 @@ namespace AspNetCore.Client.Generator.Output
 						controller.NamespaceVersion = group.Value.ToUpper();
 					}
 				}
+				else
+				{
+					controller.Route = new HttpRoute(string.Empty);
+				}
 
+				var versionAttribute = attributes.GetAttribute<ApiVersionAttribute>();
+				if (versionAttribute != null)
+				{
+#error Support other parameters
+					var version = new ApiVersionDefinition(versionAttribute);
+
+					controller.NamespaceVersion = $"V{version.Version.Replace(".", "_")}";
+
+					var versionConstraint = controller.Route.Constraints.OfType<ApiVersionContraint>().SingleOrDefault();
+					if (versionConstraint != null)
+					{
+						controller.Route.Version = new Framework.AspNetCoreHttp.Routes.ApiVersion(version.Version, false);
+					}
+					else
+					{
+						controller.Route.Version = new Framework.AspNetCoreHttp.Routes.ApiVersion(version.Version, true);
+					}
+				}
 
 				//Response types
 				var responseTypes = attributes.GetAttributes<ProducesResponseTypeAttribute>();
@@ -220,6 +243,32 @@ namespace AspNetCore.Client.Generator.Output
 				return endpoint;
 			}
 
+			if (endpoint.Route == null)
+			{
+				endpoint.Route = new HttpRoute(string.Empty);
+			}
+
+			var versionAttribute = attributes.GetAttribute<ApiVersionAttribute>();
+			if (versionAttribute != null)
+			{
+				var version = new ApiVersionDefinition(versionAttribute);
+
+				var versionConstraint = endpoint.Route.Constraints.OfType<ApiVersionContraint>().SingleOrDefault();
+				if (versionConstraint != null)
+				{
+					endpoint.Route.Version = new Framework.AspNetCoreHttp.Routes.ApiVersion(version.Version, false);
+				}
+				else
+				{
+					endpoint.Route.Version = new Framework.AspNetCoreHttp.Routes.ApiVersion(version.Version, true);
+				}
+			}
+
+
+			if (endpoint.Route.Version != null && parent.Route.Version != null)
+			{
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has {nameof(ApiVersionAttribute)} on both it's method and class");
+			}
 
 			//Obsolete Attribute
 			var obsoleteAttribute = attributes.GetAttribute<ObsoleteAttribute>();
@@ -330,6 +379,13 @@ namespace AspNetCore.Client.Generator.Output
 			{
 				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has parameters that are invalid variable names. {string.Join(", ", invalidParameters.Select(x => x.Name))}");
 			}
+
+			var fullRoute = endpoint.GetFullRoute(parent);
+			if (fullRoute?.Version?.Query ?? false)
+			{
+				endpoint.Parameters.Add(new QueryParameter($"api-version={fullRoute?.Version}"));
+			}
+
 
 			return endpoint;
 		}

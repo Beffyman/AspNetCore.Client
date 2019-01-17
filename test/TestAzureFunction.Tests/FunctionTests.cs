@@ -11,125 +11,130 @@ namespace TestAzureFunction.Tests
 		[Test]
 		public void TestJson_Get()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var client = endpoint.Provider.GetService<IFunction1Client>();
-
-			string response = null;
-
-			client.Function1_GET("Asp Client", Guid.NewGuid(), "Test",
-			OKCallback: _ =>
+			using (var endpoint = new JsonServerInfo())
 			{
-				response = _;
-			});
+				var client = endpoint.Provider.GetService<IFunction1Client>();
+
+				string response = null;
+
+				client.Function1_GET("Asp Client", Guid.NewGuid(), "Test",
+				OKCallback: _ =>
+				{
+					response = _;
+				});
 
 
-			Assert.AreEqual("Hello, Asp Client", response);
+				Assert.AreEqual("Hello, Asp Client", response);
+			}
 		}
 
 		[Test]
 		public void TestJson_Post()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var client = endpoint.Provider.GetService<IFunction1Client>();
-
-			string response = null;
-
-			client.Function1_POST(new Contracts.User
+			using (var endpoint = new JsonServerInfo())
 			{
-				Name = "Asp Client"
-			}, Guid.NewGuid(), "Test",
-			OKCallback: _ =>
-			{
-				response = _;
-			});
+				var client = endpoint.Provider.GetService<IFunction1Client>();
+
+				string response = null;
+
+				client.Function1_POST(new Contracts.User
+				{
+					Name = "Asp Client"
+				}, Guid.NewGuid(), "Test",
+				OKCallback: _ =>
+				{
+					response = _;
+				});
 
 
-			Assert.AreEqual("Hello, Asp Client", response);
+				Assert.AreEqual("Hello, Asp Client", response);
+			}
 		}
 
 
 		[Test]
 		public void TestProtobuf_Get()
 		{
-			var endpoint = new ProtobufServerInfo();
-
-			var client = endpoint.Provider.GetService<IFunction1Client>();
-
-			string response = null;
-
-			client.Function1_GET("Asp Client", Guid.NewGuid(), "Test",
-			OKCallback: _ =>
+			using (var endpoint = new ProtobufServerInfo())
 			{
-				response = _;
-			});
+				var client = endpoint.Provider.GetService<IFunction1Client>();
+
+				string response = null;
+
+				client.Function1_GET("Asp Client", Guid.NewGuid(), "Test",
+				OKCallback: _ =>
+				{
+					response = _;
+				});
 
 
-			Assert.AreEqual("Hello, Asp Client", response);
+				Assert.AreEqual("Hello, Asp Client", response);
+			}
 		}
 
 		[Test]
 		public void TestProtobuf_Post()
 		{
-			var endpoint = new ProtobufServerInfo();
-
-			var client = endpoint.Provider.GetService<IFunction1Client>();
-
-			string response = null;
-
-			client.Function1_POST(new Contracts.User
+			using (var endpoint = new ProtobufServerInfo())
 			{
-				Name = "Asp Client"
-			}, Guid.NewGuid(), "Test",
-			OKCallback: _ =>
-			{
-				response = _;
-			});
+				var client = endpoint.Provider.GetService<IFunction1Client>();
+
+				string response = null;
+
+				client.Function1_POST(new Contracts.User
+				{
+					Name = "Asp Client"
+				}, Guid.NewGuid(), "Test",
+				OKCallback: _ =>
+				{
+					response = _;
+				});
 
 
-			Assert.AreEqual("Hello, Asp Client", response);
+				Assert.AreEqual("Hello, Asp Client", response);
+			}
 		}
 
 		[Test]
 		public void TestMessagePack_Get()
 		{
-			var endpoint = new MessagePackServerInfo();
-
-			var client = endpoint.Provider.GetService<IFunction1Client>();
-
-			string response = null;
-
-			client.Function1_GET("Asp Client", Guid.NewGuid(), "Test",
-			OKCallback: _ =>
+			using (var endpoint = new MessagePackServerInfo())
 			{
-				response = _;
-			});
+				var client = endpoint.Provider.GetService<IFunction1Client>();
+
+				string response = null;
+
+				client.Function1_GET("Asp Client", Guid.NewGuid(), "Test",
+				OKCallback: _ =>
+				{
+					response = _;
+				});
 
 
-			Assert.AreEqual("Hello, Asp Client", response);
+				Assert.AreEqual("Hello, Asp Client", response);
+			}
 		}
 
 		[Test]
 		public void TestMessagePack_Post()
 		{
-			var endpoint = new MessagePackServerInfo();
-
-			var client = endpoint.Provider.GetService<IFunction1Client>();
-
-			string response = null;
-
-			client.Function1_POST(new Contracts.User
+			using (var endpoint = new MessagePackServerInfo())
 			{
-				Name = "Asp Client"
-			}, Guid.NewGuid(), "Test",
-			OKCallback: _ =>
-			{
-				response = _;
-			});
+				var client = endpoint.Provider.GetService<IFunction1Client>();
 
+				string response = null;
 
-			Assert.AreEqual("Hello, Asp Client", response);
+				client.Function1_POST(new Contracts.User
+				{
+					Name = "Asp Client"
+				}, Guid.NewGuid(), "Test",
+				OKCallback: _ =>
+				{
+					response = _;
+				});
+
+				Assert.AreEqual("Hello, Asp Client", response);
+			}
 		}
 	}
 }

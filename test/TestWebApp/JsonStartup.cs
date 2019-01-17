@@ -31,6 +31,11 @@ namespace TestWebApp
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			services.AddApiVersioning(options =>
+			{
+				options.AssumeDefaultVersionWhenUnspecified = true;
+			});
+
 			services.AddAuthentication("BasicAuthentication")
 				.AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuthentication", null);
 

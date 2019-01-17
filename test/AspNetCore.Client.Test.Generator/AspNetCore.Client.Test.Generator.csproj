@@ -27,10 +27,10 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Moq" Version="4.10.1" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

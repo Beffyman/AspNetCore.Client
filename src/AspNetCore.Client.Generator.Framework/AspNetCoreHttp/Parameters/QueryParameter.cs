@@ -33,6 +33,13 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters
 		/// </summary>
 		public int SortOrder => 3;
 
+		public bool IsConstant => string.IsNullOrEmpty(Type);
+
+		public QueryParameter(string value)
+		{
+			Name = value;
+		}
+
 		/// <summary>
 		/// Constructs a parameter with the provided info
 		/// </summary>
@@ -63,6 +70,11 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Parameters
 		/// <returns></returns>
 		public override string ToString()
 		{
+			if (string.IsNullOrEmpty(Type))
+			{
+				return string.Empty;
+			}
+
 			return $"{Type} {Name} = {DefaultValue}";
 		}
 	}

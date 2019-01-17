@@ -54,11 +54,15 @@ namespace TestWebApp.Clients
 			services.AddScoped<ITestWebAppClientRepository, TestWebAppClientRepository>();
 			services.AddScoped<ITestWebAppClientV1Repository, TestWebAppClientV1Repository>();
 			services.AddScoped<ITestWebAppClientV2Repository, TestWebAppClientV2Repository>();
+			services.AddScoped<ITestWebAppClientV3Repository, TestWebAppClientV3Repository>();
+			services.AddScoped<ITestWebAppClientV3_0Repository, TestWebAppClientV3_0Repository>();
 			services.AddScoped<IFullClient, FullClient>();
 			services.AddScoped<FancySuffix.INamespacedClient, FancySuffix.NamespacedClient>();
 			services.AddScoped<IValuesClient, ValuesClient>();
 			services.AddScoped<V1.ITestClient, V1.TestClient>();
 			services.AddScoped<V2.ITestClient, V2.TestClient>();
+			services.AddScoped<V3.ITestQueryClient, V3.TestQueryClient>();
+			services.AddScoped<V3_0.ITestRouteClient, V3_0.TestRouteClient>();
 			return configuration.ApplyConfiguration<ITestWebAppClient>(services);
 		}
 	}
@@ -186,6 +190,48 @@ namespace TestWebApp.Clients
 			this.Test = param_test;
 		}
 	}
+
+	public interface ITestWebAppClientV3Repository
+	{
+		V3.ITestQueryClient TestQuery
+		{
+			get;
+		}
+	}
+
+	internal class TestWebAppClientV3Repository : ITestWebAppClientV3Repository
+	{
+		public V3.ITestQueryClient TestQuery
+		{
+			get;
+		}
+
+		public TestWebAppClientV3Repository(V3.ITestQueryClient param_testquery)
+		{
+			this.TestQuery = param_testquery;
+		}
+	}
+
+	public interface ITestWebAppClientV3_0Repository
+	{
+		V3_0.ITestRouteClient TestRoute
+		{
+			get;
+		}
+	}
+
+	internal class TestWebAppClientV3_0Repository : ITestWebAppClientV3_0Repository
+	{
+		public V3_0.ITestRouteClient TestRoute
+		{
+			get;
+		}
+
+		public TestWebAppClientV3_0Repository(V3_0.ITestRouteClient param_testroute)
+		{
+			this.TestRoute = param_testroute;
+		}
+	}
 }
 
 namespace TestWebApp.Clients
@@ -266,6 +312,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(MyFancyDto);
 			}
 		}
@@ -364,6 +415,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(MyFancyDto);
 			}
 		}
@@ -495,6 +551,11 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return;
 			}
 
@@ -580,6 +641,11 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
+				}
+
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -669,6 +735,11 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return;
 			}
 
@@ -754,6 +825,11 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
+				}
+
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -846,6 +922,11 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
+				}
+
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -945,6 +1026,11 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return;
 			}
 
@@ -1037,6 +1123,11 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return;
 			}
 
@@ -1122,6 +1213,11 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
+				}
+
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -1211,6 +1307,11 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return;
 			}
 
@@ -1298,6 +1399,11 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return;
 			}
 
@@ -1379,9 +1485,9 @@ namespace TestWebApp.Clients
 		HttpResponseMessage PutRaw(string value, int id, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		Task PutAsync(string value, int id, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> PutRawAsync(string value, int id, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		bool Delete(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		bool Delete(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action UnauthorizedCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		HttpResponseMessage DeleteRaw(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<bool> DeleteAsync(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<bool> DeleteAsync(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action UnauthorizedCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> DeleteRawAsync(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		bool TestPreFunc(int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		HttpResponseMessage TestPreFuncRaw(int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
@@ -1588,6 +1694,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<string>);
 			}
 		}
@@ -1712,6 +1823,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<string>);
 			}
 		}
@@ -1836,6 +1952,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<string>);
 			}
 		}
@@ -1960,6 +2081,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<string>);
 			}
 		}
@@ -2084,6 +2210,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(System.Collections.Generic.IEnumerable<string>);
 			}
 		}
@@ -2208,6 +2339,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(System.Collections.Generic.IEnumerable<string>);
 			}
 		}
@@ -2332,6 +2468,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<(string, int, bool)>);
 			}
 		}
@@ -2456,6 +2597,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IEnumerable<(string, int, bool)>);
 			}
 		}
@@ -2581,6 +2727,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 			}
 		}
@@ -2707,6 +2858,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 			}
 		}
@@ -2832,6 +2988,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(string);
 			}
 		}
@@ -2956,6 +3117,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(string);
 			}
 		}
@@ -3072,6 +3238,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -3191,6 +3362,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -3306,6 +3482,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -3425,6 +3606,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -3467,7 +3653,7 @@ namespace TestWebApp.Clients
 			return response;
 		}
 
-		public bool Delete(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public bool Delete(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action UnauthorizedCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
 			string url = $@"api/{controller}/{id}";
@@ -3531,6 +3717,20 @@ namespace TestWebApp.Clients
 				}
 			}
 
+			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+			{
+				if (UnauthorizedCallback != null)
+				{
+					responseHandled = true;
+					UnauthorizedCallback.Invoke();
+				}
+			}
+
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
@@ -3548,6 +3748,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(bool);
 			}
 		}
@@ -3591,7 +3796,7 @@ namespace TestWebApp.Clients
 			return response;
 		}
 
-		public async ValueTask<bool> DeleteAsync(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async ValueTask<bool> DeleteAsync(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action UnauthorizedCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
 			string url = $@"api/{controller}/{id}";
@@ -3655,6 +3860,20 @@ namespace TestWebApp.Clients
 				}
 			}
 
+			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+			{
+				if (UnauthorizedCallback != null)
+				{
+					responseHandled = true;
+					UnauthorizedCallback.Invoke();
+				}
+			}
+
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
 			{
 				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
@@ -3672,6 +3891,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(bool);
 			}
 		}
@@ -3797,6 +4021,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(bool);
 			}
 		}
@@ -3923,6 +4152,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(bool);
 			}
 		}
@@ -4043,6 +4277,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -4160,6 +4399,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -4284,6 +4528,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -4413,6 +4662,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -4545,6 +4799,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(string);
 			}
 		}
@@ -4671,6 +4930,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(string);
 			}
 		}
@@ -4797,6 +5061,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(int);
 			}
 		}
@@ -4923,6 +5192,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(int);
 			}
 		}
@@ -5060,6 +5334,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -5205,6 +5484,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -5329,6 +5613,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -5446,6 +5735,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -5573,6 +5867,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(MyFancyDto);
 			}
 		}
@@ -5699,6 +5998,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(MyFancyDto);
 			}
 		}
@@ -5831,6 +6135,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -5966,6 +6275,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -6097,6 +6411,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -6232,6 +6551,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -6365,6 +6689,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -6496,6 +6825,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -6634,6 +6968,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -6779,6 +7118,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -6920,6 +7264,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -7065,6 +7414,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -7203,6 +7557,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -7334,6 +7693,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -7469,6 +7833,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -7600,6 +7969,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -7735,6 +8109,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -7866,6 +8245,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -8043,6 +8427,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -8218,6 +8607,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -8349,6 +8743,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -8484,6 +8883,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -8609,6 +9013,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(System.IO.Stream);
 			}
 		}
@@ -8735,6 +9144,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(System.IO.Stream);
 			}
 		}
@@ -8867,6 +9281,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -9002,6 +9421,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -9127,6 +9551,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(int? );
 			}
 		}
@@ -9253,6 +9682,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(int? );
 			}
 		}
@@ -9379,6 +9813,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(int? );
 			}
 		}
@@ -9505,6 +9944,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(int? );
 			}
 		}
@@ -9631,6 +10075,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTime);
 			}
 		}
@@ -9757,6 +10206,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTime);
 			}
 		}
@@ -9883,6 +10337,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTime);
 			}
 		}
@@ -10009,6 +10468,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTime);
 			}
 		}
@@ -10135,6 +10599,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTimeOffset);
 			}
 		}
@@ -10261,6 +10730,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTimeOffset);
 			}
 		}
@@ -10387,6 +10861,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTimeOffset);
 			}
 		}
@@ -10513,6 +10992,11 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
 				return default(DateTimeOffset);
 			}
 		}
@@ -10636,6 +11120,11 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -10767,6 +11256,11 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -10887,6 +11381,11 @@ namespace TestWebApp.Clients.V1
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -10972,6 +11471,11 @@ namespace TestWebApp.Clients.V1
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -11087,6 +11591,11 @@ namespace TestWebApp.Clients.V2
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
@@ -11174,12 +11683,513 @@ namespace TestWebApp.Clients.V2
 				ResponseCallback.Invoke(response);
 			}
 
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
 			return;
 		}
 
 		public async ValueTask<HttpResponseMessage> EndpointRawAsync(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			string url = $@"api/v2/test/endpoint";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+	}
+}
+
+namespace TestWebApp.Clients.V3
+{
+	public interface ITestQueryClient : ITestWebAppClient
+	{
+		int Endpoint(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage EndpointRaw(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<int> EndpointAsync(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> EndpointRawAsync(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+	}
+
+	internal class TestQueryClient : ITestQueryClient
+	{
+		protected readonly ITestWebAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpRequestModifier Modifier;
+		public TestQueryClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		{
+			Client = param_client;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
+			Modifier = param_modifier(this);
+		}
+
+		public int Endpoint(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestQuery";
+			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int);
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			if (response.IsSuccessStatusCode)
+			{
+				return Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+			else
+			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
+				return default(int);
+			}
+		}
+
+		public HttpResponseMessage EndpointRaw(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestQuery";
+			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		public async ValueTask<int> EndpointAsync(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestQuery";
+			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int);
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			if (response.IsSuccessStatusCode)
+			{
+				return await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false);
+			}
+			else
+			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
+				return default(int);
+			}
+		}
+
+		public async ValueTask<HttpResponseMessage> EndpointRawAsync(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestQuery";
+			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
+	}
+}
+
+namespace TestWebApp.Clients.V3_0
+{
+	public interface ITestRouteClient : ITestWebAppClient
+	{
+		int Endpoint(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage EndpointRaw(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<int> EndpointAsync(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> EndpointRawAsync(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+	}
+
+	internal class TestRouteClient : ITestRouteClient
+	{
+		protected readonly ITestWebAppClientWrapper Client;
+		protected readonly IHttpOverride HttpOverride;
+		protected readonly IHttpSerializer Serializer;
+		protected readonly IHttpRequestModifier Modifier;
+		public TestRouteClient(ITestWebAppClientWrapper param_client, Func<ITestWebAppClient, IHttpOverride> param_httpoverride, Func<ITestWebAppClient, IHttpSerializer> param_serializer, Func<ITestWebAppClient, IHttpRequestModifier> param_modifier)
+		{
+			Client = param_client;
+			HttpOverride = param_httpoverride(this);
+			Serializer = param_serializer(this);
+			Modifier = param_modifier(this);
+		}
+
+		public int Endpoint(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestRoute";
+			string url = $@"api/v3.0/{controller}/endpoint/{index}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int);
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			if (response.IsSuccessStatusCode)
+			{
+				return Serializer.Deserialize<int>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+			else
+			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
+				return default(int);
+			}
+		}
+
+		public HttpResponseMessage EndpointRaw(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestRoute";
+			string url = $@"api/v3.0/{controller}/endpoint/{index}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		public async ValueTask<int> EndpointAsync(int index, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestRoute";
+			string url = $@"api/v3.0/{controller}/endpoint/{index}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return default(int);
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			if (response.IsSuccessStatusCode)
+			{
+				return await Serializer.Deserialize<int>(response.Content).ConfigureAwait(false);
+			}
+			else
+			{
+				if (!responseHandled)
+				{
+					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+				}
+
+				return default(int);
+			}
+		}
+
+		public async ValueTask<HttpResponseMessage> EndpointRawAsync(int index, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			if (!int.TryParse(index.ToString(), out _))
+			{
+				throw new InvalidRouteException("Parameter index does not parse into an int.");
+			}
+
+			var controller = "TestRoute";
+			string url = $@"api/v3.0/{controller}/endpoint/{index}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;

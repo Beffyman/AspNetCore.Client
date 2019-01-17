@@ -290,13 +290,13 @@ public class {controller.Name}HubConnection : HubConnection
 				{
 					return $@"
 {SharedWriter.GetObsolete(endpoint)}
-public Task<ChannelReader<{endpoint.ChannelType}>> Stream{endpoint.Name}Async({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter))})
+public Task<ChannelReader<{endpoint.ChannelType}>> Stream{endpoint.Name}Async({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())})
 {{
 	return this.StreamAsChannelCoreAsync<{endpoint.ChannelType}>(""{endpoint.Name}"", {parameterText}{cancellationToken});
 }}
 
 {SharedWriter.GetObsolete(endpoint)}
-public async Task<IEnumerable<{endpoint.ChannelType}>> Read{endpoint.Name}BlockingAsync({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter))})
+public async Task<IEnumerable<{endpoint.ChannelType}>> Read{endpoint.Name}BlockingAsync({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())})
 {{
 	var channel = await this.StreamAsChannelCoreAsync<{endpoint.ChannelType}>(""{endpoint.Name}"", {parameterText}{cancellationToken});
 	IList<{endpoint.ChannelType}> items = new List<{endpoint.ChannelType}>();
@@ -315,7 +315,7 @@ public async Task<IEnumerable<{endpoint.ChannelType}>> Read{endpoint.Name}Blocki
 				{
 					return $@"
 {SharedWriter.GetObsolete(endpoint)}
-public Task {endpoint.Name}Async({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter))})
+public Task {endpoint.Name}Async({string.Join(", ", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())})
 {{
 	return this.InvokeCoreAsync(""{endpoint.Name}"", {parameterText}{cancellationToken});
 }}
@@ -582,25 +582,25 @@ public interface I{controller.ClientName} : I{Settings.ClientInterfaceName}
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, false)} {endpoint.Name}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}RawAsync
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 );
 
 ";
@@ -614,7 +614,7 @@ public interface I{controller.ClientName} : I{Settings.ClientInterfaceName}
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {endpoint.Name}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(controller, endpoint, false, false)}
@@ -623,7 +623,7 @@ public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {e
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(controller, endpoint, false, true)}
@@ -632,7 +632,7 @@ public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), fa
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(controller, endpoint, true, false)}
@@ -641,7 +641,7 @@ public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {en
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}RawAsync
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(controller, endpoint, true, true)}
@@ -730,6 +730,11 @@ if(response.IsSuccessStatusCode)
 }}
 else
 {{
+	if(!{Constants.ResponseHandledVariable})
+	{{
+		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
+	}}
+
 	return default({endpoint.ReturnType});
 }}
 ";
@@ -746,15 +751,33 @@ if(response.IsSuccessStatusCode)
 }}
 else
 {{
+	if(!{Constants.ResponseHandledVariable})
+	{{
+		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
+	}}
+
 	return default({endpoint.ReturnType});
 }}
 ";
 					}
 				}
 
+				if (Settings.ErrorOnUnhandledCallback)
+				{
+					return
+	$@"
+if(!{Constants.ResponseHandledVariable})
+{{
+	throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
+}}
 
+return;";
+				}
+				else
+				{
+					return $@"return;";
+				}
 
-				return "return;";
 			}
 
 
@@ -825,7 +848,8 @@ else
 
 			public static string GetRoute(AspNetCoreHttpController controller, AspNetCoreHttpEndpoint endpoint, bool async)
 			{
-				string routeUnformatted = endpoint.GetFullRoute(controller);
+				var route = endpoint.GetFullRoute(controller);
+				string routeUnformatted = route?.Value;
 
 
 				var template = TemplateParser.Parse(routeUnformatted);
@@ -835,6 +859,12 @@ else
 
 				foreach (var parameter in template.Parameters)
 				{
+					if (parameter.Name.Equals("version", StringComparison.CurrentCultureIgnoreCase))
+					{
+						routeUnformatted = routeUnformatted.Replace(parameter.BackToRouteParameter(), route.Version.Version);
+						continue;
+					}
+
 					if (!routeParameters.Any(x => x.Name.Equals(parameter.Name, StringComparison.CurrentCultureIgnoreCase)))
 					{
 						throw new Exception($"{parameter.Name} is missing from passed in parameters. Please check your route.");
@@ -1008,25 +1038,25 @@ public interface I{endpoint.ClientName} : I{Settings.ClientInterfaceName}
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, false)} {endpoint.Name}_{method.Method.ToUpper()}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw_{method.Method.ToUpper()}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, true)} {endpoint.Name}_{method.Method.ToUpper()}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}Raw_{method.Method.ToUpper()}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 ";
@@ -1040,7 +1070,7 @@ public interface I{endpoint.ClientName} : I{Settings.ClientInterfaceName}
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {endpoint.Name}_{method.Method.ToUpper()}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(endpoint, method, false, false)}
@@ -1049,7 +1079,7 @@ public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {e
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw_{method.Method.ToUpper()}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(endpoint, method, false, true)}
@@ -1058,7 +1088,7 @@ public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), fa
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {endpoint.Name}_{method.Method.ToUpper()}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(endpoint, method, true, false)}
@@ -1067,7 +1097,7 @@ public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {en
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}Raw_{method.Method.ToUpper()}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter))}
+{string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypesForHttpMethod(method).Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(endpoint, method, true, true)}
@@ -1188,14 +1218,21 @@ else
 
 
 
-				return
-$@"
+				if (Settings.ErrorOnUnhandledCallback)
+				{
+					return
+	$@"
 if(!{Constants.ResponseHandledVariable})
 {{
 	throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
 }}
 
 return;";
+				}
+				else
+				{
+					return $@"return;";
+				}
 			}
 
 			public static string GetHttpMethod(FunctionEndpoint endpoint, HttpMethod method)
@@ -1242,7 +1279,8 @@ return;";
 
 			public static string GetRoute(FunctionEndpoint endpoint, HttpMethod method, bool async)
 			{
-				string routeUnformatted = endpoint.GetFullRoute();
+				var route = endpoint.GetFullRoute();
+				string routeUnformatted = endpoint.GetFullRoute()?.Value;
 
 				if (routeUnformatted == null)
 				{
@@ -1256,6 +1294,12 @@ return;";
 
 				foreach (var parameter in template.Parameters)
 				{
+					if (parameter.Name.Equals("version", StringComparison.CurrentCultureIgnoreCase))
+					{
+						routeUnformatted = routeUnformatted.Replace(parameter.BackToRouteParameter(), route.Version.Version);
+						continue;
+					}
+
 					if (!routeParameters.Any(x => x.Name.Equals(parameter.Name, StringComparison.CurrentCultureIgnoreCase)))
 					{
 						throw new Exception($"{parameter.Name} is missing from passed in parameters. Please check your route.");
@@ -1294,6 +1338,12 @@ return;";
 
 			public static string GetParameter(IParameter parameter)
 			{
+				if (parameter is QueryParameter qp
+					&& qp.IsConstant)
+				{
+					return null;
+				}
+
 				return $@"{parameter.Type} {parameter.Name}{(parameter.DefaultValue != null ? $" = {parameter.DefaultValue}" : $"")}";
 			}
 
@@ -1460,6 +1510,11 @@ public interface I{Settings.ClientInterfaceName} : {nameof(IClient)} {{ }}
 
 			public static string WriteQueryParameter(QueryParameter parameter, bool async)
 			{
+				if (parameter.IsConstant)
+				{
+					return parameter.Name;
+				}
+
 				string name = $"{{nameof({parameter.Name})}}";
 
 				if (Helpers.IsEnumerable(parameter.Type))
@@ -1615,8 +1670,6 @@ if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
 ";
 				}
 			}
-
-
 
 			public static string WriteRouteConstraint(RouteConstraint constraint)
 			{
@@ -1778,6 +1831,10 @@ if(!(new Regex(@""{value}"").IsMatch({constraint.ParameterName})))
 }}";
 				}
 				else if (constraint is RequiredConstraint)
+				{
+					return null;
+				}
+				else if (constraint is ApiVersionContraint)
 				{
 					return null;
 				}

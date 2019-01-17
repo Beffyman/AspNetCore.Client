@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
 using AspNetCore.Server.Attributes.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -147,18 +148,18 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 		}
 
 
-		public string FullRouteTemplate
+		public HttpRoute FullRouteTemplate
 		{
 			get
 			{
 				if (string.IsNullOrEmpty(Options.Route))
 				{
 
-					return ParentClass.Route;
+					return new HttpRoute(ParentClass.Route);
 				}
 				else
 				{
-					return $"{ParentClass.Route}/{Options.Route}";
+					return new HttpRoute($"{ParentClass.Route}/{Options.Route}");
 				}
 			}
 		}

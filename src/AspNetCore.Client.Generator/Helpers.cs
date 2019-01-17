@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -273,13 +274,13 @@ namespace AspNetCore.Client.Generator
 			return KnownPrimitives.Contains(type, StringComparer.CurrentCultureIgnoreCase);
 		}
 
-		public static bool IsRouteParameter(string name, string fullRouteTemplate)
+		public static bool IsRouteParameter(string name, HttpRoute fullRouteTemplate)
 		{
 			var routeArgs = fullRouteTemplate.GetRouteParameters();
 			return routeArgs.ContainsKey(name);
 		}
 
-		public static string GetDefaultRouteConstraint(string name, string fullRouteTemplate)
+		public static string GetDefaultRouteConstraint(string name, HttpRoute fullRouteTemplate)
 		{
 			var routeArgs = fullRouteTemplate.GetRouteParameters();
 			if (routeArgs.ContainsKey(name))
@@ -320,25 +321,6 @@ namespace AspNetCore.Client.Generator
 			{
 				return parameterName;
 			}
-		}
-
-		public static IDictionary<string, (string type, string defaultValue)> GetRouteParameters(this string route)
-		{
-			IDictionary<string, (string type, string defaultValue)> parameters = new Dictionary<string, (string type, string defaultValue)>();
-
-			if (route == null)
-			{
-				return parameters;
-			}
-
-			if (!route.EndsWith("/"))
-			{
-				route += "/";//Need the extra / for the regex regex parse(yes two regex)
-			}
-
-			var template = TemplateParser.Parse(route);
-
-			return template.Parameters.ToDictionary(x => x.Name, y => (y?.InlineConstraints.FirstOrDefault()?.Constraint, y.DefaultValue?.ToString()));
 		}
 
 		public static string GetTaskType()

@@ -22,265 +22,275 @@ namespace TestWebApp.Tests
 		[Test]
 		public void GetTest()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var values = valuesClient.GetEnumerable();
-
-
-			Assert.AreEqual(new List<string> { "value1", "value2" }, values);
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var values = valuesClient.GetEnumerable();
 
 
+				Assert.AreEqual(new List<string> { "value1", "value2" }, values);
+			}
 		}
 
 		[Test]
 		public void HeaderTestString()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestString("Val1", "Val2");
-
-
-			Assert.AreEqual("Val1", value);
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
+				Assert.AreEqual("Val1", value);
+			}
 		}
 
 		[Test]
 		public void HeaderTestInt()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var value = valuesClient.HeaderTestInt(15);
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var value = valuesClient.HeaderTestInt(15);
 
-
-			Assert.AreEqual(15, value);
+				Assert.AreEqual(15, value);
+			}
 		}
 
 
 		[Test]
 		public void DtoReturns()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				MyFancyDto dto = null;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			MyFancyDto dto = null;
-
-			valuesClient.FancyDtoReturn(15,
-				OKCallback: (_) =>
-				{
-					dto = _;
-				});
+				valuesClient.FancyDtoReturn(15,
+					OKCallback: (_) =>
+					{
+						dto = _;
+					});
 
 
-			Assert.AreEqual(15, dto.Id);
+				Assert.AreEqual(15, dto.Id);
+			}
 		}
 
 		[Test]
 		public void GuidReturns()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				Guid g = Guid.Empty;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			Guid g = Guid.Empty;
-
-			valuesClient.GuidReturn(
-				OKCallback: (_) =>
-				{
-					g = _;
-				});
+				valuesClient.GuidReturn(
+					OKCallback: (_) =>
+					{
+						g = _;
+					});
 
 
-			Assert.AreNotEqual(Guid.Empty, g);
+				Assert.AreNotEqual(Guid.Empty, g);
+			}
 		}
 
 		[Test]
 		public void DateTimeReturns()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				DateTime g = DateTime.MinValue;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			DateTime g = DateTime.MinValue;
-
-			valuesClient.DateTimeReturns(
-				OKCallback: (_) =>
-				{
-					g = _;
-				});
+				valuesClient.DateTimeReturns(
+					OKCallback: (_) =>
+					{
+						g = _;
+					});
 
 
-			Assert.AreNotEqual(DateTime.MinValue, g);
+				Assert.AreNotEqual(DateTime.MinValue, g);
+			}
 		}
 
 
 		[Test]
 		public void BoolReturns()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				bool g = false;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			bool g = false;
-
-			valuesClient.BoolReturns(
-				OKCallback: (_) =>
-				{
-					g = _;
-				});
+				valuesClient.BoolReturns(
+					OKCallback: (_) =>
+					{
+						g = _;
+					});
 
 
-			Assert.AreNotEqual(false, g);
+				Assert.AreNotEqual(false, g);
+			}
 		}
 
 
 		[Test]
 		public void RequestAndResponseChecks()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-
-			var response = valuesClient.DtoForDtoRaw(new MyFancyDto
+			using (var endpoint = new JsonServerInfo())
 			{
-				Id = 1,
-				Collision = Guid.NewGuid(),
-				Description = "Helo",
-				When = DateTime.Now
-			});
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+
+				var response = valuesClient.DtoForDtoRaw(new MyFancyDto
+				{
+					Id = 1,
+					Collision = Guid.NewGuid(),
+					Description = "Helo",
+					When = DateTime.Now
+				});
 
 
-			Assert.True(response.RequestMessage.Content.Headers.ContentType.MediaType == "application/json");
-			Assert.True(response.Content.Headers.ContentType.MediaType == "application/json");
+				Assert.True(response.RequestMessage.Content.Headers.ContentType.MediaType == "application/json");
+				Assert.True(response.Content.Headers.ContentType.MediaType == "application/json");
+			}
 		}
 
 		[Test]
 		public void PostNoBodyCheck()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				bool ok = false;
 
-			bool ok = false;
-
-			valuesClient.PostWithNoBody(Guid.NewGuid(),
-				OKCallback: () =>
-				{
-					ok = true;
-				});
+				valuesClient.PostWithNoBody(Guid.NewGuid(),
+					OKCallback: () =>
+					{
+						ok = true;
+					});
 
 
-			Assert.True(ok);
+				Assert.True(ok);
+			}
 		}
 
 		[Test]
 		public void ComplexPostCheck()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-
-			MyFancyDto returnedDto = null;
-
-			var dto = new MyFancyDto
+			using (var endpoint = new JsonServerInfo())
 			{
-				Collision = Guid.NewGuid(),
-				Description = "Test",
-				Id = 12,
-				When = DateTime.Now
-			};
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			valuesClient.ComplexPost(dto, Guid.NewGuid(),
-			OKCallback: (_) =>
-			{
-				returnedDto = _;
-			});
+				MyFancyDto returnedDto = null;
+
+				var dto = new MyFancyDto
+				{
+					Collision = Guid.NewGuid(),
+					Description = "Test",
+					Id = 12,
+					When = DateTime.Now
+				};
+
+				valuesClient.ComplexPost(dto, Guid.NewGuid(),
+				OKCallback: (_) =>
+				{
+					returnedDto = _;
+				});
 
 
-			Assert.AreEqual(dto.Collision, returnedDto.Collision);
+				Assert.AreEqual(dto.Collision, returnedDto.Collision);
+			}
 		}
 
 
 		[Test]
 		public void EnumerableRouteGet()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-
-			IEnumerable<int> returnedEnumerable = null;
-
-			var expected = new List<int>
+			using (var endpoint = new JsonServerInfo())
 			{
-				1,2,3
-			};
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			valuesClient.EnumerableGet(expected, new List<bool> { true },
-			OKCallback: (_) =>
-			{
-				returnedEnumerable = _;
-			});
+				IEnumerable<int> returnedEnumerable = null;
+
+				var expected = new List<int>
+				{
+					1,2,3
+				};
+
+				valuesClient.EnumerableGet(expected, new List<bool> { true },
+				OKCallback: (_) =>
+				{
+					returnedEnumerable = _;
+				});
 
 
-			Assert.AreEqual(expected, returnedEnumerable);
+				Assert.AreEqual(expected, returnedEnumerable);
+			}
 		}
 
 		[Test]
 		public void EnumerableRouteGetCustom()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-
-			IEnumerable<int> returnedEnumerable = null;
-
-			var expected = new List<int>
+			using (var endpoint = new JsonServerInfo())
 			{
-				1,2,3
-			};
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			valuesClient.EnumerableGetCustom(expected, new List<bool> { true },
-			OKCallback: (_) =>
-			{
-				returnedEnumerable = _;
-			});
+				IEnumerable<int> returnedEnumerable = null;
+
+				var expected = new List<int>
+				{
+					1,2,3
+				};
+
+				valuesClient.EnumerableGetCustom(expected, new List<bool> { true },
+				OKCallback: (_) =>
+				{
+					returnedEnumerable = _;
+				});
 
 
-			Assert.AreEqual(expected, returnedEnumerable);
+				Assert.AreEqual(expected, returnedEnumerable);
+			}
 		}
 
 
 		[Test]
 		public void QueryParameterReturns()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				string expected = "FUN";
+				string actual = null;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			string expected = "FUN";
-			string actual = null;
-
-			valuesClient.QueryParameter(expected,
-				OKCallback: _ =>
-				 {
-					 actual = _;
-				 });
+				valuesClient.QueryParameter(expected,
+					OKCallback: _ =>
+					{
+						actual = _;
+					});
 
 
-			Assert.AreEqual(expected, actual);
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 
 		[Test]
 		public void FileResultTest()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var fileStream = valuesClient.FileReturn();
-			using (var reader = new StreamReader(fileStream))
+			using (var endpoint = new JsonServerInfo())
 			{
-				var str = reader.ReadToEnd();
-				Assert.AreEqual("Hello World Text", str);
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var fileStream = valuesClient.FileReturn();
+				using (var reader = new StreamReader(fileStream))
+				{
+					var str = reader.ReadToEnd();
+					Assert.AreEqual("Hello World Text", str);
+				}
 			}
 		}
 
@@ -288,115 +298,143 @@ namespace TestWebApp.Tests
 		[Test]
 		public void DeleteAuth()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				bool success = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test123"));
 
-			bool success = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test123"));
-			bool failed = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"));
+				Assert.Throws<InvalidOperationException>(() =>
+				{
+					valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"));
+				});
 
-			Assert.IsTrue(success);
-			Assert.IsFalse(failed);
+				Assert.IsTrue(success);
+			}
 		}
 
 		[Test]
 		public void TestPreFunc()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				bool success = valuesClient.TestPreFunc();
 
-			bool success = valuesClient.TestPreFunc();
-
-			Assert.IsTrue(success);
+				Assert.IsTrue(success);
+			}
 		}
 
 
 		[Test]
 		public void QueryObjectTest()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var valuesClient = endpoint.Provider.GetService<IFullClient>();
-			MyFancyDto expected = new MyFancyDto
+			using (var endpoint = new JsonServerInfo())
 			{
-				Id = 1,
-				Collision = Guid.NewGuid(),
-				Description = "Hello",
-				When = DateTime.Now.Date
-			};
+				var valuesClient = endpoint.Provider.GetService<IFullClient>();
+				MyFancyDto expected = new MyFancyDto
+				{
+					Id = 1,
+					Collision = Guid.NewGuid(),
+					Description = "Hello",
+					When = DateTime.Now.Date
+				};
 
-			MyFancyDto actual = valuesClient.GetQueryObject(expected);
+				MyFancyDto actual = valuesClient.GetQueryObject(expected);
 
 
-			Assert.AreEqual(expected.Collision, actual.Collision);
+				Assert.AreEqual(expected.Collision, actual.Collision);
+			}
 		}
 
 
 		[Test]
 		public void DefaultRouteConstraintTest()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				int? result = valuesClient.DefaultRouteConstraint(null);
+				int? expected = 5;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			int? result = valuesClient.DefaultRouteConstraint(null);
-			int? expected = 5;
-
-			Assert.AreEqual(expected, result);
+				Assert.AreEqual(expected, result);
+			}
 		}
 
 		[Test]
 		public void OptionalRouteConstraintTest()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				int? result = valuesClient.OptionalRouteConstraint(null);
+				int? expected = null;
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			int? result = valuesClient.OptionalRouteConstraint(null);
-			int? expected = null;
+				Assert.AreEqual(expected, result);
 
-			Assert.AreEqual(expected, result);
+				int? result2 = valuesClient.OptionalRouteConstraint(123);
+				int? expected2 = 123;
 
-			int? result2 = valuesClient.OptionalRouteConstraint(123);
-			int? expected2 = 123;
-
-			Assert.AreEqual(expected2, result2);
+				Assert.AreEqual(expected2, result2);
+			}
 		}
 
 		[Test]
 		public void DateTimeRouteTests()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var date = DateTime.UtcNow;
+				var expected = DateTime.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var date = DateTime.UtcNow;
-			var expected = DateTime.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+				DateTime result = valuesClient.CheckDateTime(date);
 
-			DateTime result = valuesClient.CheckDateTime(date);
+				Assert.AreEqual(expected, result);
 
-			Assert.AreEqual(expected, result);
+				DateTime? nullableResult = valuesClient.CheckDateTimeNullable(date);
 
-			DateTime? nullableResult = valuesClient.CheckDateTimeNullable(date);
-
-			Assert.AreEqual(expected, nullableResult);
+				Assert.AreEqual(expected, nullableResult);
+			}
 		}
 
 		[Test]
 		public void DateTimeOffsetRouteTests()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+				var date = DateTimeOffset.UtcNow;
+				var expected = DateTimeOffset.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
 
-			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-			var date = DateTimeOffset.UtcNow;
-			var expected = DateTimeOffset.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+				DateTimeOffset result = valuesClient.CheckDateTimeOffset(date);
 
-			DateTimeOffset result = valuesClient.CheckDateTimeOffset(date);
+				Assert.AreEqual(expected, result);
 
-			Assert.AreEqual(expected, result);
+				DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date);
 
-			DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date);
-
-			Assert.AreEqual(expected, nullableResult);
+				Assert.AreEqual(expected, nullableResult);
+			}
 		}
+
+		//[Test]
+		//public void ApiVersioningTest()
+		//{
+		//	var endpoint = new JsonServerInfo();
+
+		//	var valuesClient = endpoint.Provider.GetService<ITestApi>();
+		//	var date = DateTimeOffset.UtcNow;
+		//	var expected = DateTimeOffset.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+
+		//	DateTimeOffset result = valuesClient.CheckDateTimeOffset(date);
+
+		//	Assert.AreEqual(expected, result);
+
+		//	DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date);
+
+		//	Assert.AreEqual(expected, nullableResult);
+		//}
 
 		/// <summary>
 		/// Microsoft.AspNetCore.TestHost.ClientHandler does not respect the CancellationToken and will always complete a request. Their unit test around it ClientCancellationAbortsRequest has a "hack" that cancels in TestServer when the token is canceled.

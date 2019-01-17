@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -15,7 +16,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 		public ParameterAttributeOptions Options { get; }
 
 
-		public ParameterDefinition(ParameterSyntax parameter, string fullRoute)
+		public ParameterDefinition(ParameterSyntax parameter, HttpRoute fullRoute)
 		{
 			Name = parameter.Identifier.ValueText.Trim();
 			Type = parameter.Type.ToFullString().Trim();
