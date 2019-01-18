@@ -20,6 +20,7 @@
 		<UseInternalClients>true</UseInternalClients>
 		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
+		<MultipleFiles>false</MultipleFiles>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
 		<HubNamespace>TestWebApp.Hubs</HubNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts.*;</AllowedNamespaces>

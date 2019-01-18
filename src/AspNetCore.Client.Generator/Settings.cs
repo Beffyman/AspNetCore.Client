@@ -9,6 +9,7 @@
 		public static bool UseInternalClients { get; set; }
 		public static bool ClientRouteConstraints { get; set; }
 		public static bool ErrorOnUnhandledCallback { get; set; }
+		public static bool MultipleFiles { get; set; }
 		public static string ClientNamespace { get; set; }
 		public static string HubNamespace { get; set; }
 

@@ -5,6 +5,9 @@
 //		Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+//Requires nuget Microsoft.AspNetCore.SignalR.Client
+//Requires nuget Microsoft.Extensions.Logging
+//Requires nuget System.Threading.Channels
 using AspNetCore.Client.Authorization;
 using AspNetCore.Client.Exceptions;
 using AspNetCore.Client.GeneratorExtensions;
@@ -13,19 +16,19 @@ using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using AspNetCore.Client;
 using Flurl.Http;
-using Microsoft.AspNetCore.Http.Connections.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client
-using Microsoft.AspNetCore.Http.Connections; //Requires nuget Microsoft.AspNetCore.SignalR.Client
-using Microsoft.AspNetCore.SignalR.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client
-using Microsoft.AspNetCore.SignalR.Protocol; //Requires nuget Microsoft.AspNetCore.SignalR.Client
+using Microsoft.AspNetCore.Http.Connections.Client;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging; //Requires nuget Microsoft.Extensions.Logging
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Runtime.CompilerServices;
-using System.Threading.Channels; //Requires nuget System.Threading.Channels
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Threading;
 using System;

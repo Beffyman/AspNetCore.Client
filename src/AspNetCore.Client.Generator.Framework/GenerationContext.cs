@@ -54,9 +54,9 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <returns></returns>
 		public GenerationContext Merge(GenerationContext other)
 		{
-			if ((other.HttpClients?.Any() ?? false)
-				|| (other.HubClients?.Any() ?? false)
-				|| (other.Functions?.Any() ?? false))
+			if ((other?.HttpClients?.Any(x => !x.Ignored) ?? false)
+				|| (other?.HubClients?.Any(x => !x.Ignored) ?? false)
+				|| (other?.Functions?.Any(x => !x.Ignored) ?? false))
 			{
 				return new GenerationContext
 				{

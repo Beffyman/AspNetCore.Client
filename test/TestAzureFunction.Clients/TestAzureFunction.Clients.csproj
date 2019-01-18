@@ -20,6 +20,7 @@
 		<UseInternalClients>true</UseInternalClients>
 		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
+		<MultipleFiles>false</MultipleFiles>
 		<ClientNamespace>TestAzureFunction.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestAzureFunction.*;</AllowedNamespaces>
 		<ExcludedNamespaces>Microsoft.Extensions.Logging*;</ExcludedNamespaces>

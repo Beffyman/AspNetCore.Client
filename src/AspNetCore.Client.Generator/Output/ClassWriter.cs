@@ -48,12 +48,15 @@ namespace AspNetCore.Client.Generator.Output
 			}
 			if (context.HubEndpoints.Any(x => !x.Ignored))
 			{
-				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Protocol; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using System.Threading.Channels; //Requires nuget System.Threading.Channels");
-				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections.Client; //Requires nuget Microsoft.AspNetCore.SignalR.Client");
-				generatorUsings.Add("using Microsoft.Extensions.Logging; //Requires nuget Microsoft.Extensions.Logging");
+				generatorUsings.Add("//Requires nuget Microsoft.AspNetCore.SignalR.Client");
+				generatorUsings.Add("//Requires nuget System.Threading.Channels");
+				generatorUsings.Add("//Requires nuget Microsoft.Extensions.Logging");
+				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Client;");
+				generatorUsings.Add("using Microsoft.AspNetCore.SignalR.Protocol;");
+				generatorUsings.Add("using System.Threading.Channels;");
+				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections;");
+				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections.Client;");
+				generatorUsings.Add("using Microsoft.Extensions.Logging;");
 			}
 
 			var usings = new List<string>

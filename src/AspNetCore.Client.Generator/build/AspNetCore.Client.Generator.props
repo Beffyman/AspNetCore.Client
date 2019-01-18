@@ -14,6 +14,7 @@
 		<UseInternalClients>true</UseInternalClients>
 		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
+		<MultipleFiles>false</MultipleFiles>
 		<ClientNamespace>MyService.Clients</ClientNamespace>
 		<HubNamespace>MyService.Hubs</HubNamespace>
 		<AllowedNamespaces>System*;</AllowedNamespaces>
