@@ -12291,6 +12291,11 @@ namespace TestWebApp.Hubs
 			return this.InvokeCoreAsync("SendMessage", new object[]{user, message}, cancellationToken);
 		}
 
+		public Task DtoMessageAsync(MyFancyDto dto, CancellationToken cancellationToken = default)
+		{
+			return this.InvokeCoreAsync("DtoMessage", new object[]{dto}, cancellationToken);
+		}
+
 		public Task<ChannelReader<int>> StreamCounterAsync(int count, int delay, CancellationToken cancellationToken = default)
 		{
 			return this.StreamAsChannelCoreAsync<int>("Counter", new object[]{count, delay}, cancellationToken);
@@ -12314,6 +12319,11 @@ namespace TestWebApp.Hubs
 		public IDisposable OnReceiveMessage(Action<string, string> action)
 		{
 			return this.On("ReceiveMessage", action);
+		}
+
+		public IDisposable OnReceiveMessage2(Action<MyFancyDto> action)
+		{
+			return this.On("ReceiveMessage2", action);
 		}
 	}
 

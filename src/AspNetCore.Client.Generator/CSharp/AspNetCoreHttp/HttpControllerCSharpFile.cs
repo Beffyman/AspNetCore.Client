@@ -13,7 +13,6 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 	{
 		public string Name { get; }
 		public string FileName { get; }
-		public string FileText { get; }
 		public SyntaxTree Syntax { get; set; }
 		public CompilationUnitSyntax Root { get; }
 
@@ -24,10 +23,10 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 			Name = Path.GetFileNameWithoutExtension(file);
 			FileName = file;
 
-			FileText = Helpers.SafelyReadFromFile(file);
+			var fileText = Helpers.SafelyReadFromFile(file);
 
 
-			Syntax = CSharpSyntaxTree.ParseText(FileText, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
+			Syntax = CSharpSyntaxTree.ParseText(fileText, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
 
 			Context = new GenerationContext();
 			Root = Syntax.GetRoot() as CompilationUnitSyntax;

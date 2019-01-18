@@ -97,7 +97,6 @@ namespace AspNetCore.Client.Generator.Output
 				var versionAttribute = attributes.GetAttribute<ApiVersionAttribute>();
 				if (versionAttribute != null)
 				{
-#error Support other parameters
 					var version = new ApiVersionDefinition(versionAttribute);
 
 					controller.NamespaceVersion = $"V{version.Version.Replace(".", "_")}";
@@ -529,7 +528,7 @@ namespace AspNetCore.Client.Generator.Output
 
 			if (duplicateMessages.Any())
 			{
-				throw new NotSupportedException($"Endpoint has multiple messages with different parameters defined. {string.Join(", ", duplicateMessages.Select(x => x.Key?.ToString()))}");
+				throw new NotSupportedException($"Hub has the same message with different parameters defined on different endpoints. {string.Join(", ", duplicateMessages.Select(x => x.Key?.ToString()))}");
 			}
 
 
@@ -582,7 +581,7 @@ namespace AspNetCore.Client.Generator.Output
 
 		#region Functions
 
-		public static FunctionEndpoint ReadMethodAsFunction(MethodDeclarationSyntax syntax)
+		public static FunctionEndpoint ReadMethodAsFunction(MethodDeclarationSyntax syntax, HostJson hostData)
 		{
 			var attributes = syntax.DescendantNodes().OfType<AttributeListSyntax>().SelectMany(x => x.Attributes).ToList();
 
@@ -641,19 +640,34 @@ namespace AspNetCore.Client.Generator.Output
 
 				endpoint.SupportedMethods = triggerAttribute.Methods;
 
+				var routePrefix = hostData?.http?.routePrefix ?? "api";
+
 				if (triggerAttribute.Route != null)
 				{
 					var route = triggerAttribute.Route.TrimStart('/');
-					if (!route.StartsWith("api"))
+
+					if (!string.IsNullOrEmpty(routePrefix))
 					{
-						route = "api/" + route;
+						if (!route.StartsWith(routePrefix))
+						{
+							route = $"{routePrefix}/" + route;
+						}
+
+						route = "/" + route;
 					}
-					route = "/" + route;
+
 					endpoint.Route = new HttpRoute(route);
 				}
 				else
 				{
-					endpoint.Route = new HttpRoute($"api/{endpoint.Name}");
+					if (!string.IsNullOrEmpty(routePrefix))
+					{
+						endpoint.Route = new HttpRoute($"{routePrefix}/{endpoint.Name}");
+					}
+					else
+					{
+						endpoint.Route = new HttpRoute($"{endpoint.Name}");
+					}
 				}
 
 

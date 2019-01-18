@@ -6,7 +6,9 @@ using AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions;
 using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
 using AspNetCore.Client.Generator.Framework;
+using AspNetCore.Client.Generator.Json;
 using AspNetCore.Client.Generator.Output;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
 
 namespace AspNetCore.Client.Generator
 {
@@ -125,11 +127,16 @@ namespace AspNetCore.Client.Generator
 									.Select(cs => new HubCSharpFile(cs))
 									.ToList();
 
-#error read host.json for http:routePrefix
+			var hostFile = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "host.json", SearchOption.AllDirectories)
+									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
+											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
+									.Select(jn => new HostJsonFile(jn))
+									.SingleOrDefault();
+
 			var parsedFunctions = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
-									.Select(cs => new FunctionsCSharpFile(cs))
+									.Select(cs => new FunctionsCSharpFile(cs, hostFile?.Data))
 									.ToList();
 
 			var context = new GenerationContext();

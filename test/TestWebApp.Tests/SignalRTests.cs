@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TestWebApp.Contracts;
 using TestWebApp.Hubs;
 
 namespace TestWebApp.Tests
@@ -123,5 +125,53 @@ namespace TestWebApp.Tests
 				Assert.AreEqual(count, results.Count());
 			}
 		}
+
+
+		[Test]
+		public async Task MessagePackTest()
+		{
+			using (var endpoint = new MessagePackServerInfo())
+			{
+				var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
+					config =>
+					{
+						config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
+					})
+					.AddMessagePackProtocol()
+					.Build();
+
+				MyFancyDto actual = null;
+				MyFancyDto expected = new MyFancyDto
+				{
+					Collision = Guid.NewGuid(),
+					Description = "I am a test",
+					Id = 15,
+					When = DateTime.Now
+				};
+
+				CancellationTokenSource tokenSource = new CancellationTokenSource(2000);
+				var token = tokenSource.Token;
+
+				hub.OnReceiveMessage2((dto) =>
+				{
+					actual = dto;
+					tokenSource.Cancel();
+				});
+
+				await hub.StartAsync();
+
+				await hub.DtoMessageAsync(expected);
+
+				await token.WhenCanceled();
+
+				await hub.StopAsync();
+
+				Assert.AreEqual(expected.Collision, actual.Collision);
+				Assert.AreEqual(expected.Description, actual.Description);
+				Assert.AreEqual(expected.Id, actual.Id);
+				Assert.AreEqual(expected.When.ToLocalTime(), actual.When.ToLocalTime());
+			}
+		}
+
 	}
 }

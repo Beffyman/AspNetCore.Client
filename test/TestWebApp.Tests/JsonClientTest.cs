@@ -418,23 +418,29 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		//[Test]
-		//public void ApiVersioningTest()
-		//{
-		//	var endpoint = new JsonServerInfo();
+		[Test]
+		public void ApiRouteVersioningTest()
+		{
+			var endpoint = new JsonServerInfo();
 
-		//	var valuesClient = endpoint.Provider.GetService<ITestApi>();
-		//	var date = DateTimeOffset.UtcNow;
-		//	var expected = DateTimeOffset.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+			var v3Client = endpoint.Provider.GetService<Clients.V3_0.ITestRouteClient>();
 
-		//	DateTimeOffset result = valuesClient.CheckDateTimeOffset(date);
+			var index = v3Client.Endpoint(5);
 
-		//	Assert.AreEqual(expected, result);
+			Assert.AreEqual(6, index);
+		}
 
-		//	DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date);
+		[Test]
+		public void ApiQueryVersioningTest()
+		{
+			var endpoint = new JsonServerInfo();
 
-		//	Assert.AreEqual(expected, nullableResult);
-		//}
+			var v3Client = endpoint.Provider.GetService<Clients.V3.ITestQueryClient>();
+
+			var index = v3Client.Endpoint(5);
+
+			Assert.AreEqual(6, index);
+		}
 
 		/// <summary>
 		/// Microsoft.AspNetCore.TestHost.ClientHandler does not respect the CancellationToken and will always complete a request. Their unit test around it ClientCancellationAbortsRequest has a "hack" that cancels in TestServer when the token is canceled.

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using AspNetCore.Client.Generator.Framework;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
 using AspNetCore.Client.Generator.Output;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -13,21 +14,20 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions
 	{
 		public string Name { get; }
 		public string FileName { get; }
-		public string FileText { get; }
 		public SyntaxTree Syntax { get; set; }
 		public CompilationUnitSyntax Root { get; }
 
 		public GenerationContext Context { get; set; }
 
-		public FunctionsCSharpFile(string file)
+		public FunctionsCSharpFile(string file, HostJson hostData)
 		{
 			Name = Path.GetFileNameWithoutExtension(file);
 			FileName = file;
 
-			FileText = Helpers.SafelyReadFromFile(file);
+			var fileText = Helpers.SafelyReadFromFile(file);
 
 
-			Syntax = CSharpSyntaxTree.ParseText(FileText, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
+			Syntax = CSharpSyntaxTree.ParseText(fileText, new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.None, SourceCodeKind.Regular));
 
 			Context = new GenerationContext();
 			Root = Syntax.GetRoot() as CompilationUnitSyntax;
@@ -68,12 +68,12 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions
 				foreach (var cd in classDeclarations)
 				{
 					var methods = cd.DescendantNodes().OfType<MethodDeclarationSyntax>()
-									.Where(x => x.Modifiers.Any(y => y.Text == "public"))
+									.Where(x => x.Modifiers.Any(y => y.Text == "public") && x.Modifiers.Any(y => y.Text == "static"))
 									.ToList();
 
-					foreach(var method in methods)
+					foreach (var method in methods)
 					{
-						Context.Functions.Add(ClassParser.ReadMethodAsFunction(method));
+						Context.Functions.Add(ClassParser.ReadMethodAsFunction(method, hostData));
 					}
 				}
 			}

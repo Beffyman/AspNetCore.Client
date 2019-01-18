@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using TestWebApp.Contracts;
 
 namespace TestWebApp.Hubs
 {
@@ -19,6 +20,12 @@ namespace TestWebApp.Hubs
 		public async Task SendMessage(string user, string message)
 		{
 			await Clients.All.SendAsync("ReceiveMessage", user, message);
+		}
+
+		[ProducesMessage("ReceiveMessage2", typeof(MyFancyDto))]
+		public async Task DtoMessage(MyFancyDto dto)
+		{
+			await Clients.All.SendAsync("ReceiveMessage2", dto);
 		}
 
 
