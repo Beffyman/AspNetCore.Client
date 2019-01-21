@@ -52,6 +52,7 @@ Contains a protobuf serializer which can override the default json one via the U
 services.AddTestWebClients(config=>
 {
 	config.UseProtobufSerializer()
+			.UseProtobufDeserializer()
 			.WithProtobufBody();
 });
 
@@ -66,7 +67,8 @@ Contains a blazor simpleJson serializer which can override the default json one 
 services.AddTestBlazorClients(config=>
 {
 	config.UseBlazorSimpleJsonSerlaizer()
-            .UseExistingHttpClient();
+			.UseBlazorSimpleJsonDeserlaizer()
+			.UseExistingHttpClient();
 });
 
 ```
@@ -80,7 +82,8 @@ Contains a MessagePack serializer which can override the default json one via th
 services.AddTestBlazorClients(config=>
 {
 	config.UseMessagePackSerializer()
-            .WithMessagePackBody();
+			.UseMessagePackDeserializer()
+			.WithMessagePackBody();
 });
 
 ```
