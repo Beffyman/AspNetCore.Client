@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TestWebApp.Contracts;
 using TestWebApp.Hubs;
 
 namespace TestWebApp.Tests
@@ -27,103 +29,149 @@ namespace TestWebApp.Tests
 		[Test]
 		public async Task SendReceiveMessageAsync()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
-				config =>
-				{
-					config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
-				})
-				.Build();
-
-			string user = null;
-			string message = null;
-
-			CancellationTokenSource tokenSource = new CancellationTokenSource(2000);
-			var token = tokenSource.Token;
-
-			hub.OnReceiveMessage((usr, msg) =>
+			using (var endpoint = new JsonServerInfo())
 			{
-				user = usr;
-				message = msg;
-				tokenSource.Cancel();
-			});
+				var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
+					config =>
+					{
+						config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
+					})
+					.Build();
 
-			await hub.StartAsync();
+				string user = null;
+				string message = null;
 
-			await hub.SendMessageAsync("Test", "Hello World");
+				CancellationTokenSource tokenSource = new CancellationTokenSource(2000);
+				var token = tokenSource.Token;
 
-			await token.WhenCanceled();
+				hub.OnReceiveMessage((usr, msg) =>
+				{
+					user = usr;
+					message = msg;
+					tokenSource.Cancel();
+				});
 
-			await hub.StopAsync();
+				await hub.StartAsync();
 
-			Assert.AreEqual("Test", user);
-			Assert.AreEqual("Hello World", message);
+				await hub.SendMessageAsync("Test", "Hello World");
 
+				await token.WhenCanceled();
+
+				await hub.StopAsync();
+
+				Assert.AreEqual("Test", user);
+				Assert.AreEqual("Hello World", message);
+			}
 		}
 
 
 		[Test]
 		public async Task CounterChannelTest()
 		{
-			var endpoint = new JsonServerInfo();
-
-			var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
-				config =>
-				{
-					config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
-				})
-				.Build();
-
-			int count = 100;
-			int delay = 20;
-
-			IList<int> results = new List<int>();
-
-			await hub.StartAsync();
-
-			var channel = await hub.StreamCounterAsync(count, delay);
-
-			while (await channel.WaitToReadAsync())
+			using (var endpoint = new JsonServerInfo())
 			{
-				while (channel.TryRead(out int item))
+				var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
+					config =>
+					{
+						config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
+					})
+					.Build();
+
+				int count = 100;
+				int delay = 20;
+
+				IList<int> results = new List<int>();
+
+				await hub.StartAsync();
+
+				var channel = await hub.StreamCounterAsync(count, delay);
+
+				while (await channel.WaitToReadAsync())
 				{
-					results.Add(item);
+					while (channel.TryRead(out int item))
+					{
+						results.Add(item);
+					}
 				}
+
+				await hub.StopAsync();
+
+				Assert.AreEqual(count, results.Count());
 			}
-
-			await hub.StopAsync();
-
-			Assert.AreEqual(count, results.Count());
-
 		}
 
 
 		[Test]
 		public async Task CounterBlockingTest()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
+					config =>
+					{
+						config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
+					})
+					.Build();
 
-			var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
-				config =>
-				{
-					config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
-				})
-				.Build();
+				int count = 100;
+				int delay = 20;
 
-			int count = 100;
-			int delay = 20;
+				await hub.StartAsync();
 
-			await hub.StartAsync();
+				IEnumerable<int> results = await hub.ReadCounterBlockingAsync(count, delay);
 
-			IEnumerable<int> results = await hub.ReadCounterBlockingAsync(count, delay);
+				await hub.StopAsync();
 
-			await hub.StopAsync();
-
-			Assert.AreEqual(count, results.Count());
-
+				Assert.AreEqual(count, results.Count());
+			}
 		}
 
+
+		[Test]
+		public async Task MessagePackTest()
+		{
+			using (var endpoint = new MessagePackServerInfo())
+			{
+				var hub = new ChatHubConnectionBuilder(endpoint.Server.BaseAddress, null,
+					config =>
+					{
+						config.HttpMessageHandlerFactory = _ => endpoint.Server.CreateHandler();
+					})
+					.AddMessagePackProtocol()
+					.Build();
+
+				MyFancyDto actual = null;
+				MyFancyDto expected = new MyFancyDto
+				{
+					Collision = Guid.NewGuid(),
+					Description = "I am a test",
+					Id = 15,
+					When = DateTime.Now
+				};
+
+				CancellationTokenSource tokenSource = new CancellationTokenSource(2000);
+				var token = tokenSource.Token;
+
+				hub.OnReceiveMessage2((dto) =>
+				{
+					actual = dto;
+					tokenSource.Cancel();
+				});
+
+				await hub.StartAsync();
+
+				await hub.DtoMessageAsync(expected);
+
+				await token.WhenCanceled();
+
+				await hub.StopAsync();
+
+				Assert.AreEqual(expected.Collision, actual.Collision);
+				Assert.AreEqual(expected.Description, actual.Description);
+				Assert.AreEqual(expected.Id, actual.Id);
+				Assert.AreEqual(expected.When.ToLocalTime(), actual.When.ToLocalTime());
+			}
+		}
 
 	}
 }

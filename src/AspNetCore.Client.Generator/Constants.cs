@@ -1,9 +1,6 @@
 ﻿using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AspNetCore.Client.Generator
 {
@@ -44,5 +41,7 @@ namespace AspNetCore.Client.Generator
 		public const string HeadersParameter = "headers";
 
 		public const string ResponseCallback = "ResponseCallback";
+
+		public const string ResponseHandledVariable = "responseHandled";
 	}
 }

@@ -1,8 +1,4 @@
 ﻿using AspNetCore.Client.Serializers;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AspNetCore.Client
 {
@@ -12,12 +8,22 @@ namespace AspNetCore.Client
 	public static class BlazorJsonInstaller
 	{
 		/// <summary>
-		/// Uses <see cref="BlazorSimpleJsonSerializer"/> to serialize and deserialize requests
+		/// Uses <see cref="BlazorSimpleJsonSerializer"/> to serialize requests
 		/// </summary>
 		/// <param name="config"></param>
 		public static ClientConfiguration UseBlazorSimpleJsonSerializer(this ClientConfiguration config)
 		{
 			return config.UseSerializer<BlazorSimpleJsonSerializer>();
+		}
+
+		/// <summary>
+		/// Uses <see cref="BlazorSimpleJsonSerializer"/> to deserialize requests when Json is detected
+		/// </summary>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public static ClientConfiguration UseBlazorSimpleJsonDeserializer(this ClientConfiguration config)
+		{
+			return config.UseDeserializer<BlazorSimpleJsonSerializer>();
 		}
 	}
 }

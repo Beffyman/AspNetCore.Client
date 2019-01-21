@@ -1,15 +1,14 @@
-﻿using AspNetCore.Client.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using AspNetCore.Client.Authorization;
 using AspNetCore.Client.RequestModifiers;
 using Flurl.Http;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using System.Globalization;
 
 namespace AspNetCore.Client.GeneratorExtensions
 {
@@ -33,6 +32,18 @@ namespace AspNetCore.Client.GeneratorExtensions
 			}
 
 			return security.AddAuth(clientOrRequest);
+		}
+
+		/// <summary>
+		/// Adds the x-functions-key header to the request with the provided authkey
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="clientOrRequest"></param>
+		/// <param name="AuthKey"></param>
+		/// <returns></returns>
+		public static T WithFunctionAuthorizationKey<T>(this T clientOrRequest, string AuthKey) where T : IHttpSettingsContainer
+		{
+			return clientOrRequest.WithHeader("x-functions-key", AuthKey);
 		}
 
 		/// <summary>

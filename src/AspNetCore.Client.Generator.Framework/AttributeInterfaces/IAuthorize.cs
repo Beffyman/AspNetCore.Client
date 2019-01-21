@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
+﻿namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
 {
 	/// <summary>
 	/// Determines if the endpoint requires credentials because AuthorizeAttribute on it

@@ -1,13 +1,12 @@
-﻿using TestBlazorApp.Shared;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using TestBlazorApp.Shared;
 
 namespace TestBlazorApp.Server.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     public class SampleDataController : Controller
     {
         private static string[] Summaries = new[]

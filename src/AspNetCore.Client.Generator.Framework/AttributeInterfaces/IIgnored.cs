@@ -1,8 +1,4 @@
-﻿using AspNetCore.Client.Attributes;
-using AspNetCore.Client.Attributes.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AspNetCore.Server.Attributes.Http;
 
 namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
 {

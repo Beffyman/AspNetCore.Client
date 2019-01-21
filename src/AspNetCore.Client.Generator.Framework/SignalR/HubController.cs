@@ -1,10 +1,9 @@
-﻿using AspNetCore.Client.Attributes.Http;
-using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
-using AspNetCore.Client.Generator.Framework.Navigation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using AspNetCore.Client.Generator.Framework.AttributeInterfaces;
+using AspNetCore.Client.Generator.Framework.Navigation;
+using AspNetCore.Server.Attributes.Http;
 
 namespace AspNetCore.Client.Generator.Framework.SignalR
 {

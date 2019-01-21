@@ -13,13 +13,14 @@ namespace TestBlazorApp.Tests
 		[Test]
 		public void WeatherForecastsTest()
 		{
-			var endpoint = new BlazorJsonServerInfo();
+			using (var endpoint = new BlazorJsonServerInfo())
+			{
+				var sampleDataClient = endpoint.Provider.GetService<ISampleDataClient>();
+				var forecasts = sampleDataClient.WeatherForecasts();
 
-			var sampleDataClient = endpoint.Provider.GetService<ISampleDataClient>();
-			var forecasts = sampleDataClient.WeatherForecasts();
 
-
-			Assert.IsTrue(forecasts.Count() == 5);
+				Assert.IsTrue(forecasts.Count() == 5);
+			}
 		}
 	}
 }

@@ -1,7 +1,4 @@
-﻿using AspNetCore.Client.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AspNetCore.Server.Attributes;
 
 namespace AspNetCore.Client.Generator.Framework.AttributeInterfaces
 {

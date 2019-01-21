@@ -1,16 +1,15 @@
-﻿using AspNetCore.Client.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using AspNetCore.Client.Authorization;
 using AspNetCore.Client.Http;
 using AspNetCore.Client.RequestModifiers;
 using AspNetCore.Client.Serializers;
 using Flurl.Http;
 using Flurl.Http.Configuration;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 
 namespace AspNetCore.Client
 {
@@ -31,9 +30,14 @@ namespace AspNetCore.Client
 		private bool ConstantBaseAddress = false;
 
 		/// <summary>
-		/// What IHttpSerializer to use, defaults to json, allows for custom serialization of requests
+		/// What serializer to use for these clients
 		/// </summary>
-		private Type SerializeType { get; set; } = typeof(JsonHttpSerializer);
+		internal Type Serializer { get; set; }
+
+		/// <summary>
+		/// What deserializers that are supported
+		/// </summary>
+		internal ICollection<Type> Deserializers { get; set; } = new HashSet<Type>();
 
 		/// <summary>
 		/// What IHttpOverride to use, allows for pre-post request calls
@@ -87,10 +91,29 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public IServiceCollection ApplyConfiguration<T>(IServiceCollection services) where T : IClient
 		{
-			if (SerializeType == null)
+			if (!Deserializers.Any())
 			{
-				SerializeType = typeof(JsonHttpSerializer);
+				Deserializers.Add(typeof(JsonHttpSerializer));
 			}
+
+			if (!Deserializers.Contains(typeof(TextHttpSerializer)))
+			{
+				Deserializers.Add(typeof(TextHttpSerializer));
+			}
+
+			if (Serializer == null)
+			{
+				Serializer = typeof(JsonHttpSerializer);
+			}
+
+
+			foreach(var deser in Deserializers)
+			{
+				services.AddScoped(deser);
+			}
+
+
+			services.AddScoped(Serializer);
 
 			if (HttpOverrideType == null)
 			{
@@ -106,9 +129,9 @@ namespace AspNetCore.Client
 				throw new Exception("Error setting up client dependencies register.");
 			}
 
-			services.AddScoped(SerializeType);
+			//services.AddSingleton<IHttpSerializer>();
 			services.AddScoped(HttpOverrideType);
-			services.AddScoped<Func<T, IHttpSerializer>>(provider => (_ => (IHttpSerializer)provider.GetService(SerializeType)));
+			services.AddSingleton<Func<T, IHttpSerializer>>(provider => (_ => new HttpSerializer(provider, this)));
 			services.AddScoped<Func<T, IHttpOverride>>(provider => (_ => (IHttpOverride)provider.GetService(HttpOverrideType)));
 
 			if (ExistingHttpClient)
@@ -282,7 +305,16 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public ClientConfiguration WithJsonBody()
 		{
-			return WithPredefinedHeader("Accept", "application/json");
+			return WithPredefinedHeader("Accept", JsonHttpSerializer.CONTENT_TYPE);
+		}
+
+		/// <summary>
+		/// Adds an Accept of "application/json" to every request
+		/// </summary>
+		/// <returns></returns>
+		public ClientConfiguration WithPlainTextBody()
+		{
+			return WithPredefinedHeader("Accept", TextHttpSerializer.CONTENT_TYPE);
 		}
 
 		/// <summary>
@@ -290,7 +322,17 @@ namespace AspNetCore.Client
 		/// </summary>
 		public ClientConfiguration UseJsonClientSerializer()
 		{
-			SerializeType = typeof(JsonHttpSerializer);
+			Serializer = typeof(JsonHttpSerializer);
+
+			return this;
+		}
+
+		/// <summary>
+		/// Uses <see cref="JsonHttpSerializer"/> to serialize and deserialize requests
+		/// </summary>
+		public ClientConfiguration UseJsonClientDeserializer()
+		{
+			Deserializers.Add(typeof(JsonHttpSerializer));
 
 			return this;
 		}
@@ -311,9 +353,20 @@ namespace AspNetCore.Client
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public ClientConfiguration UseSerializer<T>() where T : IHttpSerializer
+		public ClientConfiguration UseSerializer<T>() where T : IHttpContentSerializer
 		{
-			SerializeType = typeof(T);
+			Serializer = typeof(T);
+			return this;
+		}
+
+		/// <summary>
+		/// Adds the deserializer to be used when it's content type is detected
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public ClientConfiguration UseDeserializer<T>() where T : IHttpContentSerializer
+		{
+			Deserializers.Add(typeof(T));
 			return this;
 		}
 

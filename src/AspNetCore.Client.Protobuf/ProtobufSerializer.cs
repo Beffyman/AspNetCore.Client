@@ -1,26 +1,27 @@
-﻿using AspNetCore.Client.Serializers;
-using ProtoBuf;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace AspNetCore.Client.Serializers
 {
 	/// <summary>
 	/// Uses Google.Protobuf for serializing and deserializing the http content
 	/// </summary>
-	internal class ProtobufSerializer : IHttpSerializer
+	internal class ProtobufSerializer : IHttpContentSerializer
 	{
+		internal static readonly string CONTENT_TYPE = "application/x-protobuf";
+		public string ContentType => CONTENT_TYPE;
+
 		/// <summary>
 		/// Deserializes the request content which is assumed to be protobuf into a object of <typeparamref name="T"/>
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
 		/// <returns></returns>
-		public async ValueTask<T> Deserialize<T>(HttpContent content)
+		public async Task<T> Deserialize<T>(HttpContent content)
 		{
 			return Serializer.Deserialize<T>(await content.ReadAsStreamAsync().ConfigureAwait(false));
 		}
@@ -33,13 +34,11 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			using (var stream = new MemoryStream())
-			using (var reader = new StreamReader(stream))
-			{
-				Serializer.Serialize(stream, request);
-				return new StringContent(reader.ReadToEnd(), Encoding.UTF8, "application/x-protobuf");
-			}
-
+			var stream = new MemoryStream();
+			Serializer.Serialize(stream, request);
+			var content = new StreamContent(stream);
+			content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
+			return content;
 		}
 	}
 }

@@ -13,7 +13,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
+	  <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
+	  <ProjectReference Include="..\AspNetCore.Server\AspNetCore.Server.csproj" />
 	</ItemGroup>
 
 </Project>

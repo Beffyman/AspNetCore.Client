@@ -1,12 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp.Http;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-namespace AspNetCore.Client.Generator
+﻿namespace AspNetCore.Client.Generator
 {
 	internal class Settings
 	{
@@ -15,6 +7,9 @@ namespace AspNetCore.Client.Generator
 		public static string RegisterName { get; set; }
 		public static bool UseValueTask { get; set; }
 		public static bool UseInternalClients { get; set; }
+		public static bool ClientRouteConstraints { get; set; }
+		public static bool ErrorOnUnhandledCallback { get; set; }
+		public static bool MultipleFiles { get; set; }
 		public static string ClientNamespace { get; set; }
 		public static string HubNamespace { get; set; }
 

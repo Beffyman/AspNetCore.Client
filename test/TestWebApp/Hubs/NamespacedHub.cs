@@ -1,17 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCore.Server.Attributes;
+using AspNetCore.Server.Attributes.SignalR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.Client.Attributes.SignalR;
-using System.Threading.Channels;
-using AspNetCore.Client.Attributes;
 
 namespace TestWebApp.Hubs
 {
 	[Route("Test")]
 	[NamespaceSuffix("FancySuffix")]
+	[GenerateHub]
 	public class NamespacedHub : Hub
 	{
 		public NamespacedHub()

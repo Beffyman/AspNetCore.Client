@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TestWebApp.FakeServices;
 using TestWebApp.GoodServices;
+using TestWebApp.Hubs;
 using WebApiContrib.Core.Formatter.Protobuf;
 
 namespace TestWebApp
@@ -29,8 +30,15 @@ namespace TestWebApp
 		{
 			services.AddMvc()
 				.AddProtobufFormatters()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			services.AddApiVersioning(options =>
+			{
+				options.AssumeDefaultVersionWhenUnspecified = true;
+			});
+
+
+			services.AddSignalR();
 
 			services.AddTransient<IFakeService, FakeService>();
 			services.AddTransient<IGoodService, GoodService>();
@@ -43,6 +51,12 @@ namespace TestWebApp
 			{
 				app.UseDeveloperExceptionPage();
 			}
+
+
+			app.UseSignalR(routes =>
+			{
+				routes.MapHub<ChatHub>("/Chat");
+			});
 
 			app.UseMvc();
 		}

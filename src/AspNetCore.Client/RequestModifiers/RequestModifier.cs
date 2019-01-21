@@ -1,8 +1,7 @@
-﻿using Flurl.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
+using Flurl.Http;
 
 namespace AspNetCore.Client.RequestModifiers
 {

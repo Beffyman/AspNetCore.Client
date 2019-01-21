@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +18,7 @@ namespace AspNetCore.Client.Http
 		/// <param name="body"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		ValueTask<HttpResponseMessage> GetResponseAsync(HttpMethod method, String url, object body, CancellationToken cancellationToken = default);
+		Task<HttpResponseMessage> GetResponseAsync(HttpMethod method, String url, object body, CancellationToken cancellationToken = default);
 
 		/// <summary>
 		/// Provides the response and the inputs used to achieve the result

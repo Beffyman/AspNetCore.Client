@@ -1,7 +1,6 @@
-﻿using Flurl.Http;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Text;
+using Flurl.Http;
 
 namespace AspNetCore.Client.Authorization
 {

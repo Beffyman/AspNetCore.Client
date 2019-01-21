@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCore.Server.Attributes.SignalR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AspNetCore.Client.Attributes.SignalR;
 using System.Threading.Channels;
+using System.Threading.Tasks;
+using TestWebApp.Contracts;
 
 namespace TestWebApp.Hubs
 {
 	[Route("Chat")]
+	[GenerateHub]
 	public class ChatHub : Hub
 	{
 		public ChatHub()
@@ -21,6 +20,12 @@ namespace TestWebApp.Hubs
 		public async Task SendMessage(string user, string message)
 		{
 			await Clients.All.SendAsync("ReceiveMessage", user, message);
+		}
+
+		[ProducesMessage("ReceiveMessage2", typeof(MyFancyDto))]
+		public async Task DtoMessage(MyFancyDto dto)
+		{
+			await Clients.All.SendAsync("ReceiveMessage2", dto);
 		}
 
 

@@ -1,18 +1,19 @@
-﻿using System;
+﻿using AspNetCore.Server.Attributes.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using AspNetCore.Client.Attributes.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using TestWebApp.Contracts;
 using TestWebApp.GoodServices;
 
 namespace TestWebApp.Controllers
 {
+
 	[Route("api/[controller]")]
 	[HeaderParameter("ControllerHeader", typeof(int), "0")]
 	//[HeaderParameter("Accept", typeof(string), "application/json")]//This is here so the unit tests have the option of which format
@@ -99,6 +100,7 @@ namespace TestWebApp.Controllers
 
 		// DELETE api/values/5
 		[HttpDelete("{id}")]
+		[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 		[Authorize]
 		public bool Delete(int id)
 		{
@@ -296,6 +298,39 @@ namespace TestWebApp.Controllers
 		public int? OptionalRouteConstraint(int? x)
 		{
 			return x;
+		}
+
+
+		[HttpGet("[action]/checkDate/{date}")]
+		public DateTime CheckDateTime(DateTime date)
+		{
+			return date;
+		}
+
+		[HttpGet("[action]/checkDate/{date?}")]
+		public DateTime CheckDateTimeNullable(DateTime? date)
+		{
+			return date ?? DateTime.UtcNow;
+		}
+
+
+		[HttpGet("[action]/checkDateOffset/{date}")]
+		public DateTimeOffset CheckDateTimeOffset(DateTimeOffset date)
+		{
+			return date;
+		}
+
+		[HttpGet("[action]/checkDateOffset/{date?}")]
+		public DateTimeOffset CheckDateTimeOffsetNullable(DateTimeOffset? date)
+		{
+			return date ?? DateTimeOffset.UtcNow;
+		}
+
+
+		[HttpGet("[action]/routeCheck/{name}/{id:int}/{val}")]
+		public void RouteConstraintCheck(string name, int id, bool val)
+		{
+			return;
 		}
 
 	}

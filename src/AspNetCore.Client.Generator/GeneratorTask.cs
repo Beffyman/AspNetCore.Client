@@ -1,11 +1,14 @@
-﻿using AspNetCore.Client.Generator.Framework;
-using AspNetCore.Client.Generator.CSharp.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AspNetCore.Client.Generator.Output;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using AspNetCore.Client.Generator.CSharp.SignalR;
+using AspNetCore.Client.Generator.Framework;
+using AspNetCore.Client.Generator.Json;
+using AspNetCore.Client.Generator.Output;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
 
 namespace AspNetCore.Client.Generator
 {
@@ -24,6 +27,9 @@ namespace AspNetCore.Client.Generator
 		public string RegisterName { get; set; }
 		public string UseValueTask { get; set; }
 		public string UseInternalClients { get; set; }
+		public string ClientRouteConstraints { get; set; }
+		public string ErrorOnUnhandledCallback { get; set; }
+		public string MultipleFiles { get; set; }
 		public string ClientNamespace { get; set; }
 		public string HubNamespace { get; set; }
 		public string AllowedNamespaces { get; set; }
@@ -36,6 +42,9 @@ namespace AspNetCore.Client.Generator
 			RegisterName = properties.GetValueOrDefault(nameof(RegisterName));
 			UseValueTask = properties.GetValueOrDefault(nameof(UseValueTask));
 			UseInternalClients = properties.GetValueOrDefault(nameof(UseInternalClients));
+			ClientRouteConstraints = properties.GetValueOrDefault(nameof(ClientRouteConstraints));
+			ErrorOnUnhandledCallback = properties.GetValueOrDefault(nameof(ErrorOnUnhandledCallback));
+			MultipleFiles = properties.GetValueOrDefault(nameof(MultipleFiles));
 			ClientNamespace = properties.GetValueOrDefault(nameof(ClientNamespace));
 			HubNamespace = properties.GetValueOrDefault(nameof(HubNamespace));
 			AllowedNamespaces = properties.GetValueOrDefault(nameof(AllowedNamespaces));
@@ -77,6 +86,9 @@ namespace AspNetCore.Client.Generator
 			Settings.RegisterName = RegisterName;
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
 			Settings.UseInternalClients = bool.Parse(UseInternalClients ?? "false");
+			Settings.ClientRouteConstraints = bool.Parse(ClientRouteConstraints ?? "false");
+			Settings.ErrorOnUnhandledCallback = bool.Parse(ErrorOnUnhandledCallback ?? "false");
+			Settings.MultipleFiles = bool.Parse(MultipleFiles ?? "false");
 			Settings.ClientNamespace = ClientNamespace;
 			Settings.HubNamespace = HubNamespace;
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -105,17 +117,29 @@ namespace AspNetCore.Client.Generator
 
 			//Start out by loading all cs files into memory
 
-			var parsedControllers = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Controller.cs", SearchOption.AllDirectories)
+			var parsedControllers = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
-									.Select(cs => new ClientCSharpFile(cs))
+									.Select(cs => new HttpControllerCSharpFile(cs))
 									.ToList();
 
 
-			var parsedHubs = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*Hub.cs", SearchOption.AllDirectories)
+			var parsedHubs = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
 									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
 											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
 									.Select(cs => new HubCSharpFile(cs))
+									.ToList();
+
+			var hostFile = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "host.json", SearchOption.AllDirectories)
+									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
+											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
+									.Select(jn => new HostJsonFile(jn))
+									.SingleOrDefault();
+
+			var parsedFunctions = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
+									.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
+											&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
+									.Select(cs => new FunctionsCSharpFile(cs, hostFile?.Data))
 									.ToList();
 
 			var context = new GenerationContext();
@@ -124,6 +148,10 @@ namespace AspNetCore.Client.Generator
 				context = context.Merge(file.Context);
 			}
 			foreach (var file in parsedHubs)
+			{
+				context = context.Merge(file.Context);
+			}
+			foreach (var file in parsedFunctions)
 			{
 				context = context.Merge(file.Context);
 			}

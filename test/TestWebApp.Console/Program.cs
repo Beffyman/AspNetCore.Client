@@ -16,6 +16,7 @@ namespace TestWebApp.Console
 			services.AddTestWebClients(config =>
 			{
 				config.UseJsonClientSerializer();
+				config.UseJsonClientDeserializer();
 				config.WithJsonBody();
 				config.UseHttpClientFactory();
 				//config.WithBaseAddress(_ => "http://localhost:62152");

@@ -1,10 +1,6 @@
-﻿using AspNetCore.Client.Generator.Framework.Navigation;
-using AspNetCore.Client.Generator.Framework.Http.Parameters;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
-using AspNetCore.Client.Generator.Framework.Http.RequestModifiers;
+using AspNetCore.Client.Generator.Framework.Navigation;
 
 namespace AspNetCore.Client.Generator.Framework.RequestModifiers
 {

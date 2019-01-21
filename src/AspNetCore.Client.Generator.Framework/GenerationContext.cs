@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Linq;
-using AspNetCore.Client.Generator.Framework.Http;
-using AspNetCore.Client.Generator.Framework.SignalR;
 using System.Text.RegularExpressions;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
+using AspNetCore.Client.Generator.Framework.SignalR;
 
 namespace AspNetCore.Client.Generator.Framework
 {
@@ -22,12 +21,12 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <summary>
 		/// Clients that will be generated
 		/// </summary>
-		public IList<HttpController> HttpClients { get; set; } = new List<HttpController>();
+		public IList<AspNetCoreHttpController> HttpClients { get; set; } = new List<AspNetCoreHttpController>();
 
 		/// <summary>
 		/// All of the endpoints inside the clients
 		/// </summary>
-		public IEnumerable<HttpEndpoint> HttpEndpoints => HttpClients.SelectMany(x => x.Endpoints);
+		public IEnumerable<AspNetCoreHttpEndpoint> HttpEndpoints => HttpClients.SelectMany(x => x.Endpoints);
 
 
 
@@ -42,6 +41,10 @@ namespace AspNetCore.Client.Generator.Framework
 		/// </summary>
 		public IEnumerable<HubEndpoint> HubEndpoints => HubClients.SelectMany(x => x.Endpoints);
 
+		/// <summary>
+		/// Clients for functions that will be generated
+		/// </summary>
+		public IList<FunctionEndpoint> Functions { get; set; } = new List<FunctionEndpoint>();
 
 
 		/// <summary>
@@ -51,12 +54,15 @@ namespace AspNetCore.Client.Generator.Framework
 		/// <returns></returns>
 		public GenerationContext Merge(GenerationContext other)
 		{
-			if ((other.HttpClients?.Any() ?? false) || (other.HubClients?.Any() ?? false))
+			if ((other?.HttpClients?.Any(x => !x.Ignored) ?? false)
+				|| (other?.HubClients?.Any(x => !x.Ignored) ?? false)
+				|| (other?.Functions?.Any(x => !x.Ignored) ?? false))
 			{
 				return new GenerationContext
 				{
 					HttpClients = this.HttpClients.Union(other.HttpClients).ToList(),
 					HubClients = this.HubClients.Union(other.HubClients).ToList(),
+					Functions = this.Functions.Union(other.Functions).ToList(),
 					UsingStatements = this.UsingStatements.Union(other.UsingStatements).ToList()
 				};
 			}
@@ -98,9 +104,14 @@ namespace AspNetCore.Client.Generator.Framework
 				client.Validate();
 			}
 
-			foreach (var client in HubClients)
+			foreach (var hub in HubClients)
 			{
-				client.Validate();
+				hub.Validate();
+			}
+
+			foreach (var function in Functions)
+			{
+				function.Validate();
 			}
 
 			Regex allowedUsings;

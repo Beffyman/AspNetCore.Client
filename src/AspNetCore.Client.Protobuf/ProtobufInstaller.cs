@@ -1,8 +1,4 @@
 ﻿using AspNetCore.Client.Serializers;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AspNetCore.Client
 {
@@ -13,12 +9,21 @@ namespace AspNetCore.Client
 	public static class ProtobufInstaller
 	{
 		/// <summary>
-		/// Uses <see cref="ProtobufSerializer"/> to serialize and deserialize requests
+		/// Uses <see cref="ProtobufSerializer"/> to serialize requests
 		/// </summary>
 		/// <param name="config"></param>
 		public static ClientConfiguration UseProtobufSerializer(this ClientConfiguration config)
 		{
 			return config.UseSerializer<ProtobufSerializer>();
+		}
+
+		/// <summary>
+		/// Uses <see cref="ProtobufSerializer"/> to deserialize requests when Protobuf content type is detected
+		/// </summary>
+		/// <param name="config"></param>
+		public static ClientConfiguration UseProtobufDeserializer(this ClientConfiguration config)
+		{
+			return config.UseDeserializer<ProtobufSerializer>();
 		}
 
 
@@ -28,7 +33,7 @@ namespace AspNetCore.Client
 		/// <returns></returns>
 		public static ClientConfiguration WithProtobufBody(this ClientConfiguration config)
 		{
-			return config.WithPredefinedHeader("Accept", "application/x-protobuf");
+			return config.WithPredefinedHeader("Accept", ProtobufSerializer.CONTENT_TYPE);
 		}
 	}
 }

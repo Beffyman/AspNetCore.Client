@@ -18,6 +18,9 @@
 		<RegisterName>TestBlazor</RegisterName>
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
+		<ClientRouteConstraints>false</ClientRouteConstraints>
+		<ErrorOnUnhandledCallback>false</ErrorOnUnhandledCallback>
+		<MultipleFiles>true</MultipleFiles>
 		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
 		<HubNamespace>TestBlazorApp.Hubs</HubNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>

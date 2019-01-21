@@ -1,7 +1,4 @@
 ﻿using Flurl.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AspNetCore.Client.Authorization
 {

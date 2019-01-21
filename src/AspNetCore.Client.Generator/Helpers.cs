@@ -1,7 +1,4 @@
-﻿using AspNetCore.Client.Generator.CSharp.Http;
-using Microsoft.AspNetCore.Routing.Template;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +7,13 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
+using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace AspNetCore.Client.Generator
 {
@@ -241,29 +245,42 @@ namespace AspNetCore.Client.Generator
 		"string",typeof(string).Name,
 		"bool",typeof(bool).Name,
 		"DateTime",typeof(DateTime).Name,
+		"DateTimeOffset",typeof(DateTimeOffset).Name,
 		"Guid",typeof(Guid).Name,
 		};
 
-		public static bool IsRoutableType(string type)
-		{
-			Regex matchNullable = new Regex(@"((.+)\?)|(Nullable<(.+)>)");
+		private static Regex NULLABLE_MATCHER = new Regex(@"((.+)\?)|(Nullable<(.+)>)");
 
-			var matches = matchNullable.Matches(type);
+		private static string ConvertFromNullable(string type, out bool wasNullable)
+		{
+			var matches = NULLABLE_MATCHER.Matches(type);
 			if (matches.Count > 0)
 			{
 				type = matches[matches.Count - 1].Groups[2].Value;
+				wasNullable = true;
 			}
+			else
+			{
+				wasNullable = false;
+			}
+
+			return type;
+		}
+
+		public static bool IsRoutableType(string type)
+		{
+			type = ConvertFromNullable(type, out _);
 
 			return KnownPrimitives.Contains(type, StringComparer.CurrentCultureIgnoreCase);
 		}
 
-		public static bool IsRouteParameter(string name, string fullRouteTemplate)
+		public static bool IsRouteParameter(string name, HttpRoute fullRouteTemplate)
 		{
 			var routeArgs = fullRouteTemplate.GetRouteParameters();
 			return routeArgs.ContainsKey(name);
 		}
 
-		public static string GetDefaultRouteConstraint(string name, string fullRouteTemplate)
+		public static string GetDefaultRouteConstraint(string name, HttpRoute fullRouteTemplate)
 		{
 			var routeArgs = fullRouteTemplate.GetRouteParameters();
 			if (routeArgs.ContainsKey(name))
@@ -278,12 +295,22 @@ namespace AspNetCore.Client.Generator
 		{
 			var transforms = new Dictionary<string, string>
 			{
-				{ typeof(DateTime).Name, "{0}.ToString(\"yyyy-MM-dd HH:mm:ss\")" }
+				{ nameof(DateTime), "{0}.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" },
+				{ nameof(DateTimeOffset), "{0}.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" },
+				{ $"{nameof(DateTime)}?", "{0}?.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" },
+				{ $"{nameof(DateTimeOffset)}?", "{0}?.ToString(\"s\", System.Globalization.CultureInfo.InvariantCulture)" }
 			};
 
 			if (IsEnumerable(type))
 			{
 				type = GetEnumerableType(type);
+			}
+
+			type = ConvertFromNullable(type, out bool wasNullable);
+
+			if (wasNullable)
+			{
+				type = $"{type}?";
 			}
 
 			if (transforms.ContainsKey(type))
@@ -294,25 +321,6 @@ namespace AspNetCore.Client.Generator
 			{
 				return parameterName;
 			}
-		}
-
-		public static IDictionary<string, (string type, string defaultValue)> GetRouteParameters(this string route)
-		{
-			IDictionary<string, (string type, string defaultValue)> parameters = new Dictionary<string, (string type, string defaultValue)>();
-
-			if (!route.EndsWith("/"))
-			{
-				route += "/";//Need the extra / for the regex regex parse(yes two regex)
-			}
-
-			if (route == null)
-			{
-				return parameters;
-			}
-
-			var template = TemplateParser.Parse(route);
-
-			return template.Parameters.ToDictionary(x => x.Name, y => (y?.InlineConstraints.FirstOrDefault()?.Constraint, y.DefaultValue?.ToString()));
 		}
 
 		public static string GetTaskType()
@@ -345,11 +353,11 @@ namespace AspNetCore.Client.Generator
 		public class TypeString
 		{
 			public string Name { get; set; }
-			public IEnumerable<TypeString> Arguments { get; set; } = new List<TypeString>();
+			public IEnumerable<TypeString> Arguments { get; set; } = Enumerable.Empty<TypeString>();
 
 			public TypeString(string name)
 			{
-				Name = name;
+				Name = name?.Trim();
 			}
 
 			public TypeString(string name, IEnumerable<TypeString> arguments)
@@ -362,14 +370,41 @@ namespace AspNetCore.Client.Generator
 			{
 				if (Arguments.Any())
 				{
-					return $"{Name}<{string.Join(", ", Arguments.Select(x => x.ToString()))}>";
+					return $"{Name}<{string.Join(", ", Arguments.Select(x => x.ToString()))}>"?.Trim();
 				}
 				else
 				{
-					return $"{Name}";
+					return $"{Name}"?.Trim();
 				}
 			}
 		}
+
+		private static readonly HashSet<string> FileResults = new HashSet<string>()
+		{
+			typeof(PhysicalFileResult).FullName,
+			typeof(FileResult).FullName,
+			typeof(FileContentResult).FullName,
+			typeof(FileStreamResult).FullName,
+			typeof(VirtualFileResult).FullName
+		};
+
+		public static bool IsFileReturnType(this TypeString type)
+		{
+			return FileResults.Any(x => Helpers.IsType(x, type?.Name));
+		}
+
+		private static readonly HashSet<string> ContainerResults = new HashSet<string>()
+		{
+			typeof(ValueTask).FullName,
+			typeof(Task).FullName,
+			typeof(ActionResult).FullName
+		};
+
+		public static bool IsContainerReturnType(this TypeString type)
+		{
+			return ContainerResults.Any(x => Helpers.IsType(x, type?.Name));
+		}
+
 
 		private static readonly Regex _typeRegex = new Regex(@"(.*?)<(.*)>");
 
@@ -503,6 +538,43 @@ namespace AspNetCore.Client.Generator
 		public static string CleanGenericTypeDefinition(this string str)
 		{
 			return str.Split('`').FirstOrDefault();
+		}
+
+
+		public static string GetAttributeValue(this AttributeSyntax attr)
+		{
+			return attr.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+		}
+
+		public static AttributeSyntax GetAttribute<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
+		{
+			return source.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(typeof(T).Name));
+		}
+		public static IEnumerable<AttributeSyntax> GetAttributes<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
+		{
+			return source.Where(x => x.Name.ToFullString().MatchesAttribute(typeof(T).Name));
+		}
+
+		public static bool HasAttribute<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
+		{
+			return source.GetAttribute<T>() != null;
+		}
+
+		public static string TrimQuotes(this string str)
+		{
+			str = str.Trim();
+
+			if (str.StartsWith("\"") && str.EndsWith("\""))
+			{
+				str = str.TrimStart(new char[] { '"' }).TrimEnd(new char[] { '"' }).Trim();
+			}
+
+			return str;
+		}
+
+		public static Dictionary<T, K> ToDictionary<T, K>(this IEnumerable<KeyValuePair<T, K>> source)
+		{
+			return source.ToDictionary(x => x.Key, y => y.Value);
 		}
 	}
 }
