@@ -421,25 +421,47 @@ namespace TestWebApp.Tests
 		[Test]
 		public void ApiRouteVersioningTest()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var v3Client = endpoint.Provider.GetService<Clients.V3_0.ITestRouteClient>();
 
-			var v3Client = endpoint.Provider.GetService<Clients.V3_0.ITestRouteClient>();
+				var index = v3Client.Endpoint(5);
 
-			var index = v3Client.Endpoint(5);
-
-			Assert.AreEqual(6, index);
+				Assert.AreEqual(6, index);
+			}
 		}
 
 		[Test]
 		public void ApiQueryVersioningTest()
 		{
-			var endpoint = new JsonServerInfo();
+			using (var endpoint = new JsonServerInfo())
+			{
+				var v3Client = endpoint.Provider.GetService<Clients.V3.ITestQueryClient>();
 
-			var v3Client = endpoint.Provider.GetService<Clients.V3.ITestQueryClient>();
+				var index = v3Client.Endpoint(5);
 
-			var index = v3Client.Endpoint(5);
+				Assert.AreEqual(6, index);
+			}
+		}
 
-			Assert.AreEqual(6, index);
+
+		[Test]
+		public void InheritanceGenerationBuildTest()
+		{
+			using (var endpoint = new JsonServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IInheritanceGenerationClient>();
+
+				string expected = "Woops";
+				string actual = null;
+
+				client.Get(BadRequestCallback: (str) =>
+				{
+					actual = str;
+				});
+
+				Assert.AreEqual(expected, actual);
+			}
 		}
 
 		/// <summary>
