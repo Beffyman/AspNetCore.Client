@@ -11,5 +11,11 @@ namespace TestWebApp.Boilerplate
 	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
 	public abstract class BaseInheritanceController : ControllerBase
 	{
+
+		public void DoSomethingNotGenerated()
+		{
+
+		}
+
 	}
 }

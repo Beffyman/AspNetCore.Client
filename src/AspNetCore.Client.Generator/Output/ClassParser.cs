@@ -148,7 +148,9 @@ namespace AspNetCore.Client.Generator.Output
 					.ToList();
 				controller.Endpoints = methods.Select(x => ReadMethodAsHttpEndpoint(controller, x)).ToList();
 
-				if (!controller.Endpoints.Any(x => !x.Ignored) && controller.Endpoints.Count > 0)
+				if (!controller.Endpoints.Any(x => !x.Ignored)
+					&& controller.Endpoints.Count > 0
+					&& !controller.Abstract)
 				{
 					controller.Ignored = true;
 				}
