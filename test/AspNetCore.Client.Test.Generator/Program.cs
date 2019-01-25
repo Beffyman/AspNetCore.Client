@@ -9,6 +9,9 @@ using System.Xml.Linq;
 
 namespace AspNetCore.Client.Test.Generator
 {
+	/// <summary>
+	/// This project is used to run the generator locally on all the test projects
+	/// </summary>
 	public static class Program
 	{
 		const string WEBAPP = "TestWebApp.Clients";
