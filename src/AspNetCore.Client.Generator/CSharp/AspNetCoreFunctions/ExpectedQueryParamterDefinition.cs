@@ -14,6 +14,8 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions
 
 		public string Type { get; }
 
+		public bool IsQueryObject { get; }
+
 		public ExpectedQueryParamterDefinition(AttributeSyntax syntax)
 		{
 			var arguments = syntax.ArgumentList?.Arguments.Select(x => x.ToFullString().Trim()).ToList();
@@ -57,6 +59,7 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions
 				Type = typeParameter;
 			}
 
+			IsQueryObject = !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)));
 		}
 	}
 }

@@ -23,6 +23,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using TestAzureFunction.Contracts;
 
 namespace FunctionApp2Client.Clients
 {
@@ -93,10 +94,10 @@ namespace FunctionApp2Client.Clients
 		HttpResponseMessage Function1Raw_GET(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		Task Function1_GETAsync(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> Function1Raw_GETAsync(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		void Function1_POST(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		HttpResponseMessage Function1Raw_POST(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		Task Function1_POSTAsync(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<HttpResponseMessage> Function1Raw_POSTAsync(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		void Function1_POST(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage Function1Raw_POST(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		Task Function1_POSTAsync(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> Function1Raw_POSTAsync(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 	}
 
 	internal class Function1Client : IFunction1Client
@@ -325,9 +326,9 @@ namespace FunctionApp2Client.Clients
 			return response;
 		}
 
-		public void Function1_POST(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public void Function1_POST(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"api/Function1";
+			string url = $@"api/Function1?{command.GetQueryObjectString(nameof(command)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -393,9 +394,9 @@ namespace FunctionApp2Client.Clients
 			return;
 		}
 
-		public HttpResponseMessage Function1Raw_POST(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public HttpResponseMessage Function1Raw_POST(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"api/Function1";
+			string url = $@"api/Function1?{command.GetQueryObjectString(nameof(command)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -431,9 +432,9 @@ namespace FunctionApp2Client.Clients
 			return response;
 		}
 
-		public async Task Function1_POSTAsync(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async Task Function1_POSTAsync(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"api/Function1";
+			string url = $@"api/Function1?{await command.GetQueryObjectString(nameof(command)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -499,9 +500,9 @@ namespace FunctionApp2Client.Clients
 			return;
 		}
 
-		public async ValueTask<HttpResponseMessage> Function1Raw_POSTAsync(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async ValueTask<HttpResponseMessage> Function1Raw_POSTAsync(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"api/Function1";
+			string url = $@"api/Function1?{await command.GetQueryObjectString(nameof(command)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;

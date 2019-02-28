@@ -681,7 +681,7 @@ namespace AspNetCore.Client.Generator.Output
 				var expectedQueryParameters = attributes.GetAttributes<ExpectedQueryParameterAttribute>()
 					.Select(x => new ExpectedQueryParamterDefinition(x))
 					.GroupBy(x => x.Method)
-					.ToDictionary(x => x.Key, y => y.Select(z => (IParameter)new QueryParameter(z.Name, z.Type, null, false)));
+					.ToDictionary(x => x.Key, y => y.Select(z => (IParameter)new QueryParameter(z.Name, z.Type, null, z.IsQueryObject)));
 
 				endpoint.HttpParameters = expectedBodyParameters.Union(expectedQueryParameters).ToDictionary();
 

@@ -29,6 +29,7 @@
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.Client.Generator" Version="*" Condition="'$(GenerateWithNuget)' == 'true'" />
 		<ProjectReference Include="..\..\src\AspNetCore.Client\AspNetCore.Client.csproj" />
+		<ProjectReference Include="..\TestAzureFunction.Contracts\TestAzureFunction.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

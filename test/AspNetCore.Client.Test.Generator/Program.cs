@@ -27,10 +27,10 @@ namespace AspNetCore.Client.Test.Generator
 			var functions = GoUpUntilDirectory(FUNCTIONS, FAILURE_DIR);
 			var functions2 = GoUpUntilDirectory(FUNCTIONS2, FAILURE_DIR);
 
-			if (!(Generate(webApp)
-				&& Generate(blazor)
-				&& Generate(functions)
-				&& Generate(functions2)))
+			if (!(//Generate(webApp)
+				  //&& Generate(blazor)
+				  //&& Generate(functions)
+				 Generate(functions2)))
 			{
 				Console.ReadKey();
 			}
