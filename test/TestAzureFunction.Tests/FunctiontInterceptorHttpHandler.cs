@@ -67,7 +67,6 @@ namespace TestAzureFunction.Tests
 			response.Content = new ByteArrayContent(data);
 			response.Content.Headers.ContentLength = data.Length;
 
-
 			foreach (var header in context.Response.Headers)
 			{
 				if (!response.Headers.TryAddWithoutValidation(header.Key, (IEnumerable<string>)header.Value))

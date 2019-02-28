@@ -309,7 +309,7 @@ namespace AspNetCore.Client
 		}
 
 		/// <summary>
-		/// Adds an Accept of "application/json" to every request
+		/// Adds an Accept of "text/plain" to every request
 		/// </summary>
 		/// <returns></returns>
 		public ClientConfiguration WithPlainTextBody()

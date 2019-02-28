@@ -34,10 +34,11 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			var stream = new MemoryStream();
-			MessagePack.MessagePackSerializer.Serialize(stream, request, ContractlessStandardResolver.Instance);
-			var content = new StreamContent(stream);
+			var data = MessagePack.MessagePackSerializer.Serialize(request, ContractlessStandardResolver.Instance);
+			var content = new ByteArrayContent(data);
 			content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
+			content.Headers.ContentLength = data.Length;
+
 			return content;
 		}
 	}

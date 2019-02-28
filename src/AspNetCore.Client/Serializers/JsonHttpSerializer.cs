@@ -68,21 +68,8 @@ namespace AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			var stream = new MemoryStream();
-			var writer = new StreamWriter(stream);
-			var jsonWriter = new JsonTextWriter(writer) {
-				CloseOutput = false
-			};
-
-			var serializer = new JsonSerializer();
-			serializer.Serialize(jsonWriter, request);
-			jsonWriter.Flush();
-			writer.Flush();
-
-			var content = new StreamContent(stream);
-			content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
-
-			return content;
+			var json = JsonConvert.SerializeObject(request);
+			return new StringContent(json, Encoding.UTF8, ContentType);
 		}
 	}
 }

@@ -51,16 +51,16 @@ namespace TestAzureFunction
 				}
 
 
-				if (req.ContentType.Equals("application/json", StringComparison.CurrentCultureIgnoreCase))
+				if (req.ContentType.Contains("application/json", StringComparison.CurrentCultureIgnoreCase))
 				{
 					string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 					name = JsonConvert.DeserializeObject<User>(requestBody)?.Name;
 				}
-				else if (req.ContentType.Equals("application/x-msgpack", StringComparison.CurrentCultureIgnoreCase))
+				else if (req.ContentType.Contains("application/x-msgpack", StringComparison.CurrentCultureIgnoreCase))
 				{
 					name = MessagePack.MessagePackSerializer.Deserialize<User>(req.Body, ContractlessStandardResolver.Instance)?.Name;
 				}
-				else if (req.ContentType.Equals("application/x-protobuf", StringComparison.CurrentCultureIgnoreCase))
+				else if (req.ContentType.Contains("application/x-protobuf", StringComparison.CurrentCultureIgnoreCase))
 				{
 					name = Serializer.Deserialize<User>(req.Body)?.Name;
 				}
