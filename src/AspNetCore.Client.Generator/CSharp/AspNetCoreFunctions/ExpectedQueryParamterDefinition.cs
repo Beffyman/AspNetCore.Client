@@ -52,11 +52,11 @@ namespace AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions
 
 			if (typeParameter?.Contains("typeof") ?? false)
 			{
-				Type = Regex.Replace(typeParameter, @"typeof\((.+)\)", "$1 ");
+				Type = Regex.Replace(typeParameter, @"typeof\((.+)\)", "$1 ").Trim();
 			}
 			else
 			{
-				Type = typeParameter;
+				Type = typeParameter.Trim();
 			}
 
 			IsQueryObject = !(Helpers.IsRoutableType(Helpers.GetEnumerableType(Type)));

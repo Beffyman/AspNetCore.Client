@@ -90,14 +90,10 @@ namespace FunctionApp2Client.Clients
 {
 	public interface IFunction1Client : IFunctionApp2Client
 	{
-		void Function1_GET(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		HttpResponseMessage Function1Raw_GET(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		Task Function1_GETAsync(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<HttpResponseMessage> Function1Raw_GETAsync(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		void Function1_POST(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		HttpResponseMessage Function1Raw_POST(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		Task Function1_POSTAsync(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<HttpResponseMessage> Function1Raw_POSTAsync(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		void Function1(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage Function1Raw(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		Task Function1Async(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> Function1RawAsync(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 	}
 
 	internal class Function1Client : IFunction1Client
@@ -114,219 +110,7 @@ namespace FunctionApp2Client.Clients
 			Modifier = param_modifier(this);
 		}
 
-		public void Function1_GET(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-		{
-			string url = $@"api/Function1";
-			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-			bool responseHandled = response != null;
-			if (response == null)
-			{
-				try
-				{
-					response = Client.ClientWrapper.Request(url).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).WithFunctionAuthorizationKey(AuthKey).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				}
-				catch (FlurlHttpException fhex)
-				{
-					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-					{
-						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
-					}
-
-					if (ExceptionCallback != null)
-					{
-						responseHandled = true;
-						ExceptionCallback?.Invoke(fhex);
-					}
-					else
-					{
-						throw fhex;
-					}
-
-					return;
-				}
-
-				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-			}
-
-			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
-			}
-
-			if (ResponseCallback != null)
-			{
-				responseHandled = true;
-				ResponseCallback.Invoke(response);
-			}
-
-			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");
-			}
-
-			if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-			{
-				if (UnauthorizedCallback != null)
-				{
-					responseHandled = true;
-					UnauthorizedCallback.Invoke(Serializer.Deserialize<HttpResponseMessage>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
-				}
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
-			return;
-		}
-
-		public HttpResponseMessage Function1Raw_GET(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-		{
-			string url = $@"api/Function1";
-			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-			bool responseHandled = response != null;
-			if (response == null)
-			{
-				try
-				{
-					response = Client.ClientWrapper.Request(url).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).WithFunctionAuthorizationKey(AuthKey).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-				}
-				catch (FlurlHttpException fhex)
-				{
-					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-					{
-						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
-					}
-
-					if (ExceptionCallback != null)
-					{
-						responseHandled = true;
-						ExceptionCallback?.Invoke(fhex);
-					}
-					else
-					{
-						throw fhex;
-					}
-
-					return null;
-				}
-
-				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-			}
-
-			return response;
-		}
-
-		public async Task Function1_GETAsync(String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-		{
-			string url = $@"api/Function1";
-			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
-			bool responseHandled = response != null;
-			if (response == null)
-			{
-				try
-				{
-					response = await Client.ClientWrapper.Request(url).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).WithFunctionAuthorizationKey(AuthKey).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
-				}
-				catch (FlurlHttpException fhex)
-				{
-					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-					{
-						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
-					}
-
-					if (ExceptionCallback != null)
-					{
-						responseHandled = true;
-						ExceptionCallback?.Invoke(fhex);
-					}
-					else
-					{
-						throw fhex;
-					}
-
-					return;
-				}
-
-				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
-			}
-
-			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
-			}
-
-			if (ResponseCallback != null)
-			{
-				responseHandled = true;
-				ResponseCallback.Invoke(response);
-			}
-
-			if (UnauthorizedCallback != null && UnauthorizedCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-			{
-				throw new NotSupportedException("Async void action delegates for UnauthorizedCallback are not supported.As they will run out of the scope of this call.");
-			}
-
-			if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-			{
-				if (UnauthorizedCallback != null)
-				{
-					responseHandled = true;
-					UnauthorizedCallback.Invoke(await Serializer.Deserialize<HttpResponseMessage>(response.Content).ConfigureAwait(false));
-				}
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
-			return;
-		}
-
-		public async ValueTask<HttpResponseMessage> Function1Raw_GETAsync(String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
-		{
-			string url = $@"api/Function1";
-			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
-			bool responseHandled = response != null;
-			if (response == null)
-			{
-				try
-				{
-					response = await Client.ClientWrapper.Request(url).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).WithFunctionAuthorizationKey(AuthKey).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
-				}
-				catch (FlurlHttpException fhex)
-				{
-					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
-					{
-						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
-					}
-
-					if (ExceptionCallback != null)
-					{
-						responseHandled = true;
-						ExceptionCallback?.Invoke(fhex);
-					}
-					else
-					{
-						throw fhex;
-					}
-
-					return null;
-				}
-
-				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
-			}
-
-			return response;
-		}
-
-		public void Function1_POST(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public void Function1(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			string url = $@"api/Function1?{command.GetQueryObjectString(nameof(command)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
@@ -394,7 +178,7 @@ namespace FunctionApp2Client.Clients
 			return;
 		}
 
-		public HttpResponseMessage Function1Raw_POST(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public HttpResponseMessage Function1Raw(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			string url = $@"api/Function1?{command.GetQueryObjectString(nameof(command)).ConfigureAwait(false).GetAwaiter().GetResult()}";
 			HttpResponseMessage response = null;
@@ -432,7 +216,7 @@ namespace FunctionApp2Client.Clients
 			return response;
 		}
 
-		public async Task Function1_POSTAsync(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async Task Function1Async(User command, String AuthKey, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			string url = $@"api/Function1?{await command.GetQueryObjectString(nameof(command)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;
@@ -500,7 +284,7 @@ namespace FunctionApp2Client.Clients
 			return;
 		}
 
-		public async ValueTask<HttpResponseMessage> Function1Raw_POSTAsync(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async ValueTask<HttpResponseMessage> Function1RawAsync(User command, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			string url = $@"api/Function1?{await command.GetQueryObjectString(nameof(command)).ConfigureAwait(false)}";
 			HttpResponseMessage response = null;

@@ -71,6 +71,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// </summary>
 		public IList<HttpMethod> SupportedMethods { get; set; } = new List<HttpMethod>();
 
+
 		//IRoute
 
 		/// <summary>
@@ -307,6 +308,23 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		public IEnumerable<IDependency> GetInjectionDependencies()
 		{
 			return _allDependencies.Where(x => x != typeof(ClientDependency)).Select(x => Activator.CreateInstance(x) as IDependency);
+		}
+
+		/// <summary>
+		/// Gets the method's name, if there is only 1 method, use the base name
+		/// </summary>
+		/// <param name="method"></param>
+		/// <returns></returns>
+		public string GetEndpointName(HttpMethod method, bool raw, bool async)
+		{
+			if (SupportedMethods.Count > 1)
+			{
+				return $"{Name}{(raw ? "Raw" : string.Empty)}_{method.Method.ToUpper()}{(async ? "Async" : string.Empty)}";
+			}
+			else
+			{
+				return $"{Name}{(raw ? "Raw" : string.Empty)}{(async ? "Async" : string.Empty)}";
+			}
 		}
 	}
 }
