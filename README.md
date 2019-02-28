@@ -33,6 +33,11 @@ and think the following
 
 [First Time Setup](https://github.com/Beffyman/AspNetCore.Client/wiki/First-Time-Setup)
 
+## Supported Frameworks
+- AspNetCore 2.2 HTTP Controllers
+- AspNetCore 2.2 SignalR Hubs
+- Http Trigger Azure Functions v2
+
 ## AspNetCore.Client
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.svg)](https://www.nuget.org/packages/AspNetCore.Client)
 
