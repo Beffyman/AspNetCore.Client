@@ -17,6 +17,7 @@ namespace AspNetCore.Client.Test.Generator
 		const string WEBAPP = "TestWebApp.Clients";
 		const string BLAZOR = "TestBlazorApp.Clients";
 		const string FUNCTIONS = "TestAzureFunction.Clients";
+		const string FUNCTIONS2 = "FunctionApp2.Clients";
 		const string FAILURE_DIR = "AspNetCore.Client";
 
 		static void Main()
@@ -24,8 +25,12 @@ namespace AspNetCore.Client.Test.Generator
 			var webApp = GoUpUntilDirectory(WEBAPP, FAILURE_DIR);
 			var blazor = GoUpUntilDirectory(BLAZOR, FAILURE_DIR);
 			var functions = GoUpUntilDirectory(FUNCTIONS, FAILURE_DIR);
+			var functions2 = GoUpUntilDirectory(FUNCTIONS2, FAILURE_DIR);
 
-			if (!(Generate(webApp) && Generate(blazor) && Generate(functions)))
+			if (!(Generate(webApp)
+				&& Generate(blazor)
+				&& Generate(functions)
+				&& Generate(functions2)))
 			{
 				Console.ReadKey();
 			}

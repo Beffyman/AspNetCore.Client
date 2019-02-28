@@ -48,6 +48,10 @@ dotnet clean -c Release -v m
 Write-Host ">> dotnet build -c Release -v m;" -ForegroundColor Magenta;
 dotnet build -c Release -v m;
 
+if($LastExitCode -ne 0){
+	throw "Build failed"
+}
+
 #Run the test project generators
 Push-Location -Path $testGenerator -StackName "Run";
 Write-Host ">> dotnet run -c Release -v m;" -ForegroundColor Magenta;
@@ -58,13 +62,26 @@ Pop-Location -StackName "Run";
 Write-Host ">> dotnet build -c Release -v m;" -ForegroundColor Magenta;
 dotnet build -c Release -v m;
 
+
+if($LastExitCode -ne 0){
+	throw "Build failed"
+}
+
 Write-Host ">> dotnet test -c Release -v m;" -ForegroundColor Magenta;
 dotnet test -c Release -v m;
 
 
+if($LastExitCode -ne 0){
+	throw "Tests failed"
+}
 
 Write-Host ">> dotnet pack -c Release /p:Version=$version -o $outputDir -v m" -ForegroundColor Magenta;
 dotnet pack -c Release /p:Version="$version" -o $outputDir -v m
+
+
+if($LastExitCode -ne 0){
+	throw "Pack failed"
+}
 
 Write-Host "Remove Client.cs files so we can regenerate them with the msbuild task to make that works" -ForegroundColor Magenta;
 Get-ChildItem -Path "**/Clients.cs" -Recurse | Remove-Item -Force
@@ -82,8 +99,17 @@ try{
 	Write-Host ">> dotnet build -c Release -v m /p:GenerateWithNuget=true" -ForegroundColor Magenta;
 	dotnet build -c Release /p:GenerateWithNuget=true;
 
+
+	if($LastExitCode -ne 0){
+		throw "Build failed"
+	}
+
 	Write-Host ">> dotnet test -c Release -v m /p:GenerateWithNuget=true" -ForegroundColor Magenta;
 	dotnet test -c Release;
+
+	if($LastExitCode -ne 0){
+		throw "Tests failed"
+	}
 
 }
 catch{

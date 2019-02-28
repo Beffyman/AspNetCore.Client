@@ -71,6 +71,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// </summary>
 		public IList<HttpMethod> SupportedMethods { get; set; } = new List<HttpMethod>();
 
+
 		//IRoute
 
 		/// <summary>
@@ -146,7 +147,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <returns></returns>
 		public IEnumerable<IParameter> GetParametersForHttpMethod(HttpMethod method)
 		{
-			return GetChildren().OfType<IParameter>().Union(HttpParameters[method]).OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
+			return GetChildren().OfType<IParameter>().Union(GetHttpParameters(method)).OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
 		}
 
 		/// <summary>
@@ -156,7 +157,19 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <returns></returns>
 		public IEnumerable<IParameter> GetParametersWithoutResponseTypesForHttpMethod(HttpMethod method)
 		{
-			return GetChildren().Where(x => !(x is ResponseType) || (x is ExceptionResponseType)).OfType<IParameter>().Union(HttpParameters[method]).OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
+			return GetChildren().Where(x => !(x is ResponseType) || (x is ExceptionResponseType)).OfType<IParameter>().Union(GetHttpParameters(method)).OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
+		}
+
+		private IEnumerable<IParameter> GetHttpParameters(HttpMethod method)
+		{
+			if (HttpParameters.ContainsKey(method))
+			{
+				return HttpParameters[method];
+			}
+			else
+			{
+				return Enumerable.Empty<IParameter>();
+			}
 		}
 
 		/// <summary>
@@ -174,7 +187,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <returns></returns>
 		public IEnumerable<QueryParameter> GetQueryParameters(HttpMethod method)
 		{
-			return GetChildren().Union(HttpParameters[method]).OfType<QueryParameter>().OrderBy(x => x.SortOrder);
+			return GetChildren().Union(GetHttpParameters(method)).OfType<QueryParameter>().OrderBy(x => x.SortOrder);
 		}
 
 
@@ -184,7 +197,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		/// <returns></returns>
 		public BodyParameter GetBodyParameter(HttpMethod method)
 		{
-			return GetChildren().Union(HttpParameters[method]).OfType<BodyParameter>().OrderBy(x => x.SortOrder).SingleOrDefault();
+			return GetChildren().Union(GetHttpParameters(method)).OfType<BodyParameter>().OrderBy(x => x.SortOrder).SingleOrDefault();
 		}
 
 		/// <summary>
@@ -295,6 +308,23 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions
 		public IEnumerable<IDependency> GetInjectionDependencies()
 		{
 			return _allDependencies.Where(x => x != typeof(ClientDependency)).Select(x => Activator.CreateInstance(x) as IDependency);
+		}
+
+		/// <summary>
+		/// Gets the method's name, if there is only 1 method, use the base name
+		/// </summary>
+		/// <param name="method"></param>
+		/// <returns></returns>
+		public string GetEndpointName(HttpMethod method, bool raw, bool async)
+		{
+			if (SupportedMethods.Count > 1)
+			{
+				return $"{Name}{(raw ? "Raw" : string.Empty)}_{method.Method.ToUpper()}{(async ? "Async" : string.Empty)}";
+			}
+			else
+			{
+				return $"{Name}{(raw ? "Raw" : string.Empty)}{(async ? "Async" : string.Empty)}";
+			}
 		}
 	}
 }

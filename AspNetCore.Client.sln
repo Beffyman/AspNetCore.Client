@@ -68,7 +68,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Server", "src\As
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore.Client.MessagePack", "src\AspNetCore.Client.MessagePack\AspNetCore.Client.MessagePack.csproj", "{2075D5BC-D4B9-4B0D-948C-399200598110}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAzureFunction.Tests", "test\TestAzureFunction.Tests\TestAzureFunction.Tests.csproj", "{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Tests", "test\TestAzureFunction.Tests\TestAzureFunction.Tests.csproj", "{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions2", "Functions2", "{7BFCD5A4-715F-47CA-BFB4-ED3CD7D70F97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionApp2.Clients", "test\FunctionApp2.Clients\FunctionApp2.Clients.csproj", "{B1B79A7A-DDEC-466A-9755-78E52641C7B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionApp2", "test\FunctionApp2\FunctionApp2.csproj", "{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -164,6 +170,14 @@ Global
 		{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1B79A7A-DDEC-466A-9755-78E52641C7B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1B79A7A-DDEC-466A-9755-78E52641C7B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1B79A7A-DDEC-466A-9755-78E52641C7B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1B79A7A-DDEC-466A-9755-78E52641C7B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +208,9 @@ Global
 		{60B21E11-0738-4A29-B518-329EA8470140} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 		{2075D5BC-D4B9-4B0D-948C-399200598110} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 		{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92} = {344CED97-6C7C-4EC5-BA25-B967521598F5}
+		{7BFCD5A4-715F-47CA-BFB4-ED3CD7D70F97} = {765F8CBA-ECD0-4E5B-AB1D-AC0F508A05AC}
+		{B1B79A7A-DDEC-466A-9755-78E52641C7B7} = {7BFCD5A4-715F-47CA-BFB4-ED3CD7D70F97}
+		{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314} = {7BFCD5A4-715F-47CA-BFB4-ED3CD7D70F97}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCFD7864-E2E5-4CF3-9A6D-D53B4F4E8AE0}
