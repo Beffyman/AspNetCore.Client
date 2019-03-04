@@ -106,7 +106,7 @@ Contains a preview razor components simpleJson serializer which can override the
 services.AddTestRazorComponentsClients(config=>
 {
 	config.UseRazorComponentsJsonSerializer()
-			.UseRazorComponentsJsonDeerializer()
+			.UseRazorComponentsJsonDeserializer()
 			.WithJsonBody();
 });
 

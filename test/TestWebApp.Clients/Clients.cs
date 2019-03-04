@@ -62,11 +62,11 @@ namespace TestWebApp.Clients
 			services.AddScoped<IFullClient, FullClient>();
 			services.AddScoped<IInheritanceGenerationClient, InheritanceGenerationClient>();
 			services.AddScoped<FancySuffix.INamespacedClient, FancySuffix.NamespacedClient>();
-			services.AddScoped<IValuesClient, ValuesClient>();
 			services.AddScoped<V1.ITestClient, V1.TestClient>();
 			services.AddScoped<V2.ITestClient, V2.TestClient>();
 			services.AddScoped<V3.ITestQueryClient, V3.TestQueryClient>();
 			services.AddScoped<V3_0.ITestRouteClient, V3_0.TestRouteClient>();
+			services.AddScoped<IValuesClient, ValuesClient>();
 			return configuration.ApplyConfiguration<ITestWebAppClient>(services);
 		}
 	}
