@@ -14,7 +14,7 @@
 	<PropertyGroup>
 		<Copyright>Copyright 2018</Copyright>
 		<Authors>Beffyman</Authors>
-		<Description>Contains Blazor SimpleJson serializer for AspNetCore.Client.Generator clients</Description>
+		<Description>Contains Microsoft.JSInterop SimpleJson serializer for AspNetCore.Client.Generator clients</Description>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -24,7 +24,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.JSInterop" Version="0.7.0" />
+		<PackageReference Include="Microsoft.JSInterop" Version="3.0.0-preview.19074.2" />
 	</ItemGroup>
 
 	<ItemGroup>

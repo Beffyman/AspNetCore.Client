@@ -107,13 +107,13 @@ namespace AspNetCore.Client
 			}
 
 
-			foreach(var deser in Deserializers)
+			foreach (var deser in Deserializers)
 			{
-				services.AddScoped(deser);
+				services.AddTransient(deser);
 			}
 
 
-			services.AddScoped(Serializer);
+			services.AddTransient(Serializer);
 
 			if (HttpOverrideType == null)
 			{
@@ -129,7 +129,6 @@ namespace AspNetCore.Client
 				throw new Exception("Error setting up client dependencies register.");
 			}
 
-			//services.AddSingleton<IHttpSerializer>();
 			services.AddScoped(HttpOverrideType);
 			services.AddSingleton<Func<T, IHttpSerializer>>(provider => (_ => new HttpSerializer(provider, this)));
 			services.AddScoped<Func<T, IHttpOverride>>(provider => (_ => (IHttpOverride)provider.GetService(HttpOverrideType)));

@@ -63,6 +63,23 @@ services.AddTestWebClients(config=>
 
 ```
 
+
+## AspNetCore.Client.MessagePack
+[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.MessagePack.svg)](https://www.nuget.org/packages/AspNetCore.Client.MessagePack)
+
+Contains a MessagePack serializer which can override the default json one via the UseMessagePackSerializer on the ClientConfiguration.
+
+```c#
+services.AddTestWebClients(config=>
+{
+	config.UseMessagePackSerializer()
+			.UseMessagePackDeserializer()
+			.WithMessagePackBody();
+});
+
+```
+
+
 ## AspNetCore.Client.BlazorJson
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.BlazorJson.svg)](https://www.nuget.org/packages/AspNetCore.Client.BlazorJson)
 
@@ -73,25 +90,28 @@ services.AddTestBlazorClients(config=>
 {
 	config.UseBlazorSimpleJsonSerlaizer()
 			.UseBlazorSimpleJsonDeserlaizer()
+			.WithJsonBody()
 			.UseExistingHttpClient();
 });
 
 ```
 
-## AspNetCore.Client.MessagePack
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.MessagePack.svg)](https://www.nuget.org/packages/AspNetCore.Client.MessagePack)
 
-Contains a MessagePack serializer which can override the default json one via the UseMessagePackSerializer on the ClientConfiguration.
+## AspNetCore.Client.RazorComponents
+[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.RazorComponents.svg)](https://www.nuget.org/packages/AspNetCore.Client.RazorComponents)
+
+Contains a preview razor components simpleJson serializer which can override the default json one via the UseRazorComponentsJsonSerializer on the ClientConfiguration.
 
 ```c#
-services.AddTestBlazorClients(config=>
+services.AddTestRazorComponentsClients(config=>
 {
-	config.UseMessagePackSerializer()
-			.UseMessagePackDeserializer()
-			.WithMessagePackBody();
+	config.UseRazorComponentsJsonSerializer()
+			.UseRazorComponentsJsonDeerializer()
+			.WithJsonBody();
 });
 
 ```
+
 
 ## AspNetCore.Client.Generator
 [![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/AspNetCore.Client.Generator)
