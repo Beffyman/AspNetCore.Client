@@ -13,6 +13,7 @@ using AspNetCore.Client;
 using NUnit.Framework;
 using System.IO;
 using AspNetCore.Client.Authorization;
+using Newtonsoft.Json;
 
 namespace TestWebApp.Tests
 {
@@ -461,6 +462,31 @@ namespace TestWebApp.Tests
 				});
 
 				Assert.AreEqual(expected, actual);
+			}
+		}
+
+		[Test]
+		public void DuplicateMethodReturnAndResponseTypeAttributeTest()
+		{
+			using (var endpoint = new JsonServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IValuesClient>();
+
+				string responseVal = null;
+				MyFancyDto val = client.DuplicateMethodReturnAndResponse(ResponseCallback: msg =>
+				{
+					responseVal = msg.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+				});
+
+				Assert.AreEqual(100, val.Id);
+				Assert.AreEqual(DateTime.Now.Date, val.When);
+				Assert.AreEqual("Hello", val.Description);
+
+				var responseJson = JsonConvert.DeserializeObject<MyFancyDto>(responseVal);
+
+				Assert.AreEqual(val.Id, responseJson.Id);
+				Assert.AreEqual(val.When, responseJson.When);
+				Assert.AreEqual(val.Description, responseJson.Description);
 			}
 		}
 

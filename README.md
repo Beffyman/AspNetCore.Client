@@ -97,16 +97,16 @@ services.AddTestBlazorClients(config=>
 ```
 
 
-## AspNetCore.Client.RazorComponents
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.RazorComponents.svg)](https://www.nuget.org/packages/AspNetCore.Client.RazorComponents)
+## AspNetCore.Client.JSInterop
+[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.JSInterop.svg)](https://www.nuget.org/packages/AspNetCore.Client.JSInterop)
 
-Contains a preview razor components simpleJson serializer which can override the default json one via the UseRazorComponentsJsonSerializer on the ClientConfiguration.
+Contains a preview js interop simpleJson serializer which can override the default json one via the UseJSInteropJsonSerializer on the ClientConfiguration.
 
 ```c#
 services.AddTestRazorComponentsClients(config=>
 {
-	config.UseRazorComponentsJsonSerializer()
-			.UseRazorComponentsJsonDeserializer()
+	config.UseJSInteropJsonSerializer()
+			.UseJSInteropJsonDeserializer()
 			.WithJsonBody();
 });
 

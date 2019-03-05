@@ -333,5 +333,19 @@ namespace TestWebApp.Controllers
 			return;
 		}
 
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(MyFancyDto), StatusCodes.Status200OK)]
+		public ActionResult<MyFancyDto> DuplicateMethodReturnAndResponse()
+		{
+			return new MyFancyDto
+			{
+				Id = 100,
+				Description = "Hello",
+				When = DateTime.Now.Date,
+				Collision = Guid.NewGuid()
+			};
+		}
+
 	}
 }

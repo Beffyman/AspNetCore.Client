@@ -11,7 +11,7 @@ namespace AspNetCore.Client.Serializers
 	/// <summary>
 	/// Uses Blazor's SimpleJson for serializing and deserializing the http content
 	/// </summary>
-	internal class RazorComponentsJsonSerializer : IHttpContentSerializer
+	internal class JSInteropJsonSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "application/json";
 		public string ContentType => CONTENT_TYPE;

@@ -51,7 +51,7 @@ namespace AspNetCore.Client.Serializers
 			}
 			else
 			{
-				using (var reader = new StreamReader(await content.ReadAsStreamAsync().ConfigureAwait(false)))
+				using (var reader = new StreamReader(await content.ReadAsStreamAsync().ConfigureAwait(false), Encoding.UTF8, true, 1024, true))
 				using (JsonReader jsonReader = new JsonTextReader(reader))
 				{
 					var serializer = new JsonSerializer();
