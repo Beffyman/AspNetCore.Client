@@ -21,6 +21,10 @@
 		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
 		<IncludeSource>true</IncludeSource>
 		<IncludeSymbols>true</IncludeSymbols>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+	</ItemGroup>
 </Project>

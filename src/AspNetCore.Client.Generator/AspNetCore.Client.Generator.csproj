@@ -23,6 +23,7 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
 	</PropertyGroup>
 
@@ -89,4 +90,7 @@
 		</ItemGroup>
 	</Target>
 
+	<ItemGroup>
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+	</ItemGroup>
 </Project>

@@ -21,6 +21,7 @@
 		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
 		<IncludeSource>true</IncludeSource>
 		<IncludeSymbols>true</IncludeSymbols>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,6 +30,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AspNetCore.Client\AspNetCore.Client.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
 	</ItemGroup>
 
 </Project>
