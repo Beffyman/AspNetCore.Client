@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +28,23 @@ namespace AspNetCore.Client.Serializers
 			_provider = provider;
 			_config = config;
 
-			Serializer = (IHttpContentSerializer)_provider.GetService(config.Serializer);
+			Serializer = (IHttpContentSerializer)_provider.GetService(_config.Serializer);
 
 			Deserializers = new Dictionary<string, IHttpContentSerializer>();
 			foreach (var serType in _config.Deserializers)
 			{
 				var ser = (IHttpContentSerializer)_provider.GetService(serType);
-				Deserializers.Add(ser.ContentType, ser);
+				foreach (var contentType in ser.ContentTypes ?? Enumerable.Empty<string>())
+				{
+					if (Deserializers.ContainsKey(contentType))
+					{
+						Deserializers[contentType] = ser;
+					}
+					else
+					{
+						Deserializers.Add(contentType, ser);
+					}
+				}
 			}
 		}
 

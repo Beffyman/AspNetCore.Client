@@ -12,6 +12,7 @@ using Flurl.Http;
 using TestWebApp.Contracts;
 using Microsoft.AspNetCore.TestHost;
 using AspNetCore.Client;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TestWebApp.Tests
 {
@@ -108,6 +109,42 @@ namespace TestWebApp.Tests
 				Assert.AreEqual(dto.Description, actual.Description);
 				Assert.AreEqual(dto.Id, actual.Id);
 				Assert.AreEqual(dto.When, actual.When);
+			}
+		}
+
+
+		[Test]
+		public void ProblemDetailsRequestTest()
+		{
+			//Doesn't seem like we need a application/problem+x-msgpack content-type
+			using (var endpoint = new MessagePackServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IValuesClient>();
+
+				ValidationProblemDetails errors1 = null;
+
+				var dto = new RequiredDto()
+				{
+					Id = 1
+				};
+
+				client.ProblemDetailsRequest(dto, BadRequestCallback: _ =>
+				{
+					errors1 = _;
+				});
+
+				var dto2 = new RequiredDto()
+				{
+					Id = 1,
+					Field1 = "Hello"
+				};
+
+				client.ProblemDetailsRequest(dto2,
+					OKCallback: () =>
+					{
+
+					}
+				);
 			}
 		}
 

@@ -198,7 +198,34 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		/// <returns></returns>
 		public IEnumerable<ResponseType> GetResponseTypes()
 		{
-			return GetChildren().OfType<ResponseType>().OrderBy(x => x.SortOrder);
+			var responseTypes = GetChildren().OfType<ResponseType>();
+
+			var groupedResponses = responseTypes.GroupBy(x => x.Status);
+
+			List<ResponseType> prioritizedResponseTypes = new List<ResponseType>();
+
+			foreach (var responseGroup in groupedResponses)
+			{
+				if (responseGroup.Count() > 1)
+				{
+					if (ResponseTypes.Count(x => x.Status == responseGroup.Key) == 1)
+					{
+						var endpointResponse = ResponseTypes.SingleOrDefault(x => x.Status == responseGroup.Key);
+						prioritizedResponseTypes.Add(endpointResponse);
+					}
+					else
+					{
+						//This will fail, we will let it.
+						prioritizedResponseTypes.AddRange(responseGroup);
+					}
+				}
+				else
+				{
+					prioritizedResponseTypes.Add(responseGroup.Single());
+				}
+			}
+
+			return prioritizedResponseTypes.OrderBy(x => x.SortOrder);
 		}
 
 		/// <summary>

@@ -13,7 +13,7 @@ namespace AspNetCore.Client.Serializers
 	internal class ProtobufSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "application/x-protobuf";
-		public string ContentType => CONTENT_TYPE;
+		public string[] ContentTypes => new string[] { CONTENT_TYPE };
 
 		/// <summary>
 		/// Deserializes the request content which is assumed to be protobuf into a object of <typeparamref name="T"/>
@@ -37,7 +37,7 @@ namespace AspNetCore.Client.Serializers
 			var stream = new MemoryStream();
 			Serializer.Serialize(stream, request);
 			var content = new StreamContent(stream);
-			content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
+			content.Headers.ContentType = new MediaTypeHeaderValue(CONTENT_TYPE);
 			return content;
 		}
 	}

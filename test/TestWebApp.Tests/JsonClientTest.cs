@@ -14,6 +14,9 @@ using NUnit.Framework;
 using System.IO;
 using AspNetCore.Client.Authorization;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace TestWebApp.Tests
 {
@@ -487,6 +490,61 @@ namespace TestWebApp.Tests
 				Assert.AreEqual(val.Id, responseJson.Id);
 				Assert.AreEqual(val.When, responseJson.When);
 				Assert.AreEqual(val.Description, responseJson.Description);
+			}
+		}
+
+		[Test]
+		public void ProblemDetailsRequestTest()
+		{
+			using (var endpoint = new JsonServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IValuesClient>();
+
+				ValidationProblemDetails errors1 = null;
+
+				var dto = new RequiredDto()
+				{
+					Id = 1
+				};
+
+				client.ProblemDetailsRequest(dto, BadRequestCallback: _ =>
+				{
+					errors1 = _;
+				});
+
+				var dto2 = new RequiredDto()
+				{
+					Id = 1,
+					Field1 = "Hello"
+				};
+
+				client.ProblemDetailsRequest(dto2,
+					OKCallback: () =>
+					{
+
+					}
+				);
+			}
+		}
+
+		[Test]
+		public void ModelStateBadRequestTest()
+		{
+			using (var endpoint = new JsonServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IValuesClient>();
+
+				IReadOnlyDictionary<string, IEnumerable<string>> errors = null;
+
+				client.ModelStateBadRequest(BadRequestCallback: _ =>
+				{
+					errors = _;
+				});
+
+				var str = errors["Test"];
+
+				Assert.AreEqual("Something is right!", str.Single());
+
 			}
 		}
 

@@ -14,7 +14,7 @@ namespace AspNetCore.Client.Serializers
 	internal class TextHttpSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "text/plain";
-		public string ContentType => CONTENT_TYPE;
+		public string[] ContentTypes => new string[] { CONTENT_TYPE };
 
 
 		/// <summary>

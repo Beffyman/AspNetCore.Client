@@ -13,7 +13,7 @@ namespace AspNetCore.Client.Serializers
 	internal class MessagePackSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "application/x-msgpack";
-		public string ContentType => CONTENT_TYPE;
+		public string[] ContentTypes => new string[] { CONTENT_TYPE };
 
 		/// <summary>
 		/// Deserializes the request content which is assumed to be MessagePack into a object of <typeparamref name="T"/>
@@ -36,7 +36,7 @@ namespace AspNetCore.Client.Serializers
 		{
 			var data = MessagePack.MessagePackSerializer.Serialize(request, ContractlessStandardResolver.Instance);
 			var content = new ByteArrayContent(data);
-			content.Headers.ContentType = new MediaTypeHeaderValue(ContentType);
+			content.Headers.ContentType = new MediaTypeHeaderValue(CONTENT_TYPE);
 			content.Headers.ContentLength = data.Length;
 
 			return content;
