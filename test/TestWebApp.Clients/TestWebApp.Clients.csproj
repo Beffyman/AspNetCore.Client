@@ -23,12 +23,14 @@
 		<MultipleFiles>false</MultipleFiles>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
 		<HubNamespace>TestWebApp.Hubs</HubNamespace>
-		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts.*;</AllowedNamespaces>
+		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts.*;Microsoft.AspNetCore.Mvc*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.Client.Generator" Version="*" Condition="'$(GenerateWithNuget)' == 'true'" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.2" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.1.0" />
 		<ProjectReference Include="..\..\src\AspNetCore.Client\AspNetCore.Client.csproj" />
 		<ProjectReference Include="..\TestWebApp.Contracts\TestWebApp.Contracts.csproj" />

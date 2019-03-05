@@ -9,7 +9,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
+using AspNetCore.Client.Generator.Framework;
+using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes;
 using AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes;
+using AspNetCore.Client.Generator.Framework.Navigation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -35,6 +38,38 @@ namespace AspNetCore.Client.Generator
 		public static IEnumerable<T> NotOfType<T, K>(this IEnumerable<T> source) where K : T
 		{
 			return source.Where(x => !typeof(K).IsAssignableFrom(x.GetType()));
+		}
+
+		public static IEnumerable<IParameter> FilterResponseTypes(this IEnumerable<IParameter> source, IEnumerable<ResponseType> priorityResponseTypes)
+		{
+			var responseTypes = source.OfType<ResponseType>();
+
+			var groupedResponses = responseTypes.GroupBy(x => x.Status);
+
+			List<ResponseType> prioritizedResponseTypes = new List<ResponseType>();
+
+			foreach (var responseGroup in groupedResponses)
+			{
+				if (responseGroup.Count() > 1)
+				{
+					if (priorityResponseTypes.Count(x => x.Status == responseGroup.Key) == 1)
+					{
+						var endpointResponse = priorityResponseTypes.SingleOrDefault(x => x.Status == responseGroup.Key);
+						prioritizedResponseTypes.Add(endpointResponse);
+					}
+					else
+					{
+						//This will fail, we will let it.
+						prioritizedResponseTypes.AddRange(responseGroup);
+					}
+				}
+				else
+				{
+					prioritizedResponseTypes.Add(responseGroup.Single());
+				}
+			}
+
+			return source.NotOfType<IParameter, ResponseType>().Union(prioritizedResponseTypes).OrderBy(x => x.DefaultValue == null ? 0 : 1).ThenBy(x => x.SortOrder);
 		}
 
 		public static HttpMethod HttpMethodFromEnum(HttpAttributeType type)

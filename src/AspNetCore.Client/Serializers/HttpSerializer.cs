@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,10 @@ namespace AspNetCore.Client.Serializers
 			foreach (var serType in _config.Deserializers)
 			{
 				var ser = (IHttpContentSerializer)_provider.GetService(serType);
-				Deserializers.Add(ser.ContentType, ser);
+				foreach (var contentType in ser.ContentTypes ?? Enumerable.Empty<string>())
+				{
+					Deserializers.Add(contentType, ser);
+				}
 			}
 		}
 

@@ -617,7 +617,7 @@ $@"
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, false)} {endpoint.Name}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
@@ -629,7 +629,7 @@ $@"
 {SharedWriter.GetObsolete(endpoint)}
 {SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
@@ -649,7 +649,7 @@ $@"
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {endpoint.Name}
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(controller, endpoint, false, false)}
@@ -667,7 +667,7 @@ public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), fa
 {SharedWriter.GetObsolete(endpoint)}
 public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
 (
-{string.Join($",{Environment.NewLine}", endpoint.GetParameters().Select(SharedWriter.GetParameter).NotNull())}
+{string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 )
 {{
 {GetMethodDetails(controller, endpoint, true, false)}

@@ -10,9 +10,9 @@ namespace AspNetCore.Client.Serializers
 	public interface IHttpContentSerializer
 	{
 		/// <summary>
-		/// Content-Type that this Serializer can parse
+		/// Content-Types that this can deserialize
 		/// </summary>
-		string ContentType { get; }
+		string[] ContentTypes { get; }
 
 		/// <summary>
 		/// Deserializes the content of the http response into the type provided

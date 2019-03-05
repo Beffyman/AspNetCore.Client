@@ -14,7 +14,8 @@ namespace AspNetCore.Client.Serializers
 	internal class JSInteropJsonSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "application/json";
-		public string ContentType => CONTENT_TYPE;
+		internal static readonly string PROBLEM_TYPE = "application/problem+json";
+		public string[] ContentTypes => new string[] { CONTENT_TYPE, PROBLEM_TYPE };
 
 		private static readonly IDictionary<Type, Func<string, object>> _knownJsonPrimitives = new Dictionary<Type, Func<string, object>>
 		{
@@ -67,7 +68,7 @@ namespace AspNetCore.Client.Serializers
 			//Can't use the same stream writing as AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
 
 			var json = Json.Serialize(request);
-			return new StringContent(json, Encoding.UTF8, ContentType);
+			return new StringContent(json, Encoding.UTF8, CONTENT_TYPE);
 		}
 	}
 }

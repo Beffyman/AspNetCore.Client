@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -345,6 +346,22 @@ namespace TestWebApp.Controllers
 				When = DateTime.Now.Date,
 				Collision = Guid.NewGuid()
 			};
+		}
+
+		[HttpPost("[action]")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+		public IActionResult ProblemDetailsRequest(RequiredDto dto)
+		{
+			return Ok();
+		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(IReadOnlyDictionary<string, IEnumerable<string>>), StatusCodes.Status400BadRequest)]
+		public IActionResult ModelStateBadRequest()
+		{
+			ModelState.AddModelError("Test", "Something is right!");
+			return BadRequest(ModelState);
 		}
 
 	}
