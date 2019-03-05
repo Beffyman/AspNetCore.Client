@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Microsoft.JSInterop;
 
 namespace AspNetCore.Client.Serializers
 {
 	/// <summary>
-	/// Uses Newtonsoft.Json for serializing and deserializing the http content
+	/// Uses Blazor's SimpleJson for serializing and deserializing the http content
 	/// </summary>
-	internal class JsonHttpSerializer : IHttpContentSerializer
+	internal class JSInteropJsonSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "application/json";
 		public string ContentType => CONTENT_TYPE;
-
 
 		private static readonly IDictionary<Type, Func<string, object>> _knownJsonPrimitives = new Dictionary<Type, Func<string, object>>
 		{
@@ -33,12 +31,13 @@ namespace AspNetCore.Client.Serializers
 			{ typeof(string), (_)=> _.TrimStart('"').TrimEnd('"') },
 			{ typeof(bool), (_)=> bool.Parse(_) },
 			{ typeof(DateTime), (_)=> DateTime.Parse(_.TrimStart('"').TrimEnd('"')) },
+			{ typeof(DateTimeOffset), (_)=> DateTime.Parse(_.TrimStart('"').TrimEnd('"')) },
 			{ typeof(Guid), (_)=> Guid.Parse(_.TrimStart('"').TrimEnd('"')) },
 		};
 
 
 		/// <summary>
-		/// Deserializes the request content which is assumed to be json into a object of <typeparamref name="T"/>
+		/// Deserializes the request content which is assumed to be simpleJson into a object of <typeparamref name="T"/>
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
@@ -51,24 +50,23 @@ namespace AspNetCore.Client.Serializers
 			}
 			else
 			{
-				using (var reader = new StreamReader(await content.ReadAsStreamAsync().ConfigureAwait(false), Encoding.UTF8, true, 1024, true))
-				using (JsonReader jsonReader = new JsonTextReader(reader))
-				{
-					var serializer = new JsonSerializer();
-					return serializer.Deserialize<T>(jsonReader);
-				}
+				//Can't use the same stream reading as AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
+				var str = await content.ReadAsStringAsync().ConfigureAwait(false);
+				return Json.Deserialize<T>(str);
 			}
 		}
 
 		/// <summary>
-		/// Serializes the request into a StringContent with a json media type
+		/// Serializes the request into a StringContent with a json media type, but serialized with SimpleJson
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="request"></param>
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			var json = JsonConvert.SerializeObject(request);
+			//Can't use the same stream writing as AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
+
+			var json = Json.Serialize(request);
 			return new StringContent(json, Encoding.UTF8, ContentType);
 		}
 	}

@@ -174,6 +174,7 @@ $@"//---------------------------------------------------------------------------
 		{
 			var versions = context.HubClients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
+				.OrderBy(x => x.Key)
 				.ToList();
 
 			if (!versions.Any())
@@ -196,7 +197,7 @@ $@"
 $@"
 namespace { Settings.HubNamespace }{(version.Key != null ? "." : "")}{version.Key}
 {{
-{string.Join(Environment.NewLine, version.Select(WriteHub))}
+{string.Join(Environment.NewLine, version.OrderBy(x => x.Name).Select(WriteHub))}
 }}
 ";
 		}
@@ -422,6 +423,7 @@ public IDisposable On{message.Name}(Action<{string.Join(",", message.Types)}> ac
 		{
 			var versions = context.HttpClients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
+				.OrderBy(x => x.Key)
 				.ToList();
 
 
@@ -490,6 +492,7 @@ public interface I{Settings.ClientInterfaceName}{version.Key}Repository
 		{
 			var versions = context.HttpClients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
+				.OrderBy(x => x.Key)
 				.ToList();
 
 			if (!versions.Any())
@@ -512,7 +515,7 @@ $@"
 $@"
 namespace { Settings.ClientNamespace }{(version.Key != null ? "." : "")}{version.Key}
 {{
-{string.Join(Environment.NewLine, version.Select(WriteController))}
+{string.Join(Environment.NewLine, version.OrderBy(x => x.Name).Select(WriteController))}
 }}
 ";
 		}
@@ -965,6 +968,7 @@ $@"{controllerVar}
 		public static string WriteBlocks(GenerationContext context)
 		{
 			var functions = context.Functions.Where(x => x.Generated)
+				.OrderBy(x => x.Name)
 				.ToList();
 
 			if (!functions.Any())
@@ -1413,6 +1417,7 @@ $@"namespace {Settings.ClientNamespace}
 		{
 			var versions = context.HttpClients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
+				.OrderBy(x => x.Key)
 				.Select(x => x.Key)
 				.ToList();
 
@@ -1442,9 +1447,9 @@ $@"
 			configure?.Invoke(configuration);
 
 {string.Join(Environment.NewLine, versions.Select(HttpClassWriter.WriteRepositoryRegistration))}
-{string.Join(Environment.NewLine, context.HttpClients.Where(x => x.Generated).Select(HttpClassWriter.WriteClientRegistration))}
+{string.Join(Environment.NewLine, context.HttpClients.Where(x => x.Generated).OrderBy(x => x.Name).Select(HttpClassWriter.WriteClientRegistration))}
 
-{string.Join(Environment.NewLine, context.Functions.Where(x => x.Generated).Select(FunctionClassWriter.WriteClientRegistration))}
+{string.Join(Environment.NewLine, context.Functions.Where(x => x.Generated).OrderBy(x => x.Name).Select(FunctionClassWriter.WriteClientRegistration))}
 
 			return configuration.{nameof(ClientConfiguration.ApplyConfiguration)}<I{Settings.ClientInterfaceName}>(services);
 		}}

@@ -365,7 +365,21 @@ namespace AspNetCore.Client.Generator.Output
 
 			endpoint.ReturnType = rawReturnType?.Trim();
 
+			var okStatus = endpoint.ResponseTypes.SingleOrDefault(x => x.Status == HttpStatusCode.OK);
 
+			if (okStatus != null
+				&& endpoint.ReturnType != null
+				&& Helpers.IsType(okStatus.ActionType, endpoint.ReturnType))
+			{
+				//Remove the OkStatus since it is the same as the method return
+				endpoint.ResponseTypes.Remove(okStatus);
+			}
+			else if (okStatus != null
+				&& endpoint.ReturnType != null
+				&& !Helpers.IsType(okStatus.ActionType, endpoint.ReturnType))
+			{
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has a OK response type of {okStatus.ActionType}, but the method return {endpoint.ReturnType}");
+			}
 
 			var duplicateParameters = endpoint.GetParametersWithoutResponseTypes().GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
 

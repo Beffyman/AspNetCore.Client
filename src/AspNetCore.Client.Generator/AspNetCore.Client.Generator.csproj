@@ -23,6 +23,7 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
 	</PropertyGroup>
 
@@ -48,7 +49,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\AspNetCore.Client.Generator.Framework\AspNetCore.Client.Generator.Framework.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\AspNetCore.Server\AspNetCore.Server.csproj" />
+		<ProjectReference Include="..\AspNetCore.Server\AspNetCore.Server.csproj"  PrivateAssets="all" />
 	</ItemGroup>
 
 	<!--Nerdbank.MSBuildExtension-->
@@ -89,4 +90,7 @@
 		</ItemGroup>
 	</Target>
 
+	<ItemGroup>
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+	</ItemGroup>
 </Project>
