@@ -28,7 +28,7 @@ namespace AspNetCore.Client.Serializers
 			_provider = provider;
 			_config = config;
 
-			Serializer = (IHttpContentSerializer)_provider.GetService(config.Serializer);
+			Serializer = (IHttpContentSerializer)_provider.GetService(_config.Serializer);
 
 			Deserializers = new Dictionary<string, IHttpContentSerializer>();
 			foreach (var serType in _config.Deserializers)
@@ -36,7 +36,14 @@ namespace AspNetCore.Client.Serializers
 				var ser = (IHttpContentSerializer)_provider.GetService(serType);
 				foreach (var contentType in ser.ContentTypes ?? Enumerable.Empty<string>())
 				{
-					Deserializers.Add(contentType, ser);
+					if (Deserializers.ContainsKey(contentType))
+					{
+						Deserializers[contentType] = ser;
+					}
+					else
+					{
+						Deserializers.Add(contentType, ser);
+					}
 				}
 			}
 		}
