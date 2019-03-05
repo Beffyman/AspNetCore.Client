@@ -443,19 +443,19 @@ $@"
 $@"
 public interface I{Settings.ClientInterfaceName}{version.Key}Repository
 {{
-{string.Join($@"{Environment.NewLine}", version.Select(x => WriteRepositoryInterfaceProperty(version.Key, x)))}
+{string.Join($@"{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryInterfaceProperty(version.Key, x)))}
 }}
 
 {(Settings.UseInternalClients ? "internal" : "public")} class {Settings.ClientInterfaceName}{version.Key}Repository : I{Settings.ClientInterfaceName}{version.Key}Repository
 {{
-{string.Join($@"{Environment.NewLine}", version.Select(x => WriteRepositoryProperty(version.Key, x)))}
+{string.Join($@"{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryProperty(version.Key, x)))}
 
 	public {Settings.ClientInterfaceName}{version.Key}Repository
 	(
-{string.Join($@",{Environment.NewLine}", version.Select(x => WriteRepositoryParameter(version.Key, x)))}
+{string.Join($@",{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryParameter(version.Key, x)))}
 	)
 	{{
-{string.Join($@"{Environment.NewLine}", version.Select(x => WriteRepositoryAssignment(version.Key, x)))}
+{string.Join($@"{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryAssignment(version.Key, x)))}
 	}}
 }}
 
