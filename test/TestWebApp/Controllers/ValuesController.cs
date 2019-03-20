@@ -364,5 +364,13 @@ namespace TestWebApp.Controllers
 			return BadRequest(ModelState);
 		}
 
+
+		[HttpGet("[action]/{code}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public IActionResult UrlEncodingCheck(string code)
+		{
+			return Ok();
+		}
+
 	}
 }

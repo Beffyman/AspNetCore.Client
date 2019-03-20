@@ -1136,7 +1136,7 @@ namespace TestWebApp.Clients
 					throw new InvalidRouteException("Parameter id does not parse into an int.");
 				}
 
-				string url = $@"api/namespaced/NewTest123/{id}";
+				string url = $@"api/namespaced/NewTest123/{id.EncodeForUrl()}";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				bool responseHandled = response != null;
@@ -1195,7 +1195,7 @@ namespace TestWebApp.Clients
 					throw new InvalidRouteException("Parameter id does not parse into an int.");
 				}
 
-				string url = $@"api/namespaced/NewTest123/{id}";
+				string url = $@"api/namespaced/NewTest123/{id.EncodeForUrl()}";
 				HttpResponseMessage response = null;
 				response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				bool responseHandled = response != null;
@@ -1238,7 +1238,7 @@ namespace TestWebApp.Clients
 					throw new InvalidRouteException("Parameter id does not parse into an int.");
 				}
 
-				string url = $@"api/namespaced/NewTest123/{id}";
+				string url = $@"api/namespaced/NewTest123/{id.EncodeForUrl()}";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 				bool responseHandled = response != null;
@@ -1297,7 +1297,7 @@ namespace TestWebApp.Clients
 					throw new InvalidRouteException("Parameter id does not parse into an int.");
 				}
 
-				string url = $@"api/namespaced/NewTest123/{id}";
+				string url = $@"api/namespaced/NewTest123/{id.EncodeForUrl()}";
 				HttpResponseMessage response = null;
 				response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 				bool responseHandled = response != null;
@@ -1865,6 +1865,10 @@ namespace TestWebApp.Clients
 		HttpResponseMessage ModelStateBadRequestRaw(int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		Task ModelStateBadRequestAsync(int ControllerHeader = 0, Action<IReadOnlyDictionary<string, IEnumerable<string>>> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> ModelStateBadRequestRawAsync(int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		void UrlEncodingCheck(string code, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action OKCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage UrlEncodingCheckRaw(string code, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		Task UrlEncodingCheckAsync(string code, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action OKCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> UrlEncodingCheckRawAsync(string code, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 	}
 
 	internal class ValuesClient : IValuesClient
@@ -3178,7 +3182,7 @@ namespace TestWebApp.Clients
 		public string Get(int id, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -3268,7 +3272,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage GetRaw(int id, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -3307,7 +3311,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<string> GetAsync(int id, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -3397,7 +3401,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> GetRawAsync(int id, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -3680,7 +3684,7 @@ namespace TestWebApp.Clients
 		public void Put(string value, int id, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -3763,7 +3767,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage PutRaw(string value, int id, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -3802,7 +3806,7 @@ namespace TestWebApp.Clients
 		public async Task PutAsync(string value, int id, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -3885,7 +3889,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> PutRawAsync(string value, int id, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Put, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -3924,7 +3928,7 @@ namespace TestWebApp.Clients
 		public bool Delete(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action UnauthorizedCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -4028,7 +4032,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage DeleteRaw(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -4067,7 +4071,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<bool> DeleteAsync(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action UnauthorizedCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -4171,7 +4175,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> DeleteRawAsync(int id, int ControllerHeader = 0, SecurityHeader auth = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			string url = $@"api/{controller}/{id}";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Delete, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -4726,7 +4730,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "NullableParameterOrdering";
-			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}?{nameof(deleted)}={deleted.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -4815,7 +4819,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "NullableParameterOrdering";
-			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}?{nameof(deleted)}={deleted.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -4860,7 +4864,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "NullableParameterOrdering";
-			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}?{nameof(deleted)}={deleted.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -4949,7 +4953,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "NullableParameterOrdering";
-			string url = $@"api/{controller}/{action}/{id}?{nameof(deleted)}={deleted}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}?{nameof(deleted)}={deleted.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -5518,7 +5522,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -5621,7 +5625,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -5666,7 +5670,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -5769,7 +5773,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "FancyDtoReturn";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -7152,7 +7156,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "PostWithNoBody";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -7255,7 +7259,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "PostWithNoBody";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -7300,7 +7304,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "PostWithNoBody";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -7403,7 +7407,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "PostWithNoBody";
-			string url = $@"api/{controller}/{action}/{id}";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -7448,7 +7452,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "ComplexPost";
-			string url = $@"api/{controller}/{action}/{testId}";
+			string url = $@"api/{controller}/{action}/{testId.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -7551,7 +7555,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "ComplexPost";
-			string url = $@"api/{controller}/{action}/{testId}";
+			string url = $@"api/{controller}/{action}/{testId.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -7596,7 +7600,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "ComplexPost";
-			string url = $@"api/{controller}/{action}/{testId}";
+			string url = $@"api/{controller}/{action}/{testId.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -7699,7 +7703,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "ComplexPost";
-			string url = $@"api/{controller}/{action}/{testId}";
+			string url = $@"api/{controller}/{action}/{testId.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -8015,7 +8019,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -8113,7 +8117,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -8153,7 +8157,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -8251,7 +8255,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -8291,7 +8295,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -8389,7 +8393,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -8429,7 +8433,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -8527,7 +8531,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -8927,7 +8931,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "QueryParameter";
-			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9025,7 +9029,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "QueryParameter";
-			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9065,7 +9069,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "QueryParameter";
-			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -9163,7 +9167,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "QueryParameter";
-			string url = $@"api/{controller}/{action}?{nameof(name)}={name}";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -9465,7 +9469,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "FileReturnResponseTypes";
-			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
+			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9563,7 +9567,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "FileReturnResponseTypes";
-			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
+			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9603,7 +9607,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "FileReturnResponseTypes";
-			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
+			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -9701,7 +9705,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "FileReturnResponseTypes";
-			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass}";
+			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -9741,7 +9745,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "DefaultRouteConstraint";
-			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9832,7 +9836,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "DefaultRouteConstraint";
-			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9872,7 +9876,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "DefaultRouteConstraint";
-			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -9963,7 +9967,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "DefaultRouteConstraint";
-			string url = $@"api/{controller}/{action}/defaultConstraint/{x}";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10003,7 +10007,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "OptionalRouteConstraint";
-			string url = $@"api/{controller}/{action}/optional/{x}";
+			string url = $@"api/{controller}/{action}/optional/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10094,7 +10098,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "OptionalRouteConstraint";
-			string url = $@"api/{controller}/{action}/optional/{x}";
+			string url = $@"api/{controller}/{action}/optional/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10134,7 +10138,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "OptionalRouteConstraint";
-			string url = $@"api/{controller}/{action}/optional/{x}";
+			string url = $@"api/{controller}/{action}/optional/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10225,7 +10229,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "OptionalRouteConstraint";
-			string url = $@"api/{controller}/{action}/optional/{x}";
+			string url = $@"api/{controller}/{action}/optional/{x.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10265,7 +10269,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTime";
-			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10356,7 +10360,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTime";
-			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10396,7 +10400,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTime";
-			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10487,7 +10491,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTime";
-			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10527,7 +10531,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeNullable";
-			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10618,7 +10622,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeNullable";
-			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10658,7 +10662,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeNullable";
-			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10749,7 +10753,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeNullable";
-			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -10789,7 +10793,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffset";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10880,7 +10884,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffset";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -10920,7 +10924,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffset";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -11011,7 +11015,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffset";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -11051,7 +11055,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffsetNullable";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -11142,7 +11146,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffsetNullable";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -11182,7 +11186,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffsetNullable";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -11273,7 +11277,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "CheckDateTimeOffsetNullable";
-			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -11318,7 +11322,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "RouteConstraintCheck";
-			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
+			string url = $@"api/{controller}/{action}/routeCheck/{name.EncodeForUrl()}/{id.EncodeForUrl()}/{val.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -11407,7 +11411,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "RouteConstraintCheck";
-			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
+			string url = $@"api/{controller}/{action}/routeCheck/{name.EncodeForUrl()}/{id.EncodeForUrl()}/{val.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -11452,7 +11456,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "RouteConstraintCheck";
-			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
+			string url = $@"api/{controller}/{action}/routeCheck/{name.EncodeForUrl()}/{id.EncodeForUrl()}/{val.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -11541,7 +11545,7 @@ namespace TestWebApp.Clients
 
 			var controller = "Values";
 			var action = "RouteConstraintCheck";
-			string url = $@"api/{controller}/{action}/routeCheck/{name}/{id}/{val}";
+			string url = $@"api/{controller}/{action}/routeCheck/{name.EncodeForUrl()}/{id.EncodeForUrl()}/{val.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -12362,6 +12366,282 @@ namespace TestWebApp.Clients
 
 			return response;
 		}
+
+		public void UrlEncodingCheck(string code, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action OKCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "UrlEncodingCheck";
+			string url = $@"api/{controller}/{action}/{code.EncodeForUrl()}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(Serializer.Deserialize<string>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult());
+				}
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
+			}
+
+			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke();
+				}
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
+			return;
+		}
+
+		public HttpResponseMessage UrlEncodingCheckRaw(string code, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "UrlEncodingCheck";
+			string url = $@"api/{controller}/{action}/{code.EncodeForUrl()}";
+			HttpResponseMessage response = null;
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			}
+
+			return response;
+		}
+
+		public async Task UrlEncodingCheckAsync(string code, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action OKCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "UrlEncodingCheck";
+			string url = $@"api/{controller}/{action}/{code.EncodeForUrl()}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			if (BadRequestCallback != null && BadRequestCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for BadRequestCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+			{
+				if (BadRequestCallback != null)
+				{
+					responseHandled = true;
+					BadRequestCallback.Invoke(await Serializer.Deserialize<string>(response.Content).ConfigureAwait(false));
+				}
+			}
+
+			if (InternalServerErrorCallback != null && InternalServerErrorCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for InternalServerErrorCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+			{
+				if (InternalServerErrorCallback != null)
+				{
+					responseHandled = true;
+					InternalServerErrorCallback.Invoke();
+				}
+			}
+
+			if (OKCallback != null && OKCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for OKCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (response.StatusCode == System.Net.HttpStatusCode.OK)
+			{
+				if (OKCallback != null)
+				{
+					responseHandled = true;
+					OKCallback.Invoke();
+				}
+			}
+
+			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+			{
+				throw new NotSupportedException("Async void action delegates for ResponseCallback are not supported.As they will run out of the scope of this call.");
+			}
+
+			if (ResponseCallback != null)
+			{
+				responseHandled = true;
+				ResponseCallback.Invoke(response);
+			}
+
+			if (!responseHandled)
+			{
+				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
+			}
+
+			return;
+		}
+
+		public async ValueTask<HttpResponseMessage> UrlEncodingCheckRawAsync(string code, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		{
+			var controller = "Values";
+			var action = "UrlEncodingCheck";
+			string url = $@"api/{controller}/{action}/{code.EncodeForUrl()}";
+			HttpResponseMessage response = null;
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
+			bool responseHandled = response != null;
+			if (response == null)
+			{
+				try
+				{
+					response = await Client.ClientWrapper.Request(url).WithHeader("Test", "EXTRA").WithHeader("ControllerHeader", ControllerHeader).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
+				}
+				catch (FlurlHttpException fhex)
+				{
+					if (ExceptionCallback != null && ExceptionCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
+					{
+						throw new NotSupportedException("Async void action delegates for ExceptionCallback are not supported.As they will run out of the scope of this call.");
+					}
+
+					if (ExceptionCallback != null)
+					{
+						responseHandled = true;
+						ExceptionCallback?.Invoke(fhex);
+					}
+					else
+					{
+						throw fhex;
+					}
+
+					return null;
+				}
+
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
+			}
+
+			return response;
+		}
 	}
 }
 
@@ -12817,7 +13097,7 @@ namespace TestWebApp.Clients.V3
 			}
 
 			var controller = "TestQuery";
-			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -12884,7 +13164,7 @@ namespace TestWebApp.Clients.V3
 			}
 
 			var controller = "TestQuery";
-			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -12928,7 +13208,7 @@ namespace TestWebApp.Clients.V3
 			}
 
 			var controller = "TestQuery";
-			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -12995,7 +13275,7 @@ namespace TestWebApp.Clients.V3
 			}
 
 			var controller = "TestQuery";
-			string url = $@"api/{controller}/endpoint/{index}?api-version=3";
+			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -13065,7 +13345,7 @@ namespace TestWebApp.Clients.V3_0
 			}
 
 			var controller = "TestRoute";
-			string url = $@"api/v3.0/{controller}/endpoint/{index}";
+			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -13132,7 +13412,7 @@ namespace TestWebApp.Clients.V3_0
 			}
 
 			var controller = "TestRoute";
-			string url = $@"api/v3.0/{controller}/endpoint/{index}";
+			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -13176,7 +13456,7 @@ namespace TestWebApp.Clients.V3_0
 			}
 
 			var controller = "TestRoute";
-			string url = $@"api/v3.0/{controller}/endpoint/{index}";
+			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -13243,7 +13523,7 @@ namespace TestWebApp.Clients.V3_0
 			}
 
 			var controller = "TestRoute";
-			string url = $@"api/v3.0/{controller}/endpoint/{index}";
+			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
