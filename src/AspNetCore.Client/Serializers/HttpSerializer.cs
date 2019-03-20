@@ -8,9 +8,26 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCore.Client.Serializers
 {
+	/// <summary>
+	/// This is used to register all deserializers and the serializer that the endpoint uses
+	/// </summary>
 	public interface IHttpSerializer
 	{
+		/// <summary>
+		/// Deserializes the HttpContent using a deserializer if it has it registered, else it throws an exception
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="content"></param>
+		/// <exception cref="FormatException" />
+		/// <returns></returns>
 		Task<T> Deserialize<T>(HttpContent content);
+
+		/// <summary>
+		/// Uses the configured serializer to serialize the object
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="request"></param>
+		/// <returns></returns>
 		HttpContent Serialize<T>(T request);
 
 	}
@@ -54,6 +71,7 @@ namespace AspNetCore.Client.Serializers
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
+		/// <exception cref="FormatException" />
 		/// <returns></returns>
 		public async Task<T> Deserialize<T>(HttpContent content)
 		{

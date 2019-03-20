@@ -572,6 +572,19 @@ namespace TestWebApp.Tests
 
 				Assert.True(passed);
 
+				client.UrlEncodingQueryCheck(null,
+				OKCallback: () =>
+				{
+					passed = true;
+				},
+				BadRequestCallback: _ =>
+				{
+					passed = false;
+
+				});
+
+				Assert.True(passed);
+
 			}
 		}
 

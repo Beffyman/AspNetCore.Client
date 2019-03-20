@@ -372,5 +372,13 @@ namespace TestWebApp.Controllers
 			return Ok();
 		}
 
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public IActionResult UrlEncodingQueryCheck(string code)
+		{
+			return Ok();
+		}
+
 	}
 }
