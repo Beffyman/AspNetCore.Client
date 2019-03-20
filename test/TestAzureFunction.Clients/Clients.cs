@@ -116,7 +116,7 @@ namespace TestAzureFunction.Clients
 
 		public void Function1_GET(string name, Guid ID, String AuthKey, Action<string> OKCallback = null, Action<string> BadRequestCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"/api/helloMe?{nameof(name)}={name}";
+			string url = $@"/api/helloMe?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -212,7 +212,7 @@ namespace TestAzureFunction.Clients
 
 		public HttpResponseMessage Function1Raw_GET(string name, Guid ID, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"/api/helloMe?{nameof(name)}={name}";
+			string url = $@"/api/helloMe?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -250,7 +250,7 @@ namespace TestAzureFunction.Clients
 
 		public async Task Function1_GETAsync(string name, Guid ID, String AuthKey, Action<string> OKCallback = null, Action<string> BadRequestCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, Action<HttpResponseMessage> UnauthorizedCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"/api/helloMe?{nameof(name)}={name}";
+			string url = $@"/api/helloMe?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -346,7 +346,7 @@ namespace TestAzureFunction.Clients
 
 		public async ValueTask<HttpResponseMessage> Function1Raw_GETAsync(string name, Guid ID, String AuthKey, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			string url = $@"/api/helloMe?{nameof(name)}={name}";
+			string url = $@"/api/helloMe?{nameof(name)}={name.EncodeForUrl()}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;

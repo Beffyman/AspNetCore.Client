@@ -110,6 +110,17 @@ namespace AspNetCore.Client.GeneratorExtensions
 		}
 
 		/// <summary>
+		/// Converts the object into a URL encoded string
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static string EncodeForUrl<T>(this T obj)
+		{
+			return WebUtility.UrlEncode(obj?.ToString() ?? string.Empty);
+		}
+
+		/// <summary>
 		/// https://geeklearning.io/serialize-an-object-to-an-url-encoded-string-in-csharp/
 		/// </summary>
 		/// <param name="metaToken"></param>

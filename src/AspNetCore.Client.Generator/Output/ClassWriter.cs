@@ -908,7 +908,7 @@ $@"{controllerVar}
 				var routeParameter = routeParameters.SingleOrDefault(x => x.Name.Equals(parameter.Name, StringComparison.CurrentCultureIgnoreCase));
 				if (Helpers.IsRoutableType(routeParameter.Type))
 				{
-					routeUnformatted = routeUnformatted.Replace(parameter.BackToRouteParameter(), $"{{{Helpers.GetRouteStringTransform(routeParameter.Name, routeParameter.Type)}}}");
+					routeUnformatted = routeUnformatted.Replace(parameter.BackToRouteParameter(), $"{{{Helpers.GetRouteStringTransform(routeParameter.Name, routeParameter.Type)}.{nameof(GeneratorExtensions.GeneratorExtensions.EncodeForUrl)}()}}");
 				}
 			}
 
@@ -1578,7 +1578,7 @@ public interface I{Settings.ClientInterfaceName} : {nameof(IClient)} {{ }}
 
 			if (Helpers.IsEnumerable(parameter.Type))
 			{
-				return $@"{{string.Join(""&"",{parameter.Name}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", parameter.Type)}}}""))}}";
+				return $@"{{string.Join(""&"",{parameter.Name}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", parameter.Type)}.{nameof(GeneratorExtensions.GeneratorExtensions.EncodeForUrl)}()}}""))}}";
 			}
 			else
 			{
@@ -1588,7 +1588,7 @@ public interface I{Settings.ClientInterfaceName} : {nameof(IClient)} {{ }}
 				}
 				else
 				{
-					return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}}}";
+					return $"{name}={{{Helpers.GetRouteStringTransform(parameter.Name, parameter.Type)}.{nameof(GeneratorExtensions.GeneratorExtensions.EncodeForUrl)}()}}";
 				}
 			}
 		}
