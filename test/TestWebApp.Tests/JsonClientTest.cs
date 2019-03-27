@@ -557,34 +557,26 @@ namespace TestWebApp.Tests
 			{
 				var client = endpoint.Provider.GetService<IValuesClient>();
 
-				bool passed = false;
-
-				client.UrlEncodingCheck("?my=1&test=2",
-				OKCallback: () =>
+				string val = "?my=1&test=2";
+				client.UrlEncodingCheck(val,
+				OKCallback: _ =>
 				{
-					passed = true;
+					Assert.AreEqual(val, _);
 				},
 				BadRequestCallback: _ =>
 				{
-					passed = false;
-
+					Assert.Fail();
 				});
 
-				Assert.True(passed);
-
-				client.UrlEncodingQueryCheck(null,
-				OKCallback: () =>
+				client.UrlEncodingQueryCheck(val,
+				OKCallback: _ =>
 				{
-					passed = true;
+					Assert.AreEqual(val, _);
 				},
 				BadRequestCallback: _ =>
 				{
-					passed = false;
-
+					Assert.Fail();
 				});
-
-				Assert.True(passed);
-
 			}
 		}
 

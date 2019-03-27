@@ -117,7 +117,7 @@ namespace AspNetCore.Client.GeneratorExtensions
 		/// <returns></returns>
 		public static string EncodeForUrl<T>(this T obj)
 		{
-			return WebUtility.UrlEncode(obj?.ToString() ?? string.Empty);
+			return Uri.EscapeDataString(obj?.ToString() ?? string.Empty);
 		}
 
 		/// <summary>

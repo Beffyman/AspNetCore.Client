@@ -366,18 +366,18 @@ namespace TestWebApp.Controllers
 
 
 		[HttpGet("[action]/{code}")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult UrlEncodingCheck(string code)
 		{
-			return Ok();
+			return Ok(code);
 		}
 
 
 		[HttpGet("[action]")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult UrlEncodingQueryCheck(string code)
 		{
-			return Ok();
+			return Ok(code);
 		}
 
 	}
