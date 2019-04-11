@@ -615,25 +615,25 @@ $@"
 			return
 $@"
 {SharedWriter.GetObsolete(endpoint)}
-{SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, false)} {endpoint.Name}
+{SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, false)} {endpoint.FormattedName}
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
-{SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
+{SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), false)} {endpoint.FormattedName}Raw
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
-{SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
+{SharedWriter.GetInterfaceReturnType(endpoint.ReturnType, true)} {endpoint.FormattedName}Async
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 );
 
 {SharedWriter.GetObsolete(endpoint)}
-{SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}RawAsync
+{SharedWriter.GetInterfaceReturnType(nameof(HttpResponseMessage), true)} {endpoint.FormattedName}RawAsync
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 );
@@ -647,7 +647,7 @@ $@"
 $@"
 
 {SharedWriter.GetObsolete(endpoint)}
-public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {endpoint.Name}
+public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {endpoint.FormattedName}
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 )
@@ -656,7 +656,7 @@ public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, false)} {e
 }}
 
 {SharedWriter.GetObsolete(endpoint)}
-public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), false)} {endpoint.Name}Raw
+public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), false)} {endpoint.FormattedName}Raw
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 )
@@ -665,7 +665,7 @@ public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), fa
 }}
 
 {SharedWriter.GetObsolete(endpoint)}
-public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {endpoint.Name}Async
+public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {endpoint.FormattedName}Async
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParameters().FilterResponseTypes(endpoint.ResponseTypes).Select(SharedWriter.GetParameter).NotNull())}
 )
@@ -674,7 +674,7 @@ public {SharedWriter.GetImplementationReturnType(endpoint.ReturnType, true)} {en
 }}
 
 {SharedWriter.GetObsolete(endpoint)}
-public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoint.Name}RawAsync
+public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), true)} {endpoint.FormattedName}RawAsync
 (
 {string.Join($",{Environment.NewLine}", endpoint.GetParametersWithoutResponseTypes().Select(SharedWriter.GetParameter).NotNull())}
 )

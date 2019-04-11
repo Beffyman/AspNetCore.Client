@@ -177,7 +177,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 			var resolvedEndpoints = Endpoints.Union(BaseController?.GetEndpoints() ?? new List<AspNetCoreHttpEndpoint>())
 											.ToList();
 
-			var overwrittenEndpoints = resolvedEndpoints.GroupBy(x => x.Name)
+			var overwrittenEndpoints = resolvedEndpoints.GroupBy(x => x.FormattedName)
 														.Where(x => x.Count() > 1
 																&& x.Any(y => y.Virtual)
 																&& x.Any(y => y.Override))
@@ -188,11 +188,11 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 			{
 				foreach (var group in overwrittenEndpoints)
 				{
-					resolvedEndpoints.RemoveAll(x => x.Name == group.Key && x.Virtual);
+					resolvedEndpoints.RemoveAll(x => x.FormattedName == group.Key && x.Virtual);
 				}
 			}
 
-			var newEndpoints = resolvedEndpoints.GroupBy(x => x.Name)
+			var newEndpoints = resolvedEndpoints.GroupBy(x => x.FormattedName)
 												.Where(x => x.Any(y => y.New))
 												.ToList();
 
@@ -206,7 +206,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 					}
 					else if (group.Count() == 2)
 					{
-						resolvedEndpoints.RemoveAll(x => x.Name == group.Key && !x.New);
+						resolvedEndpoints.RemoveAll(x => x.FormattedName == group.Key && !x.New);
 					}
 					else if (group.Count() > 2)
 					{

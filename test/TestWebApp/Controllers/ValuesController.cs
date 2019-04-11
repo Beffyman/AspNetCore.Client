@@ -110,6 +110,13 @@ namespace TestWebApp.Controllers
 
 
 		[HttpGet("[action]")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public IActionResult ActionRouteAsync()
+		{
+			return Ok();
+		}
+
+		[HttpGet("[action]")]
 		public bool TestPreFunc()
 		{
 			return Request.Headers.ContainsKey("TestPre");

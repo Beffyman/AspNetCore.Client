@@ -183,7 +183,8 @@ namespace AspNetCore.Client.Generator.Output
 
 			var endpoint = new AspNetCoreHttpEndpoint(parent);
 
-			endpoint.Name = syntax.Identifier.ValueText.CleanMethodName();
+			endpoint.Name = syntax.Identifier.ValueText.Trim();
+			endpoint.FormattedName = syntax.Identifier.ValueText.CleanMethodName();
 
 
 			endpoint.Virtual = syntax.Modifiers.Any(x => x.Text == "virtual");
@@ -268,7 +269,7 @@ namespace AspNetCore.Client.Generator.Output
 
 			if (endpoint.Route.Version != null && parent.Route.Version != null)
 			{
-				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has {nameof(ApiVersionAttribute)} on both it's method and class");
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.FormattedName} has {nameof(ApiVersionAttribute)} on both it's method and class");
 			}
 
 			//Obsolete Attribute
@@ -378,21 +379,21 @@ namespace AspNetCore.Client.Generator.Output
 				&& endpoint.ReturnType != null
 				&& !Helpers.IsType(okStatus.ActionType, endpoint.ReturnType))
 			{
-				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has a OK response type of {okStatus.ActionType}, but the method return {endpoint.ReturnType}");
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.FormattedName} has a OK response type of {okStatus.ActionType}, but the method return {endpoint.ReturnType}");
 			}
 
 			var duplicateParameters = endpoint.GetParametersWithoutResponseTypes().GroupBy(x => x.Name).Where(x => x.Count() > 1).ToList();
 
 			if (duplicateParameters.Any())
 			{
-				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.FormattedName} has multiple parameters of the same name defined. {string.Join(", ", duplicateParameters.Select(x => x.Key?.ToString()))}");
 			}
 
 			var invalidParameters = endpoint.GetParameters().Where(x => !Microsoft.CodeAnalysis.CSharp.SyntaxFacts.IsValidIdentifier(x.Name)).ToList();
 
 			if (invalidParameters.Any())
 			{
-				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.Name} has parameters that are invalid variable names. {string.Join(", ", invalidParameters.Select(x => x.Name))}");
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.FormattedName} has parameters that are invalid variable names. {string.Join(", ", invalidParameters.Select(x => x.Name))}");
 			}
 
 			var fullRoute = endpoint.GetFullRoute(parent);

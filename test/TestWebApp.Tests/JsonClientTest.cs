@@ -580,6 +580,41 @@ namespace TestWebApp.Tests
 			}
 		}
 
+
+		[Test]
+		public async Task RouteReplacement()
+		{
+			using (var endpoint = new JsonServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IValuesClient>();
+
+				bool hit = false;
+				await client.ActionRouteAsync(OKCallback: () =>
+				{
+					hit = true;
+				});
+
+				Assert.True(hit);
+			}
+		}
+
+		[Test]
+		public async Task InheritedRouteAsync()
+		{
+			using (var endpoint = new JsonServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IRouteInheritanceClient>();
+
+				bool hit = false;
+				await client.NoRouteAsync(OKCallback: () =>
+				{
+					hit = true;
+				});
+
+				Assert.True(hit);
+			}
+		}
+
 		/// <summary>
 		/// Microsoft.AspNetCore.TestHost.ClientHandler does not respect the CancellationToken and will always complete a request. Their unit test around it ClientCancellationAbortsRequest has a "hack" that cancels in TestServer when the token is canceled.
 		/// When the HttpClient has the default HttpMessageHandler, the SendAsync will cancel approriately, until they match this functionality, this test will be disabled

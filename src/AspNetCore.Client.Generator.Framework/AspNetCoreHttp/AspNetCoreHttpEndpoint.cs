@@ -20,9 +20,14 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 	public class AspNetCoreHttpEndpoint : IResponseTypes, IHeaders, IIgnored, IObsolete, INavNode, IAuthorize
 	{
 		/// <summary>
-		/// Name of the endpoint/controller generated from
+		/// Real name of the endpoint
 		/// </summary>
 		public string Name { get; set; }
+
+		/// <summary>
+		/// Formatted name of the endpoint/controller generated from
+		/// </summary>
+		public string FormattedName { get; set; }
 
 		/// <summary>
 		/// What HTTP method is required to hit this endpoint
@@ -273,7 +278,7 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		{
 			string namespaceVersion = $@"{(caller.NamespaceVersion != null ? $"{caller.NamespaceVersion}." : "")}{(caller.NamespaceSuffix != null ? $"{caller.NamespaceSuffix}." : string.Empty)}";
 
-			return $"{namespaceVersion}{caller.Name}.{Name}";
+			return $"{namespaceVersion}{caller.Name}.{FormattedName}";
 		}
 
 		/// <summary>
