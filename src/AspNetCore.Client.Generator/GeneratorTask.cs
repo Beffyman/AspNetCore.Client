@@ -30,6 +30,8 @@ namespace AspNetCore.Client.Generator
 		public string ClientRouteConstraints { get; set; }
 		public string ErrorOnUnhandledCallback { get; set; }
 		public string MultipleFiles { get; set; }
+		public string GenerateStaticRoutes { get; set; }
+		public string RoutesNamespace { get; set; }
 		public string ClientNamespace { get; set; }
 		public string HubNamespace { get; set; }
 		public string AllowedNamespaces { get; set; }
@@ -45,6 +47,8 @@ namespace AspNetCore.Client.Generator
 			ClientRouteConstraints = properties.GetValueOrDefault(nameof(ClientRouteConstraints));
 			ErrorOnUnhandledCallback = properties.GetValueOrDefault(nameof(ErrorOnUnhandledCallback));
 			MultipleFiles = properties.GetValueOrDefault(nameof(MultipleFiles));
+			GenerateStaticRoutes = properties.GetValueOrDefault(nameof(GenerateStaticRoutes));
+			RoutesNamespace = properties.GetValueOrDefault(nameof(RoutesNamespace));
 			ClientNamespace = properties.GetValueOrDefault(nameof(ClientNamespace));
 			HubNamespace = properties.GetValueOrDefault(nameof(HubNamespace));
 			AllowedNamespaces = properties.GetValueOrDefault(nameof(AllowedNamespaces));
@@ -89,6 +93,8 @@ namespace AspNetCore.Client.Generator
 			Settings.ClientRouteConstraints = bool.Parse(ClientRouteConstraints ?? "false");
 			Settings.ErrorOnUnhandledCallback = bool.Parse(ErrorOnUnhandledCallback ?? "false");
 			Settings.MultipleFiles = bool.Parse(MultipleFiles ?? "false");
+			Settings.GenerateStaticRoutes = bool.Parse(GenerateStaticRoutes ?? "false");
+			Settings.RoutesNamespace = RoutesNamespace;
 			Settings.ClientNamespace = ClientNamespace;
 			Settings.HubNamespace = HubNamespace;
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);

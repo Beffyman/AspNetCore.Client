@@ -21,6 +21,8 @@
 		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
 		<MultipleFiles>false</MultipleFiles>
+		<GenerateStaticRoutes>true</GenerateStaticRoutes>
+		<RoutesNamespace>Routes</RoutesNamespace>
 		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
 		<HubNamespace>TestWebApp.Hubs</HubNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts.*;Microsoft.AspNetCore.Mvc*;</AllowedNamespaces>
