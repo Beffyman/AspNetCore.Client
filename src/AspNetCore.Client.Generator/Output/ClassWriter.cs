@@ -118,6 +118,14 @@ $@"//---------------------------------------------------------------------------
 		{
 			Dictionary<string, string> files = new Dictionary<string, string>();
 
+			if (Settings.GenerateStaticRoutes)
+			{
+				files.Add("Routes", SharedWriter.WriteStaticRoutes(context));
+			}
+			else
+			{
+				files.Add("Routes", null);
+			}
 
 			files.Add("Installer", SharedWriter.WriteInstallFile(context));
 
@@ -415,6 +423,59 @@ public IDisposable On{message.Name}(Action<{string.Join(",", message.Types)}> ac
 
 
 		#endregion Installer
+
+		#region Static Routes
+
+		public static string WriteStaticRoutesRepository(GenerationContext context)
+		{
+			var versions = context.HttpClients.Where(x => x.Generated)
+				.GroupBy(x => x.NamespaceVersion)
+				.OrderBy(x => x.Key)
+				.ToList();
+
+
+			return string.Join(Environment.NewLine, versions.Select(WriteRouteRepositoryVersion));
+		}
+
+		private static string WriteRouteRepositoryVersion(IGrouping<string, AspNetCoreHttpController> version)
+		{
+			return
+$@"
+namespace { Settings.ClientNamespace }{(version.Key != null ? "." : "")}{version.Key}{(string.IsNullOrEmpty(Settings.RoutesNamespace) ? string.Empty : ".")}{Settings.RoutesNamespace}
+{{
+{string.Join($@"{Environment.NewLine}", version.OrderBy(x => x.Name).Select(WriteRouteRepositoryController))}
+}}
+";
+		}
+
+		private static string WriteRouteRepositoryController(AspNetCoreHttpController controller)
+		{
+			return
+$@"
+{(controller.NamespaceSuffix != null ? $@"namespace {controller.NamespaceSuffix}
+{{" : string.Empty)}
+public static class {controller.ClientName}Routes
+{{
+{string.Join($@"{Environment.NewLine}", controller.GetEndpoints().Select(x=> WriteRouteRepositoryEndpoint(controller,x)))}
+}}
+{(controller.NamespaceSuffix != null ? $@"}}" : string.Empty)}
+";
+		}
+
+		private static string WriteRouteRepositoryEndpoint(AspNetCoreHttpController controller, AspNetCoreHttpEndpoint endpoint)
+		{
+			return
+$@"
+	public static string {endpoint.FormattedName}({string.Join(",", endpoint.GetStaticRouteParameters().Select(SharedWriter.GetParameter).NotNull())})
+	{{
+		{GetEndpointInfoVariables(controller, endpoint)}
+		string url = $@""{GetRoute(controller, endpoint, false)}"";
+		return url;
+	}}
+";
+		}
+
+		#endregion
 
 
 		#region Repository
@@ -1371,6 +1432,14 @@ return;";
 
 	public static class SharedWriter
 	{
+
+		public static string WriteStaticRoutes(GenerationContext context)
+		{
+			return
+$@"
+{HttpClassWriter.WriteStaticRoutesRepository(context)}
+";
+		}
 
 		public static string WriteInstallFile(GenerationContext context)
 		{

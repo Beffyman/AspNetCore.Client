@@ -21,6 +21,8 @@
 		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
 		<MultipleFiles>false</MultipleFiles>
+		<GenerateStaticRoutes>true</GenerateStaticRoutes>
+		<RoutesNamespace>Routes</RoutesNamespace>
 		<ClientNamespace>FunctionApp2Client.Clients</ClientNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestAzureFunction.*;</AllowedNamespaces>
 		<ExcludedNamespaces>Microsoft.Extensions.Logging*;</ExcludedNamespaces>

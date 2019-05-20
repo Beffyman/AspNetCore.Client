@@ -180,6 +180,19 @@ namespace AspNetCore.Client.Generator.Framework.AspNetCoreHttp
 		}
 
 		/// <summary>
+		/// Gets all the parameters that exist as query string in the uri
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<IParameter> GetStaticRouteParameters()
+		{
+			var children = GetChildren();
+			var routes = children.OfType<RouteParameter>().Cast<IParameter>();
+			var query = children.OfType<QueryParameter>().Cast<IParameter>();
+
+			return routes.Union(query).Distinct().OrderBy(x => x.SortOrder);
+		}
+
+		/// <summary>
 		/// Gets the parameter that may exist inside the body of the request
 		/// </summary>
 		/// <returns></returns>

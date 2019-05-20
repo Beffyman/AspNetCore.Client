@@ -36,6 +36,457 @@ using System.Threading;
 using System;
 using TestWebApp.Contracts;
 
+namespace TestWebApp.Clients.Routes
+{
+	public static class FullClientRoutes
+	{
+		public static string GetQueryObject(MyFancyDto dto)
+		{
+			var controller = "Full";
+			var action = "GetQueryObject";
+			string url = $@"api/{controller}/{action}?{dto.GetQueryObjectString(nameof(dto)).ConfigureAwait(false).GetAwaiter().GetResult()}";
+			return url;
+		}
+	}
+
+	public static class InheritanceGenerationClientRoutes
+	{
+		public static string Get()
+		{
+			var controller = "InheritanceGeneration";
+			string url = $@"api/{controller}/";
+			return url;
+		}
+	}
+
+	namespace FancySuffix
+	{
+		public static class NamespacedClientRoutes
+		{
+			public static string Test()
+			{
+				string url = $@"api/namespaced/test";
+				return url;
+			}
+
+			public static string NewTest()
+			{
+				string url = $@"api/namespaced/NewTest123";
+				return url;
+			}
+
+			public static string NewTest(int id)
+			{
+				string url = $@"api/namespaced/NewTest123/{id.EncodeForUrl()}";
+				return url;
+			}
+
+			public static string OverrideTest()
+			{
+				string url = $@"api/namespaced/overwritten";
+				return url;
+			}
+
+			public static string InheritTest()
+			{
+				string url = $@"api/namespaced/InheritTest";
+				return url;
+			}
+		}
+	}
+
+	public static class RouteInheritanceClientRoutes
+	{
+		public static string NoRoute()
+		{
+			var controller = "RouteInheritance";
+			var action = "NoRoute";
+			string url = $@"api/{controller}/{action}/";
+			return url;
+		}
+	}
+
+	public static class ValuesClientRoutes
+	{
+		public static string GetEnumerable()
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/";
+			return url;
+		}
+
+		public static string GetEnumerableTask()
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/getAsync";
+			return url;
+		}
+
+		public static string GetFullyQualified()
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/getQualified";
+			return url;
+		}
+
+		public static string GetTuple()
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/getTuple";
+			return url;
+		}
+
+		public static string GetNestedTypes()
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/getNested";
+			return url;
+		}
+
+		public static string Get(int id)
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string Post()
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/";
+			return url;
+		}
+
+		public static string Put(int id)
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string Delete(int id)
+		{
+			var controller = "Values";
+			string url = $@"api/{controller}/{id.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string ActionRoute()
+		{
+			var controller = "Values";
+			var action = "ActionRouteAsync";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string TestPreFunc()
+		{
+			var controller = "Values";
+			var action = "TestPreFunc";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string CancellationTestEndpoint()
+		{
+			var controller = "Values";
+			var action = "CancellationTestEndpoint";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string NullableParameterOrdering(int id, bool deleted = false)
+		{
+			var controller = "Values";
+			var action = "NullableParameterOrdering";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}?{nameof(deleted)}={deleted.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string HeaderTestString()
+		{
+			var controller = "Values";
+			var action = "HeaderTestString";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string HeaderTestInt()
+		{
+			var controller = "Values";
+			var action = "HeaderTestInt";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string FancyDtoReturn(int id)
+		{
+			var controller = "Values";
+			var action = "FancyDtoReturn";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string TaskReturn()
+		{
+			var controller = "Values";
+			var action = "TaskReturn";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string DtoForDto()
+		{
+			var controller = "Values";
+			var action = "DtoForDto";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string GuidReturn()
+		{
+			var controller = "Values";
+			var action = "GuidReturn";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string DateTimeReturns()
+		{
+			var controller = "Values";
+			var action = "DateTimeReturns";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string BoolReturns()
+		{
+			var controller = "Values";
+			var action = "BoolReturns";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string PostWithNoBody(Guid id)
+		{
+			var controller = "Values";
+			var action = "PostWithNoBody";
+			string url = $@"api/{controller}/{action}/{id.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string ComplexPost(Guid testId)
+		{
+			var controller = "Values";
+			var action = "ComplexPost";
+			string url = $@"api/{controller}/{action}/{testId.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string PostWithSimpleBody()
+		{
+			var controller = "Values";
+			var action = "PostWithSimpleBody";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string EnumerableGet(IEnumerable<int> ids, IEnumerable<bool> truth)
+		{
+			var controller = "Values";
+			var action = "EnumerableGet";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			return url;
+		}
+
+		public static string EnumerableGetCustom(IEnumerable<int> customIds, IEnumerable<bool> truth)
+		{
+			var controller = "Values";
+			var action = "EnumerableGetCustom";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			return url;
+		}
+
+		public static string AttributeFormatting()
+		{
+			var controller = "Values";
+			var action = "AttributeFormatting";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string QueryParameter(string name)
+		{
+			var controller = "Values";
+			var action = "QueryParameter";
+			string url = $@"api/{controller}/{action}?{nameof(name)}={name.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string FileReturn()
+		{
+			var controller = "Values";
+			var action = "FileReturn";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string FileReturnResponseTypes(bool pass)
+		{
+			var controller = "Values";
+			var action = "FileReturnResponseTypes";
+			string url = $@"api/{controller}/{action}?{nameof(pass)}={pass.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string DefaultRouteConstraint(int? x = 5)
+		{
+			var controller = "Values";
+			var action = "DefaultRouteConstraint";
+			string url = $@"api/{controller}/{action}/defaultConstraint/{x.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string OptionalRouteConstraint(int? x)
+		{
+			var controller = "Values";
+			var action = "OptionalRouteConstraint";
+			string url = $@"api/{controller}/{action}/optional/{x.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string CheckDateTime(DateTime date)
+		{
+			var controller = "Values";
+			var action = "CheckDateTime";
+			string url = $@"api/{controller}/{action}/checkDate/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
+			return url;
+		}
+
+		public static string CheckDateTimeNullable(DateTime? date)
+		{
+			var controller = "Values";
+			var action = "CheckDateTimeNullable";
+			string url = $@"api/{controller}/{action}/checkDate/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
+			return url;
+		}
+
+		public static string CheckDateTimeOffset(DateTimeOffset date)
+		{
+			var controller = "Values";
+			var action = "CheckDateTimeOffset";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
+			return url;
+		}
+
+		public static string CheckDateTimeOffsetNullable(DateTimeOffset? date)
+		{
+			var controller = "Values";
+			var action = "CheckDateTimeOffsetNullable";
+			string url = $@"api/{controller}/{action}/checkDateOffset/{date?.ToString("s", System.Globalization.CultureInfo.InvariantCulture).EncodeForUrl()}";
+			return url;
+		}
+
+		public static string RouteConstraintCheck(string name, int id, bool val)
+		{
+			var controller = "Values";
+			var action = "RouteConstraintCheck";
+			string url = $@"api/{controller}/{action}/routeCheck/{name.EncodeForUrl()}/{id.EncodeForUrl()}/{val.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string DuplicateMethodReturnAndResponse()
+		{
+			var controller = "Values";
+			var action = "DuplicateMethodReturnAndResponse";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string ProblemDetailsRequest()
+		{
+			var controller = "Values";
+			var action = "ProblemDetailsRequest";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string ModelStateBadRequest()
+		{
+			var controller = "Values";
+			var action = "ModelStateBadRequest";
+			string url = $@"api/{controller}/{action}";
+			return url;
+		}
+
+		public static string UrlEncodingCheck(string code)
+		{
+			var controller = "Values";
+			var action = "UrlEncodingCheck";
+			string url = $@"api/{controller}/{action}/{code.EncodeForUrl()}";
+			return url;
+		}
+
+		public static string UrlEncodingQueryCheck(string code)
+		{
+			var controller = "Values";
+			var action = "UrlEncodingQueryCheck";
+			string url = $@"api/{controller}/{action}?{nameof(code)}={code.EncodeForUrl()}";
+			return url;
+		}
+	}
+}
+
+namespace TestWebApp.Clients.V1.Routes
+{
+	public static class TestClientRoutes
+	{
+		public static string Endpoint()
+		{
+			string url = $@"api/v1/test/endpoint";
+			return url;
+		}
+	}
+}
+
+namespace TestWebApp.Clients.V2.Routes
+{
+	public static class TestClientRoutes
+	{
+		public static string Endpoint()
+		{
+			string url = $@"api/v2/test/endpoint";
+			return url;
+		}
+	}
+}
+
+namespace TestWebApp.Clients.V3.Routes
+{
+	public static class TestQueryClientRoutes
+	{
+		public static string Endpoint(int index)
+		{
+			var controller = "TestQuery";
+			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
+			return url;
+		}
+	}
+}
+
+namespace TestWebApp.Clients.V3_0.Routes
+{
+	public static class TestRouteClientRoutes
+	{
+		public static string Endpoint(int index)
+		{
+			var controller = "TestRoute";
+			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
+			return url;
+		}
+	}
+}
+
 namespace TestWebApp.Clients
 {
 #warning DuplicateParameterErrorController is misconfigured for generation :: Endpoint DuplicateParameterError.ErrorResponses has multiple parameters of the same name defined. id

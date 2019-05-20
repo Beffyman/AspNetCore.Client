@@ -21,6 +21,8 @@
 		<ClientRouteConstraints>false</ClientRouteConstraints>
 		<ErrorOnUnhandledCallback>false</ErrorOnUnhandledCallback>
 		<MultipleFiles>true</MultipleFiles>
+		<GenerateStaticRoutes>true</GenerateStaticRoutes>
+		<RoutesNamespace>Routes</RoutesNamespace>
 		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
 		<HubNamespace>TestBlazorApp.Hubs</HubNamespace>
 		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>
