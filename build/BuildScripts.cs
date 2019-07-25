@@ -17,11 +17,10 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [UnsetVisualStudioEnvironmentVariables]
 public class BuildScripts : NukeBuild
 {
-	/// Support plugins are available for:
-	///   - JetBrains ReSharper        https://nuke.build/resharper
-	///   - JetBrains Rider            https://nuke.build/rider
-	///   - Microsoft VisualStudio     https://nuke.build/visualstudio
-	///   - Microsoft VSCode           https://nuke.build/vscode
+#error need to implement the project removal/readdition to test package
+#error need to update blazor tests to use netcoreapp3.0
+#error need to update global.json to core 3 preview 7
+#error need to update README
 
 	public static int Main() => Execute<BuildScripts>(x => x.Build);
 
@@ -121,10 +120,12 @@ public class BuildScripts : NukeBuild
 		{
 			DotNetRun(s => s.SetProjectFile(TestGeneratorProject)
 							.SetConfiguration(Configuration)
+							.SetFramework("netcoreapp2.2")
 							.EnableNoBuild());
 		});
 
 	Target CI => _ => _
+		.DependsOn(Clean)
 		.DependsOn(Build)
 		.DependsOn(GenerateTestProjectClients)
 		.DependsOn(Test)

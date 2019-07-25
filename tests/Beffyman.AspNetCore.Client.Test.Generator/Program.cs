@@ -3,8 +3,10 @@ using Microsoft.Build.Framework;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace Beffyman.AspNetCore.Client.Test.Generator
@@ -18,10 +20,15 @@ namespace Beffyman.AspNetCore.Client.Test.Generator
 		const string BLAZOR = "TestBlazorApp.Clients";
 		const string FUNCTIONS = "TestAzureFunction.Clients";
 		const string FUNCTIONS2 = "FunctionApp2.Clients";
-		const string FAILURE_DIR = "Beffyman.AspNetCore.Client";
+		const string FAILURE_DIR = "AspNetCore.Client";
 
 		static void Main()
 		{
+			string rootDir = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+			Console.WriteLine($"Root Dir: {rootDir}");
+			Directory.SetCurrentDirectory(rootDir);
+
+			Console.WriteLine("Starting Generator");
 			var webApp = GoUpUntilDirectory(WEBAPP, FAILURE_DIR);
 			var blazor = GoUpUntilDirectory(BLAZOR, FAILURE_DIR);
 			var functions = GoUpUntilDirectory(FUNCTIONS, FAILURE_DIR);
@@ -32,7 +39,10 @@ namespace Beffyman.AspNetCore.Client.Test.Generator
 				&& Generate(functions)
 				&& Generate(functions2)))
 			{
-				Console.ReadKey();
+				if (Debugger.IsAttached)
+				{
+					Console.ReadKey();
+				}
 			}
 
 		}
@@ -61,6 +71,7 @@ namespace Beffyman.AspNetCore.Client.Test.Generator
 
 		private static bool Generate(string path)
 		{
+			Console.WriteLine($"Generating {path}");
 			var projectName = Path.GetFileName(path);
 			var projFile = $"{path}/{projectName}.csproj";
 			var data = XElement.Load(projFile);
