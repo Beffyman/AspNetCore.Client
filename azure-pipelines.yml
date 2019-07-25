@@ -1,0 +1,55 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+- refs/tags/*
+- feature/*
+
+pr:
+  autoCancel: true
+  branches:
+    include:
+      - master
+  paths:
+    include:
+    - src/*
+    - tests/*
+
+pool:
+  vmImage: 'windows-2019'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet --info
+  displayName: Dump Info
+- task: gittools.gitversion.gitversion-task.GitVersion@4
+  displayName: GitVersion
+  inputs:
+    preferBundledVersion: false
+- powershell: "& ./build.ps1 -target CI"
+  displayName: Nuke.Build CI
+  workingDirectory: $(build.sourcesDirectory)
+  failOnStderr: true
+- task: PublishTestResults@2
+  inputs:
+   testResultsFormat: 'VSTest'
+   testResultsFiles: '*.trx'
+   searchFolder: 'artifacts/tests'
+  displayName: 'Publish Test results'
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: cobertura
+    summaryFileLocation: artifacts/tests/coverage.cobertura.xml
+    reportDirectory: artifacts/tests/Reports
+    failIfCoverageEmpty: true
+  displayName: 'Publish Code Coverage'
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: 'artifacts/nuget'
+    artifactName: 'Nuget'
+  displayName: 'Publish Packages'

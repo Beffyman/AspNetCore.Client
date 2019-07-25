@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<LangVersion>latest</LangVersion>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GenerateClients>true</GenerateClients>
+		<RouteToServiceProjectFolder>../TestBlazorApp.Server</RouteToServiceProjectFolder>
+		<ClientInterfaceName>TestBlazorAppClient</ClientInterfaceName>
+		<RegisterName>TestBlazor</RegisterName>
+		<UseValueTask>true</UseValueTask>
+		<UseInternalClients>true</UseInternalClients>
+		<ClientRouteConstraints>false</ClientRouteConstraints>
+		<ErrorOnUnhandledCallback>false</ErrorOnUnhandledCallback>
+		<MultipleFiles>true</MultipleFiles>
+		<GenerateStaticRoutes>true</GenerateStaticRoutes>
+		<RoutesNamespace>Routes</RoutesNamespace>
+		<ClientNamespace>TestBlazorApp.Clients</ClientNamespace>
+		<HubNamespace>TestBlazorApp.Hubs</HubNamespace>
+		<AllowedNamespaces>$(AllowedNamespaces);TestBlazorApp.Shared*;</AllowedNamespaces>
+		<ExcludedNamespaces></ExcludedNamespaces>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Blazor" Version="0.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Beffyman.AspNetCore.Client.Generator" Version="*" Condition="'$(GenerateWithNuget)' == 'true'" />
+		<ProjectReference Include="..\..\src\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
+		<ProjectReference Include="..\TestBlazorApp.Shared\TestBlazorApp.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

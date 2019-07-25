@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+		<LangVersion>latest</LangVersion>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Beffyman.AspNetCore.Client.BlazorJson.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Copyright>Copyright 2018</Copyright>
+		<Authors>Beffyman</Authors>
+		<Description>Contains Blazor SimpleJson serializer for Beffyman.AspNetCore.Client.Generator clients</Description>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Beffyman/Beffyman.AspNetCore.Client</RepositoryUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+		<IncludeSource>true</IncludeSource>
+		<IncludeSymbols>true</IncludeSymbols>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.JSInterop" Version="0.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+	</ItemGroup>
+</Project>

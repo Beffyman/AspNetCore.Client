@@ -1,126 +1,68 @@
-# Make so the script will stop when it hits an error.
-$ErrorActionPreference = "Stop"
+[CmdletBinding()]
+Param(
+    [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
+    [string[]]$BuildArguments
+)
 
-# Get the executing directory and set it to the current directory.
-$scriptBin = ""
-Try { $scriptBin = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)" } Catch {}
-If ([string]::IsNullOrEmpty($scriptBin)) { $scriptBin = $pwd }
-Set-Location $scriptBin
+Write-Output "Windows PowerShell $($Host.Version)"
 
-$version = $env:APPVEYOR_BUILD_VERSION;
-$localBuild = $false;
-#For local builds, appveyor will be provided version
-if([System.String]::IsNullOrEmpty($version)){
-	$version = & git describe --tags;
-	$localBuild = $true;
-}
-#Filter out - branch commit locally
-if($version -Match "-"){
-	$version = $version.Split("-")[0];
-}
+Set-StrictMode -Version 2.0; $ErrorActionPreference = "Stop"; $ConfirmPreference = "None"; trap { exit 1 }
+$PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 
-#Filter out +Build# from CI builds
-if($version -Match "\+"){
-	$version = $version.Split("+")[0];
-}
+###########################################################################
+# CONFIGURATION
+###########################################################################
 
+$BuildProjectFile = "$PSScriptRoot\build\_build.csproj"
+$TempDirectory = "$PSScriptRoot\\.tmp"
 
-if($localBuild -eq $true){
-	$build = & git rev-list --count HEAD;
-	$version = "$($version)$build";
-}
+$DotNetGlobalFile = "$PSScriptRoot\\global.json"
+$DotNetInstallUrl = "https://raw.githubusercontent.com/dotnet/cli/master/scripts/obtain/dotnet-install.ps1"
+$DotNetChannel = "Current"
 
+$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = 1
+$env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
 
-Write-Host "---Version $version will be used---" -ForegroundColor Magenta;
+###########################################################################
+# EXECUTION
+###########################################################################
 
-$artifacts = "$scriptBin/artifacts";
-$testGenerator = Resolve-Path "$scriptBin/test/AspNetCore.Client.Test.Generator";
-
-Get-ChildItem -Path $artifacts -Filter "*.nupkg" -Recurse | Remove-item -ErrorAction Ignore;
-$outputDir = Resolve-Path $artifacts;
-
-Write-Host ">> dotnet --info" -ForegroundColor Magenta;
-dotnet --info
-
-Write-Host ">> dotnet clean -c Release -v m" -ForegroundColor Magenta;
-dotnet clean -c Release -v m
-
-Write-Host ">> dotnet build -c Release -v m;" -ForegroundColor Magenta;
-dotnet build -c Release -v m;
-
-if($LastExitCode -ne 0){
-	throw "Build failed"
+function ExecSafe([scriptblock] $cmd) {
+    & $cmd
+    if ($LASTEXITCODE) { exit $LASTEXITCODE }
 }
 
-#Run the test project generators
-Push-Location -Path $testGenerator -StackName "Run";
-Write-Host ">> dotnet run -c Release -v m;" -ForegroundColor Magenta;
-dotnet run -c Release -v m --framework netcoreapp2.2;
-Pop-Location -StackName "Run";
-
-#Build again, making sure that our clients that were just regenerated via the previous command build
-Write-Host ">> dotnet build -c Release -v m;" -ForegroundColor Magenta;
-dotnet build -c Release -v m;
-
-
-if($LastExitCode -ne 0){
-	throw "Build failed"
+# If global.json exists, load expected version
+if (Test-Path $DotNetGlobalFile) {
+    $DotNetGlobal = $(Get-Content $DotNetGlobalFile | Out-String | ConvertFrom-Json)
+    if ($DotNetGlobal.PSObject.Properties["sdk"] -and $DotNetGlobal.sdk.PSObject.Properties["version"]) {
+        $DotNetVersion = $DotNetGlobal.sdk.version
+    }
 }
 
-Write-Host ">> dotnet test -c Release -v m;" -ForegroundColor Magenta;
-dotnet test -c Release -v m;
+# If dotnet is installed locally, and expected version is not set or installation matches the expected version
+if ((Get-Command "dotnet" -ErrorAction SilentlyContinue) -ne $null -and `
+     (!(Test-Path variable:DotNetVersion) -or $(& dotnet --version) -eq $DotNetVersion)) {
+    $env:DOTNET_EXE = (Get-Command "dotnet").Path
+}
+else {
+    $DotNetDirectory = "$TempDirectory\dotnet-win"
+    $env:DOTNET_EXE = "$DotNetDirectory\dotnet.exe"
 
+    # Download install script
+    $DotNetInstallFile = "$TempDirectory\dotnet-install.ps1"
+    md -force $TempDirectory > $null
+    (New-Object System.Net.WebClient).DownloadFile($DotNetInstallUrl, $DotNetInstallFile)
 
-if($LastExitCode -ne 0){
-	throw "Tests failed"
+    # Install by channel or version
+    if (!(Test-Path variable:DotNetVersion)) {
+        ExecSafe { & $DotNetInstallFile -InstallDir $DotNetDirectory -Channel $DotNetChannel -NoPath }
+    } else {
+        ExecSafe { & $DotNetInstallFile -InstallDir $DotNetDirectory -Version $DotNetVersion -NoPath }
+    }
 }
 
-Write-Host ">> dotnet pack -c Release /p:Version=$version -o $outputDir -v m" -ForegroundColor Magenta;
-dotnet pack -c Release /p:Version="$version" -o $outputDir -v m
+Write-Output "Microsoft (R) .NET Core SDK version $(& $env:DOTNET_EXE --version)"
 
-
-if($LastExitCode -ne 0){
-	throw "Pack failed"
-}
-
-Write-Host "Remove Client.cs files so we can regenerate them with the msbuild task to make that works" -ForegroundColor Magenta;
-Get-ChildItem -Path "**/Clients.cs" -Recurse | Remove-Item -Force
-
-#Remove the generator from the solution so we don't have two references to it's assembly which causes the generator to fail.
-
-dotnet sln remove "test/AspNetCore.Client.Test.Generator/AspNetCore.Client.Test.Generator.csproj"
-dotnet sln remove "src/AspNetCore.Client.Generator/AspNetCore.Client.Generator.csproj"
-
-try{
-	Write-Host ">> dotnet clean -c Release -v m" -ForegroundColor Magenta;
-	dotnet clean -c Release -v m
-
-	#Build again, making sure our build task works
-	Write-Host ">> dotnet build -c Release -v m /p:GenerateWithNuget=true" -ForegroundColor Magenta;
-	dotnet build -c Release /p:GenerateWithNuget=true;
-
-
-	if($LastExitCode -ne 0){
-		throw "Build failed"
-	}
-
-	Write-Host ">> dotnet test -c Release -v m /p:GenerateWithNuget=true" -ForegroundColor Magenta;
-	dotnet test -c Release;
-
-	if($LastExitCode -ne 0){
-		throw "Tests failed"
-	}
-
-}
-catch{
-	throw $_
-}
-finally{
-	#Readd them, for locals
-	dotnet sln add "test/AspNetCore.Client.Test.Generator/AspNetCore.Client.Test.Generator.csproj"
-	dotnet sln add "src/AspNetCore.Client.Generator/AspNetCore.Client.Generator.csproj"
-}
-
-
-
-
+ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile /nodeReuse:false }
+ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile --no-build -- $BuildArguments }

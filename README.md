@@ -1,4 +1,4 @@
-# AspNetCore.Client
+# Beffyman.AspNetCore.Client
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/984mqqfnwytd3oga?svg=true)](https://ci.appveyor.com/project/Beffyman/aspnetcore-client)
 ---
 
@@ -17,7 +17,7 @@ and think the following
 - How can I pool the HttpClient usage? 
   - HttpClient is injected! Which allows you to control it's lifecycle
 - Yuck, hard coded routes, these can lead to issues if my endpoint is still under development. 
-  - Generated On Build! AspNetCore.Client.Generator is a before compile build task that will generate clients inside the project that implements it.
+  - Generated On Build! Beffyman.AspNetCore.Client.Generator is a before compile build task that will generate clients inside the project that implements it.
 - How do I unit test this without spinning up a full web app? 
   - Works with Microsoft.AspNetCore.TestHost!
     - CancellationTokens are not respected inside the TestServer without some hacks though *(registering a kill of the server)* due to the Token not being checked.
@@ -29,17 +29,17 @@ and think the following
 - What if sometimes I want to intercept requests before they go out? 
   - IHttpOverride! Which allows for potential cache interception of requests.
 - If I own the endpoint's code, why can't I just generate clients from it to make interacting with it as simple as injecting it?
-  - Introducing AspNetCore.Client.Generator!
+  - Introducing Beffyman.AspNetCore.Client.Generator!
 
-[First Time Setup](https://github.com/Beffyman/AspNetCore.Client/wiki/First-Time-Setup)
+[First Time Setup](https://github.com/Beffyman/Beffyman.AspNetCore.Client/wiki/First-Time-Setup)
 
 ## Supported Frameworks
 - AspNetCore 2.2 HTTP Controllers
 - AspNetCore 2.2 SignalR Hubs
 - Http Trigger Azure Functions v2
 
-## AspNetCore.Client
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.svg)](https://www.nuget.org/packages/AspNetCore.Client)
+## Beffyman.AspNetCore.Client
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client)
 
 Includes ServiceCollection registration logic, used on the Client
 
@@ -48,8 +48,8 @@ Includes ServiceCollection registration logic, used on the Client
 
 Includes attributes that can affect generation, used on your AspNetCore api app
 
-## AspNetCore.Client.Protobuf
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Protobuf.svg)](https://www.nuget.org/packages/AspNetCore.Client.Protobuf)
+## Beffyman.AspNetCore.Client.Protobuf
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.Protobuf.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.Protobuf)
 
 Contains a protobuf serializer which can override the default json one via the UseProtobufSerlaizer on the ClientConfiguration.
 
@@ -64,8 +64,8 @@ services.AddTestWebClients(config=>
 ```
 
 
-## AspNetCore.Client.MessagePack
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.MessagePack.svg)](https://www.nuget.org/packages/AspNetCore.Client.MessagePack)
+## Beffyman.AspNetCore.Client.MessagePack
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.MessagePack.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.MessagePack)
 
 Contains a MessagePack serializer which can override the default json one via the UseMessagePackSerializer on the ClientConfiguration.
 
@@ -80,8 +80,8 @@ services.AddTestWebClients(config=>
 ```
 
 
-## AspNetCore.Client.BlazorJson
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.BlazorJson.svg)](https://www.nuget.org/packages/AspNetCore.Client.BlazorJson)
+## Beffyman.AspNetCore.Client.BlazorJson
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.BlazorJson.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.BlazorJson)
 
 Contains a blazor simpleJson serializer which can override the default json one via the UseBlazorSimpleJsonSerlaizer on the ClientConfiguration.
 
@@ -97,8 +97,8 @@ services.AddTestBlazorClients(config=>
 ```
 
 
-## AspNetCore.Client.JSInterop
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.JSInterop.svg)](https://www.nuget.org/packages/AspNetCore.Client.JSInterop)
+## Beffyman.AspNetCore.Client.JSInterop
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.JSInterop.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.JSInterop)
 
 Contains a preview js interop simpleJson serializer which can override the default json one via the UseJSInteropJsonSerializer on the ClientConfiguration.
 
@@ -113,7 +113,7 @@ services.AddTestRazorComponentsClients(config=>
 ```
 
 
-## AspNetCore.Client.Generator
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/AspNetCore.Client.Generator)
+## Beffyman.AspNetCore.Client.Generator
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.Generator)
 
 On Build generator that will generate a Clients.cs file based on the Properties in the csproj.
