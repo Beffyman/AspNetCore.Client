@@ -25,31 +25,36 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet --info
-  displayName: Dump Info
 - task: gittools.gitversion.gitversion-task.GitVersion@4
   displayName: GitVersion
   inputs:
     preferBundledVersion: false
-- powershell: "& ./build.ps1 -target CI"
-  displayName: Nuke.Build CI
-  workingDirectory: $(build.sourcesDirectory)
-  failOnStderr: true
+
+- task: PowerShell@2
+  displayName: 'Run CI'
+  inputs:
+    targetType: filePath
+    filePath: build.ps1
+    arguments: -target CI
+    failOnStderr: true
+
 - task: PublishTestResults@2
+  displayName: 'Publish Test results'
   inputs:
    testResultsFormat: 'VSTest'
    testResultsFiles: '*.trx'
    searchFolder: 'artifacts/tests'
-  displayName: 'Publish Test results'
+
 - task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage'
   inputs:
     codeCoverageTool: cobertura
     summaryFileLocation: artifacts/tests/coverage.cobertura.xml
     reportDirectory: artifacts/tests/Reports
     failIfCoverageEmpty: true
-  displayName: 'Publish Code Coverage'
+
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Packages'
   inputs:
     pathtoPublish: 'artifacts/nuget'
     artifactName: 'Nuget'
-  displayName: 'Publish Packages'

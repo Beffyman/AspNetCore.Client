@@ -13,7 +13,7 @@ using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
-[CheckBuildProjectConfigurations]
+[CheckBuildProjectConfigurations(TimeoutInMilliseconds = 5000)]
 [UnsetVisualStudioEnvironmentVariables]
 public class BuildScripts : NukeBuild
 {
@@ -31,8 +31,11 @@ public class BuildScripts : NukeBuild
 	[GitRepository] readonly GitRepository GitRepository;
 	[GitVersion] readonly GitVersion GitVersion;
 
-	AbsolutePath SourceDirectory => RootDirectory / "src";
-	AbsolutePath TestsDirectory => RootDirectory / "tests";
+	const string SourceFolder = "src";
+	const string TestsFolder = "tests";
+
+	AbsolutePath SourceDirectory => RootDirectory / SourceFolder;
+	AbsolutePath TestsDirectory => RootDirectory / TestsFolder;
 	AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 	AbsolutePath TestArtifactsDirectory => ArtifactsDirectory / "tests";
 	AbsolutePath NugetDirectory => ArtifactsDirectory / "nuget";
@@ -40,15 +43,21 @@ public class BuildScripts : NukeBuild
 	AbsolutePath CodeCoverageFile => TestArtifactsDirectory / "coverage.cobertura.xml";
 
 
-	AbsolutePath TestGeneratorProject => TestsDirectory / "Beffyman.AspNetCore.Client.Test.Generator" / "Beffyman.AspNetCore.Client.Test.Generator.csproj";
+	RelativePath TestGeneratorProject => (RelativePath)TestsFolder / "Beffyman.AspNetCore.Client.Test.Generator" / "Beffyman.AspNetCore.Client.Test.Generator.csproj";
+	RelativePath GeneratorProject => (RelativePath)SourceFolder / "Beffyman.AspNetCore.Client.Generator" / "Beffyman.AspNetCore.Client.Generator.csproj";
+
+	private void CleanArtifacts()
+	{
+		SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+		TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
+		EnsureCleanDirectory(ArtifactsDirectory);
+	}
 
 	Target Clean => _ => _
 		.Before(Restore)
 		.Executes(() =>
 		{
-			SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-			TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-			EnsureCleanDirectory(ArtifactsDirectory);
+			CleanArtifacts();
 		});
 
 	Target Restore => _ => _
@@ -71,12 +80,9 @@ public class BuildScripts : NukeBuild
 				.EnableNoRestore());
 		});
 
-
-	Target Test => _ => _
-		.DependsOn(Build)
-		.Executes(() =>
-		{
-			DotNetTest(s => s.EnableNoBuild()
+	private void RunTests()
+	{
+		DotNetTest(s => s.EnableNoBuild()
 				.SetConfiguration(Configuration)
 				.EnableNoBuild()
 				.EnableNoRestore()
@@ -91,7 +97,14 @@ public class BuildScripts : NukeBuild
 					.Add("/p:CoverletOutputFormat={0}", "cobertura"))
 				.SetProjectFile(Solution));
 
-			FileExists(CodeCoverageFile);
+		FileExists(CodeCoverageFile);
+	}
+
+	Target Test => _ => _
+		.DependsOn(Build)
+		.Executes(() =>
+		{
+			RunTests();
 		});
 
 
@@ -124,11 +137,38 @@ public class BuildScripts : NukeBuild
 							.EnableNoBuild());
 		});
 
+	Target BuildWithGenerator => _ => _
+		.After(Test)
+		.Before(Pack)
+		.Executes(() =>
+		{
+			CleanArtifacts();
+
+			DotNet($"sln remove {TestGeneratorProject}");
+			DotNet($"sln remove {GeneratorProject}");
+
+
+			DotNetBuild(s => s
+				.SetProjectFile(Solution)
+				.SetConfiguration(Configuration)
+				.SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
+				.SetFileVersion(GitVersion.GetNormalizedFileVersion())
+				.SetInformationalVersion(GitVersion.InformationalVersion)
+				.AddProperty("GenerateWithNuget", "true")
+				.EnableNoRestore());
+
+			RunTests();
+
+			DotNet($"sln add {GeneratorProject}");
+			DotNet($"sln add {TestGeneratorProject}");
+		});
+
 	Target CI => _ => _
 		.DependsOn(Clean)
 		.DependsOn(Build)
 		.DependsOn(GenerateTestProjectClients)
 		.DependsOn(Test)
+		.DependsOn(BuildWithGenerator)
 		.DependsOn(Pack)
 		.Executes(() => { });
 
