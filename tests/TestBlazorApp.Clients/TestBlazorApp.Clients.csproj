@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Beffyman.AspNetCore.Client.Generator" Version="*" Condition="'$(GenerateWithNuget)' == 'true'" />
+		<PackageReference Include="Beffyman.AspNetCore.Client.Generator" Version="$(GeneratorVersion)" Condition="'$(GenerateWithNuget)' == 'true'" />
 		<ProjectReference Include="..\..\src\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
 		<ProjectReference Include="..\TestBlazorApp.Shared\TestBlazorApp.Shared.csproj" />
 	</ItemGroup>

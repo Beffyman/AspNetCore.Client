@@ -154,6 +154,7 @@ public class BuildScripts : NukeBuild
 				.SetFileVersion(GitVersion.GetNormalizedFileVersion())
 				.SetInformationalVersion(GitVersion.InformationalVersion)
 				.AddProperty("GenerateWithNuget", "true")
+				.AddProperty("GeneratorVersion", GitVersion.NuGetVersionV2)
 				.AddSources(NugetDirectory));
 
 			RunTests();
