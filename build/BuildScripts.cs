@@ -62,16 +62,11 @@ public class BuildScripts : NukeBuild
 			CleanArtifacts();
 		});
 
-	private void RestoreSln()
-	{
-		DotNetRestore(s => s
-			.SetProjectFile(Solution));
-	}
-
 	Target Restore => _ => _
 		.Executes(() =>
 		{
-			RestoreSln();
+			DotNetRestore(s => s
+			.SetProjectFile(Solution));
 		});
 
 	Target Build => _ => _
@@ -152,8 +147,6 @@ public class BuildScripts : NukeBuild
 			DotNet($"sln remove {TestGeneratorProject}");
 			DotNet($"sln remove {GeneratorProject}");
 
-			RestoreSln();
-
 			DotNetBuild(s => s
 				.SetProjectFile(Solution)
 				.SetConfiguration(Configuration)
@@ -161,8 +154,7 @@ public class BuildScripts : NukeBuild
 				.SetFileVersion(GitVersion.GetNormalizedFileVersion())
 				.SetInformationalVersion(GitVersion.InformationalVersion)
 				.AddProperty("GenerateWithNuget", "true")
-				.AddSources(NugetDirectory)
-				.EnableNoRestore());
+				.AddSources(NugetDirectory));
 
 			RunTests();
 
