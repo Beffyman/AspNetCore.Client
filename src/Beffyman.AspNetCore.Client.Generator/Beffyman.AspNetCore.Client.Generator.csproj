@@ -72,8 +72,4 @@
 			<_FrameworkAssemblyReferences Remove="@(_FrameworkAssemblyReferences)" />
 		</ItemGroup>
 	</Target>
-
-	<ItemGroup>
-		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
-	</ItemGroup>
 </Project>

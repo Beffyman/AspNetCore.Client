@@ -6,8 +6,4 @@
 		<Description>A helper package for Beffyman.AspNetCore.Client.Generator that contains known attributes that affect the generation</Description>
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
-	</ItemGroup>
 </Project>

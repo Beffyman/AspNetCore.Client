@@ -14,8 +14,4 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
-	</ItemGroup>
 </Project>
