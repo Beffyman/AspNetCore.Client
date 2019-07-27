@@ -21,7 +21,6 @@
 
 		<!-- Common build related files -->
 		<None Include="..\build.ps1" />
-		<None Include="..\build.sh" />
 		<None Include="..\.nuke" />
 		<None Include="..\global.json" Condition="Exists('..\global.json')" />
 		<None Include="..\nuget.config" Condition="Exists('..\nuget.config')" />

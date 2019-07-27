@@ -3,13 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp2.2</TargetFramework>
 		<OutputType>EXE</OutputType>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-		<LangVersion>latest</LangVersion>
-		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
