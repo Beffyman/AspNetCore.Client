@@ -80,6 +80,11 @@ namespace Beffyman.AspNetCore.Client
 		private bool HttpPool = false;
 
 		/// <summary>
+		/// Custom Http Reistry
+		/// </summary>
+		private Action<IServiceCollection, bool, Func<IServiceProvider, string>> _customHttpClientRegistry = null;
+
+		/// <summary>
 		/// Does the container already have an httpclient injected?  AKA blazor?
 		/// </summary>
 		private bool ExistingHttpClient = false;
@@ -144,32 +149,7 @@ namespace Beffyman.AspNetCore.Client
 			{
 				if (HttpPool)
 				{
-					if (ConstantBaseAddress)
-					{
-						services.AddSingleton<IFlurlClientFactory, PerHostFlurlClientFactory>();
-
-						services.AddScoped<Func<T, IFlurlClient>>(provider =>
-						{
-							var factory = provider.GetService<IFlurlClientFactory>();
-							return _ => factory.Get(new Flurl.Url(HttpBaseAddress(provider)));
-						});
-					}
-					else
-					{
-						services.AddHttpClient(typeof(T).Name);
-
-						services.AddTransient<HttpClient>(provider =>
-						{
-							return provider.GetService<System.Net.Http.IHttpClientFactory>().CreateClient(typeof(T).Name);
-						});
-
-
-						services.AddTransient<Func<T, IFlurlClient>>(provider =>
-						{
-							return _ => new FlurlClient(provider.GetService<HttpClient>());
-						});
-					}
-
+					_customHttpClientRegistry(services, ConstantBaseAddress, HttpBaseAddress);
 				}
 				else
 				{
@@ -370,11 +350,14 @@ namespace Beffyman.AspNetCore.Client
 		}
 
 		/// <summary>
-		/// Enables the use of Microsoft.Extensions.Http for injecting HttpClients that the IFlurlClient will use.
+		/// If you want to use a custom http client
 		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="customHttpClientRegistry">The Services collection, whether the BaseUrl is constant, and the func to get the BaseAddress</param>
 		/// <returns></returns>
-		public ClientConfiguration UseHttpClientFactory()
+		public ClientConfiguration UseCustomHttpClient<T>(Action<IServiceCollection, bool, Func<IServiceProvider, string>> customHttpClientRegistry) where T : IClient
 		{
+			_customHttpClientRegistry = customHttpClientRegistry;
 			HttpPool = true;
 			return this;
 		}

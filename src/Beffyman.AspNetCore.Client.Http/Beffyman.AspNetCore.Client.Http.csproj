@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Beffyman.AspNetCore.Client.Http.xml</DocumentationFile>
+		<Description>Contains extension method to install the HttpClientFactory as the used http clients</Description>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
+	</ItemGroup>
+</Project>

@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\Beffyman.AspNetCore.Client.Http\Beffyman.AspNetCore.Client.Http.csproj" />
 		<ProjectReference Include="..\TestWebApp.Clients\TestWebApp.Clients.csproj" />
 	</ItemGroup>
 

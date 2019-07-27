@@ -2,23 +2,15 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-		<LangVersion>latest</LangVersion>
-		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Beffyman.AspNetCore.Client.Generator.Framework.xml</DocumentationFile>
-		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
-	  <ProjectReference Include="..\Beffyman.AspNetCore.Server\Beffyman.AspNetCore.Server.csproj" />
+		<ProjectReference Include="..\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
+		<ProjectReference Include="..\Beffyman.AspNetCore.Server\Beffyman.AspNetCore.Server.csproj" />
 	</ItemGroup>
-
 </Project>

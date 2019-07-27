@@ -2,26 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-		<LangVersion>latest</LangVersion>
-		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Beffyman.AspNetCore.Client.Protobuf.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Copyright>Copyright 2018</Copyright>
-		<Authors>Beffyman</Authors>
 		<Description>Contains protobuf serializer for Beffyman.AspNetCore.Client.Generator clients</Description>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/Beffyman/Beffyman.AspNetCore.Client</RepositoryUrl>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
-		<IncludeSource>true</IncludeSource>
-		<IncludeSymbols>true</IncludeSymbols>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -35,5 +18,4 @@
 	<ItemGroup>
 		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
 	</ItemGroup>
-
 </Project>

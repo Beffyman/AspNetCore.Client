@@ -40,7 +40,6 @@ namespace TestWebApp
 				.AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuthentication", null);
 
 			services.AddSignalR();
-
 			services.AddTransient<IFakeService, FakeService>();
 			services.AddTransient<IGoodService, GoodService>();
 

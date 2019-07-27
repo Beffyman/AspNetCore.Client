@@ -2,29 +2,12 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
-		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-		<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-		<LangVersion>latest</LangVersion>
-		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+		<Description>A build task that will generate clients from a asp.net core project</Description>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<DevelopmentDependency>true</DevelopmentDependency>
-
 		<!--Workaround for https://github.com/dotnet/cli/issues/9477-->
 		<ProjectTypeGuids>{9A19103F-16F7-4668-BE54-9A1E7A4F7556}</ProjectTypeGuids>
-
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Copyright>Copyright 2018</Copyright>
-		<Authors>Beffyman</Authors>
-		<Description>A build task that will generate clients from a asp.net core project</Description>
-		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/Beffyman/Beffyman.AspNetCore.Client</RepositoryUrl>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>

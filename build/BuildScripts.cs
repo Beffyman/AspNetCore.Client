@@ -17,10 +17,8 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [UnsetVisualStudioEnvironmentVariables]
 public class BuildScripts : NukeBuild
 {
-#error need to implement the project removal/readdition to test package
-#error need to update blazor tests to use netcoreapp3.0
-#error need to update global.json to core 3 preview 7
-#error need to update README
+	//#error need to update blazor tests to use netcoreapp3.0
+	//#error need to update README
 
 	public static int Main() => Execute<BuildScripts>(x => x.Build);
 
@@ -46,11 +44,15 @@ public class BuildScripts : NukeBuild
 	RelativePath TestGeneratorProject => (RelativePath)TestsFolder / "Beffyman.AspNetCore.Client.Test.Generator" / "Beffyman.AspNetCore.Client.Test.Generator.csproj";
 	RelativePath GeneratorProject => (RelativePath)SourceFolder / "Beffyman.AspNetCore.Client.Generator" / "Beffyman.AspNetCore.Client.Generator.csproj";
 
-	private void CleanArtifacts()
+	private void CleanArtifacts(bool packages = true)
 	{
 		SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
 		TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-		EnsureCleanDirectory(ArtifactsDirectory);
+
+		if (packages)
+		{
+			EnsureCleanDirectory(ArtifactsDirectory);
+		}
 	}
 
 	Target Clean => _ => _
@@ -60,11 +62,16 @@ public class BuildScripts : NukeBuild
 			CleanArtifacts();
 		});
 
+	private void RestoreSln()
+	{
+		DotNetRestore(s => s
+			.SetProjectFile(Solution));
+	}
+
 	Target Restore => _ => _
 		.Executes(() =>
 		{
-			DotNetRestore(s => s
-				.SetProjectFile(Solution));
+			RestoreSln();
 		});
 
 	Target Build => _ => _
@@ -113,10 +120,9 @@ public class BuildScripts : NukeBuild
 		.After(Test)
 		.Executes(() =>
 		{
-
 			DotNetPack(s => s.SetProject(Solution)
 					.SetVersion(GitVersion.NuGetVersionV2)
-					.EnableNoBuild()
+					//.EnableNoBuild()
 					.EnableIncludeSource()
 					.EnableIncludeSymbols()
 					.SetConfiguration(Configuration)
@@ -138,15 +144,15 @@ public class BuildScripts : NukeBuild
 		});
 
 	Target BuildWithGenerator => _ => _
-		.After(Test)
-		.Before(Pack)
+		.After(Pack)
 		.Executes(() =>
 		{
-			CleanArtifacts();
+			CleanArtifacts(false);
 
 			DotNet($"sln remove {TestGeneratorProject}");
 			DotNet($"sln remove {GeneratorProject}");
 
+			RestoreSln();
 
 			DotNetBuild(s => s
 				.SetProjectFile(Solution)
@@ -161,6 +167,7 @@ public class BuildScripts : NukeBuild
 
 			DotNet($"sln add {GeneratorProject}");
 			DotNet($"sln add {TestGeneratorProject}");
+
 		});
 
 	Target CI => _ => _
@@ -168,8 +175,8 @@ public class BuildScripts : NukeBuild
 		.DependsOn(Build)
 		.DependsOn(GenerateTestProjectClients)
 		.DependsOn(Test)
-		.DependsOn(BuildWithGenerator)
 		.DependsOn(Pack)
+		.DependsOn(BuildWithGenerator)
 		.Executes(() => { });
 
 

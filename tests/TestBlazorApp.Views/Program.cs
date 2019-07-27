@@ -4,12 +4,13 @@ namespace TestBlazorApp.Views
 {
 	public class Program
 	{
-		public static void Main()
+		public static void Main(string[] args)
 		{
-			BlazorWebAssemblyHost.CreateDefaultBuilder()
-							.UseBlazorStartup<Startup>()
-							.Build()
-							.Run();
+			CreateHostBuilder(args).Build().Run();
 		}
+
+		public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
+			BlazorWebAssemblyHost.CreateDefaultBuilder()
+				.UseBlazorStartup<Startup>();
 	}
 }

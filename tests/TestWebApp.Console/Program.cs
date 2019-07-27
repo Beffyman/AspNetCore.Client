@@ -3,6 +3,7 @@ using System;
 using TestWebApp.Clients;
 using TestWebApp.Clients.FancySuffix;
 using TestWebApp.Contracts;
+using Beffyman.AspNetCore.Client;
 
 namespace TestWebApp.Console
 {
@@ -18,7 +19,7 @@ namespace TestWebApp.Console
 				config.UseJsonClientSerializer();
 				config.UseJsonClientDeserializer();
 				config.WithJsonBody();
-				config.UseHttpClientFactory();
+				config.UseHttpClientFactory<ITestWebAppClient>();
 				//config.WithBaseAddress(_ => "http://localhost:62152");
 				config.WithBaseAddress("http://localhost:62152");
 			});
