@@ -39,7 +39,6 @@ steps:
     failOnStderr: true
   env:
     DOTNET_MSBUILD_SDK_RESOLVER_CLI_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
-    ForceSdkDownload: $true
 
 - task: PublishTestResults@2
   displayName: 'Publish Test results'
