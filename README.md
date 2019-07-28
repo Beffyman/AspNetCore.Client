@@ -31,7 +31,7 @@ and think the following
 - If I own the endpoint's code, why can't I just generate clients from it to make interacting with it as simple as injecting it?
   - Introducing Beffyman.AspNetCore.Client.Generator!
 
-[First Time Setup](https://github.com/Beffyman/Beffyman.AspNetCore.Client/wiki/First-Time-Setup)
+[First Time Setup](https://github.com/Beffyman/AspNetCore.Client/wiki/First-Time-Setup)
 
 ## Supported Frameworks
 - AspNetCore 2.2 HTTP Controllers
@@ -43,8 +43,8 @@ and think the following
 
 Includes ServiceCollection registration logic, used on the Client
 
-## AspNetCore.Server
-[![NuGet](https://img.shields.io/nuget/v/AspNetCore.Server.svg)](https://www.nuget.org/packages/AspNetCore.Server)
+## Beffyman.AspNetCore.Server
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Server.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Server)
 
 Includes attributes that can affect generation, used on your AspNetCore api app
 
@@ -82,6 +82,8 @@ services.AddTestWebClients(config=>
 
 ## Beffyman.AspNetCore.Client.BlazorJson
 [![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.BlazorJson.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.BlazorJson)
+
+(Pre-3.0 Blazor, 3.0 Blazor can use the default Json Serializer)
 
 Contains a blazor simpleJson serializer which can override the default json one via the UseBlazorSimpleJsonSerlaizer on the ClientConfiguration.
 
