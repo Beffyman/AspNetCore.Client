@@ -1,5 +1,5 @@
 # Beffyman.AspNetCore.Client
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/984mqqfnwytd3oga?svg=true)](https://ci.appveyor.com/project/Beffyman/aspnetcore-client)
+[![Build Status](https://dev.azure.com/beffyman/Beffyman.Github/_apis/build/status/Beffyman.AspNetCore.Client?branchName=master)](https://dev.azure.com/beffyman/Beffyman.Github/_build/latest?definitionId=7&branchName=master)
 ---
 
 If you are anything like me, you look at
