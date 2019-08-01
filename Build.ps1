@@ -60,6 +60,7 @@ if(!(Test-Path $DotNetVersionDirectory)){
 }
 
 $env:Path += $DotNetDirectory;
+$env:DOTNET_ROOT = $DotNetDirectory;
 
 Write-Output "Microsoft (R) .NET Core SDK version $(& $env:DOTNET_EXE --version)"
 
