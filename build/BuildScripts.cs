@@ -79,7 +79,6 @@ public class BuildScripts : NukeBuild
 				.SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
 				.SetFileVersion(GitVersion.GetNormalizedFileVersion())
 				.SetInformationalVersion(GitVersion.InformationalVersion)
-				.SetVerbosity(DotNetVerbosity.Detailed)
 				.EnableNoRestore());
 		});
 

@@ -1,29 +1,21 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using TestWebApp.Clients;
-using System.Net.Http;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Flurl.Http;
-using TestWebApp.Contracts;
-using Beffyman.AspNetCore.Client;
-using NUnit.Framework;
 using System.IO;
-using Beffyman.AspNetCore.Client.Authorization;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
+using Beffyman.AspNetCore.Client.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using TestWebApp.Clients;
+using TestWebApp.Contracts;
+using Xunit;
 
 namespace TestWebApp.Tests
 {
-	[TestFixture]
 	public class JsonClientTest
 	{
-		[Test]
+		[Fact]
 		public void GetTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -32,11 +24,11 @@ namespace TestWebApp.Tests
 				var values = valuesClient.GetEnumerable();
 
 
-				Assert.AreEqual(new List<string> { "value1", "value2" }, values);
+				Assert.Equal(new List<string> { "value1", "value2" }, values);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void HeaderTestString()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -45,11 +37,11 @@ namespace TestWebApp.Tests
 				var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
-				Assert.AreEqual("Val1", value);
+				Assert.Equal("Val1", value);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void HeaderTestInt()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -58,12 +50,12 @@ namespace TestWebApp.Tests
 				var value = valuesClient.HeaderTestInt(15);
 
 
-				Assert.AreEqual(15, value);
+				Assert.Equal(15, value);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void DtoReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -78,11 +70,11 @@ namespace TestWebApp.Tests
 					});
 
 
-				Assert.AreEqual(15, dto.Id);
+				Assert.Equal(15, dto.Id);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void GuidReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -97,11 +89,11 @@ namespace TestWebApp.Tests
 					});
 
 
-				Assert.AreNotEqual(Guid.Empty, g);
+				Assert.NotEqual(Guid.Empty, g);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void DateTimeReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -116,12 +108,12 @@ namespace TestWebApp.Tests
 					});
 
 
-				Assert.AreNotEqual(DateTime.MinValue, g);
+				Assert.NotEqual(DateTime.MinValue, g);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void BoolReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -136,12 +128,12 @@ namespace TestWebApp.Tests
 					});
 
 
-				Assert.AreNotEqual(false, g);
+				Assert.NotEqual(false, g);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void RequestAndResponseChecks()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -162,7 +154,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void PostNoBodyCheck()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -182,7 +174,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void ComplexPostCheck()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -206,12 +198,12 @@ namespace TestWebApp.Tests
 				});
 
 
-				Assert.AreEqual(dto.Collision, returnedDto.Collision);
+				Assert.Equal(dto.Collision, returnedDto.Collision);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void EnumerableRouteGet()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -232,11 +224,11 @@ namespace TestWebApp.Tests
 				});
 
 
-				Assert.AreEqual(expected, returnedEnumerable);
+				Assert.Equal(expected, returnedEnumerable);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void EnumerableRouteGetCustom()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -257,12 +249,12 @@ namespace TestWebApp.Tests
 				});
 
 
-				Assert.AreEqual(expected, returnedEnumerable);
+				Assert.Equal(expected, returnedEnumerable);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void QueryParameterReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -278,12 +270,12 @@ namespace TestWebApp.Tests
 					});
 
 
-				Assert.AreEqual(expected, actual);
+				Assert.Equal(expected, actual);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void FileResultTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -293,13 +285,13 @@ namespace TestWebApp.Tests
 				using (var reader = new StreamReader(fileStream))
 				{
 					var str = reader.ReadToEnd();
-					Assert.AreEqual("Hello World Text", str);
+					Assert.Equal("Hello World Text", str);
 				}
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void DeleteAuth()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -313,11 +305,11 @@ namespace TestWebApp.Tests
 					valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"));
 				});
 
-				Assert.IsTrue(success);
+				Assert.True(success);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void TestPreFunc()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -326,12 +318,12 @@ namespace TestWebApp.Tests
 
 				bool success = valuesClient.TestPreFunc();
 
-				Assert.IsTrue(success);
+				Assert.True(success);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void QueryObjectTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -348,12 +340,12 @@ namespace TestWebApp.Tests
 				MyFancyDto actual = valuesClient.GetQueryObject(expected);
 
 
-				Assert.AreEqual(expected.Collision, actual.Collision);
+				Assert.Equal(expected.Collision, actual.Collision);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void DefaultRouteConstraintTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -362,11 +354,11 @@ namespace TestWebApp.Tests
 				int? result = valuesClient.DefaultRouteConstraint(null);
 				int? expected = 5;
 
-				Assert.AreEqual(expected, result);
+				Assert.Equal(expected, result);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void OptionalRouteConstraintTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -375,16 +367,16 @@ namespace TestWebApp.Tests
 				int? result = valuesClient.OptionalRouteConstraint(null);
 				int? expected = null;
 
-				Assert.AreEqual(expected, result);
+				Assert.Equal(expected, result);
 
 				int? result2 = valuesClient.OptionalRouteConstraint(123);
 				int? expected2 = 123;
 
-				Assert.AreEqual(expected2, result2);
+				Assert.Equal(expected2, result2);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void DateTimeRouteTests()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -395,15 +387,15 @@ namespace TestWebApp.Tests
 
 				DateTime result = valuesClient.CheckDateTime(date);
 
-				Assert.AreEqual(expected, result);
+				Assert.Equal(expected, result);
 
 				DateTime? nullableResult = valuesClient.CheckDateTimeNullable(date);
 
-				Assert.AreEqual(expected, nullableResult);
+				Assert.Equal(expected, nullableResult);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void DateTimeOffsetRouteTests()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -414,15 +406,15 @@ namespace TestWebApp.Tests
 
 				DateTimeOffset result = valuesClient.CheckDateTimeOffset(date);
 
-				Assert.AreEqual(expected, result);
+				Assert.Equal(expected, result);
 
 				DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date);
 
-				Assert.AreEqual(expected, nullableResult);
+				Assert.Equal(expected, nullableResult);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void ApiRouteVersioningTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -431,11 +423,11 @@ namespace TestWebApp.Tests
 
 				var index = v3Client.Endpoint(5);
 
-				Assert.AreEqual(6, index);
+				Assert.Equal(6, index);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void ApiQueryVersioningTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -444,12 +436,12 @@ namespace TestWebApp.Tests
 
 				var index = v3Client.Endpoint(5);
 
-				Assert.AreEqual(6, index);
+				Assert.Equal(6, index);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void InheritanceGenerationBuildTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -464,11 +456,11 @@ namespace TestWebApp.Tests
 					actual = str;
 				});
 
-				Assert.AreEqual(expected, actual);
+				Assert.Equal(expected, actual);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void DuplicateMethodReturnAndResponseTypeAttributeTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -481,19 +473,19 @@ namespace TestWebApp.Tests
 					responseVal = msg.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 				});
 
-				Assert.AreEqual(100, val.Id);
-				Assert.AreEqual(DateTime.Now.Date, val.When);
-				Assert.AreEqual("Hello", val.Description);
+				Assert.Equal(100, val.Id);
+				Assert.Equal(DateTime.Now.Date, val.When);
+				Assert.Equal("Hello", val.Description);
 
 				var responseJson = JsonConvert.DeserializeObject<MyFancyDto>(responseVal);
 
-				Assert.AreEqual(val.Id, responseJson.Id);
-				Assert.AreEqual(val.When, responseJson.When);
-				Assert.AreEqual(val.Description, responseJson.Description);
+				Assert.Equal(val.Id, responseJson.Id);
+				Assert.Equal(val.When, responseJson.When);
+				Assert.Equal(val.Description, responseJson.Description);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void ProblemDetailsRequestTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -527,7 +519,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void ModelStateBadRequestTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -543,14 +535,14 @@ namespace TestWebApp.Tests
 
 				var str = errors["Test"];
 
-				Assert.AreEqual("Something is right!", str.Single());
+				Assert.Equal("Something is right!", str.Single());
 
 			}
 		}
 
 
 
-		[Test]
+		[Fact]
 		public void UrlEncodingCheckTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -561,27 +553,27 @@ namespace TestWebApp.Tests
 				client.UrlEncodingCheck(val,
 				OKCallback: _ =>
 				{
-					Assert.AreEqual(val, _);
+					Assert.Equal(val, _);
 				},
 				BadRequestCallback: _ =>
 				{
-					Assert.Fail();
+					throw new Exception("BadRequest should not be thrown");
 				});
 
 				client.UrlEncodingQueryCheck(val,
 				OKCallback: _ =>
 				{
-					Assert.AreEqual(val, _);
+					Assert.Equal(val, _);
 				},
 				BadRequestCallback: _ =>
 				{
-					Assert.Fail();
+					throw new Exception("BadRequest should not be thrown");
 				});
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public async Task RouteReplacement()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -598,7 +590,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Test]
+		[Fact]
 		public async Task InheritedRouteAsync()
 		{
 			using (var endpoint = new JsonServerInfo())

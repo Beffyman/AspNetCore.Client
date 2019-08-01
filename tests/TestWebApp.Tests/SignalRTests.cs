@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using TestWebApp.Contracts;
 using TestWebApp.Hubs;
+using Xunit;
 
 namespace TestWebApp.Tests
 {
@@ -22,11 +20,10 @@ namespace TestWebApp.Tests
 		}
 	}
 
-	[TestFixture]
 	public class SignalRTests
 	{
 
-		[Test]
+		[Fact]
 		public async Task SendReceiveMessageAsync()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -59,13 +56,13 @@ namespace TestWebApp.Tests
 
 				await hub.StopAsync();
 
-				Assert.AreEqual("Test", user);
-				Assert.AreEqual("Hello World", message);
+				Assert.Equal("Test", user);
+				Assert.Equal("Hello World", message);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public async Task CounterChannelTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -96,12 +93,12 @@ namespace TestWebApp.Tests
 
 				await hub.StopAsync();
 
-				Assert.AreEqual(count, results.Count());
+				Assert.Equal(count, results.Count());
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public async Task CounterBlockingTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -122,12 +119,12 @@ namespace TestWebApp.Tests
 
 				await hub.StopAsync();
 
-				Assert.AreEqual(count, results.Count());
+				Assert.Equal(count, results.Count());
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public async Task MessagePackTest()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -166,10 +163,10 @@ namespace TestWebApp.Tests
 
 				await hub.StopAsync();
 
-				Assert.AreEqual(expected.Collision, actual.Collision);
-				Assert.AreEqual(expected.Description, actual.Description);
-				Assert.AreEqual(expected.Id, actual.Id);
-				Assert.AreEqual(expected.When.ToLocalTime(), actual.When.ToLocalTime());
+				Assert.Equal(expected.Collision, actual.Collision);
+				Assert.Equal(expected.Description, actual.Description);
+				Assert.Equal(expected.Id, actual.Id);
+				Assert.Equal(expected.When.ToLocalTime(), actual.When.ToLocalTime());
 			}
 		}
 

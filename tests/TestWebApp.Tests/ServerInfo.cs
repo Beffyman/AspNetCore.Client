@@ -1,12 +1,10 @@
-﻿using Beffyman.AspNetCore.Client;
+﻿using System;
+using System.Net.Http;
+using Beffyman.AspNetCore.Client;
 using Flurl.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using TestWebApp.Clients;
 
 namespace TestWebApp.Tests

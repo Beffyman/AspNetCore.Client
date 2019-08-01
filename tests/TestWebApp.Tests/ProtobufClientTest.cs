@@ -1,25 +1,16 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using NUnit.Framework;
-using TestWebApp.Clients;
-using System.Net.Http;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Flurl.Http;
+using Microsoft.Extensions.DependencyInjection;
+using TestWebApp.Clients;
 using TestWebApp.Contracts;
-using Microsoft.AspNetCore.TestHost;
-using Beffyman.AspNetCore.Client;
+using Xunit;
 
 namespace TestWebApp.Tests
 {
-	[TestFixture]
 	public class ProtobufClientTest
 	{
 
-		[Test]
+		[Fact]
 		public void GetTest()
 		{
 			using (var endpoint = new ProtobufServerInfo())
@@ -28,11 +19,11 @@ namespace TestWebApp.Tests
 				var values = valuesClient.GetEnumerable();
 
 
-				Assert.AreEqual(new List<string> { "value1", "value2" }, values);
+				Assert.Equal(new List<string> { "value1", "value2" }, values);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void HeaderTestString()
 		{
 			using (var endpoint = new ProtobufServerInfo())
@@ -41,11 +32,11 @@ namespace TestWebApp.Tests
 				var value = valuesClient.HeaderTestString("Val1", "Val2");
 
 
-				Assert.AreEqual("Val1", value);
+				Assert.Equal("Val1", value);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void HeaderTestInt()
 		{
 			using (var endpoint = new ProtobufServerInfo())
@@ -54,12 +45,12 @@ namespace TestWebApp.Tests
 				var value = valuesClient.HeaderTestInt(15);
 
 
-				Assert.AreEqual(15, value);
+				Assert.Equal(15, value);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void DtoReturns()
 		{
 			using (var endpoint = new ProtobufServerInfo())
@@ -74,12 +65,12 @@ namespace TestWebApp.Tests
 					});
 
 
-				Assert.AreEqual(15, dto.Id);
+				Assert.Equal(15, dto.Id);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void RequestAndResponseChecks()
 		{
 			using (var endpoint = new ProtobufServerInfo())
@@ -104,10 +95,10 @@ namespace TestWebApp.Tests
 				var actual = valuesClient.DtoForDto(dto);
 
 
-				Assert.AreEqual(dto.Collision, actual.Collision);
-				Assert.AreEqual(dto.Description, actual.Description);
-				Assert.AreEqual(dto.Id, actual.Id);
-				Assert.AreEqual(dto.When, actual.When);
+				Assert.Equal(dto.Collision, actual.Collision);
+				Assert.Equal(dto.Description, actual.Description);
+				Assert.Equal(dto.Id, actual.Id);
+				Assert.Equal(dto.When, actual.When);
 			}
 		}
 

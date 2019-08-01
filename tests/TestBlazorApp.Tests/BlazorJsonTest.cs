@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 using System;
 using System.Threading.Tasks;
 using TestBlazorApp.Clients;
@@ -7,10 +7,9 @@ using System.Linq;
 
 namespace TestBlazorApp.Tests
 {
-	[TestFixture]
 	public class BlazorJsonTest
 	{
-		[Test]
+		[Fact]
 		public void WeatherForecastsTest()
 		{
 			using (var endpoint = new BlazorJsonServerInfo())
@@ -19,7 +18,7 @@ namespace TestBlazorApp.Tests
 				var forecasts = sampleDataClient.WeatherForecasts();
 
 
-				Assert.IsTrue(forecasts.Count() == 5);
+				Assert.True(forecasts.Count() == 5);
 			}
 		}
 	}

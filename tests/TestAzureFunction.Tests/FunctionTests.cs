@@ -1,14 +1,13 @@
-using NUnit.Framework;
+using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using TestAzureFunction.Clients;
 using System;
 
 namespace TestAzureFunction.Tests
 {
-	[TestFixture]
 	public class FunctionTests
 	{
-		[Test]
+		[Fact]
 		public void TestJson_Get()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -24,11 +23,11 @@ namespace TestAzureFunction.Tests
 				});
 
 
-				Assert.AreEqual("Hello, Asp Client", response);
+				Assert.Equal("Hello, Asp Client", response);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void TestJson_Post()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -47,12 +46,12 @@ namespace TestAzureFunction.Tests
 				});
 
 
-				Assert.AreEqual("Hello, Asp Client", response);
+				Assert.Equal("Hello, Asp Client", response);
 			}
 		}
 
 
-		[Test]
+		[Fact]
 		public void TestProtobuf_Get()
 		{
 			using (var endpoint = new ProtobufServerInfo())
@@ -68,11 +67,11 @@ namespace TestAzureFunction.Tests
 				});
 
 
-				Assert.AreEqual("Hello, Asp Client", response);
+				Assert.Equal("Hello, Asp Client", response);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void TestProtobuf_Post()
 		{
 			using (var endpoint = new ProtobufServerInfo())
@@ -91,11 +90,11 @@ namespace TestAzureFunction.Tests
 				});
 
 
-				Assert.AreEqual("Hello, Asp Client", response);
+				Assert.Equal("Hello, Asp Client", response);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void TestMessagePack_Get()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -111,11 +110,11 @@ namespace TestAzureFunction.Tests
 				});
 
 
-				Assert.AreEqual("Hello, Asp Client", response);
+				Assert.Equal("Hello, Asp Client", response);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void TestMessagePack_Post()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -133,7 +132,7 @@ namespace TestAzureFunction.Tests
 					response = _;
 				});
 
-				Assert.AreEqual("Hello, Asp Client", response);
+				Assert.Equal("Hello, Asp Client", response);
 			}
 		}
 	}
