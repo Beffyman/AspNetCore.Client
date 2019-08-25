@@ -40,7 +40,7 @@ namespace TestAzureFunction.Tests
 			{
 				await result.ExecuteResultAsync(actionContext);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				throw;
 			}

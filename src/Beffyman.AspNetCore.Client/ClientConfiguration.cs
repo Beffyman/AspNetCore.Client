@@ -363,7 +363,7 @@ namespace Beffyman.AspNetCore.Client
 		}
 
 		/// <summary>
-		/// Uses the existing http client injection inside the container, not compatible with <see cref="UseHttpClientFactory"/> and <see cref="WithBaseAddress(string)"/>
+		/// Uses the existing http client injection inside the container, not compatible with <see cref="UseCustomHttpClient"/> and <see cref="WithBaseAddress(string)"/>
 		/// </summary>
 		/// <returns></returns>
 		public ClientConfiguration UseExistingHttpClient()

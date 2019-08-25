@@ -33,8 +33,15 @@ namespace Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Paramete
 		/// </summary>
 		public int SortOrder => 3;
 
+		/// <summary>
+		/// Whether or not the Type is empty
+		/// </summary>
 		public bool IsConstant => string.IsNullOrEmpty(Type);
 
+		/// <summary>
+		/// Default Constructor
+		/// </summary>
+		/// <param name="value"></param>
 		public QueryParameter(string value)
 		{
 			Name = value;

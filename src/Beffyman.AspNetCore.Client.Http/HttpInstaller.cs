@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Beffyman.AspNetCore.Client
 {
+	/// <summary>
+	/// Used to install an HttpClientFactory HttpClient provider
+	/// </summary>
 	public static class HttpInstaller
 	{
 		/// <summary>

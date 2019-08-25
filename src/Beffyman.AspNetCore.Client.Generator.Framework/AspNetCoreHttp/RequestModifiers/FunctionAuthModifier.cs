@@ -6,6 +6,9 @@ using Beffyman.AspNetCore.Client.Generator.Framework.RequestModifiers;
 
 namespace Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.RequestModifiers
 {
+	/// <summary>
+	/// Detects whether a authkey was provided for the function
+	/// </summary>
 	public class FunctionAuthModifier : IRequestModifier, IParameter
 	{
 

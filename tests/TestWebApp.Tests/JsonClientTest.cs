@@ -127,8 +127,7 @@ namespace TestWebApp.Tests
 						g = _;
 					});
 
-
-				Assert.NotEqual(false, g);
+				Assert.True(g);
 			}
 		}
 

@@ -64,6 +64,10 @@ namespace Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 			return parameters;
 		}
 
+		/// <summary>
+		/// Gets the parameters for the route
+		/// </summary>
+		/// <returns></returns>
 		public IDictionary<string, (string type, string defaultValue)> GetRouteParameters()
 		{
 			IDictionary<string, (string type, string defaultValue)> parameters = new Dictionary<string, (string type, string defaultValue)>();
@@ -99,11 +103,20 @@ namespace Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 			};
 		}
 
+		/// <summary>
+		/// Does the Route contain the provided string?
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
 		public bool Contains(string str)
 		{
 			return Value?.Contains(str) ?? false;
 		}
 
+		/// <summary>
+		/// ToString
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return Value;

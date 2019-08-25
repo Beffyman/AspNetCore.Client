@@ -19,12 +19,21 @@ namespace Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Routes
 		/// </summary>
 		public bool Query { get; set; }
 
+		/// <summary>
+		/// Default Constructor
+		/// </summary>
+		/// <param name="version"></param>
+		/// <param name="query"></param>
 		public ApiVersion(string version, bool query)
 		{
 			Version = version;
 			Query = query;
 		}
 
+		/// <summary>
+		/// ToString
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return Version;

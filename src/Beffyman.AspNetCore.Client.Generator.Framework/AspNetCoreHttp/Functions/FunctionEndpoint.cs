@@ -314,6 +314,8 @@ namespace Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Function
 		/// Gets the method's name, if there is only 1 method, use the base name
 		/// </summary>
 		/// <param name="method"></param>
+		/// <param name="raw"></param>
+		/// <param name="async"></param>
 		/// <returns></returns>
 		public string GetEndpointName(HttpMethod method, bool raw, bool async)
 		{

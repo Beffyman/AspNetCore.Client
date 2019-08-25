@@ -4,14 +4,14 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
+using System.Text.Json;
 
 namespace Beffyman.AspNetCore.Client.Serializers
 {
 	/// <summary>
-	/// Uses Blazor's SimpleJson for serializing and deserializing the http content
+	/// Uses System.Text.Json for serializing and deserializing the http content
 	/// </summary>
-	internal class JSInteropJsonSerializer : IHttpContentSerializer
+	internal class SystemJsonSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "application/json";
 		internal static readonly string PROBLEM_TYPE = "application/problem+json";
@@ -51,9 +51,9 @@ namespace Beffyman.AspNetCore.Client.Serializers
 			}
 			else
 			{
-				//Can't use the same stream reading as Beffyman.AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
-				var str = await content.ReadAsStringAsync().ConfigureAwait(false);
-				return Json.Deserialize<T>(str);
+				//As of preview 8? It seems like the JSInterop package uses the new system json library
+				var stream = await content.ReadAsStreamAsync().ConfigureAwait(false);
+				return await System.Text.Json.JsonSerializer.DeserializeAsync<T>(stream).ConfigureAwait(false);
 			}
 		}
 
@@ -65,9 +65,8 @@ namespace Beffyman.AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			//Can't use the same stream writing as Beffyman.AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
-
-			var json = Json.Serialize(request);
+			//As of preview 8? It seems like the JSInterop package uses the new system json library
+			var json = JsonSerializer.Serialize(request);
 			return new StringContent(json, Encoding.UTF8, CONTENT_TYPE);
 		}
 	}
