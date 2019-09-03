@@ -19,7 +19,7 @@
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
 		<ClientRouteConstraints>true</ClientRouteConstraints>
-		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
+		<ErrorOnUnhandledCallback>false</ErrorOnUnhandledCallback>
 		<MultipleFiles>false</MultipleFiles>
 		<GenerateStaticRoutes>true</GenerateStaticRoutes>
 		<RoutesNamespace>Routes</RoutesNamespace>

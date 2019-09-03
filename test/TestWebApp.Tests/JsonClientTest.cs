@@ -299,25 +299,22 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Test]
-		public void DeleteAuth()
-		{
-			using (var endpoint = new JsonServerInfo())
-			{
-				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+        [Test]
+        public void DeleteAuth()
+        {
+            using (var endpoint = new JsonServerInfo())
+            {
+                var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-				bool success = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test123"));
+                bool validRequest = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test123"));
+                Assert.IsTrue(validRequest);
 
-				Assert.Throws<InvalidOperationException>(() =>
-				{
-					valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"));
-				});
+                bool invalidRequest = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"));
+                Assert.IsFalse(invalidRequest);
+            }
+        }
 
-				Assert.IsTrue(success);
-			}
-		}
-
-		[Test]
+        [Test]
 		public void TestPreFunc()
 		{
 			using (var endpoint = new JsonServerInfo())
