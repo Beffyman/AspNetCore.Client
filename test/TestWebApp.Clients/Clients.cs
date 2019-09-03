@@ -792,11 +792,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -895,11 +890,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -1028,11 +1018,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -1134,11 +1119,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -1270,11 +1250,6 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return;
 			}
 
@@ -1360,11 +1335,6 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
-				}
-
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -1454,11 +1424,6 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return;
 			}
 
@@ -1544,11 +1509,6 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
-				}
-
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -1641,11 +1601,6 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
-				}
-
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -1745,11 +1700,6 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return;
 			}
 
@@ -1842,11 +1792,6 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return;
 			}
 
@@ -1932,11 +1877,6 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
-				}
-
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -2026,11 +1966,6 @@ namespace TestWebApp.Clients
 					ResponseCallback.Invoke(response);
 				}
 
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return;
 			}
 
@@ -2116,11 +2051,6 @@ namespace TestWebApp.Clients
 				{
 					responseHandled = true;
 					ResponseCallback.Invoke(response);
-				}
-
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
 				return;
@@ -2250,11 +2180,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -2358,11 +2283,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -2680,11 +2600,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -2809,11 +2724,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -2938,11 +2848,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -3067,11 +2972,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -3196,11 +3096,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.Collections.Generic.IEnumerable<string>);
 			}
 		}
@@ -3325,11 +3220,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.Collections.Generic.IEnumerable<string>);
 			}
 		}
@@ -3454,11 +3344,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<(string, int, bool)>);
 			}
 		}
@@ -3583,11 +3468,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<(string, int, bool)>);
 			}
 		}
@@ -3713,11 +3593,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 			}
 		}
@@ -3844,11 +3719,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 			}
 		}
@@ -3974,11 +3844,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -4103,11 +3968,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -4224,11 +4084,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -4348,11 +4203,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -4470,11 +4320,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -4590,11 +4435,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -4734,11 +4574,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -4877,11 +4712,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -5013,11 +4843,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -5153,11 +4978,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -5283,11 +5103,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -5414,11 +5229,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -5539,11 +5349,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -5661,11 +5466,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -5790,11 +5590,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -5924,11 +5719,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -6061,11 +5851,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -6192,11 +5977,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -6323,11 +6103,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -6454,11 +6229,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -6596,11 +6366,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -6746,11 +6511,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -6875,11 +6635,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -6997,11 +6752,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -7129,11 +6879,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -7260,11 +7005,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -7397,11 +7137,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -7537,11 +7272,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -7673,11 +7403,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -7813,11 +7538,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -7951,11 +7671,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -8087,11 +7802,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -8230,11 +7940,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -8380,11 +8085,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -8526,11 +8226,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -8676,11 +8371,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -8819,11 +8509,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -8955,11 +8640,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -9095,11 +8775,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -9231,11 +8906,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -9371,11 +9041,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -9507,11 +9172,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -9689,11 +9349,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -9869,11 +9524,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -10005,11 +9655,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -10145,11 +9790,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -10275,11 +9915,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.IO.Stream);
 			}
 		}
@@ -10406,11 +10041,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.IO.Stream);
 			}
 		}
@@ -10543,11 +10173,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -10683,11 +10308,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -10813,11 +10433,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -10944,11 +10559,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -11075,11 +10685,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -11206,11 +10811,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -11337,11 +10937,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11468,11 +11063,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11599,11 +11189,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11730,11 +11315,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11861,11 +11441,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -11992,11 +11567,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -12123,11 +11693,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -12254,11 +11819,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -12382,11 +11942,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -12516,11 +12071,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -12653,11 +12203,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -12784,11 +12329,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -12921,11 +12461,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -13061,11 +12596,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -13185,11 +12715,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -13307,11 +12832,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -13447,11 +12967,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -13583,11 +13098,6 @@ namespace TestWebApp.Clients
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -13723,11 +13233,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -13861,11 +13366,6 @@ namespace TestWebApp.Clients
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -13981,11 +13481,6 @@ namespace TestWebApp.Clients.V1
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -14071,11 +13566,6 @@ namespace TestWebApp.Clients.V1
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -14191,11 +13681,6 @@ namespace TestWebApp.Clients.V2
 				ResponseCallback.Invoke(response);
 			}
 
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-			}
-
 			return;
 		}
 
@@ -14281,11 +13766,6 @@ namespace TestWebApp.Clients.V2
 			{
 				responseHandled = true;
 				ResponseCallback.Invoke(response);
-			}
-
-			if (!responseHandled)
-			{
-				throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 			}
 
 			return;
@@ -14413,11 +13893,6 @@ namespace TestWebApp.Clients.V3
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -14524,11 +13999,6 @@ namespace TestWebApp.Clients.V3
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -14661,11 +14131,6 @@ namespace TestWebApp.Clients.V3_0
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -14772,11 +14237,6 @@ namespace TestWebApp.Clients.V3_0
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}

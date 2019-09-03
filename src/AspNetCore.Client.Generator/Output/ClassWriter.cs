@@ -825,15 +825,14 @@ if(response.IsSuccessStatusCode)
 	return {SharedWriter.GetAwait(async)}response.Content.ReadAsStreamAsync(){SharedWriter.GetAsyncEnding(async)};
 }}
 else
-{{
+{{" + (Settings.ErrorOnUnhandledCallback ? $@"
 	if(!{Constants.ResponseHandledVariable})
 	{{
 		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
-	}}
+	}}" : "") +
 
-	return default({endpoint.ReturnType});
-}}
-";
+	$@"return default({endpoint.ReturnType});
+}}";
 			}
 			else
 			{
@@ -846,15 +845,14 @@ if(response.IsSuccessStatusCode)
 	return {SharedWriter.GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){SharedWriter.GetAsyncEnding(async)};
 }}
 else
-{{
+{{" + (Settings.ErrorOnUnhandledCallback ? $@"
 	if(!{Constants.ResponseHandledVariable})
 	{{
 		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
-	}}
+	}}" : "") +
 
-	return default({endpoint.ReturnType});
-}}
-";
+	$@"return default({endpoint.ReturnType});
+}}";
 				}
 			}
 
@@ -1280,36 +1278,34 @@ if(response.IsSuccessStatusCode)
 	return {SharedWriter.GetAwait(async)}response.Content.ReadAsStreamAsync(){SharedWriter.GetAsyncEnding(async)};
 }}
 else
-{{
+{{" + (Settings.ErrorOnUnhandledCallback ? $@"
 	if(!{Constants.ResponseHandledVariable})
 	{{
 		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
-	}}
+	}}" : "") +
 
-	return default({endpoint.ReturnType});
-}}
-";
+	$@"return default({endpoint.ReturnType});
+}}";
 			}
 			else
 			{
 				if (endpoint.ReturnType != null)
 				{
 					return
-	$@"
+$@"
 if(response.IsSuccessStatusCode)
 {{
 	return {SharedWriter.GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){SharedWriter.GetAsyncEnding(async)};
 }}
 else
-{{
+{{" + (Settings.ErrorOnUnhandledCallback ? $@"
 	if(!{Constants.ResponseHandledVariable})
 	{{
 		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
-	}}
+	}}" : "") +
 
-	return default({endpoint.ReturnType});
-}}
-";
+	$@"return default({endpoint.ReturnType});
+}}";
 				}
 			}
 
