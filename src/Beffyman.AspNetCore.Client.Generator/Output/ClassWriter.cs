@@ -829,12 +829,17 @@ if(response.IsSuccessStatusCode)
 	return {SharedWriter.GetAwait(async)}response.Content.ReadAsStreamAsync(){SharedWriter.GetAsyncEnding(async)};
 }}
 else
-{{
-	if(!{Constants.ResponseHandledVariable})
+{{"
++
+ (Settings.ErrorOnUnhandledCallback ?
+$@"
+if(!{Constants.ResponseHandledVariable})
 	{{
 		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
 	}}
-
+" : string.Empty)
++
+$@"
 	return default({endpoint.ReturnType});
 }}
 ";
@@ -850,12 +855,17 @@ if(response.IsSuccessStatusCode)
 	return {SharedWriter.GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){SharedWriter.GetAsyncEnding(async)};
 }}
 else
-{{
-	if(!{Constants.ResponseHandledVariable})
+{{"
++
+ (Settings.ErrorOnUnhandledCallback ?
+$@"
+if(!{Constants.ResponseHandledVariable})
 	{{
 		throw new System.InvalidOperationException($""Response Status of {{response.StatusCode}} was not handled properly."");
 	}}
-
+" : string.Empty)
++
+$@"
 	return default({endpoint.ReturnType});
 }}
 ";
@@ -927,7 +937,7 @@ return;";
 		{
 
 			var controllerVar = $@"var {Constants.ControllerRouteReserved} = ""{endpoint.Parent.Name}"";";
-			var actionVar = $@"var {Constants.ActionRouteReserved} = ""{endpoint.Name}"";";
+			var actionVar = $@"var {Constants.ActionRouteReserved} = ""{endpoint.FormattedName}"";";
 
 
 			if (!endpoint.GetFullRoute(controller)?.Contains($"[{Constants.ControllerRouteReserved}]") ?? false)
@@ -1225,8 +1235,10 @@ public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), tr
 			return
 $@"{string.Join(Environment.NewLine, routeConstraints.Select(SharedWriter.WriteRouteConstraint).NotNull())}
 string url = $@""{GetRoute(endpoint, method, async)}"";
+
 HttpResponseMessage response = null;
 response = {SharedWriter.GetAwait(async)}HttpOverride.GetResponseAsync({SharedWriter.GetHttpMethod(method)}, url, null, {cancellationToken.Name}){SharedWriter.GetAsyncEnding(async)};
+
 bool {Constants.ResponseHandledVariable} = response != null;
 
 if(response == null)

@@ -26,14 +26,14 @@ namespace TestWebApp
 		{
 			services.AddControllers();
 			services.AddMvc()
-					.AddMvcOptions(option =>
-					{
-						option.OutputFormatters.Clear();
-						option.OutputFormatters.Add(new MessagePackOutputFormatter(ContractlessStandardResolver.Options));
-						option.InputFormatters.Clear();
-						option.InputFormatters.Add(new MessagePackInputFormatter(ContractlessStandardResolver.Options));
-					})
-					.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+				.AddMvcOptions(option =>
+				{
+					option.OutputFormatters.Clear();
+					option.OutputFormatters.Add(new MessagePackOutputFormatter(ContractlessStandardResolver.Instance));
+					option.InputFormatters.Clear();
+					option.InputFormatters.Add(new MessagePackInputFormatter(ContractlessStandardResolver.Instance));
+				})
+				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 			services.AddApiVersioning(options =>
 			{

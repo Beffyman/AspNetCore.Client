@@ -175,7 +175,7 @@ namespace TestWebApp.Clients.Routes
 		public static string ActionRoute()
 		{
 			var controller = "Values";
-			var action = "ActionRouteAsync";
+			var action = "ActionRoute";
 			string url = $@"api/{controller}/{action}";
 			return url;
 		}
@@ -793,11 +793,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -896,11 +891,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -2611,11 +2601,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -2740,11 +2725,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -2869,11 +2849,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -2998,11 +2973,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<string>);
 			}
 		}
@@ -3127,11 +3097,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.Collections.Generic.IEnumerable<string>);
 			}
 		}
@@ -3256,11 +3221,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.Collections.Generic.IEnumerable<string>);
 			}
 		}
@@ -3385,11 +3345,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<(string, int, bool)>);
 			}
 		}
@@ -3514,11 +3469,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IEnumerable<(string, int, bool)>);
 			}
 		}
@@ -3644,11 +3594,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 			}
 		}
@@ -3775,11 +3720,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(IDictionary<string, IEnumerable<Tuple<string, int, bool, char>>>);
 			}
 		}
@@ -3905,11 +3845,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -4034,11 +3969,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -4645,11 +4575,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -4788,11 +4713,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -4839,7 +4759,7 @@ namespace TestWebApp.Clients
 		public void ActionRoute(int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action OKCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			var action = "ActionRouteAsync";
+			var action = "ActionRoute";
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -4932,7 +4852,7 @@ namespace TestWebApp.Clients
 		public HttpResponseMessage ActionRouteRaw(int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			var action = "ActionRouteAsync";
+			var action = "ActionRoute";
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -4972,7 +4892,7 @@ namespace TestWebApp.Clients
 		public async Task ActionRouteAsync(int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action OKCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			var action = "ActionRouteAsync";
+			var action = "ActionRoute";
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
@@ -5065,7 +4985,7 @@ namespace TestWebApp.Clients
 		public async ValueTask<HttpResponseMessage> ActionRouteRawAsync(int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
-			var action = "ActionRouteAsync";
+			var action = "ActionRoute";
 			string url = $@"api/{controller}/{action}";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
@@ -5184,11 +5104,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -5315,11 +5230,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(bool);
 			}
 		}
@@ -5942,11 +5852,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -6073,11 +5978,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(string);
 			}
 		}
@@ -6204,11 +6104,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -6335,11 +6230,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -6990,11 +6880,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -7121,11 +7006,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -10036,11 +9916,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.IO.Stream);
 			}
 		}
@@ -10167,11 +10042,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(System.IO.Stream);
 			}
 		}
@@ -10564,11 +10434,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -10695,11 +10560,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -10826,11 +10686,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -10957,11 +10812,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int? );
 			}
 		}
@@ -11088,11 +10938,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11219,11 +11064,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11350,11 +11190,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11481,11 +11316,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTime);
 			}
 		}
@@ -11612,11 +11442,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -11743,11 +11568,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -11874,11 +11694,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -12005,11 +11820,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(DateTimeOffset);
 			}
 		}
@@ -12394,11 +12204,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -12525,11 +12330,6 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(MyFancyDto);
 			}
 		}
@@ -14094,11 +13894,6 @@ namespace TestWebApp.Clients.V3
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -14205,11 +14000,6 @@ namespace TestWebApp.Clients.V3
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -14342,11 +14132,6 @@ namespace TestWebApp.Clients.V3_0
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}
@@ -14453,11 +14238,6 @@ namespace TestWebApp.Clients.V3_0
 			}
 			else
 			{
-				if (!responseHandled)
-				{
-					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
-				}
-
 				return default(int);
 			}
 		}

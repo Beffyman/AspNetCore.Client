@@ -57,10 +57,8 @@ namespace Beffyman.AspNetCore.Client.Serializers
 			}
 			else
 			{
-				//var str = await content.ReadAsStringAsync().ConfigureAwait(false);
 				using (var stream = await content.ReadAsStreamAsync().ConfigureAwait(false))
 				{
-					//var json = JsonSerializer.Deserialize<T>(str);
 					return await System.Text.Json.JsonSerializer.DeserializeAsync<T>(stream, _options).ConfigureAwait(false);
 				}
 			}
