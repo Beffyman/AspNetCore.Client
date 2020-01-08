@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<Description>A build task that will generate clients from a asp.net core project</Description>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<DevelopmentDependency>true</DevelopmentDependency>
@@ -11,19 +11,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.6" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.14" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" PrivateAssets="all" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.4.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" PrivateAssets="all" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.0" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.14" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.4.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>

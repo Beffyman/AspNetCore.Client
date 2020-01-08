@@ -27,13 +27,12 @@ using TestBlazorApp.Shared;
 
 namespace TestBlazorApp.Clients.Routes
 {
-	public static class SampleDataClientRoutes
+	public static class WeatherForecastClientRoutes
 	{
-		public static string WeatherForecasts()
+		public static string Get()
 		{
-			var controller = "SampleData";
-			var action = "WeatherForecasts";
-			string url = $@"api/{controller}/{action}";
+			var controller = "WeatherForecast";
+			string url = $@"{controller}/";
 			return url;
 		}
 	}

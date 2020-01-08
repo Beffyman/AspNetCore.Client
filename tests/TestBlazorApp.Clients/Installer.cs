@@ -42,7 +42,7 @@ namespace TestBlazorApp.Clients
 			configuration.UseClientWrapper<ITestBlazorAppClientWrapper, TestBlazorAppClientWrapper>((provider) => new TestBlazorAppClientWrapper(provider.GetService<Func<ITestBlazorAppClient, IFlurlClient>>(), configuration.GetSettings(), provider));
 			configure?.Invoke(configuration);
 			services.AddScoped<ITestBlazorAppClientRepository, TestBlazorAppClientRepository>();
-			services.AddScoped<ISampleDataClient, SampleDataClient>();
+			services.AddScoped<IWeatherForecastClient, WeatherForecastClient>();
 			return configuration.ApplyConfiguration<ITestBlazorAppClient>(services);
 		}
 	}
@@ -88,7 +88,7 @@ namespace TestBlazorApp.Clients
 
 	public interface ITestBlazorAppClientRepository
 	{
-		ISampleDataClient SampleData
+		IWeatherForecastClient WeatherForecast
 		{
 			get;
 		}
@@ -96,14 +96,14 @@ namespace TestBlazorApp.Clients
 
 	internal class TestBlazorAppClientRepository : ITestBlazorAppClientRepository
 	{
-		public ISampleDataClient SampleData
+		public IWeatherForecastClient WeatherForecast
 		{
 			get;
 		}
 
-		public TestBlazorAppClientRepository(ISampleDataClient param_sampledata)
+		public TestBlazorAppClientRepository(IWeatherForecastClient param_weatherforecast)
 		{
-			this.SampleData = param_sampledata;
+			this.WeatherForecast = param_weatherforecast;
 		}
 	}
 }

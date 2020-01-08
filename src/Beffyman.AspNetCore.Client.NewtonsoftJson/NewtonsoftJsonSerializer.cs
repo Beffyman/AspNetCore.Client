@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
+using Newtonsoft.Json;
 
 namespace Beffyman.AspNetCore.Client.Serializers
 {
 	/// <summary>
-	/// Uses Blazor's SimpleJson for serializing and deserializing the http content
+	/// Uses Newtonsoft.Json for serializing and deserializing the http content
 	/// </summary>
-	internal class BlazorSimpleJsonSerializer : IHttpContentSerializer
+	internal class NewtonsoftJsonHttpSerializer : IHttpContentSerializer
 	{
 		internal static readonly string CONTENT_TYPE = "application/json";
 		internal static readonly string PROBLEM_TYPE = "application/problem+json";
 		public string[] ContentTypes => new string[] { CONTENT_TYPE, PROBLEM_TYPE };
+
 
 		private static readonly IDictionary<Type, Func<string, object>> _knownJsonPrimitives = new Dictionary<Type, Func<string, object>>
 		{
@@ -32,13 +34,13 @@ namespace Beffyman.AspNetCore.Client.Serializers
 			{ typeof(string), (_)=> _.TrimStart('"').TrimEnd('"') },
 			{ typeof(bool), (_)=> bool.Parse(_) },
 			{ typeof(DateTime), (_)=> DateTime.Parse(_.TrimStart('"').TrimEnd('"')) },
-			{ typeof(DateTimeOffset), (_)=> DateTime.Parse(_.TrimStart('"').TrimEnd('"')) },
+			{ typeof(DateTimeOffset), (_)=> DateTimeOffset.Parse(_.TrimStart('"').TrimEnd('"')) },
 			{ typeof(Guid), (_)=> Guid.Parse(_.TrimStart('"').TrimEnd('"')) },
 		};
 
 
 		/// <summary>
-		/// Deserializes the request content which is assumed to be simpleJson into a object of <typeparamref name="T"/>
+		/// Deserializes the request content which is assumed to be json into a object of <typeparamref name="T"/>
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
@@ -51,23 +53,24 @@ namespace Beffyman.AspNetCore.Client.Serializers
 			}
 			else
 			{
-				//Can't use the same stream reading as Beffyman.AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
-				var str = await content.ReadAsStringAsync().ConfigureAwait(false);
-				return Json.Deserialize<T>(str);
+				using (var reader = new StreamReader(await content.ReadAsStreamAsync().ConfigureAwait(false), Encoding.UTF8, true, 1024, true))
+				using (JsonReader jsonReader = new JsonTextReader(reader))
+				{
+					var serializer = new JsonSerializer();
+					return serializer.Deserialize<T>(jsonReader);
+				}
 			}
 		}
 
 		/// <summary>
-		/// Serializes the request into a StringContent with a json media type, but serialized with SimpleJson
+		/// Serializes the request into a StringContent with a json media type
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="request"></param>
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			//Can't use the same stream writing as Beffyman.AspNetCore.Client.Serializers.JsonHttpSerializer because Blazor's json doesn't expose those AFAIK
-
-			var json = Json.Serialize(request);
+			var json = JsonConvert.SerializeObject(request);
 			return new StringContent(json, Encoding.UTF8, CONTENT_TYPE);
 		}
 	}

@@ -194,6 +194,10 @@ namespace TestWebApp.Tests
 				OKCallback: (_) =>
 				{
 					returnedDto = _;
+				},
+				ExceptionCallback: ex =>
+				{
+					throw ex;
 				});
 
 

@@ -58,7 +58,7 @@ namespace TestAzureFunction
 				}
 				else if (req.ContentType.Contains("application/x-msgpack", StringComparison.CurrentCultureIgnoreCase))
 				{
-					name = MessagePack.MessagePackSerializer.Deserialize<User>(req.Body, ContractlessStandardResolver.Instance)?.Name;
+					name = (await MessagePack.MessagePackSerializer.DeserializeAsync<User>(req.Body, ContractlessStandardResolver.Options)).Name;
 				}
 				else if (req.ContentType.Contains("application/x-protobuf", StringComparison.CurrentCultureIgnoreCase))
 				{

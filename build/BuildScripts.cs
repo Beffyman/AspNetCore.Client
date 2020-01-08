@@ -76,8 +76,8 @@ public class BuildScripts : NukeBuild
 			DotNetBuild(s => s
 				.SetProjectFile(Solution)
 				.SetConfiguration(Configuration)
-				.SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
-				.SetFileVersion(GitVersion.GetNormalizedFileVersion())
+				.SetAssemblyVersion(GitVersion.AssemblySemVer)
+				.SetFileVersion(GitVersion.AssemblySemFileVer)
 				.SetInformationalVersion(GitVersion.InformationalVersion)
 				.EnableNoRestore());
 		});
@@ -121,8 +121,8 @@ public class BuildScripts : NukeBuild
 					.EnableIncludeSource()
 					.EnableIncludeSymbols()
 					.SetConfiguration(Configuration)
-					.SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
-					.SetFileVersion(GitVersion.GetNormalizedFileVersion())
+					.SetAssemblyVersion(GitVersion.AssemblySemVer)
+					.SetFileVersion(GitVersion.AssemblySemFileVer)
 					.SetInformationalVersion(GitVersion.InformationalVersion)
 					.SetOutputDirectory(NugetDirectory));
 		});
@@ -150,8 +150,8 @@ public class BuildScripts : NukeBuild
 			DotNetBuild(s => s
 				.SetProjectFile(Solution)
 				.SetConfiguration(Configuration)
-				.SetAssemblyVersion(GitVersion.GetNormalizedAssemblyVersion())
-				.SetFileVersion(GitVersion.GetNormalizedFileVersion())
+				.SetAssemblyVersion(GitVersion.AssemblySemVer)
+				.SetFileVersion(GitVersion.AssemblySemFileVer)
 				.SetInformationalVersion(GitVersion.InformationalVersion)
 				.AddProperty("GenerateWithNuget", "true")
 				.AddProperty("GeneratorVersion", GitVersion.NuGetVersionV2)

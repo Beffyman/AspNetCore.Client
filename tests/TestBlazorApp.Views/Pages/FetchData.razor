@@ -1,7 +1,6 @@
 ﻿@page "/fetchdata"
 @using TestBlazorApp.Shared
-@using TestBlazorApp.Clients
-@inject ISampleDataClient SampleDataClient
+@inject HttpClient Http
 
 <h1>Weather forecast</h1>
 
@@ -37,10 +36,11 @@ else
 }
 
 @code {
-    IEnumerable<WeatherForecast> forecasts;
+    private WeatherForecast[] forecasts;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await SampleDataClient.WeatherForecastsAsync();
+        forecasts = await Http.GetJsonAsync<WeatherForecast[]>("WeatherForecast");
     }
+
 }

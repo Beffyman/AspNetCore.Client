@@ -10,12 +10,12 @@ namespace TestBlazorApp.Tests
 	public class BlazorJsonTest
 	{
 		[Fact]
-		public void WeatherForecastsTest()
+		public async Task WeatherForecastsTest()
 		{
 			using (var endpoint = new BlazorJsonServerInfo())
 			{
-				var sampleDataClient = endpoint.Provider.GetService<ISampleDataClient>();
-				var forecasts = sampleDataClient.WeatherForecasts();
+				var sampleDataClient = endpoint.Provider.GetService<IWeatherForecastClient>();
+				var forecasts = await sampleDataClient.GetAsync();
 
 
 				Assert.True(forecasts.Count() == 5);

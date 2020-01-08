@@ -27,21 +27,21 @@ using TestBlazorApp.Shared;
 
 namespace TestBlazorApp.Clients
 {
-	public interface ISampleDataClient : ITestBlazorAppClient
+	public interface IWeatherForecastClient : ITestBlazorAppClient
 	{
-		IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		HttpResponseMessage WeatherForecastsRaw(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		IEnumerable<WeatherForecast> Get(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		HttpResponseMessage GetRaw(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<IEnumerable<WeatherForecast>> GetAsync(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<HttpResponseMessage> GetRawAsync(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 	}
 
-	internal class SampleDataClient : ISampleDataClient
+	internal class WeatherForecastClient : IWeatherForecastClient
 	{
 		protected readonly ITestBlazorAppClientWrapper Client;
 		protected readonly IHttpOverride HttpOverride;
 		protected readonly IHttpSerializer Serializer;
 		protected readonly IHttpRequestModifier Modifier;
-		public SampleDataClient(ITestBlazorAppClientWrapper param_client, Func<ITestBlazorAppClient, IHttpOverride> param_httpoverride, Func<ITestBlazorAppClient, IHttpSerializer> param_serializer, Func<ITestBlazorAppClient, IHttpRequestModifier> param_modifier)
+		public WeatherForecastClient(ITestBlazorAppClientWrapper param_client, Func<ITestBlazorAppClient, IHttpOverride> param_httpoverride, Func<ITestBlazorAppClient, IHttpSerializer> param_serializer, Func<ITestBlazorAppClient, IHttpRequestModifier> param_modifier)
 		{
 			Client = param_client;
 			HttpOverride = param_httpoverride(this);
@@ -49,11 +49,10 @@ namespace TestBlazorApp.Clients
 			Modifier = param_modifier(this);
 		}
 
-		public IEnumerable<WeatherForecast> WeatherForecasts(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public IEnumerable<WeatherForecast> Get(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			var controller = "SampleData";
-			var action = "WeatherForecasts";
-			string url = $@"api/{controller}/{action}";
+			var controller = "WeatherForecast";
+			string url = $@"{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -112,11 +111,10 @@ namespace TestBlazorApp.Clients
 			}
 		}
 
-		public HttpResponseMessage WeatherForecastsRaw(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public HttpResponseMessage GetRaw(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			var controller = "SampleData";
-			var action = "WeatherForecasts";
-			string url = $@"api/{controller}/{action}";
+			var controller = "WeatherForecast";
+			string url = $@"{controller}/";
 			HttpResponseMessage response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -152,11 +150,10 @@ namespace TestBlazorApp.Clients
 			return response;
 		}
 
-		public async ValueTask<IEnumerable<WeatherForecast>> WeatherForecastsAsync(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async ValueTask<IEnumerable<WeatherForecast>> GetAsync(Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			var controller = "SampleData";
-			var action = "WeatherForecasts";
-			string url = $@"api/{controller}/{action}";
+			var controller = "WeatherForecast";
+			string url = $@"{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -215,11 +212,10 @@ namespace TestBlazorApp.Clients
 			}
 		}
 
-		public async ValueTask<HttpResponseMessage> WeatherForecastsRawAsync(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async ValueTask<HttpResponseMessage> GetRawAsync(Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
-			var controller = "SampleData";
-			var action = "WeatherForecasts";
-			string url = $@"api/{controller}/{action}";
+			var controller = "WeatherForecast";
+			string url = $@"{controller}/";
 			HttpResponseMessage response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;

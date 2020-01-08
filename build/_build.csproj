@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RootNamespace></RootNamespace>
 		<IsPackable>False</IsPackable>
@@ -11,10 +11,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Nuke.Common" Version="0.23.4" />
-		<PackageReference Include="GitVersion.CommandLine.DotNetCore" Version="5.0.2-beta1.27">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<PackageDownload Include="GitVersion.Tool" Version="[5.0.2-beta1.130]" />
+		<PackageDownload Include="xunit.runner.console" Version="[2.4.1]" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -22,7 +20,6 @@
 		<NukeExternalFiles Include="**\*.*.ext" Exclude="bin\**;obj\**" />
 		<None Remove="*.csproj.DotSettings;*.ref.*.txt" />
 
-		<!-- Common build related files -->
 		<None Include="..\build.ps1" />
 		<None Include="..\.nuke" />
 		<None Include="..\global.json" Condition="Exists('..\global.json')" />

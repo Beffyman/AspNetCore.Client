@@ -31,8 +31,6 @@ namespace TestWebApp
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
 			services.AddApiVersioning(options =>
 			{
 				options.AssumeDefaultVersionWhenUnspecified = true;
@@ -55,8 +53,9 @@ namespace TestWebApp
 				app.UseDeveloperExceptionPage();
 			}
 
+			app.UseRouting();
 			app.UseAuthentication();
-
+			app.UseAuthorization();
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
