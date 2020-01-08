@@ -1,6 +1,6 @@
 ﻿namespace Beffyman.AspNetCore.Client.Generator
 {
-	internal class Settings
+	internal static class Settings
 	{
 		public static string RouteToServiceProjectFolder { get; set; }
 		public static string ClientInterfaceName { get; set; }

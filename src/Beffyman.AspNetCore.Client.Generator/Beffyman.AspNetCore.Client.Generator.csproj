@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<Description>A build task that will generate clients from a asp.net core project</Description>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<DevelopmentDependency>true</DevelopmentDependency>
@@ -13,21 +13,17 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.6" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.1.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.11" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.14" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" PrivateAssets="all" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.1" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.2.1" PrivateAssets="all" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.4.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" PrivateAssets="all" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+	<ItemGroup>
 		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" PrivateAssets="all" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="14.3" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>

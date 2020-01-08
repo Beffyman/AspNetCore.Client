@@ -1,6 +1,6 @@
 <Project>
 	<PropertyGroup>
-		<LangVersion>7.3</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<IsPackable>false</IsPackable>
 		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 		<TieredCompilation>true</TieredCompilation>
@@ -9,7 +9,7 @@
 
 	<!--Define nupkg -->
 	<PropertyGroup>
-		<Copyright>Copyright 2018</Copyright>
+		<Copyright>Copyright 2020</Copyright>
 		<Authors>Beffyman</Authors>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/Beffyman.AspNetCore.Client</RepositoryUrl>

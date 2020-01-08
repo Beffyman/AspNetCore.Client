@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MessagePack.AspNetCoreMvcFormatter;
+﻿using MessagePack.AspNetCoreMvcFormatter;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting;
 using TestWebApp.FakeServices;
 using TestWebApp.GoodServices;
 using TestWebApp.Hubs;
-using WebApiContrib.Core.Formatter.Protobuf;
 
 namespace TestWebApp
 {
@@ -30,15 +24,16 @@ namespace TestWebApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddControllers();
 			services.AddMvc()
 					.AddMvcOptions(option =>
 					{
 						option.OutputFormatters.Clear();
-						option.OutputFormatters.Add(new MessagePackOutputFormatter(ContractlessStandardResolver.Instance));
+						option.OutputFormatters.Add(new MessagePackOutputFormatter(ContractlessStandardResolver.Options));
 						option.InputFormatters.Clear();
-						option.InputFormatters.Add(new MessagePackInputFormatter(ContractlessStandardResolver.Instance));
+						option.InputFormatters.Add(new MessagePackInputFormatter(ContractlessStandardResolver.Options));
 					})
-					.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+					.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 			services.AddApiVersioning(options =>
 			{
@@ -54,20 +49,18 @@ namespace TestWebApp
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
 
-
-			app.UseSignalR(routes =>
+			app.UseEndpoints(endpoints =>
 			{
-				routes.MapHub<ChatHub>("/Chat");
+				endpoints.MapControllers();
+				endpoints.MapHub<ChatHub>("/Chat");
 			});
-
-			app.UseMvc();
 		}
 	}
 }

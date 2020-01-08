@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TestWebApp.FakeServices;
@@ -28,9 +29,10 @@ namespace TestWebApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddControllers();
 			services.AddMvc()
 				.AddProtobufFormatters()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 			services.AddApiVersioning(options =>
 			{
@@ -45,7 +47,7 @@ namespace TestWebApp
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
@@ -53,12 +55,12 @@ namespace TestWebApp
 			}
 
 
-			app.UseSignalR(routes =>
+			app.UseEndpoints(endpoints =>
 			{
-				routes.MapHub<ChatHub>("/Chat");
+				endpoints.MapControllers();
+				endpoints.MapHub<ChatHub>("/Chat");
 			});
 
-			app.UseMvc();
 		}
 	}
 }

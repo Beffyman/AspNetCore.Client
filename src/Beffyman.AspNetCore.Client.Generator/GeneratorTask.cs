@@ -12,14 +12,7 @@ using Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
 
 namespace Beffyman.AspNetCore.Client.Generator
 {
-	public class GeneratorTask :
-#if NET462
-		Microsoft.Build.Utilities.Task
-#endif
-
-#if NETSTANDARD2_0
-		ContextIsolatedTask
-#endif
+	public class GeneratorTask : ContextIsolatedTask
 	{
 		public string CurrentDirectory { get; set; }
 		public string RouteToServiceProjectFolder { get; set; }
@@ -57,31 +50,18 @@ namespace Beffyman.AspNetCore.Client.Generator
 
 		public bool ByPassExecute()
 		{
-#if NET462
-			return Execute();
-#endif
 
-#if NETSTANDARD2_0
 			return ExecuteIsolated();
-#endif
-
 		}
 
-#if NET462
-		public override bool Execute()
-#endif
-
-#if NETSTANDARD2_0
 		protected override bool ExecuteIsolated()
-#endif
-
 		{
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] START");
 
 #if !DEBUG
 			try
 			{
-
+			`
 #endif
 			#region Settings Map
 

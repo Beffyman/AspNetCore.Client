@@ -44,6 +44,7 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections;");
 				generatorUsings.Add("using Microsoft.AspNetCore.Http.Connections.Client;");
 				generatorUsings.Add("using Microsoft.Extensions.Logging;");
+				generatorUsings.Add("using Microsoft.AspNetCore.Connections;");
 			}
 
 			var usings = new List<string>
@@ -232,15 +233,19 @@ $@"
 			return
 $@"
 {SharedWriter.GetObsolete(controller)}
-public class {controller.Name}HubConnectionBuilder : HubConnectionBuilder
+public class {controller.Name}HubConnectionBuilder : IHubConnectionBuilder
 {{
 	private bool _hubConnectionBuilt;
+	public IServiceCollection Services {{ get; }}
 
 	public {controller.Name}HubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null) : base()
 	{{
 		//Remove default HubConnection to use custom one
-		Services.Remove(Services.Where(x => x.ServiceType == typeof(HubConnection)).Single());
+
+		Services = new ServiceCollection();
 		Services.AddSingleton<{controller.Name}HubConnection>();
+		Services.AddLogging();
+		this.AddJsonProtocol();
 
 		Services.Configure<HttpConnectionOptions>(o =>
 		{{
@@ -259,13 +264,17 @@ public class {controller.Name}HubConnectionBuilder : HubConnectionBuilder
 		Services.AddSingleton<IConnectionFactory, HttpConnectionFactory>();
 	}}
 
+	HubConnection IHubConnectionBuilder.Build()
+	{{
+		return this.Build();
+	}}
 
-	public new {controller.Name}HubConnection Build()
+	public {controller.Name}HubConnection Build()
 	{{
 		// Build can only be used once
 		if (_hubConnectionBuilt)
 		{{
-			throw new InvalidOperationException(""HubConnectionBuilder allows creation only of a single instance of HubConnection."");
+			throw new InvalidOperationException(""{controller.Name}HubConnectionBuilder allows creation only of a single instance of {controller.Name}HubConnection."");
 		}}
 
 		_hubConnectionBuilt = true;
@@ -273,11 +282,11 @@ public class {controller.Name}HubConnectionBuilder : HubConnectionBuilder
 		// The service provider is disposed by the HubConnection
 		var serviceProvider = Services.BuildServiceProvider();
 
-		var connectionFactory = serviceProvider.GetService<IConnectionFactory>();
-		if (connectionFactory == null)
-		{{
-			throw new InvalidOperationException($""Cannot create {{nameof(HubConnection)}} instance.An {{nameof(IConnectionFactory)}} was not configured."");
-		}}
+		var connectionFactory = serviceProvider.GetService<IConnectionFactory>() ??
+			throw new InvalidOperationException($""Cannot create {{ nameof({controller.Name}HubConnection)}} instance.An {{ nameof(IConnectionFactory)}} was not configured."");
+
+		var endPoint = serviceProvider.GetService<EndPoint>() ??
+			throw new InvalidOperationException($""Cannot create {{ nameof({controller.Name}HubConnection)}} instance.An {{ nameof(EndPoint)}} was not configured."");
 
 		return serviceProvider.GetService<{controller.Name}HubConnection>();
 	}}
@@ -292,17 +301,12 @@ public class {controller.Name}HubConnectionBuilder : HubConnectionBuilder
 public class {controller.Name}HubConnection : HubConnection
 {{
 
-	public {controller.Name}HubConnection(IConnectionFactory connectionFactory,
-		IHubProtocol protocol,
-		IServiceProvider serviceProvider,
-		ILoggerFactory loggerFactory)
-		: base(connectionFactory, protocol, serviceProvider, loggerFactory) {{ }}
+	public {controller.Name}HubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, EndPoint endPoint, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+		: base(connectionFactory, protocol, endPoint, serviceProvider,loggerFactory) {{ }}
 
 
-	public {controller.Name}HubConnection(IConnectionFactory connectionFactory,
-		IHubProtocol protocol,
-		ILoggerFactory loggerFactory)
-		: base(connectionFactory, protocol, loggerFactory) {{ }}
+	public {controller.Name}HubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, EndPoint endPoint, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, IRetryPolicy reconnectPolicy)
+		: base(connectionFactory, protocol, endPoint, serviceProvider, loggerFactory, reconnectPolicy) {{ }}
 
 
 	{string.Join(Environment.NewLine, controller.GetEndpoints().Select(WriteEndpoint))}
@@ -456,7 +460,7 @@ $@"
 {{" : string.Empty)}
 public static class {controller.ClientName}Routes
 {{
-{string.Join($@"{Environment.NewLine}", controller.GetEndpoints().Select(x=> WriteRouteRepositoryEndpoint(controller,x)))}
+{string.Join($@"{Environment.NewLine}", controller.GetEndpoints().Select(x => WriteRouteRepositoryEndpoint(controller, x)))}
 }}
 {(controller.NamespaceSuffix != null ? $@"}}" : string.Empty)}
 ";

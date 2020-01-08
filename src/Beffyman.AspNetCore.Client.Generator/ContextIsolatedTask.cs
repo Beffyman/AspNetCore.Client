@@ -1,6 +1,4 @@
-﻿
-#if NETSTANDARD2_0
-using Microsoft.Build.Framework;
+﻿using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using System;
 using System.Collections.Generic;
@@ -194,5 +192,3 @@ namespace Beffyman.AspNetCore.Client.Generator
 
 	}
 }
-
-#endif

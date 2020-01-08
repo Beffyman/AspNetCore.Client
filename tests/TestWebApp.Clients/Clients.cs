@@ -35,6 +35,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using TestWebApp.Contracts;
+using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.SignalR;
 
 namespace TestWebApp.Clients.Routes
 {
@@ -2537,11 +2539,11 @@ namespace TestWebApp.Clients
 		ValueTask<HttpResponseMessage> FileReturnResponseTypesRawAsync(bool pass, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		int? DefaultRouteConstraint(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		HttpResponseMessage DefaultRouteConstraintRaw(int? x = 5, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<int? > DefaultRouteConstraintAsync(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<int?> DefaultRouteConstraintAsync(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> DefaultRouteConstraintRawAsync(int? x = 5, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		int? OptionalRouteConstraint(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		HttpResponseMessage OptionalRouteConstraintRaw(int? x, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
-		ValueTask<int? > OptionalRouteConstraintAsync(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
+		ValueTask<int?> OptionalRouteConstraintAsync(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		ValueTask<HttpResponseMessage> OptionalRouteConstraintRawAsync(int? x, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		DateTime CheckDateTime(DateTime date, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
 		HttpResponseMessage CheckDateTimeRaw(DateTime date, int ControllerHeader = 0, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default);
@@ -10762,7 +10764,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int? );
+					return default(int?);
 				}
 
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -10809,7 +10811,7 @@ namespace TestWebApp.Clients
 
 			if (response.IsSuccessStatusCode)
 			{
-				return Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+				return Serializer.Deserialize<int?>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 			else
 			{
@@ -10818,7 +10820,7 @@ namespace TestWebApp.Clients
 					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
-				return default(int? );
+				return default(int?);
 			}
 		}
 
@@ -10862,7 +10864,7 @@ namespace TestWebApp.Clients
 			return response;
 		}
 
-		public async ValueTask<int? > DefaultRouteConstraintAsync(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async ValueTask<int?> DefaultRouteConstraintAsync(int? x = 5, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
 			var action = "DefaultRouteConstraint";
@@ -10893,7 +10895,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int? );
+					return default(int?);
 				}
 
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
@@ -10940,7 +10942,7 @@ namespace TestWebApp.Clients
 
 			if (response.IsSuccessStatusCode)
 			{
-				return await Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false);
+				return await Serializer.Deserialize<int?>(response.Content).ConfigureAwait(false);
 			}
 			else
 			{
@@ -10949,7 +10951,7 @@ namespace TestWebApp.Clients
 					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
-				return default(int? );
+				return default(int?);
 			}
 		}
 
@@ -11024,7 +11026,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int? );
+					return default(int?);
 				}
 
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -11071,7 +11073,7 @@ namespace TestWebApp.Clients
 
 			if (response.IsSuccessStatusCode)
 			{
-				return Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
+				return Serializer.Deserialize<int?>(response.Content).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 			else
 			{
@@ -11080,7 +11082,7 @@ namespace TestWebApp.Clients
 					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
-				return default(int? );
+				return default(int?);
 			}
 		}
 
@@ -11124,7 +11126,7 @@ namespace TestWebApp.Clients
 			return response;
 		}
 
-		public async ValueTask<int? > OptionalRouteConstraintAsync(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
+		public async ValueTask<int?> OptionalRouteConstraintAsync(int? x, int ControllerHeader = 0, Action<string> BadRequestCallback = null, Action InternalServerErrorCallback = null, Action<HttpResponseMessage> ResponseCallback = null, Action<FlurlHttpException> ExceptionCallback = null, IDictionary<String, Object> headers = null, IEnumerable<Cookie> cookies = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
 		{
 			var controller = "Values";
 			var action = "OptionalRouteConstraint";
@@ -11155,7 +11157,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int? );
+					return default(int?);
 				}
 
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
@@ -11202,7 +11204,7 @@ namespace TestWebApp.Clients
 
 			if (response.IsSuccessStatusCode)
 			{
-				return await Serializer.Deserialize<int? >(response.Content).ConfigureAwait(false);
+				return await Serializer.Deserialize<int?>(response.Content).ConfigureAwait(false);
 			}
 			else
 			{
@@ -11211,7 +11213,7 @@ namespace TestWebApp.Clients
 					throw new System.InvalidOperationException($"Response Status of {response.StatusCode} was not handled properly.");
 				}
 
-				return default(int? );
+				return default(int?);
 			}
 		}
 
@@ -14829,33 +14831,43 @@ namespace TestWebApp.Clients.V3_0
 
 namespace TestWebApp.Hubs
 {
-	public class ChatHubConnectionBuilder : HubConnectionBuilder
+	public class ChatHubConnectionBuilder : IHubConnectionBuilder
 	{
 		private bool _hubConnectionBuilt;
-		public ChatHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
+		public IServiceCollection Services { get; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="HubConnectionBuilder"/> class.
+		/// </summary>
+		public ChatHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null)
 		{
-			//Remove default HubConnection to use custom one
-			Services.Remove(Services.Where(x => x.ServiceType == typeof(HubConnection)).Single());
+			Services = new ServiceCollection();
 			Services.AddSingleton<ChatHubConnection>();
+			Services.AddLogging();
+			this.AddJsonProtocol();
+
 			Services.Configure<HttpConnectionOptions>(o =>
 			{
-				o.Url = new Uri(host, "Chat");
+				o.Url = new Uri(host, "/Chat");
 				if (transports != null)
 				{
 					o.Transports = transports.Value;
 				}
-			}
+			});
 
-			);
 			if (configureHttpConnection != null)
 			{
 				Services.Configure(configureHttpConnection);
 			}
-
-			Services.AddSingleton<IConnectionFactory, HttpConnectionFactory>();
 		}
 
-		public new ChatHubConnection Build()
+		HubConnection IHubConnectionBuilder.Build()
+		{
+			return this.Build();
+		}
+
+		/// <inheritdoc />
+		public ChatHubConnection Build()
 		{
 			// Build can only be used once
 			if (_hubConnectionBuilt)
@@ -14864,13 +14876,15 @@ namespace TestWebApp.Hubs
 			}
 
 			_hubConnectionBuilt = true;
+
 			// The service provider is disposed by the HubConnection
 			var serviceProvider = Services.BuildServiceProvider();
-			var connectionFactory = serviceProvider.GetService<IConnectionFactory>();
-			if (connectionFactory == null)
-			{
-				throw new InvalidOperationException($"Cannot create {nameof(HubConnection)} instance.An {nameof(IConnectionFactory)} was not configured.");
-			}
+
+			var connectionFactory = serviceProvider.GetService<IConnectionFactory>() ??
+				throw new InvalidOperationException($"Cannot create {nameof(ChatHubConnection)} instance. An {nameof(IConnectionFactory)} was not configured.");
+
+			var endPoint = serviceProvider.GetService<EndPoint>() ??
+				throw new InvalidOperationException($"Cannot create {nameof(ChatHubConnection)} instance. An {nameof(EndPoint)} was not configured.");
 
 			return serviceProvider.GetService<ChatHubConnection>();
 		}
@@ -14878,32 +14892,31 @@ namespace TestWebApp.Hubs
 
 	public class ChatHubConnection : HubConnection
 	{
-		public ChatHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, IServiceProvider serviceProvider, ILoggerFactory loggerFactory): base(connectionFactory, protocol, serviceProvider, loggerFactory)
-		{
-		}
+		public ChatHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, EndPoint endPoint, IServiceProvider serviceProvider, ILoggerFactory loggerFactory) 
+			: base(connectionFactory, protocol, endPoint, serviceProvider, loggerFactory)  { }
 
-		public ChatHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, ILoggerFactory loggerFactory): base(connectionFactory, protocol, loggerFactory)
-		{
-		}
+		public ChatHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, EndPoint endPoint, IServiceProvider serviceProvider, ILoggerFactory loggerFactory, IRetryPolicy retryPolicy)
+			: base(connectionFactory, protocol, endPoint, serviceProvider, loggerFactory, retryPolicy) { }
+
 
 		public Task SendMessageAsync(string user, string message, CancellationToken cancellationToken = default)
 		{
-			return this.InvokeCoreAsync("SendMessage", new object[]{user, message}, cancellationToken);
+			return this.InvokeCoreAsync("SendMessage", new object[] { user, message }, cancellationToken);
 		}
 
 		public Task DtoMessageAsync(MyFancyDto dto, CancellationToken cancellationToken = default)
 		{
-			return this.InvokeCoreAsync("DtoMessage", new object[]{dto}, cancellationToken);
+			return this.InvokeCoreAsync("DtoMessage", new object[] { dto }, cancellationToken);
 		}
 
 		public Task<ChannelReader<int>> StreamCounterAsync(int count, int delay, CancellationToken cancellationToken = default)
 		{
-			return this.StreamAsChannelCoreAsync<int>("Counter", new object[]{count, delay}, cancellationToken);
+			return this.StreamAsChannelCoreAsync<int>("Counter", new object[] { count, delay }, cancellationToken);
 		}
 
 		public async Task<IEnumerable<int>> ReadCounterBlockingAsync(int count, int delay, CancellationToken cancellationToken = default)
 		{
-			var channel = await this.StreamAsChannelCoreAsync<int>("Counter", new object[]{count, delay}, cancellationToken);
+			var channel = await this.StreamAsChannelCoreAsync<int>("Counter", new object[] { count, delay }, cancellationToken);
 			IList<int> items = new List<int>();
 			while (await channel.WaitToReadAsync())
 			{
@@ -14932,7 +14945,7 @@ namespace TestWebApp.Hubs
 		public class NamespacedHubConnectionBuilder : HubConnectionBuilder
 		{
 			private bool _hubConnectionBuilt;
-			public NamespacedHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
+			public NamespacedHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null) : base()
 			{
 				//Remove default HubConnection to use custom one
 				Services.Remove(Services.Where(x => x.ServiceType == typeof(HubConnection)).Single());
@@ -14978,11 +14991,11 @@ namespace TestWebApp.Hubs
 
 		public class NamespacedHubConnection : HubConnection
 		{
-			public NamespacedHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, IServiceProvider serviceProvider, ILoggerFactory loggerFactory): base(connectionFactory, protocol, serviceProvider, loggerFactory)
+			public NamespacedHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, IServiceProvider serviceProvider, ILoggerFactory loggerFactory) : base(connectionFactory, protocol, serviceProvider, loggerFactory)
 			{
 			}
 
-			public NamespacedHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, ILoggerFactory loggerFactory): base(connectionFactory, protocol, loggerFactory)
+			public NamespacedHubConnection(IConnectionFactory connectionFactory, IHubProtocol protocol, ILoggerFactory loggerFactory) : base(connectionFactory, protocol, loggerFactory)
 			{
 			}
 

@@ -23,7 +23,8 @@ namespace Beffyman.AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public async Task<T> Deserialize<T>(HttpContent content)
 		{
-			return MessagePack.MessagePackSerializer.Deserialize<T>(await content.ReadAsStreamAsync().ConfigureAwait(false), ContractlessStandardResolver.Instance);
+			await content.LoadIntoBufferAsync();
+			return await MessagePack.MessagePackSerializer.DeserializeAsync<T>(await content.ReadAsStreamAsync().ConfigureAwait(false), ContractlessStandardResolver.Options);
 		}
 
 		/// <summary>
@@ -34,7 +35,7 @@ namespace Beffyman.AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public HttpContent Serialize<T>(T request)
 		{
-			var data = MessagePack.MessagePackSerializer.Serialize(request, ContractlessStandardResolver.Instance);
+			var data = MessagePack.MessagePackSerializer.Serialize(request, ContractlessStandardResolver.Options);
 			var content = new ByteArrayContent(data);
 			content.Headers.ContentType = new MediaTypeHeaderValue(CONTENT_TYPE);
 			content.Headers.ContentLength = data.Length;
