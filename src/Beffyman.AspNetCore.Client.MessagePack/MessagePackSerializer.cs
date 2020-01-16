@@ -23,7 +23,7 @@ namespace Beffyman.AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public async Task<T> Deserialize<T>(HttpContent content)
 		{
-			await content.LoadIntoBufferAsync();
+			await content.LoadIntoBufferAsync().ConfigureAwait(false);
 			return await MessagePack.MessagePackSerializer.DeserializeAsync<T>(await content.ReadAsStreamAsync().ConfigureAwait(false), ContractlessStandardResolver.Instance);
 		}
 

@@ -49,7 +49,7 @@ namespace Beffyman.AspNetCore.Client.Serializers
 		/// <returns></returns>
 		public async Task<T> Deserialize<T>(HttpContent content)
 		{
-			await content.LoadIntoBufferAsync();
+			await content.LoadIntoBufferAsync().ConfigureAwait(false);
 			if (_knownJsonPrimitives.ContainsKey(typeof(T)))
 			{
 				var str = await content.ReadAsStringAsync().ConfigureAwait(false);

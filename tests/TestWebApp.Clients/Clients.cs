@@ -13846,13 +13846,13 @@ namespace TestWebApp.Clients.V3
 			var controller = "TestQuery";
 			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -13874,7 +13874,7 @@ namespace TestWebApp.Clients.V3
 					return default(int);
 				}
 
-				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -13908,13 +13908,13 @@ namespace TestWebApp.Clients.V3
 			var controller = "TestQuery";
 			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -13936,7 +13936,7 @@ namespace TestWebApp.Clients.V3
 					return null;
 				}
 
-				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -13952,13 +13952,13 @@ namespace TestWebApp.Clients.V3
 			var controller = "TestQuery";
 			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -13980,7 +13980,7 @@ namespace TestWebApp.Clients.V3
 					return default(int);
 				}
 
-				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -14014,13 +14014,13 @@ namespace TestWebApp.Clients.V3
 			var controller = "TestQuery";
 			string url = $@"api/{controller}/endpoint/{index.EncodeForUrl()}?api-version=3";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -14042,7 +14042,7 @@ namespace TestWebApp.Clients.V3
 					return null;
 				}
 
-				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -14084,13 +14084,13 @@ namespace TestWebApp.Clients.V3_0
 			var controller = "TestRoute";
 			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -14112,7 +14112,7 @@ namespace TestWebApp.Clients.V3_0
 					return default(int);
 				}
 
-				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -14146,13 +14146,13 @@ namespace TestWebApp.Clients.V3_0
 			var controller = "TestRoute";
 			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
-			response = HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+					response = Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -14174,7 +14174,7 @@ namespace TestWebApp.Clients.V3_0
 					return null;
 				}
 
-				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
+				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			}
 
 			return response;
@@ -14190,13 +14190,13 @@ namespace TestWebApp.Clients.V3_0
 			var controller = "TestRoute";
 			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -14218,7 +14218,7 @@ namespace TestWebApp.Clients.V3_0
 					return default(int);
 				}
 
-				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			if (ResponseCallback != null && ResponseCallback.Method.IsDefined(typeof(AsyncStateMachineAttribute), true))
@@ -14252,13 +14252,13 @@ namespace TestWebApp.Clients.V3_0
 			var controller = "TestRoute";
 			string url = $@"api/v3.0/{controller}/endpoint/{index.EncodeForUrl()}";
 			HttpResponseMessage response = null;
-			response = await HttpOverride.GetResponseAsync(HttpMethod.Post, url, null, cancellationToken).ConfigureAwait(false);
+			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
 			if (response == null)
 			{
 				try
 				{
-					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().PostAsync(null, cancellationToken).ConfigureAwait(false);
+					response = await Client.ClientWrapper.Request(url).WithRequestModifiers(Modifier).WithCookies(cookies).WithHeaders(headers).WithTimeout(timeout ?? Client.Timeout).AllowAnyHttpStatus().GetAsync(cancellationToken).ConfigureAwait(false);
 				}
 				catch (FlurlHttpException fhex)
 				{
@@ -14280,7 +14280,7 @@ namespace TestWebApp.Clients.V3_0
 					return null;
 				}
 
-				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Post, url, null, response, cancellationToken).ConfigureAwait(false);
+				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
 			}
 
 			return response;
@@ -14300,27 +14300,18 @@ namespace TestWebApp.Hubs
 
 		public ChatHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
 		{
-			//Remove default HubConnection to use custom one
 			Services = new ServiceCollection();
 			Services.AddSingleton<ChatHubConnection>();
 			Services.AddLogging();
 			this.AddJsonProtocol();
-			Services.Configure<HttpConnectionOptions>(o =>
+			if (transports != null)
 			{
-				o.Url = new Uri(host, "Chat");
-				if (transports != null)
-				{
-					o.Transports = transports.Value;
-				}
+				this.WithUrl(new Uri(host, "Chat"), transports.Value, configureHttpConnection);
 			}
-
-			);
-			if (configureHttpConnection != null)
+			else
 			{
-				Services.Configure(configureHttpConnection);
+				this.WithUrl(new Uri(host, "Chat"), configureHttpConnection);
 			}
-
-			Services.AddSingleton<IConnectionFactory, HttpConnectionFactory>();
 		}
 
 		HubConnection IHubConnectionBuilder.Build()
@@ -14333,7 +14324,7 @@ namespace TestWebApp.Hubs
 			// Build can only be used once
 			if (_hubConnectionBuilt)
 			{
-				throw new InvalidOperationException("ChatHubConnectionBuilder allows creation only of a single instance of ChatHubConnection.");
+				throw new InvalidOperationException($"{nameof(ChatHubConnectionBuilder)} allows creation only of a single instance of {nameof(ChatHubConnection)}.");
 			}
 
 			_hubConnectionBuilt = true;
@@ -14408,27 +14399,18 @@ namespace TestWebApp.Hubs
 
 			public NamespacedHubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null): base()
 			{
-				//Remove default HubConnection to use custom one
 				Services = new ServiceCollection();
 				Services.AddSingleton<NamespacedHubConnection>();
 				Services.AddLogging();
 				this.AddJsonProtocol();
-				Services.Configure<HttpConnectionOptions>(o =>
+				if (transports != null)
 				{
-					o.Url = new Uri(host, "Test");
-					if (transports != null)
-					{
-						o.Transports = transports.Value;
-					}
+					this.WithUrl(new Uri(host, "Test"), transports.Value, configureHttpConnection);
 				}
-
-				);
-				if (configureHttpConnection != null)
+				else
 				{
-					Services.Configure(configureHttpConnection);
+					this.WithUrl(new Uri(host, "Test"), configureHttpConnection);
 				}
-
-				Services.AddSingleton<IConnectionFactory, HttpConnectionFactory>();
 			}
 
 			HubConnection IHubConnectionBuilder.Build()
@@ -14441,7 +14423,7 @@ namespace TestWebApp.Hubs
 				// Build can only be used once
 				if (_hubConnectionBuilt)
 				{
-					throw new InvalidOperationException("NamespacedHubConnectionBuilder allows creation only of a single instance of NamespacedHubConnection.");
+					throw new InvalidOperationException($"{nameof(NamespacedHubConnectionBuilder)} allows creation only of a single instance of {nameof(NamespacedHubConnection)}.");
 				}
 
 				_hubConnectionBuilt = true;

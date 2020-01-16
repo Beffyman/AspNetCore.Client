@@ -5,20 +5,42 @@ using Flurl.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using TestWebApp.Clients;
 
 namespace TestWebApp.Tests
 {
 	public abstract class ServerInfo<T> : IDisposable where T : class
 	{
+		public IHost Host { get; }
 		public IServiceProvider Provider { get; }
 		public TestServer Server { get; }
 		public HttpClient Client { get; }
 
 		public ServerInfo()
 		{
-			Server = new TestServer(new WebHostBuilder()
-					.UseStartup<T>());
+			Host = new HostBuilder()
+				.ConfigureWebHost(builder =>
+				{
+					builder.UseTestServer()
+					////.ConfigureServices(services =>
+					////{
+					////	services.Configure<TestServer>(options =>
+					////	{
+					////		options.AllowSynchronousIO = true;
+					////	});
+					////})
+					.UseStartup<T>()
+					.ConfigureLogging(options =>
+					{
+						options.AddDebug();
+					});
+				}).Start();
+
+			Server = Host.GetTestServer();
+
+			Server.AllowSynchronousIO = true;
 
 			Client = Server.CreateClient();
 
@@ -34,6 +56,7 @@ namespace TestWebApp.Tests
 		{
 			Client.Dispose();
 			Server.Dispose();
+			Host.Dispose();
 		}
 	}
 

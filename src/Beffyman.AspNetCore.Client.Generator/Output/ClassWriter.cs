@@ -240,28 +240,19 @@ public class {controller.Name}HubConnectionBuilder : IHubConnectionBuilder
 
 	public {controller.Name}HubConnectionBuilder(Uri host, HttpTransportType? transports = null, Action<HttpConnectionOptions> configureHttpConnection = null) : base()
 	{{
-		//Remove default HubConnection to use custom one
-
 		Services = new ServiceCollection();
 		Services.AddSingleton<{controller.Name}HubConnection>();
 		Services.AddLogging();
 		this.AddJsonProtocol();
 
-		Services.Configure<HttpConnectionOptions>(o =>
+		if(transports != null)
 		{{
-			o.Url = new Uri(host,""{controller.Route}"");
-			if (transports != null)
-			{{
-				o.Transports = transports.Value;
-			}}
-		}});
-
-		if (configureHttpConnection != null)
-		{{
-			Services.Configure(configureHttpConnection);
+			this.WithUrl(new Uri(host, ""{controller.Route}""), transports.Value, configureHttpConnection);
 		}}
-
-		Services.AddSingleton<IConnectionFactory, HttpConnectionFactory>();
+		else
+		{{
+			this.WithUrl(new Uri(host, ""{controller.Route}""), configureHttpConnection);
+		}}
 	}}
 
 	HubConnection IHubConnectionBuilder.Build()
@@ -274,7 +265,7 @@ public class {controller.Name}HubConnectionBuilder : IHubConnectionBuilder
 		// Build can only be used once
 		if (_hubConnectionBuilt)
 		{{
-			throw new InvalidOperationException(""{controller.Name}HubConnectionBuilder allows creation only of a single instance of {controller.Name}HubConnection."");
+			throw new InvalidOperationException($""{{nameof({controller.Name}HubConnectionBuilder)}} allows creation only of a single instance of {{nameof({controller.Name}HubConnection)}}."");
 		}}
 
 		_hubConnectionBuilt = true;

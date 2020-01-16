@@ -31,6 +31,7 @@ namespace TestWebApp
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers();
+
 			services.AddApiVersioning(options =>
 			{
 				options.AssumeDefaultVersionWhenUnspecified = true;
@@ -42,7 +43,6 @@ namespace TestWebApp
 			services.AddSignalR();
 			services.AddTransient<IFakeService, FakeService>();
 			services.AddTransient<IGoodService, GoodService>();
-
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,8 +54,10 @@ namespace TestWebApp
 			}
 
 			app.UseRouting();
+
 			app.UseAuthentication();
 			app.UseAuthorization();
+
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();

@@ -16,7 +16,7 @@ namespace TestWebApp.Controllers.V3
 
 		}
 
-		[HttpPost("endpoint/{index:int}")]
+		[HttpGet("endpoint/{index:int}")]
 		public int Endpoint(int index)
 		{
 			return index + 1;

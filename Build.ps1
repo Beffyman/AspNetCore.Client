@@ -74,7 +74,7 @@ else{
 	if(!(Test-Path $DotNetVersionDirectory)){
 		# Download install script
 		$DotNetInstallFile = "$TempDirectory\dotnet-install.$DotNetInstallExtension"
-		New-Item -ItemType Directory -Path $TempDirectory | Out-Null
+		New-Item -ItemType Directory -Force -Path $TempDirectory | Out-Null
 		(New-Object System.Net.WebClient).DownloadFile($DotNetInstallUrl, $DotNetInstallFile)
 
 		# Install by channel or version
