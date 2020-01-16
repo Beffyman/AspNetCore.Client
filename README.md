@@ -34,9 +34,9 @@ and think the following
 [First Time Setup](https://github.com/Beffyman/AspNetCore.Client/wiki/First-Time-Setup)
 
 ## Supported Frameworks
-- AspNetCore 2.2 HTTP Controllers
-- AspNetCore 2.2 SignalR Hubs
-- Http Trigger Azure Functions v2
+- AspNetCore 3.1 HTTP Controllers
+- AspNetCore 3.1 SignalR Hubs
+- Http Trigger Azure Functions v3
 
 ## Beffyman.AspNetCore.Client
 [![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client)
@@ -69,6 +69,8 @@ services.AddTestWebClients(config=>
 
 Contains a MessagePack serializer which can override the default json one via the UseMessagePackSerializer on the ClientConfiguration.
 
+Requires version 1.7.3.7 at the moment due to https://github.com/dotnet/aspnetcore/issues/18074
+
 ```c#
 services.AddTestWebClients(config=>
 {
@@ -80,29 +82,10 @@ services.AddTestWebClients(config=>
 ```
 
 
-## Beffyman.AspNetCore.Client.BlazorJson
-[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.BlazorJson.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.BlazorJson)
+## Beffyman.AspNetCore.Client.NewtonsoftJson
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.NewtonsoftJson.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.NewtonsoftJson)
 
-(Pre-3.0 Blazor, 3.0 Blazor can use the default Json Serializer)
-
-Contains a blazor simpleJson serializer which can override the default json one via the UseBlazorSimpleJsonSerlaizer on the ClientConfiguration.
-
-```c#
-services.AddTestBlazorClients(config=>
-{
-	config.UseBlazorSimpleJsonSerlaizer()
-			.UseBlazorSimpleJsonDeserlaizer()
-			.WithJsonBody()
-			.UseExistingHttpClient();
-});
-
-```
-
-
-## Beffyman.AspNetCore.Client.JSInterop
-[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.JSInterop.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.JSInterop)
-
-Contains a preview js interop simpleJson serializer which can override the default json one via the UseJSInteropJsonSerializer on the ClientConfiguration.
+Contains a Newtonsoft Json serializer which can override the default json one via the UseNewtonsoftJsonHttpSerializer on the ClientConfiguration.
 
 ```c#
 services.AddTestRazorComponentsClients(config=>
