@@ -72,17 +72,18 @@ $DotNetVersionDirectory = "$DotNetDirectory\sdk\$DotNetVersion"
 $env:DOTNET_EXE = "$DotNetDirectory\dotnet$DotNetExtension"
 
 #Output a bunch of diag info
-Write-Host "DotNetSuffix = $DotNetSuffix";
-Write-Host "DotNetExtension = $DotNetExtension";
-Write-Host "DotNetInstallUrl = $DotNetInstallUrl";
-Write-Host "DotNetInstallExtension = $DotNetInstallExtension";
-Write-Host "DotNetDirectory = $DotNetDirectory";
-Write-Host "DotNetVersionDirectory = $DotNetVersionDirectory";
-Write-Host "env:DOTNET_EXE = $env:DOTNET_EXE";
+Write-Host "[DotNetSuffix] = $DotNetSuffix";
+Write-Host "[DotNetExtension] = $DotNetExtension";
+Write-Host "[DotNetInstallUrl] = $DotNetInstallUrl";
+Write-Host "[DotNetInstallExtension] = $DotNetInstallExtension";
+Write-Host "[DotNetDirectory] = $DotNetDirectory";
+Write-Host "[DotNetVersionDirectory] = $DotNetVersionDirectory";
+Write-Host "[env:DOTNET_EXE] = $env:DOTNET_EXE";
 
 
 if ($null -ne (Get-Command "dotnet" -ErrorAction SilentlyContinue) -and `
      (!(Test-Path variable:DotNetVersion) -or $(& dotnet --version | Select-Object -First 1) -eq $DotNetVersion)) {
+	 Write-Host "Existing dotnet install discovered";
     $env:DOTNET_EXE = (Get-Command "dotnet").Path
 }
 else{
