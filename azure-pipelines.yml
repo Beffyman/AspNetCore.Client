@@ -31,6 +31,7 @@ steps:
     packageType: 'sdk'
     useGlobalJson: true
 
+#https://github.com/dotnet/cli/issues/6589
 - task: PowerShell@2
   displayName: 'Run CI'
   inputs:
