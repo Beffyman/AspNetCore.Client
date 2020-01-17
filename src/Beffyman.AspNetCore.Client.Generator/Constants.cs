@@ -25,7 +25,7 @@ namespace Beffyman.AspNetCore.Client.Generator
 		public const string RequestModifier = nameof(IHttpRequestModifier);
 		public const string RequestModifierField = "Modifier";
 
-
+		public const string ApiVersionAttribute = "ApiVersionAttribute";
 		public const string IActionResult = "IActionResult";
 
 		public const string ControllerRouteReserved = "controller";

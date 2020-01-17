@@ -8,11 +8,17 @@ using Beffyman.AspNetCore.Client.Generator.CSharp.SignalR;
 using Beffyman.AspNetCore.Client.Generator.Framework;
 using Beffyman.AspNetCore.Client.Generator.Json;
 using Beffyman.AspNetCore.Client.Generator.Output;
-using Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.Functions;
 
 namespace Beffyman.AspNetCore.Client.Generator
 {
-	public class GeneratorTask : ContextIsolatedTask
+	public class GeneratorTask :
+#if NET472
+		Microsoft.Build.Utilities.Task
+#endif
+
+#if NETSTANDARD2_1
+		ContextIsolatedTask
+#endif
 	{
 		public string CurrentDirectory { get; set; }
 		public string RouteToServiceProjectFolder { get; set; }
@@ -50,11 +56,22 @@ namespace Beffyman.AspNetCore.Client.Generator
 
 		public bool ByPassExecute()
 		{
+#if NET472
+			return Execute();
+#endif
 
+#if NETSTANDARD2_1
 			return ExecuteIsolated();
+#endif
 		}
 
+#if NET472
+		public override bool Execute()
+#endif
+
+#if NETSTANDARD2_1
 		protected override bool ExecuteIsolated()
+#endif
 		{
 			Log.LogCommandLine($">> [{typeof(GeneratorTask).Namespace}] START");
 

@@ -94,7 +94,7 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 					controller.Route = new HttpRoute(string.Empty);
 				}
 
-				var versionAttribute = attributes.GetAttribute<ApiVersionAttribute>();
+				var versionAttribute = attributes.GetAttribute(Constants.ApiVersionAttribute);
 				if (versionAttribute != null)
 				{
 					var version = new ApiVersionDefinition(versionAttribute);
@@ -250,7 +250,7 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 				endpoint.Route = new HttpRoute(string.Empty);
 			}
 
-			var versionAttribute = attributes.GetAttribute<ApiVersionAttribute>();
+			var versionAttribute = attributes.GetAttribute(Constants.ApiVersionAttribute);
 			if (versionAttribute != null)
 			{
 				var version = new ApiVersionDefinition(versionAttribute);
@@ -269,7 +269,7 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 
 			if (endpoint.Route.Version != null && parent.Route.Version != null)
 			{
-				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.FormattedName} has {nameof(ApiVersionAttribute)} on both it's method and class");
+				throw new NotSupportedException($"Endpoint {parent.Name}.{endpoint.FormattedName} has {Constants.ApiVersionAttribute} on both it's method and class");
 			}
 
 			//Obsolete Attribute

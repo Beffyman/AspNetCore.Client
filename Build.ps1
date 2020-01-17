@@ -98,7 +98,6 @@ else{
 			else{
 				throw "Unknown install extension";
 			}
-
 		}
 	}
 }
@@ -108,6 +107,9 @@ $env:DOTNET_ROOT = $DotNetDirectory;
 
 Write-Output "Microsoft (R) .NET Core SDK version $(& $env:DOTNET_EXE --version)"
 
-ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile -c Release /nodeReuse:false }
-ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile -c Release --no-build -- $BuildArguments }
-ExecSafe { & $env:DOTNET_EXE build-server shutdown --msbuild --vbcscompiler}
+try{
+	ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile -c Release /nodeReuse:false }
+	ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile -c Release --no-build -- $BuildArguments }
+}finally{
+	ExecSafe { & $env:DOTNET_EXE build-server shutdown --msbuild --vbcscompiler}
+}

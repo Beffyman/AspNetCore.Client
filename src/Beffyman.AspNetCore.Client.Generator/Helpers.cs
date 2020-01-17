@@ -16,7 +16,7 @@ using Beffyman.AspNetCore.Client.Generator.Framework.Navigation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Beffyman.AspNetCore.Client.Generator
 {
@@ -169,26 +169,25 @@ namespace Beffyman.AspNetCore.Client.Generator
 
 
 
-		private static readonly JsonSerializerSettings SETTINGS = new JsonSerializerSettings
+		private static readonly JsonSerializerOptions SETTINGS = new JsonSerializerOptions
 		{
-			Formatting = Formatting.Indented,
-			NullValueHandling = NullValueHandling.Include,
-			MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead
+			PropertyNameCaseInsensitive = true,
+			WriteIndented = true
 		};
 
 		public static string SerializeToJson(this object obj)
 		{
-			return JsonConvert.SerializeObject(obj, SETTINGS);
+			return JsonSerializer.Serialize(obj, SETTINGS);
 		}
 
 		public static T DeserializeFromJson<T>(this string str)
 		{
-			return JsonConvert.DeserializeObject<T>(str, SETTINGS);
+			return JsonSerializer.Deserialize<T>(str, SETTINGS);
 		}
 
 		public static object DeserializeFromJson(this string str, Type t)
 		{
-			return JsonConvert.DeserializeObject(str, t, SETTINGS);
+			return JsonSerializer.Deserialize(str, t, SETTINGS);
 		}
 
 
@@ -585,6 +584,12 @@ namespace Beffyman.AspNetCore.Client.Generator
 		{
 			return source.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(typeof(T).Name));
 		}
+
+		public static AttributeSyntax GetAttribute(this IEnumerable<AttributeSyntax> source, string attributeName)
+		{
+			return source.SingleOrDefault(x => x.Name.ToFullString().MatchesAttribute(attributeName));
+		}
+
 		public static IEnumerable<AttributeSyntax> GetAttributes<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
 		{
 			return source.Where(x => x.Name.ToFullString().MatchesAttribute(typeof(T).Name));

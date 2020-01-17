@@ -44,6 +44,8 @@ public class BuildScripts : NukeBuild
 	RelativePath TestGeneratorProject => (RelativePath)TestsFolder / "Beffyman.AspNetCore.Client.Test.Generator" / "Beffyman.AspNetCore.Client.Test.Generator.csproj";
 	RelativePath GeneratorProject => (RelativePath)SourceFolder / "Beffyman.AspNetCore.Client.Generator" / "Beffyman.AspNetCore.Client.Generator.csproj";
 
+	const string TestGeneratorFramework = "netcoreapp3.1";
+
 	private void CleanArtifacts(bool packages = true)
 	{
 		SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
@@ -134,7 +136,7 @@ public class BuildScripts : NukeBuild
 		{
 			DotNetRun(s => s.SetProjectFile(TestGeneratorProject)
 							.SetConfiguration(Configuration)
-							.SetFramework("netcoreapp2.2")
+							.SetFramework(TestGeneratorFramework)
 							.EnableNoBuild());
 		});
 
@@ -144,24 +146,29 @@ public class BuildScripts : NukeBuild
 		{
 			CleanArtifacts(false);
 
-			DotNet($"sln remove {TestGeneratorProject}");
-			DotNet($"sln remove {GeneratorProject}");
+			try
+			{
+				//DotNet($"sln remove {TestGeneratorProject}");
+				//DotNet($"sln remove {GeneratorProject}");
 
-			DotNetBuild(s => s
-				.SetProjectFile(Solution)
-				.SetConfiguration(Configuration)
-				.SetAssemblyVersion(GitVersion.AssemblySemVer)
-				.SetFileVersion(GitVersion.AssemblySemFileVer)
-				.SetInformationalVersion(GitVersion.InformationalVersion)
-				.AddProperty("GenerateWithNuget", "true")
-				.AddProperty("GeneratorVersion", GitVersion.NuGetVersionV2)
-				.AddSources(NugetDirectory));
+				DotNetBuild(s => s
+					.SetProjectFile(Solution)
+					.SetConfiguration(Configuration)
+					.SetAssemblyVersion(GitVersion.AssemblySemVer)
+					.SetFileVersion(GitVersion.AssemblySemFileVer)
+					.SetInformationalVersion(GitVersion.InformationalVersion)
+					.EnableNoCache()
+					.AddProperty("GenerateWithNuget", "true")
+					.AddProperty("GeneratorVersion", GitVersion.NuGetVersionV2)
+					.AddSources(NugetDirectory));
 
-			RunTests();
-
-			DotNet($"sln add {GeneratorProject}");
-			DotNet($"sln add {TestGeneratorProject}");
-
+				RunTests();
+			}
+			finally
+			{
+				//DotNet($"sln add {GeneratorProject}");
+				//DotNet($"sln add {TestGeneratorProject}");
+			}
 		});
 
 	Target CI => _ => _

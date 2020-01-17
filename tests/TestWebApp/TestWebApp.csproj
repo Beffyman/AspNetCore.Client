@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="1.7.3.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="3.1.1" />
 		<PackageReference Include="WebApiContrib.Core.Formatter.Protobuf" Version="2.1.3" />
