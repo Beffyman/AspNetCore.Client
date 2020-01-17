@@ -38,7 +38,7 @@ $env:NUGET_XMLDOC_MODE = "skip"
 function ExecSafe([scriptblock] $cmd) {
     & $cmd
 
-	if((Get-Variable -Name "LASTEXITCODE" -Scope Global) -ne $null) {
+	if((Get-Variable -Name "LASTEXITCODE" -Scope Global -ErrorAction SilentlyContinue) -ne $null) {
 		if ($LASTEXITCODE) {
 			exit $LASTEXITCODE
 		}
