@@ -37,7 +37,12 @@ $env:NUGET_XMLDOC_MODE = "skip"
 
 function ExecSafe([scriptblock] $cmd) {
     & $cmd
-    if ($LASTEXITCODE) { exit $LASTEXITCODE }
+
+	if((Get-Variable -Name "LASTEXITCODE" -Scope Global) -ne $null) {
+		if ($LASTEXITCODE) {
+			exit $LASTEXITCODE
+		}
+	}
 }
 
 # If global.json exists, load expected version
