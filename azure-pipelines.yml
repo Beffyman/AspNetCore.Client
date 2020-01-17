@@ -34,9 +34,10 @@ steps:
   displayName: 'Run CI'
   inputs:
     targetType: filePath
-    filePath: build.ps1
+    filePath: Build.ps1
     arguments: -target CI
     failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)
   env:
     DOTNET_MSBUILD_SDK_RESOLVER_CLI_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
 

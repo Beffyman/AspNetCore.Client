@@ -20,7 +20,7 @@
 		<NukeExternalFiles Include="**\*.*.ext" Exclude="bin\**;obj\**" />
 		<None Remove="*.csproj.DotSettings;*.ref.*.txt" />
 
-		<None Include="..\build.ps1" />
+		<None Include="..\Build.ps1" />
 		<None Include="..\.nuke" />
 		<None Include="..\global.json" Condition="Exists('..\global.json')" />
 		<None Include="..\nuget.config" Condition="Exists('..\nuget.config')" />
