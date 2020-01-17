@@ -41,6 +41,7 @@ steps:
     workingDirectory: $(Build.SourcesDirectory)
   env:
     DOTNET_MSBUILD_SDK_RESOLVER_CLI_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-unix"
+    DOTNET_MSBUILD_SDK_RESOLVER_SDKS_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-unix"
 
 - task: PublishTestResults@2
   displayName: 'Publish Test results'
