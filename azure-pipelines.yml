@@ -19,16 +19,16 @@ pr:
     - tests/*
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'ubuntu-latest'
 
 variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: gittools.gitversion.gitversion-task.GitVersion@4
+- task: GitVersion@5
   displayName: GitVersion
   inputs:
-    preferBundledVersion: false
+    runtime: 'core'
 
 - task: PowerShell@2
   displayName: 'Run CI'
