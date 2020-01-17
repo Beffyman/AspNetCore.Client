@@ -27,7 +27,7 @@ variables:
 steps:
 - task: UseDotNet@2
   inputs:
-    installationPath: "$(Build.SourcesDirectory)/.tmp/dotnet-unix"
+    installationPath: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
     packageType: 'sdk'
     useGlobalJson: true
 
@@ -41,9 +41,9 @@ steps:
     failOnStderr: true
     workingDirectory: $(Build.SourcesDirectory)
   env:
-    DOTNET_MSBUILD_SDK_RESOLVER_CLI_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-unix"
-    DOTNET_MSBUILD_SDK_RESOLVER_SDKS_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-unix"
-    DOTNET_ROOT: "$(Build.SourcesDirectory)/.tmp/dotnet-unix"
+    DOTNET_MSBUILD_SDK_RESOLVER_CLI_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
+    DOTNET_MSBUILD_SDK_RESOLVER_SDKS_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
+    DOTNET_ROOT: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
 
 - task: PublishTestResults@2
   displayName: 'Publish Test results'
