@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Beffyman.AspNetCore.Client.Generator" Version="$(GeneratorVersion)" Condition="'$(GenerateWithNuget)' == 'true'" />
+		<!--<PackageReference Include="Beffyman.AspNetCore.Client.Generator" Version="$(GeneratorVersion)" Condition="'$(GenerateWithNuget)' == 'true'" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.1" />
