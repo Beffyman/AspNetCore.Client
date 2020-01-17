@@ -83,7 +83,7 @@ else{
 				ExecSafe { & $DotNetInstallFile -InstallDir $DotNetDirectory -Channel $DotNetChannel -NoPath }
 			}
 			elseif ($DotNetInstallExtension -eq "sh"){
-				ExecSafe { & "$DOTNET_INSTALL_FILE" --install-dir "$DOTNET_DIRECTORY" --channel "$DOTNET_CHANNEL" --no-path }
+				ExecSafe { & "$DotNetInstallFile" --install-dir "$DotNetDirectory" --channel "$DotNetChannel" --no-path }
 			}
 			else{
 				throw "Unknown install extension";
@@ -93,7 +93,7 @@ else{
 				ExecSafe { & $DotNetInstallFile -InstallDir $DotNetDirectory -Version $DotNetVersion -NoPath }
 			}
 			elseif ($DotNetInstallExtension -eq "sh"){
-				ExecSafe { &  "$DOTNET_INSTALL_FILE" --install-dir "$DOTNET_DIRECTORY" --version "$DOTNET_VERSION" --no-path }
+				ExecSafe { &  "$DotNetInstallFile" --install-dir "$DotNetDirectory" --version "$DotNetVersion" --no-path }
 			}
 			else{
 				throw "Unknown install extension";
