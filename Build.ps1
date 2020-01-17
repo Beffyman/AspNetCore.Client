@@ -71,16 +71,6 @@ $DotNetDirectory = "$TempDirectory\dotnet-$DotNetSuffix"
 $DotNetVersionDirectory = "$DotNetDirectory\sdk\$DotNetVersion"
 $env:DOTNET_EXE = "$DotNetDirectory\dotnet$DotNetExtension"
 
-#Output a bunch of diag info
-Write-Host "[DotNetVersion] = $DotNetVersion";
-Write-Host "[DotNetSuffix] = $DotNetSuffix";
-Write-Host "[DotNetExtension] = $DotNetExtension";
-Write-Host "[DotNetInstallUrl] = $DotNetInstallUrl";
-Write-Host "[DotNetInstallExtension] = $DotNetInstallExtension";
-Write-Host "[DotNetDirectory] = $DotNetDirectory";
-Write-Host "[DotNetVersionDirectory] = $DotNetVersionDirectory";
-Write-Host "[env:DOTNET_EXE] = $env:DOTNET_EXE";
-
 
 if ($null -ne (Get-Command "dotnet" -ErrorAction SilentlyContinue) -and `
      (!(Test-Path variable:DotNetVersion) -or "$(& dotnet --version | Select-Object -First 1)" -eq "$DotNetVersion")) {
@@ -127,6 +117,17 @@ $env:PATH += $DotNetDirectory;
 $env:DOTNET_ROOT = $DotNetDirectory;
 
 Write-Output "Microsoft (R) .NET Core SDK version $(& $env:DOTNET_EXE --version)"
+
+
+#Output a bunch of diag info
+Write-Host "[DotNetVersion] = $DotNetVersion";
+Write-Host "[DotNetSuffix] = $DotNetSuffix";
+Write-Host "[DotNetExtension] = $DotNetExtension";
+Write-Host "[DotNetInstallUrl] = $DotNetInstallUrl";
+Write-Host "[DotNetInstallExtension] = $DotNetInstallExtension";
+Write-Host "[DotNetDirectory] = $DotNetDirectory";
+Write-Host "[DotNetVersionDirectory] = $DotNetVersionDirectory";
+Write-Host "[env:DOTNET_EXE] = $env:DOTNET_EXE";
 
 try{
 	ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile -c Release /nodeReuse:false }

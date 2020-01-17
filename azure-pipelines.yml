@@ -27,6 +27,7 @@ variables:
 steps:
 - task: UseDotNet@2
   inputs:
+    installationPath: "$(Build.SourcesDirectory)/.tmp/dotnet-unix"
     packageType: 'sdk'
     useGlobalJson: true
 
