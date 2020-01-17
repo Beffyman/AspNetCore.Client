@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Nuke.Common;
+using Nuke.Common.CI;
+using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.ProjectModel;
@@ -17,9 +19,6 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [UnsetVisualStudioEnvironmentVariables]
 public class BuildScripts : NukeBuild
 {
-	//#error need to update blazor tests to use netcoreapp3.0
-	//#error need to update README
-
 	public static int Main() => Execute<BuildScripts>(x => x.Build);
 
 	[Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -28,6 +27,7 @@ public class BuildScripts : NukeBuild
 	[Solution] readonly Solution Solution;
 	[GitRepository] readonly GitRepository GitRepository;
 	[GitVersion] readonly GitVersion GitVersion;
+	[CI] readonly AzurePipelines AzurePipelines;
 
 	const string SourceFolder = "src";
 	const string TestsFolder = "tests";
@@ -178,7 +178,10 @@ public class BuildScripts : NukeBuild
 		.DependsOn(Test)
 		.DependsOn(Pack)
 		.DependsOn(BuildWithGenerator)
-		.Executes(() => { });
+		.Executes(() =>
+		{
+			AzurePipelines.UpdateBuildNumber(GitVersion.NuGetVersionV2);
+		});
 
 
 }

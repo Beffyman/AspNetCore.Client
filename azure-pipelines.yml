@@ -30,11 +30,6 @@ steps:
     packageType: 'sdk'
     useGlobalJson: true
 
-- task: GitVersion@5
-  displayName: GitVersion
-  inputs:
-    runtime: 'core'
-
 - task: PowerShell@2
   displayName: 'Run CI'
   inputs:
