@@ -61,7 +61,6 @@ namespace Beffyman.AspNetCore.Client.Generator
 #if !DEBUG
 			try
 			{
-			`
 #endif
 			#region Settings Map
 
