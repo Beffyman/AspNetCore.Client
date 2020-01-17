@@ -180,7 +180,7 @@ public class BuildScripts : NukeBuild
 		.DependsOn(BuildWithGenerator)
 		.Executes(() =>
 		{
-			AzurePipelines.UpdateBuildNumber(GitVersion.NuGetVersionV2);
+			AzurePipelines?.UpdateBuildNumber(GitVersion.NuGetVersionV2);
 		});
 
 

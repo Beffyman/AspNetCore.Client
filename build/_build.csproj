@@ -11,7 +11,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Nuke.Common" Version="0.23.6" />
-		<PackageDownload Include="GitVersion.Tool" Version="[5.0.2-beta1.130]" />
+		<PackageDownload Include="GitVersion.Tool" Version="[5.1.1]" />
 		<PackageDownload Include="xunit.runner.console" Version="[2.4.1]" />
 	</ItemGroup>
 
