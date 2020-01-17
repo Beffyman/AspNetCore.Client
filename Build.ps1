@@ -45,6 +45,44 @@ function ExecSafe([scriptblock] $cmd) {
 	}
 }
 
+function ExecuteDotnetBuild {
+
+	$startInfo = [System.Diagnostics.ProcessStartInfo]::new("$env:DOTNET_EXE");
+    $startInfo.Arguments ="build `"$BuildProjectFile`" -c Release /nodeReuse:false";
+	$startInfo.EnvironmentVariables["DOTNET_ROOT"] = $DotNetDirectory;
+    $startInfo.UseShellExecute = $false;
+    $startInfo.WorkingDirectory = $PSScriptRoot;
+
+   # $startInfo | Out-Host
+
+	$process = [System.Diagnostics.Process]::Start($startInfo);
+
+	$process.WaitForExit();
+
+    if($process.ExitCode -ne 0){
+        exit $process.ExitCode
+    }
+}
+
+function ExecuteDotnetRun {
+
+	$startInfo = [System.Diagnostics.ProcessStartInfo]::new("$env:DOTNET_EXE");
+    $startInfo.Arguments ="run --project `"$BuildProjectFile`" -c Release --no-build -- $BuildArguments";
+	$startInfo.EnvironmentVariables["DOTNET_ROOT"] = $DotNetDirectory;
+    $startInfo.UseShellExecute = $false;
+    $startInfo.WorkingDirectory = $PSScriptRoot;
+
+    #$startInfo | Out-Host
+
+	$process = [System.Diagnostics.Process]::Start($startInfo);
+
+	$process.WaitForExit();
+
+    if($process.ExitCode -ne 0){
+        exit $process.ExitCode
+    }
+}
+
 # If global.json exists, load expected version
 if (Test-Path $DotNetGlobalFile) {
     $DotNetGlobal = $(Get-Content $DotNetGlobalFile | Out-String | ConvertFrom-Json)
@@ -116,7 +154,6 @@ else{
 $env:PATH += $DotNetDirectory;
 $env:DOTNET_ROOT = $DotNetDirectory;
 
-
 Write-Output "Microsoft (R) .NET Core SDK version $(& $env:DOTNET_EXE --version)"
 
 
@@ -133,8 +170,11 @@ Write-Host "[env:DOTNET_ROOT] = $env:DOTNET_ROOT";
 Write-Host "[env:PATH] = $env:PATH";
 
 try{
-	ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile -c Release /nodeReuse:false }
-	ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile -c Release --no-build -- $BuildArguments }
+	ExecuteDotnetBuild;
+	ExecuteDotnetRun;
+
+	#ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile -c Release /nodeReuse:false }
+	#ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile -c Release --no-build -- $BuildArguments }
 }finally{
 	ExecSafe { & $env:DOTNET_EXE build-server shutdown --msbuild --vbcscompiler}
 }
