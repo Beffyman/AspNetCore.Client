@@ -51,6 +51,7 @@ steps:
    testResultsFormat: 'VSTest'
    testResultsFiles: '*.trx'
    searchFolder: 'artifacts/tests'
+  condition: always()
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish Code Coverage'
