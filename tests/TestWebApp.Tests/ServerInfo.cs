@@ -24,22 +24,29 @@ namespace TestWebApp.Tests
 
 		public ServerInfo(int testTimeout = 10_000)
 		{
+			_tokenSource = new CancellationTokenSource(testTimeout);
+
+			TimeoutToken = _tokenSource.Token;
+
+			TimeoutToken.Register(() =>
+			{
+				try
+				{
+					Host?.StopAsync().GetAwaiter().GetResult();
+				}
+				catch { }
+			});
+
 			Host = new HostBuilder()
 				.ConfigureWebHost(builder =>
 				{
 					builder.UseTestServer()
-					////.ConfigureServices(services =>
-					////{
-					////	services.Configure<TestServer>(options =>
-					////	{
-					////		options.AllowSynchronousIO = true;
-					////	});
-					////})
-					.UseStartup<T>()
-					.ConfigureLogging(options =>
-					{
-						options.AddDebug();
-					});
+						.UseShutdownTimeout(TimeSpan.FromMilliseconds(testTimeout))
+						.UseStartup<T>()
+						.ConfigureLogging(options =>
+						{
+							options.AddDebug();
+						});
 				}).Start();
 
 			Server = Host.GetTestServer();
@@ -53,22 +60,6 @@ namespace TestWebApp.Tests
 
 			Provider = services.BuildServiceProvider();
 
-
-			_tokenSource = new CancellationTokenSource(testTimeout);
-
-			TimeoutToken = _tokenSource.Token;
-
-			TimeoutToken.Register(() =>
-			{
-				if (Host != null)
-				{
-					var stopTask = Host.StopAsync();
-					if (!stopTask.IsCompleted)
-					{
-						stopTask.GetAwaiter().GetResult();
-					}
-				}
-			});
 		}
 
 		protected abstract void ConfigureClient(ClientConfiguration configure);
