@@ -86,8 +86,7 @@ public class BuildScripts : NukeBuild
 
 	private void RunTests()
 	{
-		DotNetTest(s => s.EnableNoBuild()
-				.SetConfiguration(Configuration)
+		DotNetTest(s => s.SetConfiguration(Configuration)
 				.EnableNoBuild()
 				.EnableNoRestore()
 				.SetLogger("trx")

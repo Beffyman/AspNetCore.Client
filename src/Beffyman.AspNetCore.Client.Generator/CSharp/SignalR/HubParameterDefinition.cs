@@ -7,6 +7,7 @@ namespace Beffyman.AspNetCore.Client.Generator.CSharp.SignalR
 		public string Name { get; }
 		public string Type { get; }
 		public string Default { get; }
+		public bool Invalid { get; }
 
 
 		public HubParameterDefinition(ParameterSyntax parameter)
@@ -14,6 +15,11 @@ namespace Beffyman.AspNetCore.Client.Generator.CSharp.SignalR
 			Name = parameter.Identifier.ValueText.Trim();
 			Type = parameter.Type.ToFullString().Trim();
 			Default = parameter.Default?.Value.ToFullString().Trim();
+
+			if (Helpers.IsInvalidParameterType(Type))
+			{
+				Invalid = true;
+			}
 		}
 
 		public override string ToString()

@@ -303,7 +303,7 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 
 
 
-			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute(parent))).ToList();
+			var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute(parent))).Where(x => !x.Invalid).ToList();
 
 
 			var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
@@ -551,7 +551,7 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 
 
 
-			var parameters = syntax.ParameterList.Parameters.Select(x => new HubParameterDefinition(x)).ToList();
+			var parameters = syntax.ParameterList.Parameters.Select(x => new HubParameterDefinition(x)).Where(x => !x.Invalid).ToList();
 			var hubParams = parameters.Select(x => new HubParameter(x.Name, x.Type, x.Default)).ToList();
 
 			endpoint.Parameters = hubParams.Cast<IParameter>().NotNull().ToList();
@@ -700,7 +700,7 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 
 				endpoint.HttpParameters = expectedBodyParameters.Union(expectedQueryParameters).ToDictionary();
 
-				var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute())).ToList();
+				var parameters = syntax.ParameterList.Parameters.Select(x => new ParameterDefinition(x, endpoint.GetFullRoute())).Where(x => !x.Invalid).ToList();
 
 				var routeParams = parameters.Where(x => x.Options.FromRoute).Select(x => new RouteParameter(x.RouteName, x.Type, x.Default)).ToList();
 

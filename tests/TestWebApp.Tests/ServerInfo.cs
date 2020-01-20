@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using Beffyman.AspNetCore.Client;
 using Flurl.Http;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +19,10 @@ namespace TestWebApp.Tests
 		public TestServer Server { get; }
 		public HttpClient Client { get; }
 
-		public ServerInfo()
+		private readonly CancellationTokenSource _tokenSource;
+		public readonly CancellationToken TimeoutToken;
+
+		public ServerInfo(int testTimeout = 10_000)
 		{
 			Host = new HostBuilder()
 				.ConfigureWebHost(builder =>
@@ -48,6 +52,16 @@ namespace TestWebApp.Tests
 			services.AddTestWebClients(ConfigureClient);
 
 			Provider = services.BuildServiceProvider();
+
+
+			_tokenSource = new CancellationTokenSource(testTimeout);
+
+			TimeoutToken = _tokenSource.Token;
+
+			TimeoutToken.Register(() =>
+			{
+				Host?.StopAsync().RunSynchronously();
+			});
 		}
 
 		protected abstract void ConfigureClient(ClientConfiguration configure);

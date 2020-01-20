@@ -22,7 +22,6 @@ namespace TestWebApp.Tests
 
 	public class SignalRTests
 	{
-
 		[Fact]
 		public async Task SendReceiveMessageAsync()
 		{
@@ -48,9 +47,9 @@ namespace TestWebApp.Tests
 					tokenSource.Cancel();
 				});
 
-				await hub.StartAsync();
+				await hub.StartAsync(endpoint.TimeoutToken);
 
-				await hub.SendMessageAsync("Test", "Hello World");
+				await hub.SendMessageAsync("Test", "Hello World", endpoint.TimeoutToken);
 
 				await token.WhenCanceled();
 
@@ -79,11 +78,11 @@ namespace TestWebApp.Tests
 
 				IList<int> results = new List<int>();
 
-				await hub.StartAsync();
+				await hub.StartAsync(endpoint.TimeoutToken);
 
-				var channel = await hub.StreamCounterAsync(count, delay);
+				var channel = await hub.StreamCounterAsync(count, delay, endpoint.TimeoutToken);
 
-				while (await channel.WaitToReadAsync())
+				while (await channel.WaitToReadAsync(endpoint.TimeoutToken))
 				{
 					while (channel.TryRead(out int item))
 					{
@@ -91,7 +90,7 @@ namespace TestWebApp.Tests
 					}
 				}
 
-				await hub.StopAsync();
+				await hub.StopAsync(endpoint.TimeoutToken);
 
 				Assert.Equal(count, results.Count());
 			}
@@ -113,11 +112,11 @@ namespace TestWebApp.Tests
 				int count = 100;
 				int delay = 20;
 
-				await hub.StartAsync();
+				await hub.StartAsync(endpoint.TimeoutToken);
 
-				IEnumerable<int> results = await hub.ReadCounterBlockingAsync(count, delay);
+				IEnumerable<int> results = await hub.ReadCounterBlockingAsync(count, delay, endpoint.TimeoutToken);
 
-				await hub.StopAsync();
+				await hub.StopAsync(endpoint.TimeoutToken);
 
 				Assert.Equal(count, results.Count());
 			}
@@ -155,13 +154,13 @@ namespace TestWebApp.Tests
 					tokenSource.Cancel();
 				});
 
-				await hub.StartAsync();
+				await hub.StartAsync(endpoint.TimeoutToken);
 
-				await hub.DtoMessageAsync(expected);
+				await hub.DtoMessageAsync(expected, endpoint.TimeoutToken);
 
 				await token.WhenCanceled();
 
-				await hub.StopAsync();
+				await hub.StopAsync(endpoint.TimeoutToken);
 
 				Assert.Equal(expected.Collision, actual.Collision);
 				Assert.Equal(expected.Description, actual.Description);

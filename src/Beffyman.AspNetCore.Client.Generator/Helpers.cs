@@ -263,24 +263,28 @@ namespace Beffyman.AspNetCore.Client.Generator
 			}
 		}
 
-
-		public static string[] KnownPrimitives = new string[]
+		public static HashSet<string> KnownExcludedParameters = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase)
 		{
-		"char",typeof(char).Name,
-		"byte",typeof(byte).Name,
-		"sbyte",typeof(sbyte).Name,
-		"ushort",typeof(ushort).Name,
-		"int",typeof(int).Name,
-		"uint",typeof(uint).Name,
-		"long",typeof(long).Name,
-		"ulong",typeof(ulong).Name,
-		"float",typeof(float).Name,
-		"double",typeof(double).Name,
-		"string",typeof(string).Name,
-		"bool",typeof(bool).Name,
-		"DateTime",typeof(DateTime).Name,
-		"DateTimeOffset",typeof(DateTimeOffset).Name,
-		"Guid",typeof(Guid).Name,
+			nameof(CancellationToken)
+		};
+
+		public static HashSet<string> KnownPrimitives = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase)
+		{
+			"char",typeof(char).Name,
+			"byte",typeof(byte).Name,
+			"sbyte",typeof(sbyte).Name,
+			"ushort",typeof(ushort).Name,
+			"int",typeof(int).Name,
+			"uint",typeof(uint).Name,
+			"long",typeof(long).Name,
+			"ulong",typeof(ulong).Name,
+			"float",typeof(float).Name,
+			"double",typeof(double).Name,
+			"string",typeof(string).Name,
+			"bool",typeof(bool).Name,
+			"DateTime",typeof(DateTime).Name,
+			"DateTimeOffset",typeof(DateTimeOffset).Name,
+			"Guid",typeof(Guid).Name,
 		};
 
 		private static Regex NULLABLE_MATCHER = new Regex(@"((.+)\?)|(Nullable<(.+)>)");
@@ -305,7 +309,14 @@ namespace Beffyman.AspNetCore.Client.Generator
 		{
 			type = ConvertFromNullable(type, out _);
 
-			return KnownPrimitives.Contains(type, StringComparer.CurrentCultureIgnoreCase);
+			return KnownPrimitives.Contains(type);
+		}
+
+		public static bool IsInvalidParameterType(string type)
+		{
+			type = ConvertFromNullable(type, out _);
+
+			return KnownExcludedParameters.Contains(type);
 		}
 
 		public static bool IsRouteParameter(string name, HttpRoute fullRouteTemplate)

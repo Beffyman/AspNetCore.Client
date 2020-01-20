@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Beffyman.AspNetCore.Client.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using TestWebApp.Clients;
 using TestWebApp.Contracts;
 using Xunit;
@@ -21,7 +21,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new JsonServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				var values = valuesClient.GetEnumerable();
+				var values = valuesClient.GetEnumerable(cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(new List<string> { "value1", "value2" }, values);
@@ -34,7 +34,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new JsonServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				var value = valuesClient.HeaderTestString("Val1", "Val2");
+				var value = valuesClient.HeaderTestString("Val1", "Val2", cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal("Val1", value);
@@ -47,7 +47,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new JsonServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				var value = valuesClient.HeaderTestInt(15);
+				var value = valuesClient.HeaderTestInt(15, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(15, value);
@@ -67,7 +67,7 @@ namespace TestWebApp.Tests
 					OKCallback: (_) =>
 					{
 						dto = _;
-					});
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(15, dto.Id);
@@ -86,7 +86,7 @@ namespace TestWebApp.Tests
 					OKCallback: (_) =>
 					{
 						g = _;
-					});
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.NotEqual(Guid.Empty, g);
@@ -105,7 +105,7 @@ namespace TestWebApp.Tests
 					OKCallback: (_) =>
 					{
 						g = _;
-					});
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.NotEqual(DateTime.MinValue, g);
@@ -125,7 +125,7 @@ namespace TestWebApp.Tests
 					OKCallback: (_) =>
 					{
 						g = _;
-					});
+					}, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.True(g);
 			}
@@ -145,7 +145,7 @@ namespace TestWebApp.Tests
 					Collision = Guid.NewGuid(),
 					Description = "Helo",
 					When = DateTime.Now
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.True(response.RequestMessage.Content.Headers.ContentType.MediaType == "application/json");
@@ -166,7 +166,7 @@ namespace TestWebApp.Tests
 					OKCallback: () =>
 					{
 						ok = true;
-					});
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.True(ok);
@@ -191,14 +191,14 @@ namespace TestWebApp.Tests
 				};
 
 				valuesClient.ComplexPost(dto, Guid.NewGuid(),
-				OKCallback: (_) =>
-				{
-					returnedDto = _;
-				},
-				ExceptionCallback: ex =>
-				{
-					throw ex;
-				});
+					OKCallback: (_) =>
+					{
+						returnedDto = _;
+					},
+					ExceptionCallback: ex =>
+					{
+						throw ex;
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(dto.Collision, returnedDto.Collision);
@@ -221,10 +221,10 @@ namespace TestWebApp.Tests
 				};
 
 				valuesClient.EnumerableGet(expected, new List<bool> { true },
-				OKCallback: (_) =>
-				{
-					returnedEnumerable = _;
-				});
+					OKCallback: (_) =>
+					{
+						returnedEnumerable = _;
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(expected, returnedEnumerable);
@@ -249,7 +249,7 @@ namespace TestWebApp.Tests
 				OKCallback: (_) =>
 				{
 					returnedEnumerable = _;
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(expected, returnedEnumerable);
@@ -270,7 +270,7 @@ namespace TestWebApp.Tests
 					OKCallback: _ =>
 					{
 						actual = _;
-					});
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(expected, actual);
@@ -284,7 +284,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new JsonServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				var fileStream = valuesClient.FileReturn();
+				var fileStream = valuesClient.FileReturn(cancellationToken: endpoint.TimeoutToken);
 				using (var reader = new StreamReader(fileStream))
 				{
 					var str = reader.ReadToEnd();
@@ -301,10 +301,10 @@ namespace TestWebApp.Tests
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-				bool validRequest = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test123"));
+				bool validRequest = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test123"), cancellationToken: endpoint.TimeoutToken);
 				Assert.True(validRequest);
 
-				bool invalidRequest = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"));
+				bool invalidRequest = valuesClient.Delete(5, 0, auth: new BasicAuthHeader("Tester", "Test12"), cancellationToken: endpoint.TimeoutToken);
 				Assert.False(invalidRequest);
 			}
 		}
@@ -316,7 +316,7 @@ namespace TestWebApp.Tests
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
 
-				bool success = valuesClient.TestPreFunc();
+				bool success = valuesClient.TestPreFunc(cancellationToken: endpoint.TimeoutToken);
 
 				Assert.True(success);
 			}
@@ -337,7 +337,7 @@ namespace TestWebApp.Tests
 					When = DateTime.Now.Date
 				};
 
-				MyFancyDto actual = valuesClient.GetQueryObject(expected);
+				MyFancyDto actual = valuesClient.GetQueryObject(expected, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(expected.Collision, actual.Collision);
@@ -351,7 +351,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new JsonServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				int? result = valuesClient.DefaultRouteConstraint(null);
+				int? result = valuesClient.DefaultRouteConstraint(null, cancellationToken: endpoint.TimeoutToken);
 				int? expected = 5;
 
 				Assert.Equal(expected, result);
@@ -364,12 +364,12 @@ namespace TestWebApp.Tests
 			using (var endpoint = new JsonServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				int? result = valuesClient.OptionalRouteConstraint(null);
+				int? result = valuesClient.OptionalRouteConstraint(null, cancellationToken: endpoint.TimeoutToken);
 				int? expected = null;
 
 				Assert.Equal(expected, result);
 
-				int? result2 = valuesClient.OptionalRouteConstraint(123);
+				int? result2 = valuesClient.OptionalRouteConstraint(123, cancellationToken: endpoint.TimeoutToken);
 				int? expected2 = 123;
 
 				Assert.Equal(expected2, result2);
@@ -385,11 +385,11 @@ namespace TestWebApp.Tests
 				var date = DateTime.UtcNow;
 				var expected = DateTime.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
 
-				DateTime result = valuesClient.CheckDateTime(date);
+				DateTime result = valuesClient.CheckDateTime(date, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(expected, result);
 
-				DateTime? nullableResult = valuesClient.CheckDateTimeNullable(date);
+				DateTime? nullableResult = valuesClient.CheckDateTimeNullable(date, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(expected, nullableResult);
 			}
@@ -404,11 +404,11 @@ namespace TestWebApp.Tests
 				var date = DateTimeOffset.UtcNow;
 				var expected = DateTimeOffset.Parse(date.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
 
-				DateTimeOffset result = valuesClient.CheckDateTimeOffset(date);
+				DateTimeOffset result = valuesClient.CheckDateTimeOffset(date, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(expected, result);
 
-				DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date);
+				DateTimeOffset? nullableResult = valuesClient.CheckDateTimeOffsetNullable(date, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(expected, nullableResult);
 			}
@@ -421,7 +421,7 @@ namespace TestWebApp.Tests
 			{
 				var v3Client = endpoint.Provider.GetService<Clients.V3_0.ITestRouteClient>();
 
-				var index = v3Client.Endpoint(5);
+				var index = v3Client.Endpoint(5, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(6, index);
 			}
@@ -434,7 +434,7 @@ namespace TestWebApp.Tests
 			{
 				var v3Client = endpoint.Provider.GetService<Clients.V3.ITestQueryClient>();
 
-				var index = v3Client.Endpoint(5);
+				var index = v3Client.Endpoint(5, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(6, index);
 			}
@@ -454,7 +454,7 @@ namespace TestWebApp.Tests
 				client.Get(BadRequestCallback: (str) =>
 				{
 					actual = str;
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(expected, actual);
 			}
@@ -471,13 +471,16 @@ namespace TestWebApp.Tests
 				MyFancyDto val = client.DuplicateMethodReturnAndResponse(ResponseCallback: msg =>
 				{
 					responseVal = msg.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.Equal(100, val.Id);
 				Assert.Equal(DateTime.Now.Date, val.When);
 				Assert.Equal("Hello", val.Description);
 
-				var responseJson = JsonConvert.DeserializeObject<MyFancyDto>(responseVal);
+				var responseJson = JsonSerializer.Deserialize<MyFancyDto>(responseVal, new JsonSerializerOptions
+				{
+					PropertyNameCaseInsensitive = true
+				});
 
 				Assert.Equal(val.Id, responseJson.Id);
 				Assert.Equal(val.When, responseJson.When);
@@ -502,7 +505,7 @@ namespace TestWebApp.Tests
 				client.ProblemDetailsRequest(dto, BadRequestCallback: _ =>
 				{
 					errors1 = _;
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 				var dto2 = new RequiredDto()
 				{
@@ -514,7 +517,7 @@ namespace TestWebApp.Tests
 					OKCallback: () =>
 					{
 
-					}
+					}, cancellationToken: endpoint.TimeoutToken
 				);
 			}
 		}
@@ -531,7 +534,7 @@ namespace TestWebApp.Tests
 				client.ModelStateBadRequest(BadRequestCallback: _ =>
 				{
 					errors = _;
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 				var str = errors["Test"];
 
@@ -558,7 +561,7 @@ namespace TestWebApp.Tests
 				BadRequestCallback: _ =>
 				{
 					throw new Exception("BadRequest should not be thrown");
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 				client.UrlEncodingQueryCheck(val,
 				OKCallback: _ =>
@@ -568,7 +571,7 @@ namespace TestWebApp.Tests
 				BadRequestCallback: _ =>
 				{
 					throw new Exception("BadRequest should not be thrown");
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 			}
 		}
 
@@ -584,7 +587,7 @@ namespace TestWebApp.Tests
 				await client.ActionRouteAsync(OKCallback: () =>
 				{
 					hit = true;
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.True(hit);
 			}
@@ -601,9 +604,21 @@ namespace TestWebApp.Tests
 				await client.NoRouteAsync(OKCallback: () =>
 				{
 					hit = true;
-				});
+				}, cancellationToken: endpoint.TimeoutToken);
 
 				Assert.True(hit);
+			}
+		}
+
+		[Fact]
+		public async Task CancellationTokenParameter()
+		{
+			using (var endpoint = new JsonServerInfo())
+			{
+				var client = endpoint.Provider.GetService<IValuesClient>();
+
+				await client.CancellationTokenApiAsync(0, cancellationToken: endpoint.TimeoutToken);
+
 			}
 		}
 

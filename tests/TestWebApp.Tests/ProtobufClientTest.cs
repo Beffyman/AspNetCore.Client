@@ -16,7 +16,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new ProtobufServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				var values = valuesClient.GetEnumerable();
+				var values = valuesClient.GetEnumerable(cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(new List<string> { "value1", "value2" }, values);
@@ -29,7 +29,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new ProtobufServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				var value = valuesClient.HeaderTestString("Val1", "Val2");
+				var value = valuesClient.HeaderTestString("Val1", "Val2", cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal("Val1", value);
@@ -42,7 +42,7 @@ namespace TestWebApp.Tests
 			using (var endpoint = new ProtobufServerInfo())
 			{
 				var valuesClient = endpoint.Provider.GetService<IValuesClient>();
-				var value = valuesClient.HeaderTestInt(15);
+				var value = valuesClient.HeaderTestInt(15, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(15, value);
@@ -62,7 +62,7 @@ namespace TestWebApp.Tests
 					OKCallback: (_) =>
 					{
 						dto = _;
-					});
+					}, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(15, dto.Id);
@@ -85,14 +85,14 @@ namespace TestWebApp.Tests
 					When = DateTime.UtcNow
 				};
 
-				var response = valuesClient.DtoForDtoRaw(dto);
+				var response = valuesClient.DtoForDtoRaw(dto, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.True(response.RequestMessage.Content.Headers?.ContentType?.MediaType == "application/x-protobuf");
 				Assert.True(response.Content.Headers.ContentType.MediaType == "application/x-protobuf");
 
 
-				var actual = valuesClient.DtoForDto(dto);
+				var actual = valuesClient.DtoForDto(dto, cancellationToken: endpoint.TimeoutToken);
 
 
 				Assert.Equal(dto.Collision, actual.Collision);
