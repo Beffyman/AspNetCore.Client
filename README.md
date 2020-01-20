@@ -36,6 +36,7 @@ and think the following
 ## Supported Frameworks
 - AspNetCore 3.1 HTTP Controllers
 - AspNetCore 3.1 SignalR Hubs
+- AspNetCore 3.1 Blazor Client Side
 - Http Trigger Azure Functions v3
 
 ## Beffyman.AspNetCore.Client
@@ -88,10 +89,10 @@ services.AddTestWebClients(config=>
 Contains a Newtonsoft Json serializer which can override the default json one via the UseNewtonsoftJsonHttpSerializer on the ClientConfiguration.
 
 ```c#
-services.AddTestRazorComponentsClients(config=>
+services.AddTestWebClients(config=>
 {
-	config.UseJSInteropJsonSerializer()
-			.UseJSInteropJsonDeserializer()
+	config.UseNewtonsoftJsonHttpSerializer()
+			.UseNewtonsoftJsonHttpDeserializer()
 			.WithJsonBody();
 });
 
