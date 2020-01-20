@@ -6,6 +6,7 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<DevelopmentDependency>true</DevelopmentDependency>
 		<IsPackable>true</IsPackable>
+		<IncludeSymbols>false</IncludeSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>

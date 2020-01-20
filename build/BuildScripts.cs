@@ -118,9 +118,6 @@ public class BuildScripts : NukeBuild
 		{
 			DotNetPack(s => s.SetProject(Solution)
 					.SetVersion(GitVersion.NuGetVersionV2)
-					//.EnableNoBuild()
-					.EnableIncludeSource()
-					.EnableIncludeSymbols()
 					.SetConfiguration(Configuration)
 					.SetAssemblyVersion(GitVersion.AssemblySemVer)
 					.SetFileVersion(GitVersion.AssemblySemFileVer)

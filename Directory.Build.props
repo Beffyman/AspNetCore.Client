@@ -14,10 +14,9 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/Beffyman/Beffyman.AspNetCore.Client</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
-		<IncludeSource>true</IncludeSource>
-		<IncludeSymbols>true</IncludeSymbols>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeSymbols>true</IncludeSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>
