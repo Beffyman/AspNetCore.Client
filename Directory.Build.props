@@ -12,7 +12,7 @@
 		<Copyright>Copyright 2020</Copyright>
 		<Authors>Beffyman</Authors>
 		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/Beffyman/Beffyman.AspNetCore.Client</RepositoryUrl>
+		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -25,13 +25,6 @@
 
 	<!--Define Analyzers -->
 	<ItemGroup>
-
-		<!--Enable when adding new stuff to minimize heap allocations-->
-		<!--<PackageReference Include="ClrHeapAllocationAnalyzer" Version="1.0.0.9">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>-->
-
 		<PackageReference Include="ErrorProne.NET.Structs" Version="0.2.0-beta.7 ">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

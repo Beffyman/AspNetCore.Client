@@ -142,29 +142,18 @@ public class BuildScripts : NukeBuild
 		{
 			CleanArtifacts(false);
 
-			try
-			{
-				//DotNet($"sln remove {TestGeneratorProject}");
-				//DotNet($"sln remove {GeneratorProject}");
+			DotNetBuild(s => s
+				.SetProjectFile(Solution)
+				.SetConfiguration(Configuration)
+				.SetAssemblyVersion(GitVersion.AssemblySemVer)
+				.SetFileVersion(GitVersion.AssemblySemFileVer)
+				.SetInformationalVersion(GitVersion.InformationalVersion)
+				.EnableNoCache()
+				.AddProperty("GenerateWithNuget", "true")
+				.AddProperty("GeneratorVersion", GitVersion.NuGetVersionV2)
+				.AddSources(NugetDirectory));
 
-				DotNetBuild(s => s
-					.SetProjectFile(Solution)
-					.SetConfiguration(Configuration)
-					.SetAssemblyVersion(GitVersion.AssemblySemVer)
-					.SetFileVersion(GitVersion.AssemblySemFileVer)
-					.SetInformationalVersion(GitVersion.InformationalVersion)
-					.EnableNoCache()
-					.AddProperty("GenerateWithNuget", "true")
-					.AddProperty("GeneratorVersion", GitVersion.NuGetVersionV2)
-					.AddSources(NugetDirectory));
-
-				RunTests();
-			}
-			finally
-			{
-				//DotNet($"sln add {GeneratorProject}");
-				//DotNet($"sln add {TestGeneratorProject}");
-			}
+			RunTests();
 		});
 
 	Target CI => _ => _

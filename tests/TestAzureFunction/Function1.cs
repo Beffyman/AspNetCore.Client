@@ -12,6 +12,7 @@ using TestAzureFunction.Contracts;
 using AspNetCore.Server.Attributes.Http;
 using MessagePack.Resolvers;
 using ProtoBuf;
+using System.Threading;
 
 namespace TestAzureFunction
 {
@@ -25,7 +26,8 @@ namespace TestAzureFunction
 		[FunctionName("Function1")]
 		public static async Task<IActionResult> Run(
 			[HttpTrigger(AuthorizationLevel.Function, "get", nameof(HttpMethods.Post), Route = "helloMe")] HttpRequest req,
-			ILogger log)
+			ILogger log,
+			CancellationToken token = default)
 		{
 			log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -53,8 +55,10 @@ namespace TestAzureFunction
 
 				if (req.ContentType.Contains("application/json", StringComparison.CurrentCultureIgnoreCase))
 				{
-					string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-					name = JsonConvert.DeserializeObject<User>(requestBody)?.Name;
+					using (var reader = new StreamReader(req.Body))
+					{
+						name = JsonConvert.DeserializeObject<User>(await reader.ReadToEndAsync())?.Name;
+					}
 				}
 				else if (req.ContentType.Contains("application/x-msgpack", StringComparison.CurrentCultureIgnoreCase))
 				{

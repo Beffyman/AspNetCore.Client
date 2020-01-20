@@ -21,8 +21,8 @@
 		<None Remove="*.csproj.DotSettings;*.ref.*.txt" />
 
 		<!-- Common build related files -->
-		<None Include="..\build.ps1" />
-		<None Include="..\build.sh" />
+		<None Include="..\build.ps1" Condition="Exists('..\build.ps1')" />
+		<None Include="..\build.sh" Condition="Exists('..\build.sh')" />
 
 		<None Include="..\.nuke" LinkBase="config" />
 		<None Include="..\global.json" LinkBase="config" Condition="Exists('..\global.json')" />

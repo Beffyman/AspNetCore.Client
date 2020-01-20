@@ -1,6 +1,7 @@
 ﻿using AspNetCore.Server.Attributes.SignalR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using TestWebApp.Contracts;
@@ -17,9 +18,9 @@ namespace TestWebApp.Hubs
 		}
 
 		[ProducesMessage("ReceiveMessage", typeof(string), typeof(string))]
-		public async Task SendMessage(string user, string message)
+		public async Task SendMessage(string user, string message, CancellationToken token = default)
 		{
-			await Clients.All.SendAsync("ReceiveMessage", user, message);
+			await Clients.All.SendAsync("ReceiveMessage", user, message, token);
 		}
 
 		[ProducesMessage("ReceiveMessage2", typeof(MyFancyDto))]

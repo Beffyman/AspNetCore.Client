@@ -7,7 +7,7 @@ using Beffyman.AspNetCore.Client;
 
 namespace TestWebApp.Console
 {
-	public class Program
+	public static class Program
 	{
 
 		public static void Main()
