@@ -60,7 +60,14 @@ namespace TestWebApp.Tests
 
 			TimeoutToken.Register(() =>
 			{
-				Host?.StopAsync().RunSynchronously();
+				if (Host != null)
+				{
+					var stopTask = Host.StopAsync();
+					if (!stopTask.IsCompleted)
+					{
+						stopTask.GetAwaiter().GetResult();
+					}
+				}
 			});
 		}
 
