@@ -11,7 +11,7 @@ namespace TestWebApp.Tests
 	public class MessagePackClientTest
 	{
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void GetTest()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -24,7 +24,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void HeaderTestString()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -37,7 +37,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void HeaderTestInt()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -51,7 +51,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DtoReturns()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -71,7 +71,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void RequestAndResponseChecks()
 		{
 			using (var endpoint = new MessagePackServerInfo())
@@ -104,7 +104,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void ProblemDetailsRequestTest()
 		{
 			//Doesn't seem like we need a application/problem+x-msgpack content-type
@@ -144,7 +144,7 @@ namespace TestWebApp.Tests
 		/// When the HttpClient has the default HttpMessageHandler, the SendAsync will cancel approriately, until they match this functionality, this test will be disabled
 		/// </summary>
 		/// <returns></returns>
-		//[Fact]
+		//[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		//public async Task CancelTestAsync()
 		//{
 		//	var endpoint = new ProtobufServerInfo();

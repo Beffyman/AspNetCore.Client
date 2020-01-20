@@ -22,7 +22,8 @@ namespace TestWebApp.Tests
 
 	public class SignalRTests
 	{
-		[Fact]
+
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public async Task SendReceiveMessageAsync()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -61,7 +62,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public async Task CounterChannelTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -97,7 +98,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public async Task CounterBlockingTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -123,7 +124,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public async Task MessagePackTest()
 		{
 			using (var endpoint = new MessagePackServerInfo())

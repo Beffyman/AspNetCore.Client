@@ -5,7 +5,7 @@ namespace TestWebApp.Tests
 {
 	public class StaticRouteTests
 	{
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void TestRoute()
 		{
 			var actual = TestWebApp.Clients.Routes.ValuesClientRoutes.Get(5);
@@ -13,7 +13,7 @@ namespace TestWebApp.Tests
 			Assert.Equal(expected, actual);
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void TestQuery()
 		{
 			var actual = TestWebApp.Clients.Routes.ValuesClientRoutes.EnumerableGet(new List<int> { 1, 2, 3, 4 }, new List<bool> { true, false, true });

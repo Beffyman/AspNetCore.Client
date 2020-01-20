@@ -22,7 +22,7 @@ namespace TestWebApp.Tests
 		private readonly CancellationTokenSource _tokenSource;
 		public readonly CancellationToken TimeoutToken;
 
-		public ServerInfo(int testTimeout = 10_000)
+		public ServerInfo(int testTimeout = Constants.TEST_TIMEOUT)
 		{
 			_tokenSource = new CancellationTokenSource(testTimeout);
 

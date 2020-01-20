@@ -15,7 +15,7 @@ namespace TestWebApp.Tests
 {
 	public class JsonClientTest
 	{
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void GetTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -28,7 +28,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void HeaderTestString()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -41,7 +41,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void HeaderTestInt()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -55,7 +55,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DtoReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -74,7 +74,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void GuidReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -93,7 +93,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DateTimeReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -113,7 +113,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void BoolReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -132,7 +132,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void RequestAndResponseChecks()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -153,7 +153,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void PostNoBodyCheck()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -173,7 +173,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void ComplexPostCheck()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -206,7 +206,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void EnumerableRouteGet()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -231,7 +231,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void EnumerableRouteGetCustom()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -257,7 +257,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void QueryParameterReturns()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -278,7 +278,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void FileResultTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -294,7 +294,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DeleteAuth()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -309,7 +309,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void TestPreFunc()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -323,7 +323,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void QueryObjectTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -345,7 +345,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DefaultRouteConstraintTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -358,7 +358,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void OptionalRouteConstraintTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -376,7 +376,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DateTimeRouteTests()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -395,7 +395,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DateTimeOffsetRouteTests()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -414,7 +414,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void ApiRouteVersioningTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -427,7 +427,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void ApiQueryVersioningTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -441,7 +441,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void InheritanceGenerationBuildTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -460,7 +460,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void DuplicateMethodReturnAndResponseTypeAttributeTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -488,7 +488,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void ProblemDetailsRequestTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -522,7 +522,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void ModelStateBadRequestTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -545,7 +545,7 @@ namespace TestWebApp.Tests
 
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void UrlEncodingCheckTest()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -576,7 +576,7 @@ namespace TestWebApp.Tests
 		}
 
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public async Task RouteReplacement()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -593,7 +593,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public async Task InheritedRouteAsync()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -610,7 +610,7 @@ namespace TestWebApp.Tests
 			}
 		}
 
-		[Fact]
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public async Task CancellationTokenParameter()
 		{
 			using (var endpoint = new JsonServerInfo())
@@ -627,7 +627,7 @@ namespace TestWebApp.Tests
 		/// When the HttpClient has the default HttpMessageHandler, the SendAsync will cancel approriately, until they match this functionality, this test will be disabled
 		/// </summary>
 		/// <returns></returns>
-		//[Fact]
+		//[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		//public async Task CancelTestAsync()
 		//{
 		//	var endpoint = new JsonServerInfo();
