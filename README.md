@@ -44,6 +44,12 @@ and think the following
 
 Includes ServiceCollection registration logic, used on the Client
 
+## Beffyman.AspNetCore.Client.Generator
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.Generator)
+
+On Build generator that will generate a Clients.cs file based on the Properties in the csproj.
+
+
 ## Beffyman.AspNetCore.Server
 [![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Server.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Server)
 
@@ -99,7 +105,15 @@ services.AddTestWebClients(config=>
 ```
 
 
-## Beffyman.AspNetCore.Client.Generator
-[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.Generator.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.Generator)
+## Beffyman.AspNetCore.Client.Http
+[![NuGet](https://img.shields.io/nuget/v/Beffyman.AspNetCore.Client.Http.svg)](https://www.nuget.org/packages/Beffyman.AspNetCore.Client.Http)
 
-On Build generator that will generate a Clients.cs file based on the Properties in the csproj.
+Uses Microsoft.Extensions.Http to inject a client factory. This allows for better reuse of the underlying HttpMessageHandler. 
+
+```c#
+services.AddTestWebClients(config=>
+{
+	config.UseHttpClientFactory<ITestWebAppClient>();
+});
+
+```
