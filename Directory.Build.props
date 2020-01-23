@@ -1,0 +1,33 @@
+<Project>
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+		<IsPackable>false</IsPackable>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<TieredCompilation>true</TieredCompilation>
+		<TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+	</PropertyGroup>
+
+	<!--Define nupkg -->
+	<PropertyGroup>
+		<Copyright>Copyright 2020</Copyright>
+		<Authors>Beffyman</Authors>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Beffyman/AspNetCore.Client</RepositoryUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeSymbols>true</IncludeSymbols>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+	</ItemGroup>
+
+	<!--Define Analyzers -->
+	<ItemGroup>
+		<PackageReference Include="ErrorProne.NET.Structs" Version="0.2.0-beta.7 ">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+</Project>

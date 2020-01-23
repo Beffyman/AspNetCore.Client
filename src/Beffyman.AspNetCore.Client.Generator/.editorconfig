@@ -1,0 +1,29 @@
+# Rules in this file were initially inferred by Visual Studio IntelliCode from the E:\Git_Github\Beffyman.AspNetCore.Client\src\Beffyman.AspNetCore.Client.BlazorJson\ codebase based on best match to current usage at 10/25/2018
+# You can modify the rules from these initially generated values to suit your own policies
+# You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+[*.cs]
+
+#Core editorconfig formatting - indentation
+
+#use hard tabs for indentation
+indent_style = tab
+
+#Formatting - organize using options
+
+#sort System.* using directives alphabetically, and place them before other usings
+dotnet_sort_system_directives_first = true
+
+#Style - expression bodied member options
+
+#prefer block bodies for methods
+csharp_style_expression_bodied_methods = false:suggestion
+
+#Style - expression level options
+
+#prefer the language keyword for member access expressions, instead of the type name, for types that have a keyword to represent them
+dotnet_style_predefined_type_for_member_access = true:suggestion
+
+#Style - language keyword and framework type options
+
+#prefer the language keyword for local variables, method parameters, and class members, instead of the type name, for types that have a keyword to represent them
+dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion

@@ -1,0 +1,68 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+- refs/tags/*
+- feature/*
+
+pr:
+  autoCancel: true
+  branches:
+    include:
+      - master
+  paths:
+    include:
+    - src/*
+    - tests/*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    installationPath: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
+    packageType: 'sdk'
+    useGlobalJson: true
+
+#https://github.com/dotnet/cli/issues/6589
+- task: PowerShell@2
+  displayName: 'Run CI'
+  inputs:
+    targetType: filePath
+    filePath: Build.ps1
+    arguments: -target CI
+    failOnStderr: true
+    workingDirectory: $(Build.SourcesDirectory)
+  env:
+    DOTNET_MSBUILD_SDK_RESOLVER_CLI_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
+    DOTNET_MSBUILD_SDK_RESOLVER_SDKS_DIR: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
+    DOTNET_ROOT: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test results'
+  inputs:
+   testResultsFormat: 'VSTest'
+   testResultsFiles: '*.trx'
+   searchFolder: 'artifacts/tests'
+  condition: always()
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage'
+  inputs:
+    codeCoverageTool: cobertura
+    summaryFileLocation: artifacts/tests/coverage.cobertura.xml
+    reportDirectory: artifacts/tests/Reports
+    failIfCoverageEmpty: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Packages'
+  inputs:
+    pathtoPublish: 'artifacts/nuget'
+    artifactName: 'Nuget'

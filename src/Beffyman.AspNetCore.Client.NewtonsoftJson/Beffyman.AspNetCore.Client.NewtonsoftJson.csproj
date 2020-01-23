@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Beffyman.AspNetCore.Client.SystemJson.xml</DocumentationFile>
+		<Description>Contains System.Text.Json serializer for Beffyman.AspNetCore.Client.Generator clients</Description>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Text.Json" Version="4.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
+	</ItemGroup>
+</Project>

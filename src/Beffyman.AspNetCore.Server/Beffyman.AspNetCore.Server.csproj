@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Beffyman.AspNetCore.Server.xml</DocumentationFile>
+		<Description>A helper package for Beffyman.AspNetCore.Client.Generator that contains known attributes that affect the generation</Description>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+</Project>

@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GenerateClients>true</GenerateClients>
+		<RouteToServiceProjectFolder>../TestWebApp</RouteToServiceProjectFolder>
+		<ClientInterfaceName>TestWebAppClient</ClientInterfaceName>
+		<RegisterName>TestWeb</RegisterName>
+		<UseValueTask>true</UseValueTask>
+		<UseInternalClients>true</UseInternalClients>
+		<ClientRouteConstraints>true</ClientRouteConstraints>
+		<ErrorOnUnhandledCallback>false</ErrorOnUnhandledCallback>
+		<MultipleFiles>false</MultipleFiles>
+		<GenerateStaticRoutes>true</GenerateStaticRoutes>
+		<RoutesNamespace>Routes</RoutesNamespace>
+		<ClientNamespace>TestWebApp.Clients</ClientNamespace>
+		<HubNamespace>TestWebApp.Hubs</HubNamespace>
+		<AllowedNamespaces>$(AllowedNamespaces);TestWebApp.Contracts.*;Microsoft.AspNetCore.Mvc*;</AllowedNamespaces>
+		<ExcludedNamespaces></ExcludedNamespaces>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Beffyman.AspNetCore.Client.Generator" Version="$(GeneratorVersion)" Condition="'$(GenerateWithNuget)' == 'true'" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.1" />
+		<ProjectReference Include="..\..\src\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
+		<ProjectReference Include="..\TestWebApp.Contracts\TestWebApp.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>
