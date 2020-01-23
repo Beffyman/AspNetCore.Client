@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using TestWebApp.Contracts;
+using TestWebApp.FakeServices;
 using TestWebApp.GoodServices;
 
 namespace TestWebApp.Controllers
@@ -592,6 +593,12 @@ namespace TestWebApp.Controllers
 			await Task.Delay(2500, token);
 
 			return Ok();
+		}
+
+		[HttpGet("[action]")]
+		public Task TestFromServicesAttributeAsync([FromServices] IFakeService fakeService)
+		{
+			return Task.CompletedTask;
 		}
 
 	}
