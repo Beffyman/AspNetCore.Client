@@ -29,8 +29,14 @@ namespace Beffyman.AspNetCore.Client.Generator.CSharp.AspNetCoreHttp
 				return;
 			}
 
-
 			var attributes = parameter.AttributeLists.SelectMany(x => x.Attributes).ToList();
+
+			if (attributes.Any(x => x.Name.ToFullString().MatchesAttribute(nameof(FromServicesAttribute))))
+			{
+				Invalid = true;
+				return;
+			}
+
 
 			Options = new ParameterAttributeOptions
 			{
