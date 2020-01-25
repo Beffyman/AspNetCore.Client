@@ -49,7 +49,8 @@ namespace Beffyman.AspNetCore.Client.Generator.Output
 
 			var usings = new List<string>
 			{
-				@"using Beffyman.AspNetCore.Client;",
+				@"//Requires nuget Beffyman.AspNetCore.Client",
+				"using Beffyman.AspNetCore.Client;",
 				"using Beffyman.AspNetCore.Client.Authorization;",
 				"using Beffyman.AspNetCore.Client.Exceptions;",
 				"using Beffyman.AspNetCore.Client.Http;",
@@ -405,6 +406,11 @@ public IDisposable On{message.Name}(Action<{string.Join(",", message.Types)}> ac
 
 		public static string WriteRepositoryRegistration(string version)
 		{
+			if (!Settings.GenerateClientRepository)
+			{
+				return string.Empty;
+			}
+
 			return $@"			services.AddScoped<I{Settings.ClientInterfaceName}{version}Repository,{Settings.ClientInterfaceName}{version}Repository>();";
 		}
 
@@ -477,6 +483,11 @@ $@"
 
 		public static string WriteRepositories(GenerationContext context)
 		{
+			if (!Settings.GenerateClientRepository)
+			{
+				return string.Empty;
+			}
+
 			var versions = context.HttpClients.Where(x => x.Generated)
 				.GroupBy(x => x.NamespaceVersion)
 				.OrderBy(x => x.Key)
@@ -493,8 +504,6 @@ $@"
 
 		public static string WriteRepository(IGrouping<string, AspNetCoreHttpController> version)
 		{
-
-
 			return
 $@"
 public interface I{Settings.ClientInterfaceName}{version.Key}Repository
@@ -504,39 +513,96 @@ public interface I{Settings.ClientInterfaceName}{version.Key}Repository
 
 {(Settings.UseInternalClients ? "internal" : "public")} class {Settings.ClientInterfaceName}{version.Key}Repository : I{Settings.ClientInterfaceName}{version.Key}Repository
 {{
+{WriteRepositoryLazyProvider()}
 {string.Join($@"{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryProperty(version.Key, x)))}
 
 	public {Settings.ClientInterfaceName}{version.Key}Repository
 	(
-{string.Join($@",{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryParameter(version.Key, x)))}
+{WriteRepositoryLazyProviderParameter(version)}
+{string.Join($@",{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryParameter(version.Key, x)).NotNull())}
 	)
 	{{
+{WriteRepositoryLazyProviderAssignment()}
 {string.Join($@"{Environment.NewLine}", version.OrderBy(x => x.Name).Select(x => WriteRepositoryAssignment(version.Key, x)))}
 	}}
 }}
-
 ";
+
 		}
 
+		private static string WriteRepositoryLazyProviderParameter(IGrouping<string, AspNetCoreHttpController> version)
+		{
+			if (!Settings.GenerateLazyClientRepository)
+			{
+				return string.Empty;
+			}
 
-		public static string WriteRepositoryInterfaceProperty(string key, AspNetCoreHttpController controller)
+			return $"IServiceProvider {Constants.RepositoryLazyProviderName}";
+		}
+
+		private static string WriteRepositoryLazyProviderAssignment()
+		{
+			if (!Settings.GenerateLazyClientRepository)
+			{
+				return string.Empty;
+			}
+
+			return $"this._{Constants.RepositoryLazyProviderName} = {Constants.RepositoryLazyProviderName};";
+		}
+
+		private static string WriteRepositoryLazyProvider()
+		{
+			if (!Settings.GenerateLazyClientRepository)
+			{
+				return string.Empty;
+			}
+
+			return $"protected readonly IServiceProvider _{Constants.RepositoryLazyProviderName};";
+		}
+
+		private static string WriteRepositoryInterfaceProperty(string key, AspNetCoreHttpController controller)
 		{
 			return $@"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.Name} {{ get; }}";
 		}
 
 		public static string WriteRepositoryProperty(string key, AspNetCoreHttpController controller)
 		{
-			return $@"public {key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} {controller.Name} {{ get; }}";
+			string type = $"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName}";
+			string name = controller.Name;
+			if (!Settings.GenerateLazyClientRepository)
+			{
+				return $@"public {type} {name} {{ get; }}";
+			}
+
+			return
+$@"private readonly Lazy<{type}> lazy_{name};
+public {type} {name} => lazy_{name}.Value;";
+
 		}
 
 		public static string WriteRepositoryParameter(string key, AspNetCoreHttpController controller)
 		{
+			if (Settings.GenerateLazyClientRepository)
+			{
+				return null;
+			}
+
 			return $@"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName} param_{controller.Name.ToLower()}";
 		}
 
 		public static string WriteRepositoryAssignment(string key, AspNetCoreHttpController controller)
 		{
-			return $@"this.{controller.Name} = param_{controller.Name.ToLower()};";
+			if (!Settings.GenerateLazyClientRepository)
+			{
+				return $@"this.{controller.Name} = param_{controller.Name.ToLower()};";
+			}
+			else
+			{
+				string type = $"{key}{(key != null ? "." : "")}{(controller.NamespaceSuffix != null ? $"{controller.NamespaceSuffix}." : string.Empty)}I{controller.ClientName}";
+
+				return
+$@"this.lazy_{controller.Name} = new Lazy<{type}>(() => _{Constants.RepositoryLazyProviderName}.GetService<{type}>());";
+			}
 		}
 
 

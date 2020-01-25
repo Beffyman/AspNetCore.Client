@@ -5,6 +5,7 @@
 //		Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+//Requires nuget Beffyman.AspNetCore.Client
 using Beffyman.AspNetCore.Client.Authorization;
 using Beffyman.AspNetCore.Client.Exceptions;
 using Beffyman.AspNetCore.Client.GeneratorExtensions;

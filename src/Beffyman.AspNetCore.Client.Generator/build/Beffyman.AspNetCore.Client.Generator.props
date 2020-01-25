@@ -10,15 +10,21 @@
 		<RouteToServiceProjectFolder></RouteToServiceProjectFolder>
 		<ClientInterfaceName>MyServiceClient</ClientInterfaceName>
 		<RegisterName>MyService</RegisterName>
+
 		<UseValueTask>true</UseValueTask>
 		<UseInternalClients>true</UseInternalClients>
 		<ClientRouteConstraints>true</ClientRouteConstraints>
 		<ErrorOnUnhandledCallback>true</ErrorOnUnhandledCallback>
 		<MultipleFiles>false</MultipleFiles>
 		<GenerateStaticRoutes>true</GenerateStaticRoutes>
+
+		<GenerateClientRepository>true</GenerateClientRepository>
+		<GenerateLazyClientRepository>true</GenerateLazyClientRepository>
+
 		<RoutesNamespace>Routes</RoutesNamespace>
 		<ClientNamespace>MyService.Clients</ClientNamespace>
 		<HubNamespace>MyService.Hubs</HubNamespace>
+
 		<AllowedNamespaces>System*;</AllowedNamespaces>
 		<ExcludedNamespaces></ExcludedNamespaces>
 	</PropertyGroup>

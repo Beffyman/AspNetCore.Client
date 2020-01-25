@@ -21,18 +21,25 @@ namespace Beffyman.AspNetCore.Client.Generator
 #endif
 	{
 		public string CurrentDirectory { get; set; }
+
 		public string RouteToServiceProjectFolder { get; set; }
 		public string ClientInterfaceName { get; set; }
 		public string RegisterName { get; set; }
+
 		public string UseValueTask { get; set; }
 		public string UseInternalClients { get; set; }
 		public string ClientRouteConstraints { get; set; }
 		public string ErrorOnUnhandledCallback { get; set; }
 		public string MultipleFiles { get; set; }
 		public string GenerateStaticRoutes { get; set; }
+
+		public string GenerateClientRepository { get; set; }
+		public string GenerateLazyClientRepository { get; set; }
+
 		public string RoutesNamespace { get; set; }
 		public string ClientNamespace { get; set; }
 		public string HubNamespace { get; set; }
+
 		public string AllowedNamespaces { get; set; }
 		public string ExcludedNamespaces { get; set; }
 
@@ -41,15 +48,21 @@ namespace Beffyman.AspNetCore.Client.Generator
 			RouteToServiceProjectFolder = properties.GetValueOrDefault(nameof(RouteToServiceProjectFolder));
 			ClientInterfaceName = properties.GetValueOrDefault(nameof(ClientInterfaceName));
 			RegisterName = properties.GetValueOrDefault(nameof(RegisterName));
+
 			UseValueTask = properties.GetValueOrDefault(nameof(UseValueTask));
 			UseInternalClients = properties.GetValueOrDefault(nameof(UseInternalClients));
 			ClientRouteConstraints = properties.GetValueOrDefault(nameof(ClientRouteConstraints));
 			ErrorOnUnhandledCallback = properties.GetValueOrDefault(nameof(ErrorOnUnhandledCallback));
 			MultipleFiles = properties.GetValueOrDefault(nameof(MultipleFiles));
 			GenerateStaticRoutes = properties.GetValueOrDefault(nameof(GenerateStaticRoutes));
+
+			GenerateClientRepository = properties.GetValueOrDefault(nameof(GenerateClientRepository));
+			GenerateLazyClientRepository = properties.GetValueOrDefault(nameof(GenerateLazyClientRepository));
+
 			RoutesNamespace = properties.GetValueOrDefault(nameof(RoutesNamespace));
 			ClientNamespace = properties.GetValueOrDefault(nameof(ClientNamespace));
 			HubNamespace = properties.GetValueOrDefault(nameof(HubNamespace));
+
 			AllowedNamespaces = properties.GetValueOrDefault(nameof(AllowedNamespaces));
 			ExcludedNamespaces = properties.GetValueOrDefault(nameof(ExcludedNamespaces));
 		}
@@ -84,15 +97,21 @@ namespace Beffyman.AspNetCore.Client.Generator
 			Settings.RouteToServiceProjectFolder = RouteToServiceProjectFolder;
 			Settings.ClientInterfaceName = ClientInterfaceName;
 			Settings.RegisterName = RegisterName;
+
 			Settings.UseValueTask = bool.Parse(UseValueTask ?? "false");
 			Settings.UseInternalClients = bool.Parse(UseInternalClients ?? "false");
 			Settings.ClientRouteConstraints = bool.Parse(ClientRouteConstraints ?? "false");
 			Settings.ErrorOnUnhandledCallback = bool.Parse(ErrorOnUnhandledCallback ?? "false");
 			Settings.MultipleFiles = bool.Parse(MultipleFiles ?? "false");
 			Settings.GenerateStaticRoutes = bool.Parse(GenerateStaticRoutes ?? "false");
+
+			Settings.GenerateClientRepository = bool.Parse(GenerateClientRepository ?? "true");
+			Settings.GenerateLazyClientRepository = bool.Parse(GenerateLazyClientRepository ?? "false");
+
 			Settings.RoutesNamespace = RoutesNamespace;
 			Settings.ClientNamespace = ClientNamespace;
 			Settings.HubNamespace = HubNamespace;
+
 			Settings.AllowedNamespaces = AllowedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 			Settings.ExcludedNamespaces = ExcludedNamespaces?.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
