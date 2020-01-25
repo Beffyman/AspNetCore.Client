@@ -18,6 +18,7 @@ namespace Beffyman.AspNetCore.Client.Generator
 		public const string HttpOverrideGetMethod = nameof(IHttpOverride.GetResponseAsync);
 		public const string HttpOverrideOnNonOverridedResponse = nameof(IHttpOverride.OnNonOverridedResponseAsync);
 
+		public const string RepositoryLazyProviderName = "provider";
 
 		public const string Serializer = nameof(IHttpSerializer);
 		public const string SerializerField = "Serializer";

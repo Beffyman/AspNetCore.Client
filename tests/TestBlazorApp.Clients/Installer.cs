@@ -5,6 +5,7 @@
 //		Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+//Requires nuget Beffyman.AspNetCore.Client
 using Beffyman.AspNetCore.Client.Authorization;
 using Beffyman.AspNetCore.Client.Exceptions;
 using Beffyman.AspNetCore.Client.GeneratorExtensions;
@@ -41,7 +42,6 @@ namespace TestBlazorApp.Clients
 			configuration.RegisterClientWrapperCreator<ITestBlazorAppClient>(TestBlazorAppClientWrapper.Create);
 			configuration.UseClientWrapper<ITestBlazorAppClientWrapper, TestBlazorAppClientWrapper>((provider) => new TestBlazorAppClientWrapper(provider.GetService<Func<ITestBlazorAppClient, IFlurlClient>>(), configuration.GetSettings(), provider));
 			configure?.Invoke(configuration);
-			services.AddScoped<ITestBlazorAppClientRepository, TestBlazorAppClientRepository>();
 			services.AddScoped<IWeatherForecastClient, WeatherForecastClient>();
 			return configuration.ApplyConfiguration<ITestBlazorAppClient>(services);
 		}
@@ -84,26 +84,5 @@ namespace TestBlazorApp.Clients
 
 	public interface ITestBlazorAppClient : IClient
 	{
-	}
-
-	public interface ITestBlazorAppClientRepository
-	{
-		IWeatherForecastClient WeatherForecast
-		{
-			get;
-		}
-	}
-
-	internal class TestBlazorAppClientRepository : ITestBlazorAppClientRepository
-	{
-		public IWeatherForecastClient WeatherForecast
-		{
-			get;
-		}
-
-		public TestBlazorAppClientRepository(IWeatherForecastClient param_weatherforecast)
-		{
-			this.WeatherForecast = param_weatherforecast;
-		}
 	}
 }

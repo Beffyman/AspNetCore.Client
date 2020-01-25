@@ -10,15 +10,21 @@
 													RouteToServiceProjectFolder="$(RouteToServiceProjectFolder)"
 													ClientInterfaceName="$(ClientInterfaceName)"
 													RegisterName="$(RegisterName)"
+
 													UseValueTask="$(UseValueTask)"
 													UseInternalClients="$(UseInternalClients)"
 													ClientRouteConstraints="$(ClientRouteConstraints)"
 													ErrorOnUnhandledCallback="$(ErrorOnUnhandledCallback)"
 													MultipleFiles="$(MultipleFiles)"
 													GenerateStaticRoutes ="$(GenerateStaticRoutes)"
+
+													GenerateClientRepository ="$(GenerateClientRepository)"
+													GenerateLazyClientRepository ="$(GenerateLazyClientRepository)"
+
 													RoutesNamespace ="$(RoutesNamespace)"
 													ClientNamespace="$(ClientNamespace)"
 													HubNamespace="$(HubNamespace)"
+
 													AllowedNamespaces="$(AllowedNamespaces)"
 													ExcludedNamespaces="$(ExcludedNamespaces)"/>
 

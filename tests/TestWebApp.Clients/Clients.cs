@@ -5,6 +5,7 @@
 //		Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+//Requires nuget Beffyman.AspNetCore.Client
 //Requires nuget Microsoft.AspNetCore.SignalR.Client
 //Requires nuget Microsoft.Extensions.Logging
 //Requires nuget System.Threading.Channels
@@ -611,38 +612,25 @@ namespace TestWebApp.Clients
 
 	internal class TestWebAppClientRepository : ITestWebAppClientRepository
 	{
-		public IFullClient Full
+		protected readonly IServiceProvider _provider;
+		private readonly Lazy<IFullClient> lazy_Full;
+		public IFullClient Full => lazy_Full.Value;
+		private readonly Lazy<IInheritanceGenerationClient> lazy_InheritanceGeneration;
+		public IInheritanceGenerationClient InheritanceGeneration => lazy_InheritanceGeneration.Value;
+		private readonly Lazy<FancySuffix.INamespacedClient> lazy_Namespaced;
+		public FancySuffix.INamespacedClient Namespaced => lazy_Namespaced.Value;
+		private readonly Lazy<IRouteInheritanceClient> lazy_RouteInheritance;
+		public IRouteInheritanceClient RouteInheritance => lazy_RouteInheritance.Value;
+		private readonly Lazy<IValuesClient> lazy_Values;
+		public IValuesClient Values => lazy_Values.Value;
+		public TestWebAppClientRepository(IServiceProvider provider)
 		{
-			get;
-		}
-
-		public IInheritanceGenerationClient InheritanceGeneration
-		{
-			get;
-		}
-
-		public FancySuffix.INamespacedClient Namespaced
-		{
-			get;
-		}
-
-		public IRouteInheritanceClient RouteInheritance
-		{
-			get;
-		}
-
-		public IValuesClient Values
-		{
-			get;
-		}
-
-		public TestWebAppClientRepository(IFullClient param_full, IInheritanceGenerationClient param_inheritancegeneration, FancySuffix.INamespacedClient param_namespaced, IRouteInheritanceClient param_routeinheritance, IValuesClient param_values)
-		{
-			this.Full = param_full;
-			this.InheritanceGeneration = param_inheritancegeneration;
-			this.Namespaced = param_namespaced;
-			this.RouteInheritance = param_routeinheritance;
-			this.Values = param_values;
+			this._provider = provider;
+			this.lazy_Full = new Lazy<IFullClient>(() => _provider.GetService<IFullClient>());
+			this.lazy_InheritanceGeneration = new Lazy<IInheritanceGenerationClient>(() => _provider.GetService<IInheritanceGenerationClient>());
+			this.lazy_Namespaced = new Lazy<FancySuffix.INamespacedClient>(() => _provider.GetService<FancySuffix.INamespacedClient>());
+			this.lazy_RouteInheritance = new Lazy<IRouteInheritanceClient>(() => _provider.GetService<IRouteInheritanceClient>());
+			this.lazy_Values = new Lazy<IValuesClient>(() => _provider.GetService<IValuesClient>());
 		}
 	}
 
@@ -656,14 +644,13 @@ namespace TestWebApp.Clients
 
 	internal class TestWebAppClientV1Repository : ITestWebAppClientV1Repository
 	{
-		public V1.ITestClient Test
+		protected readonly IServiceProvider _provider;
+		private readonly Lazy<V1.ITestClient> lazy_Test;
+		public V1.ITestClient Test => lazy_Test.Value;
+		public TestWebAppClientV1Repository(IServiceProvider provider)
 		{
-			get;
-		}
-
-		public TestWebAppClientV1Repository(V1.ITestClient param_test)
-		{
-			this.Test = param_test;
+			this._provider = provider;
+			this.lazy_Test = new Lazy<V1.ITestClient>(() => _provider.GetService<V1.ITestClient>());
 		}
 	}
 
@@ -677,14 +664,13 @@ namespace TestWebApp.Clients
 
 	internal class TestWebAppClientV2Repository : ITestWebAppClientV2Repository
 	{
-		public V2.ITestClient Test
+		protected readonly IServiceProvider _provider;
+		private readonly Lazy<V2.ITestClient> lazy_Test;
+		public V2.ITestClient Test => lazy_Test.Value;
+		public TestWebAppClientV2Repository(IServiceProvider provider)
 		{
-			get;
-		}
-
-		public TestWebAppClientV2Repository(V2.ITestClient param_test)
-		{
-			this.Test = param_test;
+			this._provider = provider;
+			this.lazy_Test = new Lazy<V2.ITestClient>(() => _provider.GetService<V2.ITestClient>());
 		}
 	}
 
@@ -698,14 +684,13 @@ namespace TestWebApp.Clients
 
 	internal class TestWebAppClientV3Repository : ITestWebAppClientV3Repository
 	{
-		public V3.ITestQueryClient TestQuery
+		protected readonly IServiceProvider _provider;
+		private readonly Lazy<V3.ITestQueryClient> lazy_TestQuery;
+		public V3.ITestQueryClient TestQuery => lazy_TestQuery.Value;
+		public TestWebAppClientV3Repository(IServiceProvider provider)
 		{
-			get;
-		}
-
-		public TestWebAppClientV3Repository(V3.ITestQueryClient param_testquery)
-		{
-			this.TestQuery = param_testquery;
+			this._provider = provider;
+			this.lazy_TestQuery = new Lazy<V3.ITestQueryClient>(() => _provider.GetService<V3.ITestQueryClient>());
 		}
 	}
 
@@ -719,14 +704,13 @@ namespace TestWebApp.Clients
 
 	internal class TestWebAppClientV3_0Repository : ITestWebAppClientV3_0Repository
 	{
-		public V3_0.ITestRouteClient TestRoute
+		protected readonly IServiceProvider _provider;
+		private readonly Lazy<V3_0.ITestRouteClient> lazy_TestRoute;
+		public V3_0.ITestRouteClient TestRoute => lazy_TestRoute.Value;
+		public TestWebAppClientV3_0Repository(IServiceProvider provider)
 		{
-			get;
-		}
-
-		public TestWebAppClientV3_0Repository(V3_0.ITestRouteClient param_testroute)
-		{
-			this.TestRoute = param_testroute;
+			this._provider = provider;
+			this.lazy_TestRoute = new Lazy<V3_0.ITestRouteClient>(() => _provider.GetService<V3_0.ITestRouteClient>());
 		}
 	}
 }
