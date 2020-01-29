@@ -9,7 +9,7 @@ using System.Text.Json;
 namespace Beffyman.AspNetCore.Client.Serializers
 {
 	/// <summary>
-	/// Uses System.Texy.Json for serializing and deserializing the http content
+	/// Uses System.Text.Json for serializing and deserializing the http content
 	/// </summary>
 	internal class JsonHttpSerializer : IHttpContentSerializer
 	{
@@ -42,7 +42,7 @@ namespace Beffyman.AspNetCore.Client.Serializers
 
 
 		/// <summary>
-		/// Deserializes the request content which is assumed to be simpleJson into a object of <typeparamref name="T"/>
+		/// Deserializes the request content which is assumed to be json into a object of <typeparamref name="T"/>
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="content"></param>
@@ -65,7 +65,7 @@ namespace Beffyman.AspNetCore.Client.Serializers
 		}
 
 		/// <summary>
-		/// Serializes the request into a StringContent with a json media type, but serialized with SimpleJson
+		/// Serializes the request into a StringContent with a json media type, but serialized with System.Text.Json
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="request"></param>

@@ -3,7 +3,7 @@
 namespace Beffyman.AspNetCore.Client
 {
 	/// <summary>
-	/// Static extension class for the Beffyman.AspNetCore.Client.SystemJson library
+	/// Static extension class for the Beffyman.AspNetCore.Client.NewtonsoftJson library
 	/// </summary>
 	public static class NewtonsoftJsonSerializerInstaller
 	{

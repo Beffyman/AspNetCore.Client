@@ -8,10 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Text.Json" Version="4.7.0" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj" />
 	</ItemGroup>
 </Project>
