@@ -4,6 +4,7 @@ using TestWebApp.Clients;
 using TestWebApp.Clients.FancySuffix;
 using TestWebApp.Contracts;
 using Beffyman.AspNetCore.Client;
+using System.Net.Http;
 
 namespace TestWebApp.Console
 {
@@ -28,18 +29,33 @@ namespace TestWebApp.Console
 
 			var client = provider.GetService<IValuesClient>();
 
-			MyFancyDto dto = null;
+			HttpResponseMessage msg = null;
+			MyFancyDto val = client.MultiReturnParse(BadRequestCallback: () =>
+			{
+				throw new Exception("Client did not work!");
+			},
+			InternalServerErrorCallback: () =>
+			{
+				throw new Exception("Client did not work!");
+			},
+			CreatedCallback: dto =>
+			 {
 
-			client.FancyDtoReturn(50, OKCallback: _ =>
-			  {
-				  dto = _;
-			  });
+			 },
+			ResponseCallback: response =>
+			 {
+				 msg = response;
+			 });
 
-			if (dto == null)
+			if (val.Id != 5)
 			{
 				throw new Exception("Client did not work!");
 			}
 
+			if (!msg.IsSuccessStatusCode)
+			{
+				throw new Exception("Client did not work!");
+			}
 		}
 
 	}

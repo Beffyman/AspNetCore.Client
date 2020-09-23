@@ -601,5 +601,15 @@ namespace TestWebApp.Controllers
 			return Task.CompletedTask;
 		}
 
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(MyFancyDto), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public ActionResult<MyFancyDto> MultiReturnParse()
+		{
+			return Ok(new MyFancyDto
+			{
+				Id = 5
+			});
+		}
 	}
 }

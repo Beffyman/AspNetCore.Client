@@ -22,7 +22,7 @@ namespace Beffyman.AspNetCore.Client
 			{
 				if (constantBaseAddress)
 				{
-					services.AddSingleton<IFlurlClientFactory, PerHostFlurlClientFactory>();
+					services.AddSingleton<IFlurlClientFactory, PerBaseUrlFlurlClientFactory>();
 
 					services.AddScoped<Func<T, IFlurlClient>>(provider =>
 					{
