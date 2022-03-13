@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+		<TestProjectType>UnitTest</TestProjectType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.msbuild" Version="3.1.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Include="Moq" Version="4.13.1" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\src\Beffyman.AspNetCore.Client.MessagePack\Beffyman.AspNetCore.Client.MessagePack.csproj" />
+		<ProjectReference Include="..\..\..\src\Beffyman.AspNetCore.Client.Protobuf\Beffyman.AspNetCore.Client.Protobuf.csproj" />
+		<ProjectReference Include="..\TestAzureFunction.Clients\TestAzureFunction.Clients.csproj" />
+		<ProjectReference Include="..\TestAzureFunction\TestAzureFunction.csproj" />
+	</ItemGroup>
+
+</Project>

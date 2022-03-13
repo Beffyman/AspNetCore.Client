@@ -5,11 +5,13 @@ using Nuke.Common.CI;
 using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
+using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
+using Nuke.Components;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
@@ -89,10 +91,10 @@ public class BuildScripts : NukeBuild
 		DotNetTest(s => s.SetConfiguration(Configuration)
 				.EnableNoBuild()
 				.EnableNoRestore()
-				.SetLogger("trx")
+				.SetLoggers("trx")
 				.SetResultsDirectory(TestArtifactsDirectory)
-				.SetLogOutput(true)
-				.SetArgumentConfigurator(arguments => arguments.Add("/p:CollectCoverage={0}", "true")
+				.EnableProcessLogOutput()
+				.SetProcessArgumentConfigurator(arguments => arguments.Add("/p:CollectCoverage={0}", "true")
 					.Add("/p:CoverletOutput={0}/", TestArtifactsDirectory)
 					//.Add("/p:Threshold={0}", 90)
 					.Add("/p:Exclude=\"[xunit*]*%2c[*.Tests]*\"")
@@ -100,7 +102,7 @@ public class BuildScripts : NukeBuild
 					.Add("/p:CoverletOutputFormat={0}", "cobertura"))
 				.SetProjectFile(Solution));
 
-		FileExists(CodeCoverageFile);
+		Nuke.Common.IO.FileSystemTasks.FileExists(CodeCoverageFile);
 	}
 
 	Target Test => _ => _

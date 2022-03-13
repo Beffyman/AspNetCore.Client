@@ -826,7 +826,7 @@ public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), tr
 $@"{string.Join(Environment.NewLine, routeConstraints.Select(SharedWriter.WriteRouteConstraint).NotNull())}
 {GetEndpointInfoVariables(controller, endpoint)}
 string url = $@""{GetRoute(controller, endpoint, async)}"";
-HttpResponseMessage response = null;
+IFlurlResponse response = null;
 response = {SharedWriter.GetAwait(async)}HttpOverride.GetResponseAsync({SharedWriter.GetHttpMethod(endpoint.HttpType)}, url, null, {cancellationToken.Name}){SharedWriter.GetAsyncEnding(async)};
 bool {Constants.ResponseHandledVariable} = response != null;
 
@@ -874,16 +874,16 @@ if(response == null)
 		{
 			if (raw)
 			{
-				return @"return response;";
+				return @"return response.ResponseMessage;";
 			}
 
 			if (endpoint.ReturnsStream)
 			{
 				return
 $@"
-if(response.IsSuccessStatusCode)
+if(response.ResponseMessage.IsSuccessStatusCode)
 {{
-	return {SharedWriter.GetAwait(async)}response.Content.ReadAsStreamAsync(){SharedWriter.GetAsyncEnding(async)};
+	return {SharedWriter.GetAwait(async)}response.ResponseMessage.Content.ReadAsStreamAsync(){SharedWriter.GetAsyncEnding(async)};
 }}
 else
 {{"
@@ -907,9 +907,9 @@ $@"
 				{
 					return
 	$@"
-if(response.IsSuccessStatusCode)
+if(response.ResponseMessage.IsSuccessStatusCode)
 {{
-	return {SharedWriter.GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){SharedWriter.GetAsyncEnding(async)};
+	return {SharedWriter.GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.ResponseMessage.Content){SharedWriter.GetAsyncEnding(async)};
 }}
 else
 {{"
@@ -1293,7 +1293,7 @@ public {SharedWriter.GetImplementationReturnType(nameof(HttpResponseMessage), tr
 $@"{string.Join(Environment.NewLine, routeConstraints.Select(SharedWriter.WriteRouteConstraint).NotNull())}
 string url = $@""{GetRoute(endpoint, method, async)}"";
 
-HttpResponseMessage response = null;
+IFlurlResponse response = null;
 response = {SharedWriter.GetAwait(async)}HttpOverride.GetResponseAsync({SharedWriter.GetHttpMethod(method)}, url, null, {cancellationToken.Name}){SharedWriter.GetAsyncEnding(async)};
 
 bool {Constants.ResponseHandledVariable} = response != null;
@@ -1341,16 +1341,16 @@ if(response == null)
 		{
 			if (raw)
 			{
-				return @"return response;";
+				return @"return response.ResponseMessage;";
 			}
 
 			if (endpoint.ReturnsStream)
 			{
 				return
 $@"
-if(response.IsSuccessStatusCode)
+if(response.ResponseMessage.IsSuccessStatusCode)
 {{
-	return {SharedWriter.GetAwait(async)}response.Content.ReadAsStreamAsync(){SharedWriter.GetAsyncEnding(async)};
+	return {SharedWriter.GetAwait(async)}response.ResponseMessage.Content.ReadAsStreamAsync(){SharedWriter.GetAsyncEnding(async)};
 }}
 else
 {{
@@ -1369,9 +1369,9 @@ else
 				{
 					return
 	$@"
-if(response.IsSuccessStatusCode)
+if(response.ResponseMessage.IsSuccessStatusCode)
 {{
-	return {SharedWriter.GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.Content){SharedWriter.GetAsyncEnding(async)};
+	return {SharedWriter.GetAwait(async)}Serializer.Deserialize<{endpoint.ReturnType}>(response.ResponseMessage.Content){SharedWriter.GetAsyncEnding(async)};
 }}
 else
 {{
@@ -1832,7 +1832,7 @@ $@"
 if({responseType.Name} != null)
 {{
 	{Constants.ResponseHandledVariable} = true;
-	{responseType.Name}.Invoke(response);
+	{responseType.Name}.Invoke(response.ResponseMessage);
 }}
 ";
 			}
@@ -1841,11 +1841,11 @@ if({responseType.Name} != null)
 				string content = null;
 				if (responseType.ActionType == nameof(Stream))
 				{
-					content = $@"{GetAwait(async)}response.Content.ReadAsStreamAsync(){GetAsyncEnding(async)}";
+					content = $@"{GetAwait(async)}response.ResponseMessage.Content.ReadAsStreamAsync(){GetAsyncEnding(async)}";
 				}
 				else if (responseType.ActionType != null)
 				{
-					content = $@"{GetAwait(async)}Serializer.Deserialize<{responseType.ActionType}>(response.Content){GetAsyncEnding(async)}";
+					content = $@"{GetAwait(async)}Serializer.Deserialize<{responseType.ActionType}>(response.ResponseMessage.Content){GetAsyncEnding(async)}";
 				}
 
 				string statusValue = null;
@@ -1860,7 +1860,7 @@ if({responseType.Name} != null)
 
 				return
 $@"
-if(response.StatusCode == System.Net.HttpStatusCode.{statusValue})
+if(response.StatusCode == (int)System.Net.HttpStatusCode.{statusValue})
 {{
 	if({responseType.Name} != null)
 	{{

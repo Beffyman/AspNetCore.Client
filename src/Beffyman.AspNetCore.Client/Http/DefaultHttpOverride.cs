@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Flurl.Http;
 
 namespace Beffyman.AspNetCore.Client.Http
 {
@@ -18,13 +19,13 @@ namespace Beffyman.AspNetCore.Client.Http
 		/// <param name="body"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task<HttpResponseMessage> GetResponseAsync(HttpMethod method, String url, object body, CancellationToken cancellationToken = default)
+		public async Task<IFlurlResponse> GetResponseAsync(HttpMethod method, String url, object body, CancellationToken cancellationToken = default)
 		{
-			return await Task.FromResult<HttpResponseMessage>(null).ConfigureAwait(false);
+			return await Task.FromResult<IFlurlResponse>(null).ConfigureAwait(false);
 		}
 
 		/// <summary>
-		/// Empty implementation of <see cref="IHttpOverride.OnNonOverridedResponseAsync(HttpMethod, string, object, HttpResponseMessage, CancellationToken)"/>
+		/// Empty implementation of <see cref="IHttpOverride.OnNonOverridedResponseAsync(HttpMethod, string, object, IFlurlResponse, CancellationToken)"/>
 		/// </summary>
 		/// <param name="method"></param>
 		/// <param name="url"></param>
@@ -32,7 +33,7 @@ namespace Beffyman.AspNetCore.Client.Http
 		/// <param name="response"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task OnNonOverridedResponseAsync(HttpMethod method, String url, object body, HttpResponseMessage response, CancellationToken cancellationToken = default)
+		public async Task OnNonOverridedResponseAsync(HttpMethod method, String url, object body, IFlurlResponse response, CancellationToken cancellationToken = default)
 		{
 			await Task.CompletedTask.ConfigureAwait(false);
 		}

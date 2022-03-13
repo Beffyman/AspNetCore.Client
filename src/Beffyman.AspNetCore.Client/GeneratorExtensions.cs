@@ -24,7 +24,7 @@ namespace Beffyman.AspNetCore.Client.GeneratorExtensions
 		/// <param name="clientOrRequest"></param>
 		/// <param name="security"></param>
 		/// <returns></returns>
-		public static T WithAuth<T>(this T clientOrRequest, SecurityHeader security) where T : IHttpSettingsContainer
+		public static T WithAuth<T>(this T clientOrRequest, SecurityHeader security) where T : IFlurlRequest
 		{
 			if (security == null)
 			{
@@ -41,7 +41,7 @@ namespace Beffyman.AspNetCore.Client.GeneratorExtensions
 		/// <param name="clientOrRequest"></param>
 		/// <param name="AuthKey"></param>
 		/// <returns></returns>
-		public static T WithFunctionAuthorizationKey<T>(this T clientOrRequest, string AuthKey) where T : IHttpSettingsContainer
+		public static T WithFunctionAuthorizationKey<T>(this T clientOrRequest, string AuthKey) where T : IFlurlRequest
 		{
 			return clientOrRequest.WithHeader("x-functions-key", AuthKey);
 		}
@@ -49,11 +49,10 @@ namespace Beffyman.AspNetCore.Client.GeneratorExtensions
 		/// <summary>
 		/// Applies request modifiers
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
 		/// <param name="clientOrRequest"></param>
 		/// <param name="requestModifier"></param>
 		/// <returns></returns>
-		public static T WithRequestModifiers<T>(this T clientOrRequest, IHttpRequestModifier requestModifier) where T : IHttpSettingsContainer
+		public static IFlurlRequest WithRequestModifiers(this IFlurlRequest clientOrRequest, IHttpRequestModifier requestModifier)
 		{
 			return requestModifier.ApplyModifiers(clientOrRequest);
 		}
@@ -65,13 +64,13 @@ namespace Beffyman.AspNetCore.Client.GeneratorExtensions
 		/// <param name="clientOrRequest"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static T WithCookies<T>(this T clientOrRequest, IEnumerable<Cookie> cookies) where T : IHttpSettingsContainer
+		public static T WithCookies<T>(this T clientOrRequest, IEnumerable<Cookie> cookies) where T : IFlurlRequest
 		{
 			if (cookies != null && cookies.Any())
 			{
 				foreach (var cookie in cookies)
 				{
-					clientOrRequest.WithCookie(cookie);
+					clientOrRequest.WithCookie(cookie.Name, cookie.Value);
 				}
 			}
 			return clientOrRequest;
@@ -84,7 +83,7 @@ namespace Beffyman.AspNetCore.Client.GeneratorExtensions
 		/// <param name="clientOrRequest"></param>
 		/// <param name="headers"></param>
 		/// <returns></returns>
-		public static T WithHeaders<T>(this T clientOrRequest, IDictionary<string, object> headers) where T : IHttpSettingsContainer
+		public static T WithHeaders<T>(this T clientOrRequest, IDictionary<string, object> headers) where T : IFlurlRequest
 		{
 			if (headers != null && headers.Any())
 			{

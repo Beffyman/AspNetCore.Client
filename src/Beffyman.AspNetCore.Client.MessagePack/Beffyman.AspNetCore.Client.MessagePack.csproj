@@ -8,8 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--https://github.com/dotnet/aspnetcore/issues/18074-->
-		<PackageReference Include="MessagePack" Version="[1.7.3.7]" />
+		<PackageReference Include="MessagePack" Version="2.3.85" />
 	</ItemGroup>
 
 	<ItemGroup>

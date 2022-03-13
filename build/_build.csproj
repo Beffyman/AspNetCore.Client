@@ -1,40 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>netcoreapp3.0</TargetFramework>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
 		<RootNamespace></RootNamespace>
+		<NukeRootDirectory>..</NukeRootDirectory>
+		<NukeScriptDirectory>..</NukeScriptDirectory>
+		<NukeTelemetryOption>1</NukeTelemetryOption>
 		<IsPackable>False</IsPackable>
 		<NoWarn>CS0649;CS0169</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Nuke.Common" Version="0.23.6" />
-		<PackageDownload Include="GitVersion.Tool" Version="[5.1.1]" />
+		<PackageReference Include="Nuke.Common" Version="6.0.1" />
+		<PackageReference Include="Nuke.Components" Version="6.0.1" />
+		<PackageDownload Include="GitVersion.Tool" Version="[5.8.0]" />
 		<PackageDownload Include="xunit.runner.console" Version="[2.4.1]" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<NukeSpecificationFiles Include="**\*.json" Exclude="bin\**;obj\**" />
-		<NukeExternalFiles Include="**\*.*.ext" Exclude="bin\**;obj\**" />
-		<None Remove="*.csproj.DotSettings;*.ref.*.txt" />
-
-		<!-- Common build related files -->
-		<None Include="..\build.ps1" Condition="Exists('..\build.ps1')" />
-		<None Include="..\build.sh" Condition="Exists('..\build.sh')" />
-
-		<None Include="..\.nuke" LinkBase="config" />
-		<None Include="..\global.json" LinkBase="config" Condition="Exists('..\global.json')" />
-		<None Include="..\nuget.config" LinkBase="config" Condition="Exists('..\nuget.config')" />
-		<None Include="..\GitVersion.yml" LinkBase="config" Condition="Exists('..\GitVersion.yml')" />
-
-		<None Include="..\.teamcity\settings.kts" LinkBase="ci" Condition="Exists('..\.teamcity\settings.kts')" />
-		<None Include="..\.github\workflows\*.yml" LinkBase="ci" />
-		<None Include="..\azure-pipelines.yml" LinkBase="ci" Condition="Exists('..\azure-pipelines.yml')" />
-		<None Include="..\Jenkinsfile" LinkBase="ci" Condition="Exists('..\Jenkinsfile')" />
-		<None Include="..\appveyor.yml" LinkBase="ci" Condition="Exists('..\appveyor.yml')" />
-		<None Include="..\.travis.yml" LinkBase="ci" Condition="Exists('..\.travis.yml')" />
-	</ItemGroup>
-
 </Project>

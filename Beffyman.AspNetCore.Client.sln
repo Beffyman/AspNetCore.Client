@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28407.52
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Client", "src\Beffyman.AspNetCore.Client\Beffyman.AspNetCore.Client.csproj", "{3709B2AC-A6E2-4707-A2F4-DBE6AFC3A012}"
 EndProject
@@ -26,57 +26,57 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{765F8CBA
 		tests\Directory.Build.props = tests\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp", "tests\TestWebApp\TestWebApp.csproj", "{303D91A0-1A4E-4F98-A81F-35072F18C19A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp", "tests\AspNetCore3.1\TestWebApp\TestWebApp.csproj", "{303D91A0-1A4E-4F98-A81F-35072F18C19A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Clients", "tests\TestWebApp.Clients\TestWebApp.Clients.csproj", "{D59C431C-CAB3-4BAD-8AAA-2D2042E492D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Clients", "tests\AspNetCore3.1\TestWebApp.Clients\TestWebApp.Clients.csproj", "{D59C431C-CAB3-4BAD-8AAA-2D2042E492D3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCore", "AspNetCore", "{EBC264EF-636C-42D0-9CF9-F5FD874354D4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCore3.1", "AspNetCore3.1", "{EBC264EF-636C-42D0-9CF9-F5FD874354D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{DAA1FF40-201F-444E-A3EF-FB83FB5D8F96}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor3.1", "Blazor3.1", "{DAA1FF40-201F-444E-A3EF-FB83FB5D8F96}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Shared", "tests\TestBlazorApp.Shared\TestBlazorApp.Shared.csproj", "{CA3BA183-5937-4484-8FDB-1A1E80C9077D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Shared", "tests\Blazor3.1\TestBlazorApp.Shared\TestBlazorApp.Shared.csproj", "{CA3BA183-5937-4484-8FDB-1A1E80C9077D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Clients", "tests\TestBlazorApp.Clients\TestBlazorApp.Clients.csproj", "{BBE6C596-7295-420D-9814-829933A8F6AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Clients", "tests\Blazor3.1\TestBlazorApp.Clients\TestBlazorApp.Clients.csproj", "{BBE6C596-7295-420D-9814-829933A8F6AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Tests", "tests\TestWebApp.Tests\TestWebApp.Tests.csproj", "{65D34793-90AA-4641-80DC-A8B092E40DAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Tests", "tests\AspNetCore3.1\TestWebApp.Tests\TestWebApp.Tests.csproj", "{65D34793-90AA-4641-80DC-A8B092E40DAC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Contracts", "tests\TestWebApp.Contracts\TestWebApp.Contracts.csproj", "{D21B21B7-CCF3-4C68-8F90-DC045ABE3DCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Contracts", "tests\AspNetCore3.1\TestWebApp.Contracts\TestWebApp.Contracts.csproj", "{D21B21B7-CCF3-4C68-8F90-DC045ABE3DCA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Client.Protobuf", "src\Beffyman.AspNetCore.Client.Protobuf\Beffyman.AspNetCore.Client.Protobuf.csproj", "{4F89E001-24D2-4464-9577-6768E31C510D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Tests", "tests\TestBlazorApp.Tests\TestBlazorApp.Tests.csproj", "{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Tests", "tests\Blazor3.1\TestBlazorApp.Tests\TestBlazorApp.Tests.csproj", "{B28C16E6-4FDB-4245-AB1B-F4928CC9B611}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Client.Generator.Framework", "src\Beffyman.AspNetCore.Client.Generator.Framework\Beffyman.AspNetCore.Client.Generator.Framework.csproj", "{862DD062-0098-4700-8CDB-7570AF9655F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Console", "tests\TestWebApp.Console\TestWebApp.Console.csproj", "{8150D22C-D1F4-4D14-9B39-2D81A2B75FA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Console", "tests\AspNetCore3.1\TestWebApp.Console\TestWebApp.Console.csproj", "{8150D22C-D1F4-4D14-9B39-2D81A2B75FA7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{344CED97-6C7C-4EC5-BA25-B967521598F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction", "tests\TestAzureFunction\TestAzureFunction.csproj", "{EC486723-64AF-45BE-AC74-8021A24994AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction", "tests\Functions\TestAzureFunction\TestAzureFunction.csproj", "{EC486723-64AF-45BE-AC74-8021A24994AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Clients", "tests\TestAzureFunction.Clients\TestAzureFunction.Clients.csproj", "{54656466-4617-4B86-AD56-4DA8C15CA640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Clients", "tests\Functions\TestAzureFunction.Clients\TestAzureFunction.Clients.csproj", "{54656466-4617-4B86-AD56-4DA8C15CA640}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Contracts", "tests\TestAzureFunction.Contracts\TestAzureFunction.Contracts.csproj", "{11133C2A-4AB2-45F5-876F-F22AB024A67C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Contracts", "tests\Functions\TestAzureFunction.Contracts\TestAzureFunction.Contracts.csproj", "{11133C2A-4AB2-45F5-876F-F22AB024A67C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Server", "src\Beffyman.AspNetCore.Server\Beffyman.AspNetCore.Server.csproj", "{60B21E11-0738-4A29-B518-329EA8470140}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Client.MessagePack", "src\Beffyman.AspNetCore.Client.MessagePack\Beffyman.AspNetCore.Client.MessagePack.csproj", "{2075D5BC-D4B9-4B0D-948C-399200598110}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Tests", "tests\TestAzureFunction.Tests\TestAzureFunction.Tests.csproj", "{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAzureFunction.Tests", "tests\Functions\TestAzureFunction.Tests\TestAzureFunction.Tests.csproj", "{E58B7973-8AF8-4FEF-8855-F10DEFCB7A92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions2", "Functions2", "{7BFCD5A4-715F-47CA-BFB4-ED3CD7D70F97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionApp2.Clients", "tests\FunctionApp2.Clients\FunctionApp2.Clients.csproj", "{B1B79A7A-DDEC-466A-9755-78E52641C7B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionApp2.Clients", "tests\Functions\FunctionApp2.Clients\FunctionApp2.Clients.csproj", "{B1B79A7A-DDEC-466A-9755-78E52641C7B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionApp2", "tests\FunctionApp2\FunctionApp2.csproj", "{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionApp2", "tests\Functions\FunctionApp2\FunctionApp2.csproj", "{3AF190F0-6B8E-47B3-9C29-F4A0EE19D314}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{933E4A0A-7712-4E6C-961E-9AE9147B493C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{B16EEEFF-40C6-4DC7-8CE0-2387B1AEA9E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Server", "tests\TestBlazorApp.Server\TestBlazorApp.Server.csproj", "{D7FA09D6-2E49-4504-BD25-83799A3E2ACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Server", "tests\Blazor3.1\TestBlazorApp.Server\TestBlazorApp.Server.csproj", "{D7FA09D6-2E49-4504-BD25-83799A3E2ACA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Views", "tests\TestBlazorApp.Views\TestBlazorApp.Views.csproj", "{69C58805-0300-4463-AA5B-84823DC0B443}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBlazorApp.Views", "tests\Blazor3.1\TestBlazorApp.Views\TestBlazorApp.Views.csproj", "{69C58805-0300-4463-AA5B-84823DC0B443}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Client.Http", "src\Beffyman.AspNetCore.Client.Http\Beffyman.AspNetCore.Client.Http.csproj", "{ACE003CE-5640-41EE-B232-71C4F574B74C}"
 EndProject
@@ -85,6 +85,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Client.Test.Generator", "tests\Beffyman.AspNetCore.Client.Test.Generator\Beffyman.AspNetCore.Client.Test.Generator.csproj", "{C841D007-BDD7-4AC9-BFCC-317BF96A9299}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Beffyman.AspNetCore.Client.NewtonsoftJson", "src\Beffyman.AspNetCore.Client.NewtonsoftJson\Beffyman.AspNetCore.Client.NewtonsoftJson.csproj", "{CCFCBB7F-2DB8-44A6-B142-2879DB563968}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCore6.0", "AspNetCore6.0", "{734F9A4D-0563-4115-9009-451AE480CD0B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp", "tests\AspNetCore6.0\TestWebApp\TestWebApp.csproj", "{6237A852-9CB3-46CA-AF22-7E85AE8AC81E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Clients", "tests\AspNetCore6.0\TestWebApp.Clients\TestWebApp.Clients.csproj", "{1588DB3C-756A-4BA2-B774-ED0F1D5C0DEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Console", "tests\AspNetCore6.0\TestWebApp.Console\TestWebApp.Console.csproj", "{FC9C9EFC-C0D8-431D-8ED2-A5F377AC4D4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Contracts", "tests\AspNetCore6.0\TestWebApp.Contracts\TestWebApp.Contracts.csproj", "{0AD8EA5F-792C-4013-B7C4-130EBA054835}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWebApp.Tests", "tests\AspNetCore6.0\TestWebApp.Tests\TestWebApp.Tests.csproj", "{F72A36E5-796A-457D-8791-57286A562C87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -194,6 +206,26 @@ Global
 		{CCFCBB7F-2DB8-44A6-B142-2879DB563968}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCFCBB7F-2DB8-44A6-B142-2879DB563968}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCFCBB7F-2DB8-44A6-B142-2879DB563968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6237A852-9CB3-46CA-AF22-7E85AE8AC81E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6237A852-9CB3-46CA-AF22-7E85AE8AC81E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6237A852-9CB3-46CA-AF22-7E85AE8AC81E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6237A852-9CB3-46CA-AF22-7E85AE8AC81E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1588DB3C-756A-4BA2-B774-ED0F1D5C0DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1588DB3C-756A-4BA2-B774-ED0F1D5C0DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1588DB3C-756A-4BA2-B774-ED0F1D5C0DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1588DB3C-756A-4BA2-B774-ED0F1D5C0DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC9C9EFC-C0D8-431D-8ED2-A5F377AC4D4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC9C9EFC-C0D8-431D-8ED2-A5F377AC4D4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC9C9EFC-C0D8-431D-8ED2-A5F377AC4D4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC9C9EFC-C0D8-431D-8ED2-A5F377AC4D4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AD8EA5F-792C-4013-B7C4-130EBA054835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD8EA5F-792C-4013-B7C4-130EBA054835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD8EA5F-792C-4013-B7C4-130EBA054835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD8EA5F-792C-4013-B7C4-130EBA054835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F72A36E5-796A-457D-8791-57286A562C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F72A36E5-796A-457D-8791-57286A562C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F72A36E5-796A-457D-8791-57286A562C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F72A36E5-796A-457D-8791-57286A562C87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,6 +261,12 @@ Global
 		{BD2BA351-40FE-4729-8E63-E18522858ACF} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
 		{C841D007-BDD7-4AC9-BFCC-317BF96A9299} = {765F8CBA-ECD0-4E5B-AB1D-AC0F508A05AC}
 		{CCFCBB7F-2DB8-44A6-B142-2879DB563968} = {F0EC1B44-13B2-4817-80A8-D67960BD79E1}
+		{734F9A4D-0563-4115-9009-451AE480CD0B} = {765F8CBA-ECD0-4E5B-AB1D-AC0F508A05AC}
+		{6237A852-9CB3-46CA-AF22-7E85AE8AC81E} = {734F9A4D-0563-4115-9009-451AE480CD0B}
+		{1588DB3C-756A-4BA2-B774-ED0F1D5C0DEF} = {734F9A4D-0563-4115-9009-451AE480CD0B}
+		{FC9C9EFC-C0D8-431D-8ED2-A5F377AC4D4E} = {734F9A4D-0563-4115-9009-451AE480CD0B}
+		{0AD8EA5F-792C-4013-B7C4-130EBA054835} = {734F9A4D-0563-4115-9009-451AE480CD0B}
+		{F72A36E5-796A-457D-8791-57286A562C87} = {734F9A4D-0563-4115-9009-451AE480CD0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCFD7864-E2E5-4CF3-9A6D-D53B4F4E8AE0}
