@@ -69,32 +69,35 @@ namespace TestWebApp.Tests
 			Client.Dispose();
 			Server.Dispose();
 			Host.Dispose();
+			_tokenSource.Dispose();
 		}
 	}
 
 
-	public class ProtobufServerInfo : ServerInfo<ProtobufStartup>
-	{
-		protected override void ConfigureClient(ClientConfiguration configure)
-		{
-			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
-				.WithProtobufBody()
-				.UseProtobufDeserializer()
-				.UseProtobufSerializer();
-		}
-	}
+	//public class ProtobufServerInfo : ServerInfo<ProtobufStartup>
+	//{
+	//	protected override void ConfigureClient(ClientConfiguration configure)
+	//	{
+	//		configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
+	//			.WithProtobufBody()
+	//			.UseProtobufDeserializer()
+	//			.UseProtobufSerializer()
+	//			.WithTimeout(TimeSpan.FromMinutes(10));
+	//	}
+	//}
 
 
-	public class MessagePackServerInfo : ServerInfo<MessagePackStartup>
-	{
-		protected override void ConfigureClient(ClientConfiguration configure)
-		{
-			configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
-				.WithMessagePackBody()
-				.UseMessagePackDeserializer()
-				.UseMessagePackSerializer();
-		}
-	}
+	//public class MessagePackServerInfo : ServerInfo<MessagePackStartup>
+	//{
+	//	protected override void ConfigureClient(ClientConfiguration configure)
+	//	{
+	//		configure.UseTestServerClient<ITestWebAppClientWrapper>(Client)
+	//			.WithMessagePackBody()
+	//			.UseMessagePackDeserializer()
+	//			.UseMessagePackSerializer()
+	//			.WithTimeout(TimeSpan.FromMinutes(10));
+	//	}
+	//}
 
 	public class JsonServerInfo : ServerInfo<JsonStartup>
 	{
@@ -107,7 +110,8 @@ namespace TestWebApp.Tests
 					return request.WithHeader("TestPre", "YES");
 				})
 				.UseJsonClientDeserializer()
-				.UseJsonClientSerializer();
+				.UseJsonClientSerializer()
+				.WithTimeout(TimeSpan.FromMinutes(10));
 		}
 	}
 

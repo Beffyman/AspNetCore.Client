@@ -4,7 +4,8 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Beffyman.AspNetCore.Client.MessagePack.xml</DocumentationFile>
 		<Description>Contains MessagePack serializer for Beffyman.AspNetCore.Client.Generator clients</Description>
-		<IsPackable>true</IsPackable>
+		<!--No longer packing this, implementation is very subjective-->
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>

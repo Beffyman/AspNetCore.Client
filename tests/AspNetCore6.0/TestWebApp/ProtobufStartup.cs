@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using TestWebApp.FakeServices;
 using TestWebApp.GoodServices;
 using TestWebApp.Hubs;
@@ -29,8 +30,13 @@ namespace TestWebApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllers()
-				.AddProtobufFormatters();
+			services.AddControllers(options =>
+			{
+				options.FormatterMappings
+					.SetMediaTypeMappingForFormat("protobuf",
+					  MediaTypeHeaderValue.Parse("application/x-protobuf"));
+			})
+			.AddProtobufFormatters();
 
 			services.AddApiVersioning(options =>
 			{

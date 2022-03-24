@@ -1,0 +1,10 @@
+a6d49b83be6c7e6a4314d03f517c9672
+NugetConfigGenerate
+Clean
+Restore
+Build
+GenerateTestProjectClients
+Test
+Pack
+BuildWithGenerator
+CI

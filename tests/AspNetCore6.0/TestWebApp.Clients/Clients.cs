@@ -9,33 +9,33 @@
 //Requires nuget Microsoft.AspNetCore.SignalR.Client
 //Requires nuget Microsoft.Extensions.Logging
 //Requires nuget System.Threading.Channels
-using Beffyman.AspNetCore.Client;
 using Beffyman.AspNetCore.Client.Authorization;
 using Beffyman.AspNetCore.Client.Exceptions;
 using Beffyman.AspNetCore.Client.GeneratorExtensions;
 using Beffyman.AspNetCore.Client.Http;
 using Beffyman.AspNetCore.Client.RequestModifiers;
 using Beffyman.AspNetCore.Client.Serializers;
+using Beffyman.AspNetCore.Client;
 using Flurl.Http;
 using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Http.Connections.Client;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
+using System.Net;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using System.Threading;
+using System;
 using TestWebApp.Contracts;
 
 namespace TestWebApp.Clients.Routes

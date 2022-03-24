@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;net472</TargetFrameworks>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<Description>A build task that will generate clients from a asp.net core project</Description>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<DevelopmentDependency>true</DevelopmentDependency>
@@ -12,21 +12,13 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.1" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.3" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.31" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.12" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" PrivateAssets="all" />
 		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="all" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-		<PackageReference Include="System.Runtime.Loader" Version="4.3.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.1.0" PrivateAssets="all" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-		<PackageReference Include="Microsoft.Build.Utilities.Core" Version="14.3" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,7 +26,6 @@
 		<ProjectReference Include="..\Beffyman.AspNetCore.Server\Beffyman.AspNetCore.Server.csproj" PrivateAssets="all" />
 	</ItemGroup>
 
-	<!--Nerdbank.MSBuildExtension-->
 	<PropertyGroup>
 		<!-- We're going to include it by virtue of sending the whole bin dir to the build folder. -->
 		<IncludeBuildOutput>false</IncludeBuildOutput>

@@ -17,7 +17,6 @@ namespace Beffyman.AspNetCore.Client.Test.Generator
 	{
 		public static List<string> Projects = new List<string>
 		{
-			"tests/AspNetCore3.1/TestWebApp.Clients/TestWebApp.Clients.csproj",
 			"tests/AspNetCore6.0/TestWebApp.Clients/TestWebApp.Clients.csproj",
 			"tests/Blazor3.1/TestBlazorApp.Clients/TestBlazorApp.Clients.csproj",
 			"tests/Functions/FunctionApp2.Clients/FunctionApp2.Clients.csproj",
@@ -88,30 +87,12 @@ namespace Beffyman.AspNetCore.Client.Test.Generator
 				.ToDictionary(x => x.Name.ToString(), y => y.Value);
 
 			var previousWorkDir = Environment.CurrentDirectory;
-			var task = new GeneratorTask();
-			task.Fill(properties);
-			task.CurrentDirectory = parentDirectory;
+			properties[nameof(GeneratorArgs.CurrentDirectory)] = parentDirectory;
 
+			var success = ClientGenerator.Generate(new GeneratorArgs(properties), null);
 
-			var mockedBuildEngine = new Mock<IBuildEngine>();
-			mockedBuildEngine.Setup(x => x.LogErrorEvent(It.IsAny<BuildErrorEventArgs>())).Callback((BuildErrorEventArgs args) =>
-			{
-				Console.Error.WriteLine(args.Message);
-				throw new Exception(args.Message);
-			});
-			mockedBuildEngine.Setup(x => x.LogMessageEvent(It.IsAny<BuildMessageEventArgs>())).Callback((BuildMessageEventArgs args) =>
-			{
-				Console.WriteLine(args.Message);
-			});
-			mockedBuildEngine.Setup(x => x.LogWarningEvent(It.IsAny<BuildWarningEventArgs>())).Callback((BuildWarningEventArgs args) =>
-			{
-				Console.WriteLine(args.Message);
-			});
-
-			task.BuildEngine = mockedBuildEngine.Object;
-
-			var success = task.ByPassExecute();
 			Environment.CurrentDirectory = previousWorkDir;
+
 			return success;
 		}
 
