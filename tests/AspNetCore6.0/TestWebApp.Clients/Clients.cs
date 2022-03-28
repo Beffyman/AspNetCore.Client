@@ -9,33 +9,33 @@
 //Requires nuget Microsoft.AspNetCore.SignalR.Client
 //Requires nuget Microsoft.Extensions.Logging
 //Requires nuget System.Threading.Channels
+using Beffyman.AspNetCore.Client;
 using Beffyman.AspNetCore.Client.Authorization;
 using Beffyman.AspNetCore.Client.Exceptions;
 using Beffyman.AspNetCore.Client.GeneratorExtensions;
 using Beffyman.AspNetCore.Client.Http;
 using Beffyman.AspNetCore.Client.RequestModifiers;
 using Beffyman.AspNetCore.Client.Serializers;
-using Beffyman.AspNetCore.Client;
 using Flurl.Http;
 using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.Http.Connections;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using System.Threading;
-using System;
 using TestWebApp.Contracts;
 
 namespace TestWebApp.Clients.Routes
@@ -297,7 +297,7 @@ namespace TestWebApp.Clients.Routes
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids?.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			return url;
 		}
 
@@ -305,7 +305,7 @@ namespace TestWebApp.Clients.Routes
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds?.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			return url;
 		}
 
@@ -8675,7 +8675,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids?.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -8768,7 +8768,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids?.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -8808,7 +8808,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids?.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -8901,7 +8901,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGet";
-			string url = $@"api/{controller}/{action}?{string.Join("&", ids.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", ids?.Select(x => $"{nameof(ids)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -8941,7 +8941,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds?.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9034,7 +9034,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds?.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
 			bool responseHandled = response != null;
@@ -9074,7 +9074,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds?.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;
@@ -9167,7 +9167,7 @@ namespace TestWebApp.Clients
 		{
 			var controller = "Values";
 			var action = "EnumerableGetCustom";
-			string url = $@"api/{controller}/{action}?{string.Join("&", customIds.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}"))}&{string.Join("&", truth.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}"))}";
+			string url = $@"api/{controller}/{action}?{string.Join("&", customIds?.Select(x => $"{nameof(customIds)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}&{string.Join("&", truth?.Select(x => $"{nameof(truth)}={x.EncodeForUrl()}") ?? Array.Empty<string>())}";
 			IFlurlResponse response = null;
 			response = await HttpOverride.GetResponseAsync(HttpMethod.Get, url, null, cancellationToken).ConfigureAwait(false);
 			bool responseHandled = response != null;

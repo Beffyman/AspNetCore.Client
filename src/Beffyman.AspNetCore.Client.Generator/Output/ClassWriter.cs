@@ -1720,7 +1720,7 @@ public interface I{Settings.ClientInterfaceName} : {nameof(IClient)} {{ }}
 
 			if (Helpers.IsEnumerable(parameter.Type))
 			{
-				return $@"{{string.Join(""&"",{parameter.Name}.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", parameter.Type)}.{nameof(GeneratorExtensions.GeneratorExtensions.EncodeForUrl)}()}}""))}}";
+				return $@"{{string.Join(""&"",{parameter.Name}?.Select(x => $""{name}={{{Helpers.GetRouteStringTransform("x", parameter.Type)}.{nameof(GeneratorExtensions.GeneratorExtensions.EncodeForUrl)}()}}"") ?? Array.Empty<string>())}}";
 			}
 			else
 			{

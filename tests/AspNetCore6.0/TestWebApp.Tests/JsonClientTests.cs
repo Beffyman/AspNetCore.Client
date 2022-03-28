@@ -207,6 +207,25 @@ namespace TestWebApp.Tests
 			Assert.Equal(expected, returnedEnumerable);
 		}
 
+
+		[Fact(Timeout = Constants.TEST_TIMEOUT)]
+		public void EnumerableRouteGetNullCheck()
+		{
+			using var endpoint = new JsonServerInfo();
+			var valuesClient = endpoint.Provider.GetService<IValuesClient>();
+
+			bool badRequest = false;
+
+			valuesClient.EnumerableGet(null, null,
+				BadRequestCallback: (_) =>
+				{
+					badRequest = true;
+				}, cancellationToken: endpoint.TimeoutToken);
+
+
+			Assert.True(badRequest);
+		}
+
 		[Fact(Timeout = Constants.TEST_TIMEOUT)]
 		public void EnumerableRouteGetCustom()
 		{

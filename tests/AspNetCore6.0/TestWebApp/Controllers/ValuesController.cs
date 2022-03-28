@@ -319,7 +319,7 @@ namespace TestWebApp.Controllers
 		/// <returns></returns>
 		[HttpPost("[action]/{testId:guid}")]
 		[ProducesResponseType(typeof(MyFancyDto), (int)HttpStatusCode.OK)]
-		public IActionResult ComplexPost([FromRoute(Name = "testId")]Guid id, MyFancyDto dto)
+		public IActionResult ComplexPost([FromRoute(Name = "testId")] Guid id, MyFancyDto dto)
 		{
 			return Ok(dto);
 		}
@@ -331,7 +331,7 @@ namespace TestWebApp.Controllers
 		/// <returns></returns>
 		[HttpPost("[action]")]
 		[ProducesResponseType(typeof(Guid), (int)HttpStatusCode.OK)]
-		public IActionResult PostWithSimpleBody([FromBody]Guid id)
+		public IActionResult PostWithSimpleBody([FromBody] Guid id)
 		{
 			return Ok(id);
 		}
@@ -344,11 +344,11 @@ namespace TestWebApp.Controllers
 		/// <returns></returns>
 		[HttpGet("[action]")]
 		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
-		public IActionResult EnumerableGet([FromQuery]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
+		public IActionResult EnumerableGet([FromQuery] IEnumerable<int> ids, [FromQuery] IEnumerable<bool> truth)
 		{
-			if (truth.Any())
+			if (truth?.Any() ?? false)
 			{
-				return Ok(ids);
+				return Ok(ids ?? Array.Empty<int>());
 			}
 			return BadRequest("BAD");
 		}
@@ -361,7 +361,7 @@ namespace TestWebApp.Controllers
 		/// <returns></returns>
 		[HttpGet("[action]")]
 		[ProducesResponseType(typeof(IEnumerable<int>), (int)HttpStatusCode.OK)]
-		public IActionResult EnumerableGetCustom([FromQuery(Name = "customIds")]IEnumerable<int> ids, [FromQuery]IEnumerable<bool> truth)
+		public IActionResult EnumerableGetCustom([FromQuery(Name = "customIds")] IEnumerable<int> ids, [FromQuery] IEnumerable<bool> truth)
 		{
 			if (truth.Any())
 			{
