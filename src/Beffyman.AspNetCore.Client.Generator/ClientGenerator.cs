@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Beffyman.AspNetCore.Client.Generator.CSharp;
 using Beffyman.AspNetCore.Client.Generator.CSharp.AspNetCoreFunctions;
 using Beffyman.AspNetCore.Client.Generator.CSharp.AspNetCoreHttp;
 using Beffyman.AspNetCore.Client.Generator.CSharp.SignalR;
@@ -91,6 +92,12 @@ namespace Beffyman.AspNetCore.Client.Generator
 										.Select(cs => new FunctionsCSharpFile(cs, hostFile?.Data))
 										.ToList();
 
+				var globalUsingFiles = Directory.EnumerateFiles($"{Environment.CurrentDirectory}/{Settings.RouteToServiceProjectFolder}", "*.cs", SearchOption.AllDirectories)
+										.Where(x => !x.Contains("/obj/") && !x.Contains("\\obj\\")
+												&& !x.Contains("/bin/") && !x.Contains("\\bin\\"))
+										.Select(cs => new GlobalUsingsFile(cs))
+										.ToList();
+
 				var context = new GenerationContext();
 				foreach (var file in parsedControllers)
 				{
@@ -101,6 +108,10 @@ namespace Beffyman.AspNetCore.Client.Generator
 					context = context.Merge(file.Context);
 				}
 				foreach (var file in parsedFunctions)
+				{
+					context = context.Merge(file.Context);
+				}
+				foreach (var file in globalUsingFiles)
 				{
 					context = context.Merge(file.Context);
 				}

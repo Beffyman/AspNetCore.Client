@@ -17,6 +17,10 @@ namespace Beffyman.AspNetCore.Client.Generator.Framework
 		/// Using statements that were in the files
 		/// </summary>
 		public IList<string> UsingStatements { get; set; } = new List<string>();
+		/// <summary>
+		/// Does the file contain global usings so the context should be included
+		/// </summary>
+		public bool HasGlobalUsings { get; set; }
 
 		/// <summary>
 		/// Clients that will be generated
@@ -56,7 +60,8 @@ namespace Beffyman.AspNetCore.Client.Generator.Framework
 		{
 			if ((other?.HttpClients?.Any(x => !x.Ignored) ?? false)
 				|| (other?.HubClients?.Any(x => !x.Ignored) ?? false)
-				|| (other?.Functions?.Any(x => !x.Ignored) ?? false))
+				|| (other?.Functions?.Any(x => !x.Ignored) ?? false)
+				|| other.HasGlobalUsings)
 			{
 				return new GenerationContext
 				{

@@ -611,5 +611,15 @@ namespace TestWebApp.Controllers
 				Id = 5
 			});
 		}
+
+		[HttpGet("[action]")]
+		[ProducesResponseType(typeof(GlobalNamespaceDto), StatusCodes.Status201Created)]
+		public ActionResult<GlobalNamespaceDto> GlobalUsing()
+		{
+			return Ok(new GlobalNamespaceDto
+			{
+				Id = 1
+			});
+		}
 	}
 }

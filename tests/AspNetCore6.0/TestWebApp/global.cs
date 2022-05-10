@@ -1,0 +1,1 @@
+﻿global using TestWebApp.Contracts.GlobalNamespace;
