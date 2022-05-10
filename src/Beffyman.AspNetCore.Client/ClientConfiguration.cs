@@ -47,7 +47,7 @@ namespace Beffyman.AspNetCore.Client
 		/// <summary>
 		/// Functions that will always be ran on a request
 		/// </summary>
-		private ICollection<Func<IHttpSettingsContainer, IHttpSettingsContainer>> PredefinedFunctions { get; } = new List<Func<IHttpSettingsContainer, IHttpSettingsContainer>>();
+		private ICollection<Func<IFlurlRequest, IFlurlRequest>> PredefinedFunctions { get; } = new List<Func<IFlurlRequest, IFlurlRequest>>();
 
 		/// <summary>
 		/// Headers that will always be included with every request
@@ -233,7 +233,7 @@ namespace Beffyman.AspNetCore.Client
 		/// <returns></returns>
 		public ClientConfiguration WithSecurity(SecurityHeader auth)
 		{
-			Func<IHttpSettingsContainer, IHttpSettingsContainer> func = (IHttpSettingsContainer request) =>
+			Func<IFlurlRequest, IFlurlRequest> func = (IFlurlRequest request) =>
 			{
 				return auth.AddAuth(request);
 			};
@@ -248,7 +248,7 @@ namespace Beffyman.AspNetCore.Client
 		/// </summary>
 		/// <param name="requestModifier"></param>
 		/// <returns></returns>
-		public ClientConfiguration WithRequestModifier(Func<IHttpSettingsContainer, IHttpSettingsContainer> requestModifier)
+		public ClientConfiguration WithRequestModifier(Func<IFlurlRequest, IFlurlRequest> requestModifier)
 		{
 			PredefinedFunctions.Add(requestModifier);
 

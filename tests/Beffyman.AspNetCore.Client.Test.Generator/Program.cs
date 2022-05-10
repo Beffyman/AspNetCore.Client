@@ -1,13 +1,12 @@
-﻿using Beffyman.AspNetCore.Client.Generator;
-using Microsoft.Build.Framework;
-using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml.Linq;
+using Beffyman.AspNetCore.Client.Generator;
+using Microsoft.Build.Framework;
+using Moq;
 
 namespace Beffyman.AspNetCore.Client.Test.Generator
 {
@@ -16,10 +15,14 @@ namespace Beffyman.AspNetCore.Client.Test.Generator
 	/// </summary>
 	public static class Program
 	{
-		const string WEBAPP = "TestWebApp.Clients";
-		const string BLAZOR = "TestBlazorApp.Clients";
-		const string FUNCTIONS = "TestAzureFunction.Clients";
-		const string FUNCTIONS2 = "FunctionApp2.Clients";
+		public static List<string> Projects = new List<string>
+		{
+			"tests/AspNetCore6.0/TestWebApp.Clients/TestWebApp.Clients.csproj",
+			"tests/Blazor3.1/TestBlazorApp.Clients/TestBlazorApp.Clients.csproj",
+			"tests/Functions/FunctionApp2.Clients/FunctionApp2.Clients.csproj",
+			"tests/Functions/TestAzureFunction.Clients/TestAzureFunction.Clients.csproj",
+		};
+
 		const string FAILURE_DIR = "AspNetCore.Client";
 
 		static void Main()
@@ -29,82 +32,67 @@ namespace Beffyman.AspNetCore.Client.Test.Generator
 			Directory.SetCurrentDirectory(rootDir);
 
 			Console.WriteLine("Starting Generator");
-			var webApp = GoUpUntilDirectory(WEBAPP, FAILURE_DIR);
-			var blazor = GoUpUntilDirectory(BLAZOR, FAILURE_DIR);
-			var functions = GoUpUntilDirectory(FUNCTIONS, FAILURE_DIR);
-			var functions2 = GoUpUntilDirectory(FUNCTIONS2, FAILURE_DIR);
 
-			if (!(Generate(webApp)
-				&& Generate(blazor)
-				&& Generate(functions)
-				&& Generate(functions2)))
+			foreach (var path in Projects)
 			{
-				if (Debugger.IsAttached)
+				var fullPath = GoUpUntilFile(path, FAILURE_DIR);
+
+				if (!Generate(fullPath))
 				{
-					Console.ReadKey();
+					if (Debugger.IsAttached)
+					{
+						Console.ReadKey();
+					}
 				}
 			}
-
 		}
 
-		private static string GoUpUntilDirectory(string targetDirectoryName, string failDirectory)
+		private static string GoUpUntilFile(string targetFile, string failDirectory)
 		{
-			string currentPath = System.Environment.CurrentDirectory;
+			string currentPath = Path.GetDirectoryName(Environment.ProcessPath);
+			bool notAtRootDir = true;
 
-			while (Path.GetFileName(currentPath) != failDirectory)
+			while (notAtRootDir)
 			{
-				var childDirectories = Directory.GetDirectories(currentPath).ToList();
-				var dirs = childDirectories.Select(Path.GetFileName).ToList();
-				if (!dirs.Contains(targetDirectoryName))
+				if (Path.GetFileName(currentPath) == failDirectory)
 				{
-					currentPath = Path.GetFullPath($"{currentPath}/..");
+					notAtRootDir = false;
+				}
+
+				var targetPath = Path.Combine(currentPath, targetFile);
+
+				if (File.Exists(targetPath))
+				{
+					return Path.GetFullPath(targetPath);
 				}
 				else
 				{
-					return childDirectories.SingleOrDefault(x => Path.GetFileName(x) == targetDirectoryName);
+					currentPath = Path.GetFullPath($"{currentPath}/..");
 				}
 			}
 
-			throw new DirectoryNotFoundException($"Directory {targetDirectoryName} was not found.");
+			throw new DirectoryNotFoundException($"Relative Project File [{targetFile}] was not found.");
 		}
 
 
-		private static bool Generate(string path)
+		private static bool Generate(string csprojPath)
 		{
-			Console.WriteLine($"Generating {path}");
-			var projectName = Path.GetFileName(path);
-			var projFile = $"{path}/{projectName}.csproj";
-			var data = XElement.Load(projFile);
+			Console.WriteLine($"Generating {csprojPath}");
+			var projectName = Path.GetFileName(csprojPath);
+			var data = XElement.Load(csprojPath);
+			var parentDirectory = Directory.GetParent(csprojPath).FullName;
 
 			IDictionary<string, string> properties = data.Elements("PropertyGroup")
 				.Descendants()
 				.ToDictionary(x => x.Name.ToString(), y => y.Value);
 
 			var previousWorkDir = Environment.CurrentDirectory;
-			var task = new GeneratorTask();
-			task.Fill(properties);
-			task.CurrentDirectory = path;
+			properties[nameof(GeneratorArgs.CurrentDirectory)] = parentDirectory;
 
+			var success = ClientGenerator.Generate(new GeneratorArgs(properties), null);
 
-			var mockedBuildEngine = new Mock<IBuildEngine>();
-			mockedBuildEngine.Setup(x => x.LogErrorEvent(It.IsAny<BuildErrorEventArgs>())).Callback((BuildErrorEventArgs args) =>
-			{
-				Console.Error.WriteLine(args.Message);
-				throw new Exception(args.Message);
-			});
-			mockedBuildEngine.Setup(x => x.LogMessageEvent(It.IsAny<BuildMessageEventArgs>())).Callback((BuildMessageEventArgs args) =>
-			{
-				Console.WriteLine(args.Message);
-			});
-			mockedBuildEngine.Setup(x => x.LogWarningEvent(It.IsAny<BuildWarningEventArgs>())).Callback((BuildWarningEventArgs args) =>
-			{
-				Console.WriteLine(args.Message);
-			});
-
-			task.BuildEngine = mockedBuildEngine.Object;
-
-			var success = task.ByPassExecute();
 			Environment.CurrentDirectory = previousWorkDir;
+
 			return success;
 		}
 

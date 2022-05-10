@@ -5,15 +5,21 @@ using Nuke.Common.CI;
 using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
+using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
+using Nuke.Components;
+using System.IO;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
+using static Nuke.Common.Tools.MSBuild.MSBuildSettingsExtensions;
+using NuGet.Configuration;
 
 [CheckBuildProjectConfigurations(TimeoutInMilliseconds = 5000)]
 [UnsetVisualStudioEnvironmentVariables]
@@ -40,11 +46,14 @@ public class BuildScripts : NukeBuild
 	AbsolutePath CodeCoverageReportOutput => TestArtifactsDirectory / "Reports";
 	AbsolutePath CodeCoverageFile => TestArtifactsDirectory / "coverage.cobertura.xml";
 
+	AbsolutePath NugetConfigFile => RootDirectory / "nuget.config";
+
+	string GeneratorPackageName => "Beffyman.AspNetCore.Client.Generator";
 
 	RelativePath TestGeneratorProject => (RelativePath)TestsFolder / "Beffyman.AspNetCore.Client.Test.Generator" / "Beffyman.AspNetCore.Client.Test.Generator.csproj";
-	RelativePath GeneratorProject => (RelativePath)SourceFolder / "Beffyman.AspNetCore.Client.Generator" / "Beffyman.AspNetCore.Client.Generator.csproj";
+	RelativePath GeneratorProject => (RelativePath)SourceFolder / GeneratorPackageName / $"{GeneratorPackageName}.csproj";
 
-	const string TestGeneratorFramework = "netcoreapp3.1";
+	const string TestGeneratorFramework = "net6.0";
 
 	private void CleanArtifacts(bool packages = true)
 	{
@@ -61,6 +70,27 @@ public class BuildScripts : NukeBuild
 		.Before(Restore)
 		.Executes(() =>
 		{
+			if (IsLocalBuild)
+			{
+				var settings = Settings.LoadDefaultSettings(null);
+				var globalNugetPath = SettingsUtility.GetGlobalPackagesFolder(settings);
+				var packageDir = Path.Combine(globalNugetPath, GeneratorPackageName, GitVersion.NuGetVersionV2);
+
+				if (Directory.Exists(packageDir))
+				{
+					try
+					{
+						DeleteDirectory(packageDir);
+						Serilog.Log.Information("Stale package version has been removed");
+					}
+					catch (Exception)
+					{
+						Serilog.Log.Error("Could not delete stale package directory, this build may be stale, so erroring.");
+						throw;
+					}
+				}
+			}
+
 			CleanArtifacts();
 		});
 
@@ -77,6 +107,7 @@ public class BuildScripts : NukeBuild
 		{
 			DotNetBuild(s => s
 				.SetProjectFile(Solution)
+				.SetVerbosity(DotNetVerbosity.Normal)
 				.SetConfiguration(Configuration)
 				.SetAssemblyVersion(GitVersion.AssemblySemVer)
 				.SetFileVersion(GitVersion.AssemblySemFileVer)
@@ -86,13 +117,15 @@ public class BuildScripts : NukeBuild
 
 	private void RunTests()
 	{
-		DotNetTest(s => s.SetConfiguration(Configuration)
+		DotNetTest(s => s
+				.SetConfiguration(Configuration)
+				.SetVerbosity(DotNetVerbosity.Normal)
 				.EnableNoBuild()
 				.EnableNoRestore()
-				.SetLogger("trx")
+				.SetLoggers("trx")
 				.SetResultsDirectory(TestArtifactsDirectory)
-				.SetLogOutput(true)
-				.SetArgumentConfigurator(arguments => arguments.Add("/p:CollectCoverage={0}", "true")
+				.EnableProcessLogOutput()
+				.SetProcessArgumentConfigurator(arguments => arguments.Add("/p:CollectCoverage={0}", "true")
 					.Add("/p:CoverletOutput={0}/", TestArtifactsDirectory)
 					//.Add("/p:Threshold={0}", 90)
 					.Add("/p:Exclude=\"[xunit*]*%2c[*.Tests]*\"")
@@ -100,7 +133,7 @@ public class BuildScripts : NukeBuild
 					.Add("/p:CoverletOutputFormat={0}", "cobertura"))
 				.SetProjectFile(Solution));
 
-		FileExists(CodeCoverageFile);
+		Nuke.Common.IO.FileSystemTasks.FileExists(CodeCoverageFile);
 	}
 
 	Target Test => _ => _
@@ -116,7 +149,11 @@ public class BuildScripts : NukeBuild
 		.After(Test)
 		.Executes(() =>
 		{
-			DotNetPack(s => s.SetProject(Solution)
+			EnsureExistingDirectory(NugetDirectory);
+
+			DotNetPack(s => s
+					.SetProject(Solution)
+					.SetVerbosity(DotNetVerbosity.Normal)
 					.SetVersion(GitVersion.NuGetVersionV2)
 					.SetConfiguration(Configuration)
 					.SetAssemblyVersion(GitVersion.AssemblySemVer)
@@ -130,19 +167,24 @@ public class BuildScripts : NukeBuild
 		.Before(Test)
 		.Executes(() =>
 		{
-			DotNetRun(s => s.SetProjectFile(TestGeneratorProject)
-							.SetConfiguration(Configuration)
-							.SetFramework(TestGeneratorFramework)
-							.EnableNoBuild());
+			DotNetRun(s => s
+						.SetProjectFile(TestGeneratorProject)
+						.SetConfiguration(Configuration)
+						.SetFramework(TestGeneratorFramework)
+						.EnableNoBuild());
 		});
 
 	Target BuildWithGenerator => _ => _
 		.After(Pack)
 		.Executes(() =>
 		{
+			EnsureExistingDirectory(NugetDirectory);
+
+			//First run through the dotnet msbuild workflow for the projects using the packaged version of it
 			CleanArtifacts(false);
 
 			DotNetBuild(s => s
+				.SetVerbosity(DotNetVerbosity.Normal)
 				.SetProjectFile(Solution)
 				.SetConfiguration(Configuration)
 				.SetAssemblyVersion(GitVersion.AssemblySemVer)
@@ -154,6 +196,24 @@ public class BuildScripts : NukeBuild
 				.AddSources(NugetDirectory));
 
 			RunTests();
+
+			//Then run through the Visual studio MsBuild workflow for the projects using the packaged version of it
+
+			CleanArtifacts(false);
+
+			MSBuild(s => s
+					.SetVerbosity(Nuke.Common.Tools.MSBuild.MSBuildVerbosity.Normal)
+					.SetSolutionFile(Solution)
+					.SetConfiguration(Configuration)
+					.AddProperty("GenerateWithNuget", "true")
+					.AddProperty("GeneratorVersion", GitVersion.NuGetVersionV2)
+					.AddRestoreSources(NugetDirectory)
+					.SetTargets("Restore", "Rebuild")
+					.SetNodeReuse(IsLocalBuild)
+					.SetMaxCpuCount(Environment.ProcessorCount));
+
+			RunTests();
+
 		});
 
 	Target CI => _ => _
@@ -162,11 +222,29 @@ public class BuildScripts : NukeBuild
 		.DependsOn(GenerateTestProjectClients)
 		.DependsOn(Test)
 		.DependsOn(Pack)
+		.DependsOn(NugetConfigGenerate)
 		.DependsOn(BuildWithGenerator)
 		.Executes(() =>
 		{
 			AzurePipelines?.UpdateBuildNumber(GitVersion.NuGetVersionV2);
 		});
 
+	Target NugetConfigGenerate => _ => _
+		.After(Clean)
+		.Before(BuildWithGenerator)
+		.Executes(async () =>
+		{
+			string nugetConfig =
+$@"<?xml version=""1.0"" encoding=""utf-8""?>
+<configuration>
+  <packageSources>
+    <add key=""nuget.org"" value=""https://api.nuget.org/v3/index.json"" protocolVersion=""3"" />
+    <add key=""Test Sources"" value=""{NugetDirectory}"" />
+</packageSources>
+</configuration>
+";
 
+			await File.WriteAllTextAsync(NugetConfigFile, nugetConfig);
+			EnsureExistingDirectory(NugetDirectory);
+		});
 }

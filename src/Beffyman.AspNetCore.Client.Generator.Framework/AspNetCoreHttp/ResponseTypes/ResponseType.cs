@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Beffyman.AspNetCore.Client.Generator.Framework.Navigation;
+using Flurl.Http;
 
 namespace Beffyman.AspNetCore.Client.Generator.Framework.AspNetCoreHttp.ResponseTypes
 {

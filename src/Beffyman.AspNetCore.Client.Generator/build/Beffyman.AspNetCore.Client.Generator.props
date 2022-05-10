@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<_BeffymanAspNetCoreClientGeneratorTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">.\netstandard2.1\Beffyman.AspNetCore.Client.Generator.dll</_BeffymanAspNetCoreClientGeneratorTaskAssembly>
-		<_BeffymanAspNetCoreClientGeneratorTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">.\net472\Beffyman.AspNetCore.Client.Generator.dll</_BeffymanAspNetCoreClientGeneratorTaskAssembly>
+		<!--https://github.com/dotnet/msbuild/issues/4763#issuecomment-535477075-->
+		<_BeffymanAspNetCoreClientGeneratorTaskAssembly >.\Beffyman.AspNetCore.Client.Generator.dll</_BeffymanAspNetCoreClientGeneratorTaskAssembly>
 	</PropertyGroup>
 
 	<PropertyGroup>

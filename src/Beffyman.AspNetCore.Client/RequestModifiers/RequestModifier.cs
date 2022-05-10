@@ -23,10 +23,9 @@ namespace Beffyman.AspNetCore.Client.RequestModifiers
 		/// <summary>
 		/// Applies header modifications to the request
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
 		/// <param name="clientOrRequest"></param>
 		/// <returns></returns>
-		T ApplyModifiers<T>(T clientOrRequest) where T : IHttpSettingsContainer;
+		IFlurlRequest ApplyModifiers(IFlurlRequest clientOrRequest);
 	}
 
 	/// <summary>
@@ -47,16 +46,15 @@ namespace Beffyman.AspNetCore.Client.RequestModifiers
 		/// <summary>
 		/// Functions that will always be ran on a request
 		/// </summary>
-		public ICollection<Func<IHttpSettingsContainer, IHttpSettingsContainer>> PredefinedFunctions { get; set; }
+		public ICollection<Func<IFlurlRequest, IFlurlRequest>> PredefinedFunctions { get; set; }
 
 
 		/// <summary>
 		/// Applies header modifications to the request
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
 		/// <param name="clientOrRequest"></param>
 		/// <returns></returns>
-		public T ApplyModifiers<T>(T clientOrRequest) where T : IHttpSettingsContainer
+		public IFlurlRequest ApplyModifiers(IFlurlRequest clientOrRequest)
 		{
 			var request = clientOrRequest.WithHeaders(PredefinedHeaders)
 											.WithCookies(PredefinedCookies);
@@ -65,7 +63,7 @@ namespace Beffyman.AspNetCore.Client.RequestModifiers
 			{
 				foreach (var func in PredefinedFunctions)
 				{
-					request = (T)func(request);
+					request = func(request);
 				}
 			}
 
