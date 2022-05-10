@@ -230,6 +230,7 @@ public class BuildScripts : NukeBuild
 		});
 
 	Target NugetConfigGenerate => _ => _
+		.After(Clean)
 		.Before(BuildWithGenerator)
 		.Executes(async () =>
 		{
