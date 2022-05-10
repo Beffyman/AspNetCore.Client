@@ -9,35 +9,35 @@
 //Requires nuget Microsoft.AspNetCore.SignalR.Client
 //Requires nuget Microsoft.Extensions.Logging
 //Requires nuget System.Threading.Channels
-using Beffyman.AspNetCore.Client;
 using Beffyman.AspNetCore.Client.Authorization;
 using Beffyman.AspNetCore.Client.Exceptions;
 using Beffyman.AspNetCore.Client.GeneratorExtensions;
 using Beffyman.AspNetCore.Client.Http;
 using Beffyman.AspNetCore.Client.RequestModifiers;
 using Beffyman.AspNetCore.Client.Serializers;
+using Beffyman.AspNetCore.Client;
 using Flurl.Http;
 using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Http.Connections.Client;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
+using System.Net;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using TestWebApp.Contracts;
+using System.Threading;
+using System;
 using TestWebApp.Contracts.GlobalNamespace;
+using TestWebApp.Contracts;
 
 namespace TestWebApp.Clients.Routes
 {
@@ -10381,7 +10381,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int?);
+					return default(int? );
 				}
 
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -10432,7 +10432,7 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				return default(int?);
+				return default(int? );
 			}
 		}
 
@@ -10507,7 +10507,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int?);
+					return default(int? );
 				}
 
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
@@ -10558,7 +10558,7 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				return default(int?);
+				return default(int? );
 			}
 		}
 
@@ -10633,7 +10633,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int?);
+					return default(int? );
 				}
 
 				HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -10684,7 +10684,7 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				return default(int?);
+				return default(int? );
 			}
 		}
 
@@ -10759,7 +10759,7 @@ namespace TestWebApp.Clients
 						throw fhex;
 					}
 
-					return default(int?);
+					return default(int? );
 				}
 
 				await HttpOverride.OnNonOverridedResponseAsync(HttpMethod.Get, url, null, response, cancellationToken).ConfigureAwait(false);
@@ -10810,7 +10810,7 @@ namespace TestWebApp.Clients
 			}
 			else
 			{
-				return default(int?);
+				return default(int? );
 			}
 		}
 
@@ -15407,22 +15407,22 @@ namespace TestWebApp.Hubs
 
 		public Task SendMessageAsync(string user, string message, CancellationToken cancellationToken = default)
 		{
-			return this.InvokeCoreAsync("SendMessage", new object[] { user, message }, cancellationToken);
+			return this.InvokeCoreAsync("SendMessage", new object[]{user, message}, cancellationToken);
 		}
 
 		public Task DtoMessageAsync(MyFancyDto dto, CancellationToken cancellationToken = default)
 		{
-			return this.InvokeCoreAsync("DtoMessage", new object[] { dto }, cancellationToken);
+			return this.InvokeCoreAsync("DtoMessage", new object[]{dto}, cancellationToken);
 		}
 
 		public Task<ChannelReader<int>> StreamCounterAsync(int count, int delay, CancellationToken cancellationToken = default)
 		{
-			return this.StreamAsChannelCoreAsync<int>("Counter", new object[] { count, delay }, cancellationToken);
+			return this.StreamAsChannelCoreAsync<int>("Counter", new object[]{count, delay}, cancellationToken);
 		}
 
 		public async Task<IEnumerable<int>> ReadCounterBlockingAsync(int count, int delay, CancellationToken cancellationToken = default)
 		{
-			var channel = await this.StreamAsChannelCoreAsync<int>("Counter", new object[] { count, delay }, cancellationToken);
+			var channel = await this.StreamAsChannelCoreAsync<int>("Counter", new object[]{count, delay}, cancellationToken);
 			IList<int> items = new List<int>();
 			while (await channel.WaitToReadAsync())
 			{
