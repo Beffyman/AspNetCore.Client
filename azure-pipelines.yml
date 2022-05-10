@@ -29,6 +29,12 @@ steps:
   inputs:
     installationPath: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
     packageType: 'sdk'
+    version: 5.x
+
+- task: UseDotNet@2
+  inputs:
+    installationPath: "$(Build.SourcesDirectory)/.tmp/dotnet-win"
+    packageType: 'sdk'
     useGlobalJson: true
 
 #https://github.com/dotnet/cli/issues/6589
