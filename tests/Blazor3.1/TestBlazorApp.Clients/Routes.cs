@@ -6,24 +6,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 //Requires nuget Beffyman.AspNetCore.Client
+using Beffyman.AspNetCore.Client;
 using Beffyman.AspNetCore.Client.Authorization;
 using Beffyman.AspNetCore.Client.Exceptions;
 using Beffyman.AspNetCore.Client.GeneratorExtensions;
 using Beffyman.AspNetCore.Client.Http;
 using Beffyman.AspNetCore.Client.RequestModifiers;
 using Beffyman.AspNetCore.Client.Serializers;
-using Beffyman.AspNetCore.Client;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Threading;
-using System;
+using System.Threading.Tasks;
 using TestBlazorApp.Shared;
 
 namespace TestBlazorApp.Clients.Routes

@@ -1545,7 +1545,14 @@ $@"namespace {Settings.ClientNamespace}
 		{
 			if (ob.Obsolete)
 			{
-				return $@"[{nameof(ObsoleteAttribute)}(""{ob.ObsoleteMessage}"")]";
+				if (string.IsNullOrEmpty(ob.ObsoleteMessage))
+				{
+					return $@"[{nameof(ObsoleteAttribute)}]";
+				}
+				else
+				{
+					return $@"[{nameof(ObsoleteAttribute)}(""{ob.ObsoleteMessage}"")]";
+				}
 			}
 			else
 			{

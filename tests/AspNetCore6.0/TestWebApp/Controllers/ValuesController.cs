@@ -95,6 +95,13 @@ namespace TestWebApp.Controllers
 			};
 		}
 
+		[HttpGet("[action]")]
+		[Obsolete]
+		public ActionResult ObsoleteTest()
+		{
+			return Ok();
+		}
+
 		/// <summary>
 		/// Header injection support
 		/// </summary>

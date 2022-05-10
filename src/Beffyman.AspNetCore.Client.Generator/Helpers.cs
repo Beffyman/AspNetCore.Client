@@ -588,7 +588,7 @@ namespace Beffyman.AspNetCore.Client.Generator
 
 		public static string GetAttributeValue(this AttributeSyntax attr)
 		{
-			return attr.ArgumentList.Arguments.ToFullString().Replace("\"", "").Trim();
+			return attr.ArgumentList?.Arguments.ToFullString().Replace("\"", "").Trim();
 		}
 
 		public static AttributeSyntax GetAttribute<T>(this IEnumerable<AttributeSyntax> source) where T : Attribute
